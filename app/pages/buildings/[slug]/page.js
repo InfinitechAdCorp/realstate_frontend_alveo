@@ -97,28 +97,34 @@ export default function BlogPost({ params }) {
       <div className=" p-4 md:p-8 mt-2 w-full mb-20">
         <h1 className="text-2xl font-bold mb-4 text-center">{property.name}</h1>
         <div className="grid gap-4 lg:flex justify-center items-center text-center w-full 2xl:w-8/12 mx-auto">
-          <img
-            src={
-              property.path.startsWith("http://localhost:8000/storage/")
-                ? property.path
-                : `http://localhost:8000/assets/Location/${encodeURIComponent(
-                    property.path.replace("assets/Location/", "")
-                  )}`
-            }
-            alt={property.name}
-            className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
-          />
-          <img
-            src={
-              property.view.startsWith("http://localhost:8000/storage/")
-                ? property.view
-                : `http://localhost:8000/assets/Location/${encodeURIComponent(
-                    property.view.replace("assets/Location/", "")
-                  )}`
-            }
-            alt={property.name}
-            className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
-          />
+     <img
+  src={
+    property.path && property.path.startsWith("http://localhost:8000/")
+      ? property.path // If it's already a full URL, use it directly
+      : property.path && property.path.startsWith("property/")
+      ? `http://localhost:8000/${property.path}` // If the path starts with 'property/', use it directly with the server URL
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
+          property.path.replace("assets/Location/", "")
+        )}` // Otherwise, construct the URL for 'assets/Location/'
+  }
+  alt={property.name}
+  className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
+/>
+
+         <img
+  src={
+    property.view && property.view.startsWith("http://localhost:8000/")
+      ? property.view // If it's already a full URL, use it directly
+      : property.view && property.view.startsWith("property/")
+      ? `http://localhost:8000/${property.view}` // If the path starts with 'property/', use it directly with the server URL
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
+          property.view.replace("assets/Location/", "")
+        )}` // Otherwise, construct the URL for 'assets/Location/'
+  }
+  alt={property.name}
+  className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
+/>
+
         </div>
 
         <div className="property-info mb-4">
@@ -155,19 +161,22 @@ export default function BlogPost({ params }) {
                   className="border rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 hover:shadow-xl"
                 >
                   <h4>{feature.name}</h4>
-                  <img
-                    src={
-                      feature.image.startsWith("http://localhost:8000/storage/")
-                        ? feature.image
-                        : `http://localhost:8000/assets/Location/${encodeURIComponent(
-                            feature.image
-                              .replace(/\\/g, "/")
-                              .replace("assets/Location/", "")
-                          )}`
-                    }
-                    alt={feature.name}
-                    className="w-full h-auto"
-                  />
+               <img
+  src={
+    feature.image.startsWith("http://localhost:8000/") // If it's already a full URL
+      ? feature.image
+      : feature.image.startsWith("/property/") // If it starts with /property/
+      ? `http://localhost:8000${feature.image.replace(/\\/g, "/")}` // Prepend the base URL
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
+          feature.image
+            .replace(/\\/g, "/") // Replace backslashes with forward slashes
+            .replace("assets/Location/", "") // Remove the "assets/Location/" part of the path
+        )}` // Otherwise, handle assets/Location paths
+  }
+  alt={feature.name}
+  className="w-full h-auto"
+/>
+
                 </div>
               ))}
             </div>
@@ -203,17 +212,20 @@ export default function BlogPost({ params }) {
                 <h3 className="text-xl font-semibold text-center mb-6">
                   {building.name}
                 </h3>
-                <img
-                  src={
-                    building.path.startsWith("http://localhost:8000/storage/")
-                      ? building.path
-                      : `http://localhost:8000/assets/Location/${encodeURIComponent(
-                          building.path.replace("assets/Location/", "")
-                        )}`
-                  }
-                  alt={building.name}
-                  className="w-full h-60 rounded-lg mb-6"
-                />
+            <img
+  src={
+    building.path.startsWith("http://localhost:8000/") // If it's already a full URL
+      ? building.path
+      : building.path.startsWith("/property/") // If it starts with /property/
+      ? `http://localhost:8000${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
+          building.path.replace("assets/Location/", "")
+        )}` // Otherwise, handle assets/Location paths
+  }
+  alt={building.name}
+  className="w-full h-60 rounded-lg mb-6"
+/>
+
                 <div className="text-base">
                   <p>
                     <strong>Residential Levels:</strong>{" "}

@@ -390,7 +390,11 @@ const handleSubmit = async (e) => {
         </DropdownMenu>
       </div>
 
-      <div>
+      <div style={{
+        maxHeight: '500px',  // Set a fixed height for the body
+        overflowY: 'auto',   // Enable vertical scrolling
+        display: 'block',    // Make the table body block-level
+      }}>
         <div >
           <Table>
             <TableHeader>
@@ -410,7 +414,7 @@ const handleSubmit = async (e) => {
               ))}
             </TableHeader>
 
-            <TableBody>
+            <TableBody   >
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <React.Fragment key={row.id}>

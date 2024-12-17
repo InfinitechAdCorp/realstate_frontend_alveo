@@ -861,15 +861,27 @@ const handleClick1 = () => {
                     </div>
 
                     {/* Image Gallery */}
-   {[property.path, property.view].map((imgPath, imgIndex) => {
-  // Check if the image path is a relative path (local asset) or an absolute URL
-  const imageSrc =
-    imgPath.startsWith('http') || imgPath.startsWith('https')
-      ? imgPath // If it's a URL, use it directly
-      : `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`; // If it's a local asset, prepend the local server URL
+{[property.path, property.view].map((imgPath, imgIndex) => {
+  // Construct the image source URL based on whether it's a relative path or an absolute URL
+  const imageSrc = (() => {
+    if (imgPath.startsWith('http') || imgPath.startsWith('https')) {
+      // If it's an absolute URL, use it directly
+      return imgPath;
+    }
+
+    if (imgPath.startsWith('property/')) {
+      // If the image path starts with "property/", it is assumed to be in the "public" folder
+      return `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`;
+    }
+
+    // For any other local paths, prepend the base URL
+    return `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`;
+  })();
+
+  console.log('Image Source:', imageSrc); // Log the image source to verify the correct path
 
   return (
-    <div className="" key={imgIndex}>
+    <div className="relative" key={imgIndex}>
       <img
         src={imageSrc}
         alt={`${property.name} view ${imgIndex + 1}`}
@@ -951,15 +963,29 @@ const handleClick1 = () => {
   <span className="section-title text-3xl font-extrabold text-gray-900 tracking-tight text-center">
     Key Features
   </span>
-  <ul className="features-list space-y-8 flex flex-col items-center justify-center w-full max-w-4xl -ml-10">
-    {JSON.parse(property.features).map((feature, featureIndex) => {
-      // Ensure feature.image is not null or undefined before using it
-      const imageSrc =
-        feature.image && (feature.image.startsWith('http') || feature.image.startsWith('https'))
-          ? feature.image // If it's a URL, use it directly
-          : feature.image
-          ? `http://localhost:8000/${feature.image.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
-          : ''; // If feature.image is null or undefined, fallback to an empty string or placeholder
+<ul className="features-list space-y-8 flex flex-col items-center justify-center w-full max-w-4xl -ml-10">
+  {/* Check if there are features available */}
+  {property.features && JSON.parse(property.features).length > 0 ? (
+    JSON.parse(property.features).map((feature, featureIndex) => {
+      // Check the type of image path and create the appropriate source URL
+      const getImageSrc = (imagePath) => {
+        if (!imagePath) return ''; // If no image path, return empty string or placeholder
+
+        // If the image path starts with '/property/', treat it as a URL that requires the base URL
+        if (imagePath.startsWith('/property/')) {
+          return `http://localhost:8000${imagePath.replace(/\\/g, '/')}`;
+        }
+
+        // If the image path starts with 'http' or 'https', it's already a full URL
+        if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+          return imagePath;
+        }
+
+        // If it's a relative path (assets folder), convert it to the correct path
+        return `${imagePath.replace(/\\/g, '/')}`;
+      };
+
+      const imageSrc = getImageSrc(feature.image); // Get the image source based on the logic
 
       return (
         <li
@@ -973,15 +999,21 @@ const handleClick1 = () => {
             onMouseEnter={() => setHoveredImage(imageSrc)}
             onMouseLeave={() => setHoveredImage(null)}
             onClick={() => handleImageClick(imageSrc)}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: 'pointer' }}
           />
           <span className="text-xl font-semibold text-gray-800 tracking-tight">
             {feature.name}
           </span>
         </li>
       );
-    })}
-  </ul>
+    })
+  ) : (
+    <div className="text-center text-xl font-semibold text-gray-500">
+      No features available
+    </div>
+  )}
+</ul>
+
 </div>
 
 
@@ -1066,24 +1098,26 @@ const handleClick1 = () => {
             </h5>
 
             {/* Image Container */}
-            <div className="relative">
-              <img
-                src={
-                  building.path &&
-                  (building.path.startsWith('http') || building.path.startsWith('https'))
-                    ? building.path // If it's a URL, use it directly
-                    : building.path
-                    ? `http://localhost:8000/${building.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
-                    : '' // Fallback in case building.path is null or undefined
-                }
-                alt={building.name}
-                onMouseEnter={() => setHoveredImage(building.path)}
-                onMouseLeave={() => setHoveredImage(null)}
-                onClick={() => handleImageClick(building.path)}
-                className="w-full h-64 object-cover rounded-lg transition-all duration-300 transform hover:scale-105"
-              />
-              {/* Hover Effect: Show image details on hover */}
-            </div>
+   <div className="relative">
+  <img
+    src={
+      building.path
+        ? (building.path.startsWith('http') || building.path.startsWith('https'))
+          ? building.path // If it's a URL, use it directly
+          : building.path.startsWith('/property/')
+          ? `http://localhost:8000${building.path.replace(/\\/g, '/')}` // If it's a local asset with '/property/', prepend the local server URL
+          : `${building.path.replace(/\\/g, '/')}` // If it's a relative asset, prepend '/assets'
+        : '' // Fallback in case building.path is null or undefined
+    }
+    alt={building.name}
+    onMouseEnter={() => setHoveredImage(building.path)}
+    onMouseLeave={() => setHoveredImage(null)}
+    onClick={() => handleImageClick(building.path)}
+    className="w-full h-64 object-cover rounded-lg transition-all duration-300 transform hover:scale-105"
+  />
+  {/* Hover Effect: Show image details on hover */}
+</div>
+
 
             {/* Building Info List */}
             <ul className="mt-4 text-gray-700 space-y-2 list-none pl-0">

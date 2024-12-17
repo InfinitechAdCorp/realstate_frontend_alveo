@@ -134,12 +134,18 @@ export default function BlogPost({ params }) {
   canonical="http://localhost:3000/pages/locations"
 />
         <Image
-          src={`/${property.path}`}
-          alt={property.name}
-          width={400} // Adjusted width
-          height={300} // Adjusted height
-          className="w-full h-60 object-cover" // Set a fixed height for the image
-        />
+      src={
+        property.path
+          ? (property.path.startsWith('http') || property.path.startsWith('https'))
+            ? property.path // If it's a URL, use it directly
+            : `http://localhost:8000/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+          : '' // Fallback if property.path is null or undefined
+      }
+      alt={property.name}
+      width={400} // Adjusted width
+      height={300} // Adjusted height
+      className="w-full h-60 object-cover rounded-lg"
+    />
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-4 text-gray-800 lg:text-4xl xl:text-3xl">
             {property.name}

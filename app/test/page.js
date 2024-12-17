@@ -15,7 +15,9 @@ export default function Admin({}) {
   const [isVisible, setIsVisible] = useState(true); // Controls visibility of popup
   const [formData, setFormData] = useState({ email: "", password: "", code: "" });
   const [error, setError] = useState("");
-  const [isOtpSent, setIsOtpSent] = useState(false); // To track OTP sent state
+  const [otp, setOtp] = useState(null); // OTP state to store generated OTP
+  const [otpInput, setOtpInput] = useState(""); // User's input for OTP
+ const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
 
   const [properties, setProperties] = useState([]); // State to store fetched data from API
   const [counts, setCounts] = useState({
@@ -25,13 +27,13 @@ export default function Admin({}) {
     locations: 0,
   });
 
- const handleInputChange = (e) => {
+  const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
 const handleLogin = async (e) => {
   e.preventDefault();
 
-  // Step 1: User submits email and password to login
   const response = await fetch("http://localhost:8000/api/login", {
     method: "POST",
     headers: {
@@ -40,45 +42,23 @@ const handleLogin = async (e) => {
     body: JSON.stringify({ email: formData.email, password: formData.password }),
   });
 
+  const data = await response.json(); // Parse the response as JSON
+
+  console.log('Response from API:', data); // Log the full response
+
   if (response.ok) {
-    // If login is successful, show OTP input
-    setError(""); // Reset any previous error
-    console.log("Login successful. OTP sent to email.");
-    setIsOtpSent(true); // Allow the user to enter OTP
+    alert('Login Successful');
+    setIsLoggedIn(true); // Set login status to true only after successful login
+    closePopup(); // Close popup after login
   } else {
-    setError("Invalid email or password.");
+    alert(data.message || "Invalid email or password."); // Use the message from the backend if available
   }
 };
 
-const handleOtpVerification = async (e) => {
-  e.preventDefault();
-
-  // Step 2: User submits OTP for verification
-  const otpResponse = await fetch("http://localhost:8000/api/verify-otp", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: formData.email, // Include email to identify user for OTP check
-      otp: formData.otp, // OTP entered by user
-    }),
-  });
-
-  if (otpResponse.ok) {
-    // If OTP verification is successful
-    console.log("OTP verified. You are now logged in.");
-    // Redirect user to dashboard or home page
-  } else {
-    setError("Invalid or expired OTP.");
-  }
-};
 
   const fetchCount = async (endpoint, key) => {
     try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/${endpoint}`
-      );
+      const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
       const data = await response.json();
       if (response.ok) {
         setCounts((prevCounts) => ({ ...prevCounts, [key]: data.count }));
@@ -90,37 +70,16 @@ const handleOtpVerification = async (e) => {
     }
   };
 
+  // Fetch count data after login success
   useEffect(() => {
-    fetchCount("countproperties", "properties");
-    fetchCount("countotherbuildings", "otherBuildings");
-    fetchCount("countcondominiums", "condominiums");
-    fetchCount("countlocations", "locations");
-  }, []); // Runs once on mount
+    if (isLoggedIn) {
+      fetchCount("countproperties", "properties");
+      fetchCount("countotherbuildings", "otherBuildings");
+      fetchCount("countcondominiums", "condominiums");
+      fetchCount("countlocations", "locations");
 
-
-
-
-  // Fetch data from the API on page load
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:8000/api/admin/properties"
-        ); // Your Next.js API route
-        const data = await response.json();
-        setProperties(data); // Store fetched properties
- 
-      } catch (error) {
-        console.error("Failed to fetch properties:", error);
-      }
-    };
-
-    fetchProperties();
-  }, []); // Empty dependency array ensures this runs only on mount
-
-  const closePopup = () => {
-    setIsVisible(false);
-  };
+    }
+  }, [isLoggedIn]); // Runs only when isLoggedIn is true
 
 
   return (
@@ -129,7 +88,7 @@ const handleOtpVerification = async (e) => {
   <div className="popup-container fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50">
     <div className="popup-content bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">
       <h2 className="text-2xl font-semibold text-center mb-4">ACCOUNT</h2>
-      <form>
+      <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="email" className="block text-lg font-medium">Email:</label>
           <input
@@ -156,13 +115,14 @@ const handleOtpVerification = async (e) => {
           />
         </div>
 
-        {error && <p className="text-red-500 mt-2">{error}</p>}
+        {error && (
+          <p className="text-red-500 mt-2 text-center">{error}</p>
+        )}
 
         <div className="w-full flex gap-6 mt-4 justify-center">
           <button
             className="w-32 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
             type="submit"
-            onClick={handleLogin}
           >
             LOGIN
           </button>
@@ -170,7 +130,7 @@ const handleOtpVerification = async (e) => {
       </form>
     </div>
   </div>
-)}
+)} 
 
   
  <div className="fixed w-full">
@@ -260,7 +220,7 @@ const handleOtpVerification = async (e) => {
 </div>
 
 {/* Demo Section */}
-<div className="demo-container min-h-screen mt-14 w-9/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center">
+<div className="demo-container mt-14 w-9/12 mx-auto flex justify-center">
   <div>
     <Demo />
   </div>
@@ -269,7 +229,8 @@ const handleOtpVerification = async (e) => {
 
 
 
-       </div>
+
+       </div> 
  
     </>
   );
