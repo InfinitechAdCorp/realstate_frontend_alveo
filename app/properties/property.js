@@ -21,7 +21,7 @@ const TableComponent = () => {
         // Assuming you have this function defined elsewhere
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/properties"
+            "https://infinitech-testing1.online/api/admin/properties"
           ); // Fetch properties API
           const data = await response.json();
           
@@ -34,7 +34,7 @@ const TableComponent = () => {
       const fetchBuildings = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/buildings"
+            "https://infinitech-testing1.online/api/admin/buildings"
           ); // Fetch buildings API
           // Fetch properties API
           const data = await response.json();
@@ -48,7 +48,7 @@ const TableComponent = () => {
       const fetchFacilities = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/facilities"
+            "https://infinitech-testing1.online/api/admin/facilities"
           );
           const data = await response.json();
      
@@ -61,7 +61,7 @@ const TableComponent = () => {
       const fetchFeatures = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/features"
+            "https://infinitech-testing1.online/api/admin/features"
           ); // Fetch features API
           const data = await response.json();
  
@@ -80,13 +80,13 @@ const TableComponent = () => {
 
         let url;
         if (viewType === "property") {
-          url = "http://localhost:8000/api/admin/deleteproperty";
+          url = "https://infinitech-testing1.online/api/admin/deleteproperty";
         } else if (viewType === "buildings") {
-          url = "http://localhost:8000/api/admin/deletebuilding";
+          url = "https://infinitech-testing1.online/api/admin/deletebuilding";
         } else if (viewType === "feature") {
-          url = "http://localhost:8000/api/admin/deletefeature";
+          url = "https://infinitech-testing1.online/api/admin/deletefeature";
         } else if (viewType === "facility") {
-          url = "http://localhost:8000/api/admin/deletefacility";
+          url = "https://infinitech-testing1.online/api/admin/deletefacility";
         } else {
           console.error("Invalid viewType");
           return;
@@ -258,7 +258,7 @@ const handleAddOtherBuilding = async (e) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8000/api/admin/addBuildings", {
+    const response = await fetch("https://infinitech-testing1.online/api/admin/addBuildings", {
       method: "POST",
       body: formDataToSend, // Send the FormData directly
     });
@@ -293,7 +293,7 @@ const handleAddFacilities = async (e) => {
   console.log('Facilities Data:', facilities);
 
   try {
-    const response = await fetch('http://localhost:8000/api/admin/addFacilities', {
+    const response = await fetch('https://infinitech-testing1.online/api/admin/addFacilities', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(facilities),
@@ -336,7 +336,7 @@ const handleAddFeature = (e) => {
       }
     });
 
-    fetch('http://localhost:8000/api/admin/addFeature', {
+    fetch('https://infinitech-testing1.online/api/admin/addFeature', {
       method: 'POST',
       body: data,
     })
@@ -367,7 +367,7 @@ const handleUpdateProperty = (e) => {
   ];
 
   // Make the API call to update the property
-  fetch('http://localhost:8000/api/admin/update-properties', {
+  fetch('https://infinitech-testing1.online/api/admin/update-properties', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -395,7 +395,7 @@ const handleUpdateProperty = (e) => {
 
 const fetchBuildingData = async (buildingId) => {
   try {
-    const response = await fetch(`http://localhost:8000/api/buildings/id/${buildingId}`);
+    const response = await fetch(`https://infinitech-testing1.online/api/buildings/id/${buildingId}`);
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
@@ -448,7 +448,7 @@ const updatedBuilding = {
 };
 
   try {
-    const response = await fetch(`http://localhost:8000/api/admin/update-buildings`, {
+    const response = await fetch(`https://infinitech-testing1.online/api/admin/update-buildings`, {
       method: 'POST',  // Change the HTTP method to POST
       headers: {
         'Content-Type': 'application/json',
@@ -475,7 +475,7 @@ const updatedBuilding = {
  const getFacilities= async () => {
     try {
        // Replace this with the actual property ID dynamically
-      const response = await fetch(`http://localhost:8000/api/facilities/id/${payment.id}`);
+      const response = await fetch(`https://infinitech-testing1.online/api/facilities/id/${payment.id}`);
 
       // Check if the response is successful (status 200-299)
       if (!response.ok) {
@@ -506,7 +506,7 @@ const updatedBuilding = {
 
 
 
-    fetch('http://localhost:8000/api/admin/update-facilities', {
+    fetch('https://infinitech-testing1.online/api/admin/update-facilities', {
       method: 'POST',
       body: JSON.stringify(updatedFacilities), // Send the updated facilities array
       headers: {
@@ -630,7 +630,7 @@ const handleSubmit = async (e) => {
     }
 
     // Send the request to update the features
-    const response = await fetch('http://localhost:8000/api/admin/update-features', {
+    const response = await fetch('https://infinitech-testing1.online/api/admin/update-features', {
       method: 'POST', // Use POST since you're sending FormData
       body: formData, // FormData automatically sets the correct Content-Type (multipart/form-data)
     });
@@ -849,7 +849,7 @@ const handleFeatureImageChange = (e, index) => {
   ) : (
     // Path-based image handling (URL or path)
     <img
-      src={`http://localhost:8000${feature.image.replace(/\\/g, '/')}`} // Ensure the path is fixed
+      src={`https://infinitech-testing1.online${feature.image.replace(/\\/g, '/')}`} // Ensure the path is fixed
       alt={feature.name || 'Feature Image'}
       className="w-32 h-32 object-cover rounded-md"
     />

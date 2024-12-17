@@ -34,7 +34,7 @@ export default function Admin({}) {
 const handleLogin = async (e) => {
   e.preventDefault();
 
-  const response = await fetch("http://localhost:8000/api/login", {
+  const response = await fetch("https://infinitech-testing1.online/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -49,7 +49,7 @@ const handleLogin = async (e) => {
   if (response.ok) {
     alert('Login Successful');
     setIsLoggedIn(true); // Set login status to true only after successful login
-    setIsVisible(false); // Close popup after login
+    setIsVisible  (false); // Close popup after login
   } else {
     alert(data.message || "Invalid email or password."); // Use the message from the backend if available
   }
@@ -58,7 +58,7 @@ const handleLogin = async (e) => {
 
   const fetchCount = async (endpoint, key) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
+      const response = await fetch(`https://infinitech-testing1.online/api/admin/${endpoint}`);
       const data = await response.json();
       if (response.ok) {
         setCounts((prevCounts) => ({ ...prevCounts, [key]: data.count }));
@@ -84,7 +84,7 @@ const handleLogin = async (e) => {
 
   return (
     <>
-  {isVisible && (
+  {/* {isVisible && (
   <div className="popup-container fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50">
     <div className="popup-content bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">
       <h2 className="text-2xl font-semibold text-center mb-4">ACCOUNT</h2>
@@ -130,7 +130,7 @@ const handleLogin = async (e) => {
       </form>
     </div>
   </div>
-)} 
+)}  */}
 
   
  <div className="fixed w-full">

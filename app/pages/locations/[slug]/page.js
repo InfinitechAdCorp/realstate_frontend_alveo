@@ -138,7 +138,7 @@ export default function BlogPost({ params }) {
         property.path
           ? (property.path.startsWith('http') || property.path.startsWith('https'))
             ? property.path // If it's a URL, use it directly
-            : `http://localhost:8000/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+            : `https://infinitech-testing1.online/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
           : '' // Fallback if property.path is null or undefined
       }
       alt={property.name}
@@ -168,7 +168,7 @@ export default function BlogPost({ params }) {
     const fetchApi = async () => {
       try {
   
-        const response = await fetch(`http://localhost:8000/api/blog/${slug}`);
+        const response = await fetch(`https://infinitech-testing1.online/api/blog/${slug}`);
         if (!response.ok) {
           throw new Error("Failed to fetch blog post data");
         }
