@@ -49,7 +49,7 @@ const handleLogin = async (e) => {
   if (response.ok) {
     alert('Login Successful');
     setIsLoggedIn(true); // Set login status to true only after successful login
-    closePopup(); // Close popup after login
+    setIsVisible(false); // Close popup after login
   } else {
     alert(data.message || "Invalid email or password."); // Use the message from the backend if available
   }

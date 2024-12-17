@@ -15,72 +15,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-export const columns = [
-  // {
-  //   id: "select",
-  //   header: ({ table }) => (
-  //     <Checkbox
-  //       checked={
-  //         table.getIsAllPageRowsSelected() ||
-  //         (table.getIsSomePageRowsSelected() && "indeterminate")
-  //       }
-  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-  //       aria-label="Select all"
-  //     />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <Checkbox
-  //       checked={row.getIsSelected()}
-  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
-  //       aria-label="Select row"
-  //     />
-  //   ),
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Building Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "development_type",
-    header: "Development Type",
-  },
-  {
-    accessorKey: "price_range",
-    header: "Price Range",
-  },
-  {
-    accessorKey: "architectural_theme",
-    header: "Architectural Theme",
-  },
-  {
-    accessorKey: "lat",
-    header: "Lattitude",
-  },
-  {
-    accessorKey: "lng",
-    header: "Longitude",
-  },
-
-  {
-    id: "actions",
-    cell: ({ row, viewType }) => {
-      const payment = row.original;
+const TableComponent = () => {
+ const payment = row.original;
       const fetchProperties = async () => {
         // Assuming you have this function defined elsewhere
         try {
@@ -961,9 +897,10 @@ const handleFeatureImageChange = (e, index) => {
        {popups.updateBuilding && buildingData && buildingData.length > 0 && (
   <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-4xl overflow-auto">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Update Building for '{buildingData[currentBuildingIndex].name}' in {payment.name}
-      </h2>
+  <h2 className="text-xl font-semibold text-gray-800 mb-4">
+  Update Building for &apos;{buildingData[currentBuildingIndex].name}&apos; in {payment.name}
+</h2>
+
 
       <form className="grid grid-cols-2 gap-4 w-full" onSubmit={handleUpdateBuilding}>
         {/* Dynamically render building details */}
@@ -1451,6 +1388,74 @@ const handleFeatureImageChange = (e, index) => {
           
         </div>
       );
+};
+
+export const columns = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Building Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
+    accessorKey: "development_type",
+    header: "Development Type",
+  },
+  {
+    accessorKey: "price_range",
+    header: "Price Range",
+  },
+  {
+    accessorKey: "architectural_theme",
+    header: "Architectural Theme",
+  },
+  {
+    accessorKey: "lat",
+    header: "Lattitude",
+  },
+  {
+    accessorKey: "lng",
+    header: "Longitude",
+  },
+
+  {
+    id: "actions",
+    cell: ({ row, viewType }) => {
+     TableComponent
     },
   },
 
