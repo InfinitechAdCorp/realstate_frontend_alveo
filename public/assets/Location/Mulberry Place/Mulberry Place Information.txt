@@ -1,0 +1,67 @@
+Name: Mulberry Place 
+Status: Ready for Occupancy, Home Ready Promo
+Location: Taguig City
+Specific Location: Acacia Estates, Taguig City 
+Price Range: PHP7,301,000 - PHP25,844,000
+Units: 2BR, 3BR, 4BR 
+Land Area: 36, 474 sqm.
+Development type: Mid Rise Condominiums , High Rise Condominiums
+Architectural Theme: Asian Tropical Theme
+
+General Facilities
+- 24-hour Security
+- Drop-Off Area
+- Convenience Store
+- AVR/Meeting Room
+- Gazebo/ Cabana
+- Landscaped Gardens
+- Laundry Station
+- Open Lawn/Picnic Grove
+- Perimeter Fence
+- Pool Deck
+- Pool Shower Area
+- Provision for CCTV Cameras
+- Standby Electric Generator
+- Water Station
+- WiFi Access
+
+Buildings
+Name:Shantung
+Development Type: High Rise Condominiums
+     Residential : 18 Levels
+
+Name:Bengaline 
+Development Type: Mid Rise Condominiums
+     Residential : 6 Levels
+     Basement Parking : 2 Level
+
+Name:Cochine
+Development Type: Mid Rise Condominiums
+     Residential : 6 Levels
+     Basement Parking : 2 Level
+
+Name:Dui 
+Development Type: Mid Rise Condominiums
+     Residential : 6 Levels
+     Basement Parking : 2 Level
+
+Name:Paisley
+Development Type: High Rise Condominiums
+     Residential : 6 Levels
+
+Name: Marcelline 
+Development Type: Mid Rise Condominiums
+     Residential : 6 Levels
+     Basement Parking : 2 Level
+
+
+Building Features
+- Deck Utility/ Service Area
+- Fire Alarm & Automatic Sprinkler System
+- Fire Exit
+- Garbage Rooms
+- Mailbox Area
+- Parking Space
+- Passenger Elevators
+- Provision for CCTV
+- Reception Lobby

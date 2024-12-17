@@ -1,0 +1,69 @@
+Name: Oak Harbor Residences
+Status: Ready for Occupancy
+Location: Paranaque
+Specific Location: Jackson Ave. Asiaworld City, Brgy. Don Galo, Parañaque City
+Price Range: PHP11,888,000 - PHP56,588,000
+Units: 1BR, 2BR, 3BR, LOFT
+Land Area: 11,871 sqm.
+Development type: Mid Rise Condominiums
+Architectural Theme: Asian Contemporary
+
+General Facilities
+- 24-hour Security
+- Arrival Court
+- Children's Playground
+- Convenience Store
+- Entertainment Room
+- Game Area
+- Gazebo/ Cabana
+- Jogging/ Biking Path
+- Landscaped Gardens
+- Lap Pool
+- Laundry Station
+- Main Entrance Gate
+- Open Lawn/Picnic Grove
+- Perimeter Fence
+- Pool Deck
+- Pool Shower Area
+- Pool Water Slides
+- Provision for CCTV Cameras
+- Standby Electric Generator
+- View Deck
+- WiFi Access
+
+Buildings
+Name: Lauderdale 
+Development Type: Mid Rise Condominiums
+     Residential : 14 Levels
+     Basement Parking : 1 Level
+     Podium Parking : 1 Level
+     Lower Ground Floor Parking : 1 Level
+
+Name: Westport 
+Development Type: Mid Rise Condominiums
+     Residential : 12 Levels
+     Basement Parking : 1 Level
+     Podium Parking : 1 Level
+
+Name: Aston 
+Development Type: Mid Rise Condominiums
+     Residential : 12 Levels
+     Basement Parking : 1 Level
+     Podium Parking : 1 Level
+
+Building Features
+- Deck Utility/ Service Area
+- Fire Alarm & Automatic Sprinkler System
+- Fire Cabinets
+- Fire Exit
+- Garbage Rooms
+- Landscaped Atriums
+- Mailbox Area
+- Parking Space
+- Passenger Elevators
+- Provision for CCTV
+- Sky Patio (Lumiventt Technology)
+- Service Elevator
+- 100% Back Up Power
+- Car Wash Bays
+- Proximity Access

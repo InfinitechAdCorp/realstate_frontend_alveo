@@ -1,0 +1,13 @@
+ <style jsx>{`
+
+ 
+@media (min-width: 1441px) and (max-width: 1920px) {
+  
+
+}
+
+@media (min-width: 374px) and (max-width: 460px) {
+
+}
+
+            `}</style>

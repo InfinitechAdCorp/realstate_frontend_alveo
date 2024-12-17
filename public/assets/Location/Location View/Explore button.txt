@@ -1,0 +1,55 @@
+/***
+ <td
+    className="text-right align-right"
+    style={{
+        width: '2%',
+        height: '5vh',
+        marginLeft: '-90px',
+        zIndex: '1000',
+    }}
+>
+      <a href={`/pages/explore`} style={{ textDecoration: 'none' }}>
+    <button
+        style={{
+            backgroundColor: '#4379F2', // Button background color
+            border: 'none', // Remove default button border
+            borderRadius: '5px', // Optional: add rounded corners
+            cursor: 'pointer', // Change cursor to pointer
+            height: '100%', // Make the button take the full height of the td
+            width: '100%', // Make the button take the full width of the td
+            display: 'flex', // Use flex to align items
+            alignItems: 'center', // Center items vertically
+            padding: '0', // Remove default padding
+        }}
+    >
+        <div className="d-flex flex-row align-items-right" style={{ marginLeft: '-40px' }}>
+            <Image
+                src="/assets/search.png" // Updated path
+                alt="Search"
+                width={17}
+                height={17}
+                className="mt-2 ms-2" // Adjust margin for better spacing
+                style={{
+                    transform: 'rotate(90deg)',
+                    transition: 'transform 0.2s ease',
+                    marginTop: '-120px',
+                }} // Added transition for smoothness
+            />
+            <p
+                className="ms-2"
+                style={{
+                    fontSize: '15px',
+                    color: 'black', // Change text color to white for better contrast
+                    fontWeight: 'bold',
+                }}
+            >
+                Explore Our Properties
+            </p>
+        </div>
+    </button>
+    </a>
+</td>
+
+
+
+ */

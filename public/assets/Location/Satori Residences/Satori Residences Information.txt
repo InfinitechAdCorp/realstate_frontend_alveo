@@ -1,0 +1,73 @@
+Name: Satory Residence 
+Status: Ready for Occupancy
+Location: Pasig City 
+Specific Location: F. Pasco Avenue, Santolan, Pasig City 
+Price Range: PHP4,437,000 - PHP8,376,000
+Units: 1BR, 2BR
+Land Area: 29,170 sqm.
+Development type: High Rise Condominiums
+Architectural Theme: Neo-Asian Minimalist
+
+General Facilities
+- 24-hour Security
+- Convenience Store
+- Audio Visual Room
+- Fitness Gym
+- Multi-Purpose Area
+- Game Area
+- Gazebo/ Cabana
+- Grill Pits
+- Landscaped Gardens
+- Laundry Station
+- Lounge Area
+- Picnic/Grill Area
+- Electrified Perimeter Fence
+- Pool Deck
+- Pool Shower Area
+- Pool Water Slides
+- Provision for CCTV Cameras
+- Roof Deck
+- Sky Lounge
+- Standby Electric Generator
+- Tree-lined Walkways/Garden
+- Water Station
+
+Buildings
+Name: Hacana 
+Development Type: High Rise Condominiums
+     Residential : 14 Levels
+     Basement Parking : 2 Level
+
+Name: Lana
+Development Type: High Rise Condominiums
+     Residential : 15 Levels
+     Basement Parking : 2 Level
+
+Name: Rahu 
+Development Type: High Rise Condominiums
+     Residential : 14 Levels
+     Basement Parking : 2 Level
+
+Name: Yasu 
+Development Type: High Rise Condominiums
+     Residential : 15 Levels
+     Basement Parking : 2 Level
+
+Name: Amani 
+Development Type: High Rise Condominiums
+     Residential : 15 Levels
+     Basement Parking : 1 Level
+
+Building Features
+- Deck Utility/ Service Area
+- Fire Alarm & Automatic Sprinkler System
+- Fire Hose Cabinets
+- Fire Exit
+- Garbage Rooms
+- Landscaped Atriums
+- Mailbox Area
+- Parking Space
+- Passenger Elevators
+- Provision for CCTV
+- Reception Lobby
+- Sky Patio (Lumiventt Technology)

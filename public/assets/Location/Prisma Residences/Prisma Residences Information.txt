@@ -1,0 +1,59 @@
+Name : Prisma Residence 
+Status: Ready for Occupancy
+Location: Pasig
+Specific Location: Pasig Boulevard, Brgy. Bagong Ilog 
+Price Range: PHP4,562,000 - PHP12,174,000
+Units: 1BR, 2BR
+Land Area: 20,380 sqm.
+Development type: High Rise Condominiums
+Architectural Theme: Modern Tropical
+
+General Facilities
+- 24-hour Security
+- Drop-Off Area
+- Basketball Court/Playcourt
+- Convenience Store
+- Audio-Visual Room
+- Fitness Gym
+- Function Hall
+- Game Room
+- Landscaped Gardens
+- Laundry Station
+- Open Lounge
+- Perimeter Fence
+- Palm Deck
+- Pool Shower Area
+- Provision for CCTV Cameras
+- Sky Lounge
+- Standby Electric Generator
+- Observatory Deck
+- Water Station
+- WiFi Access
+
+Buildings
+Name: Astra 
+Development Type: High Rise Condominiums
+     Residential : 42 Levels
+     Basement Parking : 6 Level
+
+Name: Celeste 
+Development Type: High Rise Condominiums
+     Residential : 41 Levels
+     Basement Parking : 6 Level
+
+Name: Kiran
+Development Type: High Rise Condominiums
+     Residential : 45 Levels
+     Basement Parking : 6 Level
+
+Building Features
+- Fire Alarm & Automatic Sprinkler System
+- Fire Cabinet
+- Fire Exit
+- Garbage Rooms
+- Landscaped Atriums
+- Mailbox Area
+- Parking Space
+- Passenger Elevators
+- Provision for CCTV
+- Reception Lobby
