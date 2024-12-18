@@ -20,15 +20,21 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    }
   },
   "include": [
     "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "**/*.ts",
+    ".next/types//*.ts",
+    "/*.ts",
     "**/*.tsx",
-    ".next/types/app/botui.d.ts"
-, "components/Chatbot/page.js"
+    ".next/types/app/botui.d.ts",
+    "components/Chatbot/page.js",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

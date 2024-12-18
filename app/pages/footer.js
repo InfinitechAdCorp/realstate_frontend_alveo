@@ -1,23 +1,23 @@
-'use client' // Add this line at the top
-import { useRouter } from 'next/router' // Import useRouter for navigation
-import React, { useEffect, useState, useRef } from 'react'
-import Image from 'next/image' // Assuming you're using Next.js's Image component
-import Link from 'next/link'
-import { throttle } from 'lodash'
-import { useSession, signIn, signOut } from 'next-auth/react'
+"use client"; // Add this line at the top
+import { useRouter } from 'next/router'; // Import useRouter for navigation
+import React, { useEffect, useState, useRef } from 'react';
+import Image from 'next/image'; // Assuming you're using Next.js's Image component
+import Link from 'next/link';
+import { throttle } from 'lodash';
+import { useSession, signIn, signOut } from "next-auth/react";
 
-import SEO from './../seo/page'
+import SEO from "./../seo/page"
 const Footer = () => {
-  useEffect(() => {
-    // Reload the page if it hasn't already been reloaded
-    const hasReloaded = sessionStorage.getItem('footerPageReloaded')
-    if (!hasReloaded) {
-      sessionStorage.setItem('footerPageReloaded', 'true') // Set a flag to prevent infinite reloads
-      window.location.reload()
-    }
-  }, [])
+     useEffect(() => {
+        // Reload the page if it hasn't already been reloaded
+        const hasReloaded = sessionStorage.getItem('footerPageReloaded');
+        if (!hasReloaded) {
+            sessionStorage.setItem('footerPageReloaded', 'true'); // Set a flag to prevent infinite reloads
+            window.location.reload();
+        }
+    }, []);
   const handleDownloadClick = () => {
-    const apkUrl = '/apk/app-apk-67613c8a8b586-1734425738.apk';
+    const apkUrl = '/apk/app-apk-674920b422397-1732845748.apk';
     const link = document.createElement('a');
     link.href = apkUrl;
     link.download = 'Alveo.apk'; // Specify the desired file name
@@ -53,76 +53,48 @@ const Footer = () => {
   </div>
 </div>
 
+ 
+    <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20">
+        <h1 className="xl:text-3xl xl:mt-10 text-3xl sm:text-3xl lg:text-5xl">Contact Us</h1>
+        <p className="xl:text-lg text-sm sm:text-xl lg:text-2xl">Our dedicated teams are ready to assist you with needed information on Alveo Land properties, wherever you are.</p>
+   
+        <h1 className="xl:text-3xl text-2xl sm:text-3xl lg:text-5xl">Customer Hotline:</h1>
+        <p className="xl:text-lg text-sm sm:text-xl lg:text-2xl">(+632) 8848 5000</p>
+        <h1 className="xl:text-3xl text-2xl sm:text-3xl lg:text-5xl">Email:</h1>
+        <p className="xl:text-lg text-sm sm:text-xl lg:text-2xl">info@alveoland.com.ph</p>
+    </div>
 
-          <h1 className='xl:text-3xl text-2xl sm:text-3xl lg:text-5xl'>
-            Customer Hotline:
-          </h1>
-          <p className='xl:text-lg text-sm sm:text-xl lg:text-2xl'>
-            (+632) 8848 5000
-          </p>
-          <h1 className='xl:text-3xl text-2xl sm:text-3xl lg:text-5xl'>
-            Email:
-          </h1>
-          <p className='xl:text-lg text-sm sm:text-xl lg:text-2xl'>
-            info@alveoland.com.ph
-          </p>
+   
+    <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20">
+        <h1 className="xl:text-3xl xl:mt-10 text-2xl sm:text-3xl lg:text-5xl" >Location:</h1>
+        <h5 className="xl:text-lg text-sm sm:text-xl lg:text-2xl">Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634 Taguig City, Metro Manila Philippines</h5>
+
+        <div className="w-1/3 mx-auto flex flex-col items-left justify-center xl:items-start ">
+            <div className="flex items-center justify-center space-x-2  xl:justify-start  xl:-ml-36 2xl:-ml-52">
+                <img src="/assets/socialmedia/facebook.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8" alt="Facebook" />
+                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Facebook</h3>
+            </div>
+            <div className="flex items-center justify-center space-x-2  xl:justify-start xl:-ml-36 2xl:-ml-52">
+                <img src="/assets/socialmedia/messenger.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8"  alt="Messenger" />
+                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Messenger</h3>
+            </div>
+            <div className="flex items-center justify-center space-x-2  xl:justify-start xl:-ml-36 2xl:-ml-52">
+                <img src="/assets/socialmedia/telegram.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8"  alt="Telegram" />
+                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Telegram</h3>
+            </div>
+            <div className="flex items-center justify-center space-x-2 xl:justify-start xl:-ml-36 2xl:-ml-52">
+                <img src="/assets/socialmedia/viber.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8"  alt="Viber" />
+                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Viber</h3>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div className='xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20'>
-          <h1 className='xl:text-3xl xl:mt-10 text-2xl sm:text-3xl lg:text-5xl'>
-            Location:
-          </h1>
-          <h5 className='xl:text-lg text-sm sm:text-xl lg:text-2xl'>
-            Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
-            Taguig City, Metro Manila Philippines
-          </h5>
-
-          <div className='w-1/3 mx-auto flex flex-col items-left justify-center xl:items-start '>
-            <div className='flex items-center justify-center space-x-2  xl:justify-start  xl:-ml-36 2xl:-ml-52'>
-              <img
-                src='/assets/socialmedia/facebook.png'
-                className='w-6 h-6 -mt-2 lg:w-8 lg:h-8'
-                alt='Facebook'
-              />
-              <h3 className='xl:text-xl text-lg sm:text-xl lg:text-3xl'>
-                Facebook
-              </h3>
-            </div>
-            <div className='flex items-center justify-center space-x-2  xl:justify-start xl:-ml-36 2xl:-ml-52'>
-              <img
-                src='/assets/socialmedia/messenger.png'
-                className='w-6 h-6 -mt-2 lg:w-8 lg:h-8'
-                alt='Messenger'
-              />
-              <h3 className='xl:text-xl text-lg sm:text-xl lg:text-3xl'>
-                Messenger
-              </h3>
-            </div>
-            <div className='flex items-center justify-center space-x-2  xl:justify-start xl:-ml-36 2xl:-ml-52'>
-              <img
-                src='/assets/socialmedia/telegram.png'
-                className='w-6 h-6 -mt-2 lg:w-8 lg:h-8'
-                alt='Telegram'
-              />
-              <h3 className='xl:text-xl text-lg sm:text-xl lg:text-3xl'>
-                Telegram
-              </h3>
-            </div>
-            <div className='flex items-center justify-center space-x-2 xl:justify-start xl:-ml-36 2xl:-ml-52'>
-              <img
-                src='/assets/socialmedia/viber.png'
-                className='w-6 h-6 -mt-2 lg:w-8 lg:h-8'
-                alt='Viber'
-              />
-              <h3 className='xl:text-xl text-lg sm:text-xl lg:text-3xl'>
-                Viber
-              </h3>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  )
-}
-
-export default Footer
+       
+        </>
+    );
+    
+};
+ 
+ 
+export default Footer;

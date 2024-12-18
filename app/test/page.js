@@ -25,6 +25,7 @@ export default function Admin ({}) {
   })
   const [error, setError] = useState('')
   const [isOtpSent, setIsOtpSent] = useState(false) // To track OTP sent state
+  const [isLoggedIn, setisLoggedin] = useState(false) // To track OTP sent state
 
   const [properties, setProperties] = useState([]) // State to store fetched data from API
 
@@ -369,7 +370,7 @@ export default function Admin ({}) {
           </div>
         </div>
 
-        {/* Demo Section */}
+
         <div className='demo-container min-h-screen mt-14 w-9/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center'>
           <div>
             <Demo />
@@ -389,17 +390,10 @@ export default function Admin ({}) {
           <AreaModal isOpen={isAreaModalOpen} closeModal={closeModal} />
         </div>
       </div>
-      
-    </div>
-  </div>
-</div>
-{/* Demo Section */}
-<div className="demo-container mt-14 w-9/12 mx-auto flex justify-center">
-  <div>
-    <Demo />
-  </div>
-</div>
-       </div> 
+
+
+
+   
     </>
   )
 }
