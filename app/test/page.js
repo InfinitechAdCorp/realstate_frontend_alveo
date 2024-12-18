@@ -32,7 +32,6 @@ export default function Admin ({}) {
     properties: 0,
     otherBuildings: 0,
     condominiums: 0,
-
     locations: 0
   })
   const [isSidebarVisible, setSidebarVisible] = useState(false) // State for controlling sidebar visibility
@@ -100,16 +99,14 @@ export default function Admin ({}) {
       setError('Invalid or expired OTP.')
     }
 
+
   }
 
 
   const fetchCount = async (endpoint, key) => {
     try {
-
-      const response = await fetch(
-        `http://localhost:8000/api/admin/${endpoint}`
-      )
-      const data = await response.json()
+      const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
+      const data = await response.json();
 
       if (response.ok) {
         setCounts(prevCounts => ({ ...prevCounts, [key]: data.count }))

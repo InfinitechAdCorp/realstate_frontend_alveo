@@ -15,13 +15,77 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-const TableComponent = () => {
- const payment = row.original;
+export const columns = [
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Building Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
+    accessorKey: "development_type",
+    header: "Development Type",
+  },
+  {
+    accessorKey: "price_range",
+    header: "Price Range",
+  },
+  {
+    accessorKey: "architectural_theme",
+    header: "Architectural Theme",
+  },
+  {
+    accessorKey: "lat",
+    header: "Lattitude",
+  },
+  {
+    accessorKey: "lng",
+    header: "Longitude",
+  },
+
+  {
+    id: "actions",
+    cell: ({ row, viewType }) => {
+      const payment = row.original;
       const fetchProperties = async () => {
         // Assuming you have this function defined elsewhere
         try {
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/properties"
+            "http://localhost:8000/api/admin/properties"
           ); // Fetch properties API
           const data = await response.json();
           
@@ -34,7 +98,7 @@ const TableComponent = () => {
       const fetchBuildings = async () => {
         try {
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/buildings"
+            "http://localhost:8000/api/admin/buildings"
           ); // Fetch buildings API
           // Fetch properties API
           const data = await response.json();
@@ -48,7 +112,7 @@ const TableComponent = () => {
       const fetchFacilities = async () => {
         try {
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/facilities"
+            "http://localhost:8000/api/admin/facilities"
           );
           const data = await response.json();
      
@@ -61,7 +125,7 @@ const TableComponent = () => {
       const fetchFeatures = async () => {
         try {
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/features"
+            "http://localhost:8000/api/admin/features"
           ); // Fetch features API
           const data = await response.json();
  
@@ -80,13 +144,13 @@ const TableComponent = () => {
 
         let url;
         if (viewType === "property") {
-          url = "https://infinitech-testing1.online/api/admin/deleteproperty";
+          url = "http://localhost:8000/api/admin/deleteproperty";
         } else if (viewType === "buildings") {
-          url = "https://infinitech-testing1.online/api/admin/deletebuilding";
+          url = "http://localhost:8000/api/admin/deletebuilding";
         } else if (viewType === "feature") {
-          url = "https://infinitech-testing1.online/api/admin/deletefeature";
+          url = "http://localhost:8000/api/admin/deletefeature";
         } else if (viewType === "facility") {
-          url = "https://infinitech-testing1.online/api/admin/deletefacility";
+          url = "http://localhost:8000/api/admin/deletefacility";
         } else {
           console.error("Invalid viewType");
           return;
@@ -258,7 +322,7 @@ const handleAddOtherBuilding = async (e) => {
   }
 
   try {
-    const response = await fetch("https://infinitech-testing1.online/api/admin/addBuildings", {
+    const response = await fetch("http://localhost:8000/api/admin/addBuildings", {
       method: "POST",
       body: formDataToSend, // Send the FormData directly
     });
@@ -293,7 +357,7 @@ const handleAddFacilities = async (e) => {
   console.log('Facilities Data:', facilities);
 
   try {
-    const response = await fetch('https://infinitech-testing1.online/api/admin/addFacilities', {
+    const response = await fetch('http://localhost:8000/api/admin/addFacilities', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(facilities),
@@ -336,7 +400,7 @@ const handleAddFeature = (e) => {
       }
     });
 
-    fetch('https://infinitech-testing1.online/api/admin/addFeature', {
+    fetch('http://localhost:8000/api/admin/addFeature', {
       method: 'POST',
       body: data,
     })
@@ -367,7 +431,7 @@ const handleUpdateProperty = (e) => {
   ];
 
   // Make the API call to update the property
-  fetch('https://infinitech-testing1.online/api/admin/update-properties', {
+  fetch('http://localhost:8000/api/admin/update-properties', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -395,7 +459,7 @@ const handleUpdateProperty = (e) => {
 
 const fetchBuildingData = async (buildingId) => {
   try {
-    const response = await fetch(`https://infinitech-testing1.online/api/buildings/id/${buildingId}`);
+    const response = await fetch(`http://localhost:8000/api/buildings/id/${buildingId}`);
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
@@ -448,7 +512,7 @@ const updatedBuilding = {
 };
 
   try {
-    const response = await fetch(`https://infinitech-testing1.online/api/admin/update-buildings`, {
+    const response = await fetch(`http://localhost:8000/api/admin/update-buildings`, {
       method: 'POST',  // Change the HTTP method to POST
       headers: {
         'Content-Type': 'application/json',
@@ -475,7 +539,7 @@ const updatedBuilding = {
  const getFacilities= async () => {
     try {
        // Replace this with the actual property ID dynamically
-      const response = await fetch(`https://infinitech-testing1.online/api/facilities/id/${payment.id}`);
+      const response = await fetch(`http://localhost:8000/api/facilities/id/${payment.id}`);
 
       // Check if the response is successful (status 200-299)
       if (!response.ok) {
@@ -506,7 +570,7 @@ const updatedBuilding = {
 
 
 
-    fetch('https://infinitech-testing1.online/api/admin/update-facilities', {
+    fetch('http://localhost:8000/api/admin/update-facilities', {
       method: 'POST',
       body: JSON.stringify(updatedFacilities), // Send the updated facilities array
       headers: {
@@ -597,7 +661,6 @@ const handleOtherBuildingImageChange = (e) => {
     // Read the file as a data URL (Base64)
     reader.readAsDataURL(file);
   };
-
 const handleSubmit = async (e) => {
   e.preventDefault(); // Prevent default form submission behavior
 
@@ -608,16 +671,21 @@ const handleSubmit = async (e) => {
     // Prepare FormData to handle both file uploads and other fields
     const formData = new FormData();
     formData.append('propertyId', rowData.id); // Assuming rowData has the propertyId
-    formData.append('propertyName', rowData.name); // Assuming rowData has the propertyId
+    formData.append('propertyName', rowData.name); // Assuming rowData has the propertyName
 
     // Loop through updated features to add files dynamically
     updatedFeatures.forEach((feature, index) => {
       Object.entries(feature).forEach(([key, value]) => {
-        if (value instanceof File) {
-          // Append file entries dynamically
-          formData.append(`features[${index}][${key}]`, value);
+        if (key === 'image') {
+          // Check if it's a base64 image
+          if (value.startsWith('data:image')) {
+            formData.append(`features[${index}][image]`, value); // Directly append the base64 string
+          } else {
+            // If it's a file path (relative or absolute), append it as is
+            formData.append(`features[${index}][image]`, value); 
+          }
         } else {
-          // Append other non-file feature values
+          // Append other non-image feature values
           formData.append(`features[${index}][${key}]`, value);
         }
       });
@@ -630,7 +698,7 @@ const handleSubmit = async (e) => {
     }
 
     // Send the request to update the features
-    const response = await fetch('https://infinitech-testing1.online/api/admin/update-features', {
+    const response = await fetch('http://localhost:8000/api/admin/update-features', {
       method: 'POST', // Use POST since you're sending FormData
       body: formData, // FormData automatically sets the correct Content-Type (multipart/form-data)
     });
@@ -650,6 +718,7 @@ const handleSubmit = async (e) => {
     alert('An error occurred while updating the features.');
   }
 };
+
 const handleFeatureInputChange = (e, index) => {
   const { name, value, type, files } = e.target;
 
@@ -838,25 +907,38 @@ const handleFeatureImageChange = (e, index) => {
 
                 {/* Display Image */}
             <div className="flex justify-center items-center p-4 bg-gray-50 border rounded-lg">
-{feature.image && feature.image !== 'null' ? (
-  feature.image.startsWith('data:image') ? (
-    // Base64 image handling
-    <img
-      src={feature.image} // Base64 string for the image preview
-      alt={feature.name || 'Feature Image'}
-      className="w-32 h-32 object-cover rounded-md"
-    />
+{
+  feature.image && feature.image !== 'null' ? (
+    feature.image.startsWith('data:image') ? (
+      // Base64 image handling
+      <img
+        src={feature.image} // Base64 string for the image preview
+        alt={feature.name || 'Feature Image'}
+        className="w-32 h-32 object-cover rounded-md"
+      />
+    ) : feature.image.startsWith('/property/') ? (
+      // Handle http://localhost:8000 property URLs (e.g., /property/fortis_residence/...)
+      <img
+        src={`http://localhost:8000${feature.image}`} // Use localhost:8000 for the image
+        alt={feature.name || 'Feature Image'}
+        className="w-32 h-32 object-cover rounded-md"
+      />
+    ) : (
+      // Handle other paths (e.g., localhost:3000 or other assets paths)
+      <img
+        src={`http://localhost:3000/${feature.image.replace(/\\/g, '/')}`} // Normalize path and prepend localhost:3000
+        alt={feature.name || 'Feature Image'}
+        className="w-32 h-32 object-cover rounded-md"
+      />
+    )
   ) : (
-    // Path-based image handling (URL or path)
-    <img
-      src={`https://infinitech-testing1.online${feature.image.replace(/\\/g, '/')}`} // Ensure the path is fixed
-      alt={feature.name || 'Feature Image'}
-      className="w-32 h-32 object-cover rounded-md"
-    />
+    // Fallback for missing or null images
+    <div className="text-gray-500">No Image Available</div>
   )
-) : (
-  <div className="text-gray-500">No Image Available</div>
-)}
+}
+
+
+
 
 </div>
 
@@ -897,10 +979,9 @@ const handleFeatureImageChange = (e, index) => {
        {popups.updateBuilding && buildingData && buildingData.length > 0 && (
   <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-4xl overflow-auto">
-  <h2 className="text-xl font-semibold text-gray-800 mb-4">
-  Update Building for &apos;{buildingData[currentBuildingIndex].name}&apos; in {payment.name}
-</h2>
-
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        Update Building for '{buildingData[currentBuildingIndex].name}' in {payment.name}
+      </h2>
 
       <form className="grid grid-cols-2 gap-4 w-full" onSubmit={handleUpdateBuilding}>
         {/* Dynamically render building details */}
@@ -1388,74 +1469,6 @@ const handleFeatureImageChange = (e, index) => {
           
         </div>
       );
-};
-
-export const columns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Building Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "development_type",
-    header: "Development Type",
-  },
-  {
-    accessorKey: "price_range",
-    header: "Price Range",
-  },
-  {
-    accessorKey: "architectural_theme",
-    header: "Architectural Theme",
-  },
-  {
-    accessorKey: "lat",
-    header: "Lattitude",
-  },
-  {
-    accessorKey: "lng",
-    header: "Longitude",
-  },
-
-  {
-    id: "actions",
-    cell: ({ row, viewType }) => {
-     TableComponent
     },
   },
 

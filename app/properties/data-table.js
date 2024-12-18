@@ -37,9 +37,9 @@ const fetchProperties = async () => {
   // Assuming you have this function defined elsewhere
   try {
 
-    const response = await fetch('http://localhost:8000/api/admin/properties') // Fetch properties API
-    const data = await response.json()
-    return data // Return fetched properties
+    const response = await fetch("http://localhost:8000/api/admin/properties"); // Fetch properties API
+    const data = await response.json();
+    return data; // Return fetched properties
 
   } catch (error) {
     console.error('Failed to fetch properties:', error)
@@ -49,7 +49,7 @@ const fetchProperties = async () => {
 const fetchBuildings = async () => {
   try {
 
-    const response = await fetch('http://localhost:8000/api/admin/buildings') // Fetch buildings API
+    const response = await fetch("http://localhost:8000/api/admin/buildings"); // Fetch buildings API
 
     // Fetch properties API
     const data = await response.json()
@@ -63,10 +63,10 @@ const fetchBuildings = async () => {
 const fetchFacilities = async () => {
   try {
 
-    const response = await fetch('http://localhost:8000/api/admin/facilities')
-    const data = await response.json()
-
-    return data // Return fetched properties
+    const response = await fetch("http://localhost:8000/api/admin/facilities");
+    const data = await response.json();
+ 
+    return data; // Return fetched properties
 
   } catch (error) {
     console.error('Failed to fetch properties:', error)
@@ -76,10 +76,10 @@ const fetchFacilities = async () => {
 const fetchFeatures = async () => {
   try {
 
-    const response = await fetch('http://localhost:8000/api/admin/features') // Fetch features API
-    const data = await response.json()
-
-    return data // Return fetched properties
+    const response = await fetch("http://localhost:8000/api/admin/features"); // Fetch features API
+    const data = await response.json();
+  
+    return data; // Return fetched properties
 
   } catch (error) {
     console.error('Failed to fetch properties:', error)
@@ -244,6 +244,7 @@ export function DataTable ({ columns, data }) {
         formData.append(key, propertyData[key]);
       }
     });
+
 
 
     // Log the formData to see what is being appended
