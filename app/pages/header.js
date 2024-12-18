@@ -119,9 +119,7 @@ const Header = () => {
   useEffect(() => {
     const fetchArea = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8000/api/admin/area'
-        )
+        const response = await fetch('http://localhost:8000/api/admin/area')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
@@ -134,18 +132,6 @@ const Header = () => {
 
     fetchArea()
   }, [])
-
-  const handleAreaClick = async (areaName) => {
-    try {
-      setLoading(true);
-      setError(null); 
-      router.push(`/pages/locations/${areaName.toLowerCase().replace(/\s+/g, '-')}`);
-    } catch (err) {
-      setError(err.message); // Handle any errors
-    } finally {
-      setLoading(false); // Stop loading
-    }
-  };
 
   return (
     <>
@@ -249,14 +235,13 @@ const Header = () => {
               <li key={area.key}>
                 <a
                   className='block cursor-pointer hover:text-gray-300 no-underline text-white lg:text-xl xl:text-sm'
-                  onClick={() => handleAreaClick(area.area_name)}
+                  href={`/pages/locations/${area.area_name.toLowerCase().replace(/\s+/g, '')}`}
                 >
-                  {area.area_name} {/* Display area name here */}
+                  {area.area_name}
                 </a>
               </li>
             ))}
           </ul>
-
           <Link
             href='/pages/explore'
             className='block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
