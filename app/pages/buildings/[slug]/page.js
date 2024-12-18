@@ -91,7 +91,7 @@ export default function BlogPost({ params }) {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, luxury property, property features, building information, property information, building features, condominium features"
-  canonical="http://localhost:3000"
+  canonical="https://realstate-frontend-alveo.vercel.app"
 />
       <Header />
       <div className=" p-4 md:p-8 mt-2 w-full mb-20">

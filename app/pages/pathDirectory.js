@@ -27,7 +27,7 @@ const Directory = ({ currentLocation, specificLocation }) => {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, location, property location, condominium slot, property location"
-  canonical="http://localhost:3000"
+  canonical="https://realstate-frontend-alveo.vercel.app"
 />
        <div className="  mt-1 h-20 ml-5 w-12/12 -mb-12">
     <div className=" flex items-left justify-left sm:justify-left">

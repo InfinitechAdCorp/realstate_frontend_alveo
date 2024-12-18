@@ -103,7 +103,7 @@ function ExplorePage() {
       const propertyData = await response.json();
 
       // Redirect to the new URL using the property ID
-      window.location.href = `http://localhost:3000/pages/buildings/${buildingId}`;
+      window.location.href = `https://realstate-frontend-alveo.vercel.app/pages/buildings/${buildingId}`;
     } catch (error) {
       console.error("Error fetching property:", error);
     }
@@ -120,7 +120,7 @@ function ExplorePage() {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, properties, parkings, building features, property features, property, buildings, building type"
-  canonical="http://localhost:3000/pages/explore"
+  canonical="https://realstate-frontend-alveo.vercel.app/pages/explore"
 />
       <Header />
       <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10">
