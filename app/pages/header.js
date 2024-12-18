@@ -235,7 +235,9 @@ const Header = () => {
               <li key={area.key}>
                 <a
                   className='block cursor-pointer hover:text-gray-300 no-underline text-white lg:text-xl xl:text-sm'
-                  href={`/pages/locations/${area.area_name.toLowerCase().replace(/\s+/g, '')}`}
+                  href={`/pages/locations/${area.area_name
+                    .toLowerCase()
+                    .replace(/\s+/g, '')}`}
                 >
                   {area.area_name}
                 </a>
@@ -260,6 +262,13 @@ const Header = () => {
               </li>
             ))}
           </ul>
+
+          <Link
+            href='/pages/set-appointment'
+            className='block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
+          >
+            SET APPOINTMENT
+          </Link>
         </nav>
 
         {isPopupVisible && (

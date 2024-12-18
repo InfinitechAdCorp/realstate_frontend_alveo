@@ -275,7 +275,7 @@ export default function Admin ({}) {
               </span>
             </div>
 
-            <nav className='p-4'>
+            <nav className='p-4 cursor-pointer'>
               <ul className='space-y-2' onClick={openDevelopmentTypeModal}>
                 <li>Development Type</li>
               </ul>
@@ -288,6 +288,13 @@ export default function Admin ({}) {
               <ul className='space-y-2' onClick={openAreaModal}>
                 <li>Location</li>
               </ul>
+
+              <Link
+                href='/pages/aboutalveo/aboutalveo'
+                className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
+              >
+                APPOINTMENTS
+              </Link>
             </nav>
           </div>
         )}
