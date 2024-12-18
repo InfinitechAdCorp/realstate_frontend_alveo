@@ -117,7 +117,7 @@ const LocationPage = () => {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale, property location, location"
-  canonical="http://localhost:3000/pages/location"
+  canonical="https://realstate-frontend-alveo.vercel.app/pages/location"
 />
             <Header />
 

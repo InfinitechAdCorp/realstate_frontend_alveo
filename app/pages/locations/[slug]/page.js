@@ -131,15 +131,21 @@ export default function BlogPost({ params }) {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, location, property, building location, property location"
-  canonical="http://localhost:3000/pages/locations"
+  canonical="https://realstate-frontend-alveo.vercel.app/pages/locations"
 />
         <Image
-          src={`/${property.path}`}
-          alt={property.name}
-          width={400} // Adjusted width
-          height={300} // Adjusted height
-          className="w-full h-60 object-cover" // Set a fixed height for the image
-        />
+      src={
+        property.path
+          ? (property.path.startsWith('http') || property.path.startsWith('https'))
+            ? property.path // If it's a URL, use it directly
+            : `https://infinitech-testing1.online/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+          : '' // Fallback if property.path is null or undefined
+      }
+      alt={property.name}
+      width={400} // Adjusted width
+      height={300} // Adjusted height
+      className="w-full h-60 object-cover rounded-lg"
+    />
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-4 text-gray-800 lg:text-4xl xl:text-3xl">
             {property.name}
@@ -162,7 +168,7 @@ export default function BlogPost({ params }) {
     const fetchApi = async () => {
       try {
   
-        const response = await fetch(`http://localhost:8000/api/blog/${slug}`);
+        const response = await fetch(`https://infinitech-testing1.online/api/blog/${slug}`);
         if (!response.ok) {
           throw new Error("Failed to fetch blog post data");
         }

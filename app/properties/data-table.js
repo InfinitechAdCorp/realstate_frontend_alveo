@@ -36,9 +36,11 @@ import { Input } from '@/components/ui/input'
 const fetchProperties = async () => {
   // Assuming you have this function defined elsewhere
   try {
+
     const response = await fetch('http://localhost:8000/api/admin/properties') // Fetch properties API
     const data = await response.json()
     return data // Return fetched properties
+
   } catch (error) {
     console.error('Failed to fetch properties:', error)
     return [] // Return an empty array in case of an error
@@ -46,7 +48,9 @@ const fetchProperties = async () => {
 }
 const fetchBuildings = async () => {
   try {
+
     const response = await fetch('http://localhost:8000/api/admin/buildings') // Fetch buildings API
+
     // Fetch properties API
     const data = await response.json()
 
@@ -58,10 +62,12 @@ const fetchBuildings = async () => {
 }
 const fetchFacilities = async () => {
   try {
+
     const response = await fetch('http://localhost:8000/api/admin/facilities')
     const data = await response.json()
 
     return data // Return fetched properties
+
   } catch (error) {
     console.error('Failed to fetch properties:', error)
     return [] // Return an empty array in case of an error
@@ -69,10 +75,12 @@ const fetchFacilities = async () => {
 }
 const fetchFeatures = async () => {
   try {
+
     const response = await fetch('http://localhost:8000/api/admin/features') // Fetch features API
     const data = await response.json()
 
     return data // Return fetched properties
+
   } catch (error) {
     console.error('Failed to fetch properties:', error)
     return [] // Return an empty array in case of an error
@@ -237,9 +245,11 @@ export function DataTable ({ columns, data }) {
       }
     });
 
+
     // Log the formData to see what is being appended
     formData.forEach((value, key) => {
       console.log('Form Data:', key, value);
+
     });
 
     try {
@@ -528,8 +538,14 @@ export function DataTable ({ columns, data }) {
         </DropdownMenu>
       </div>
 
-      <div>
-        <div>
+
+      <div style={{
+        maxHeight: '500px',  // Set a fixed height for the body
+        overflowY: 'auto',   // Enable vertical scrolling
+        display: 'block',    // Make the table body block-level
+      }}>
+        <div >
+
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map(headerGroup => (
@@ -548,7 +564,7 @@ export function DataTable ({ columns, data }) {
               ))}
             </TableHeader>
 
-            <TableBody>
+            <TableBody   >
               {table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map(row => (
                   <React.Fragment key={row.id}>

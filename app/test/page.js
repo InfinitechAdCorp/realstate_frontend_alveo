@@ -1,4 +1,5 @@
 // components/Header.js
+
 'use client'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -26,10 +27,12 @@ export default function Admin ({}) {
   const [isOtpSent, setIsOtpSent] = useState(false) // To track OTP sent state
 
   const [properties, setProperties] = useState([]) // State to store fetched data from API
+
   const [counts, setCounts] = useState({
     properties: 0,
     otherBuildings: 0,
     condominiums: 0,
+
     locations: 0
   })
   const [isSidebarVisible, setSidebarVisible] = useState(false) // State for controlling sidebar visibility
@@ -96,14 +99,18 @@ export default function Admin ({}) {
     } else {
       setError('Invalid or expired OTP.')
     }
+
   }
+
 
   const fetchCount = async (endpoint, key) => {
     try {
+
       const response = await fetch(
         `http://localhost:8000/api/admin/${endpoint}`
       )
       const data = await response.json()
+
       if (response.ok) {
         setCounts(prevCounts => ({ ...prevCounts, [key]: data.count }))
       } else {
@@ -114,34 +121,17 @@ export default function Admin ({}) {
     }
   }
 
+  // Fetch count data after login success
   useEffect(() => {
-    fetchCount('countproperties', 'properties')
-    fetchCount('countotherbuildings', 'otherBuildings')
-    fetchCount('countcondominiums', 'condominiums')
-    fetchCount('countlocations', 'locations')
-  }, []) // Runs once on mount
 
-  // Fetch data from the API on page load
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        const response = await fetch(
-          'http://localhost:8000/api/admin/properties'
-        ) // Your Next.js API route
-        const data = await response.json()
-        setProperties(data) // Store fetched properties
-      } catch (error) {
-        console.error('Failed to fetch properties:', error)
-      }
+    if (isLoggedIn) {
+      fetchCount("countproperties", "properties");
+      fetchCount("countotherbuildings", "otherBuildings");
+      fetchCount("countcondominiums", "condominiums");
+      fetchCount("countlocations", "locations");
+
     }
-
-    fetchProperties()
-  }, []) // Empty dependency array ensures this runs only on mount
-
-  const closePopup = () => {
-    setIsVisible(false)
-  }
-
+  }, [isLoggedIn]); // Runs only when isLoggedIn is true
   const openSidebar = () => {
     setSidebarVisible(true)
   }
@@ -161,6 +151,7 @@ export default function Admin ({}) {
 
   return (
     <>
+
       {/* {isVisible && (
         <div className='popup-container fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50'>
           <div className='popup-content bg-white p-8 rounded-lg shadow-xl w-full max-w-lg'>
@@ -289,6 +280,7 @@ export default function Admin ({}) {
                 <li>Location</li>
               </ul>
             </nav>
+
           </div>
         )}
         <div className='main-container mt-24 p-4 flex justify-center items-center'>
@@ -393,6 +385,17 @@ export default function Admin ({}) {
           <AreaModal isOpen={isAreaModalOpen} closeModal={closeModal} />
         </div>
       </div>
+      
+    </div>
+  </div>
+</div>
+{/* Demo Section */}
+<div className="demo-container mt-14 w-9/12 mx-auto flex justify-center">
+  <div>
+    <Demo />
+  </div>
+</div>
+       </div> 
     </>
   )
 }

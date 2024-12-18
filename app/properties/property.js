@@ -15,77 +15,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
-export const columns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Building Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-  },
-  {
-    accessorKey: "development_type",
-    header: "Development Type",
-  },
-  {
-    accessorKey: "price_range",
-    header: "Price Range",
-  },
-  {
-    accessorKey: "architectural_theme",
-    header: "Architectural Theme",
-  },
-  {
-    accessorKey: "lat",
-    header: "Lattitude",
-  },
-  {
-    accessorKey: "lng",
-    header: "Longitude",
-  },
-
-  {
-    id: "actions",
-    cell: ({ row, viewType }) => {
-      const payment = row.original;
+const TableComponent = () => {
+ const payment = row.original;
       const fetchProperties = async () => {
         // Assuming you have this function defined elsewhere
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/properties"
+            "https://infinitech-testing1.online/api/admin/properties"
           ); // Fetch properties API
           const data = await response.json();
           
@@ -98,7 +34,7 @@ export const columns = [
       const fetchBuildings = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/buildings"
+            "https://infinitech-testing1.online/api/admin/buildings"
           ); // Fetch buildings API
           // Fetch properties API
           const data = await response.json();
@@ -112,7 +48,7 @@ export const columns = [
       const fetchFacilities = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/facilities"
+            "https://infinitech-testing1.online/api/admin/facilities"
           );
           const data = await response.json();
      
@@ -125,7 +61,7 @@ export const columns = [
       const fetchFeatures = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/features"
+            "https://infinitech-testing1.online/api/admin/features"
           ); // Fetch features API
           const data = await response.json();
  
@@ -144,13 +80,13 @@ export const columns = [
 
         let url;
         if (viewType === "property") {
-          url = "http://localhost:8000/api/admin/deleteproperty";
+          url = "https://infinitech-testing1.online/api/admin/deleteproperty";
         } else if (viewType === "buildings") {
-          url = "http://localhost:8000/api/admin/deletebuilding";
+          url = "https://infinitech-testing1.online/api/admin/deletebuilding";
         } else if (viewType === "feature") {
-          url = "http://localhost:8000/api/admin/deletefeature";
+          url = "https://infinitech-testing1.online/api/admin/deletefeature";
         } else if (viewType === "facility") {
-          url = "http://localhost:8000/api/admin/deletefacility";
+          url = "https://infinitech-testing1.online/api/admin/deletefacility";
         } else {
           console.error("Invalid viewType");
           return;
@@ -322,7 +258,7 @@ const handleAddOtherBuilding = async (e) => {
   }
 
   try {
-    const response = await fetch("http://localhost:8000/api/admin/addBuildings", {
+    const response = await fetch("https://infinitech-testing1.online/api/admin/addBuildings", {
       method: "POST",
       body: formDataToSend, // Send the FormData directly
     });
@@ -357,7 +293,7 @@ const handleAddFacilities = async (e) => {
   console.log('Facilities Data:', facilities);
 
   try {
-    const response = await fetch('http://localhost:8000/api/admin/addFacilities', {
+    const response = await fetch('https://infinitech-testing1.online/api/admin/addFacilities', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(facilities),
@@ -400,7 +336,7 @@ const handleAddFeature = (e) => {
       }
     });
 
-    fetch('http://localhost:8000/api/admin/addFeature', {
+    fetch('https://infinitech-testing1.online/api/admin/addFeature', {
       method: 'POST',
       body: data,
     })
@@ -431,7 +367,7 @@ const handleUpdateProperty = (e) => {
   ];
 
   // Make the API call to update the property
-  fetch('http://localhost:8000/api/admin/update-properties', {
+  fetch('https://infinitech-testing1.online/api/admin/update-properties', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -459,7 +395,7 @@ const handleUpdateProperty = (e) => {
 
 const fetchBuildingData = async (buildingId) => {
   try {
-    const response = await fetch(`http://localhost:8000/api/buildings/id/${buildingId}`);
+    const response = await fetch(`https://infinitech-testing1.online/api/buildings/id/${buildingId}`);
     const data = await response.json();
 
     if (Array.isArray(data) && data.length > 0) {
@@ -512,7 +448,7 @@ const updatedBuilding = {
 };
 
   try {
-    const response = await fetch(`http://localhost:8000/api/admin/update-buildings`, {
+    const response = await fetch(`https://infinitech-testing1.online/api/admin/update-buildings`, {
       method: 'POST',  // Change the HTTP method to POST
       headers: {
         'Content-Type': 'application/json',
@@ -539,7 +475,7 @@ const updatedBuilding = {
  const getFacilities= async () => {
     try {
        // Replace this with the actual property ID dynamically
-      const response = await fetch(`http://localhost:8000/api/facilities/id/${payment.id}`);
+      const response = await fetch(`https://infinitech-testing1.online/api/facilities/id/${payment.id}`);
 
       // Check if the response is successful (status 200-299)
       if (!response.ok) {
@@ -570,7 +506,7 @@ const updatedBuilding = {
 
 
 
-    fetch('http://localhost:8000/api/admin/update-facilities', {
+    fetch('https://infinitech-testing1.online/api/admin/update-facilities', {
       method: 'POST',
       body: JSON.stringify(updatedFacilities), // Send the updated facilities array
       headers: {
@@ -694,7 +630,7 @@ const handleSubmit = async (e) => {
     }
 
     // Send the request to update the features
-    const response = await fetch('http://localhost:8000/api/admin/update-features', {
+    const response = await fetch('https://infinitech-testing1.online/api/admin/update-features', {
       method: 'POST', // Use POST since you're sending FormData
       body: formData, // FormData automatically sets the correct Content-Type (multipart/form-data)
     });
@@ -913,7 +849,7 @@ const handleFeatureImageChange = (e, index) => {
   ) : (
     // Path-based image handling (URL or path)
     <img
-      src={`http://localhost:8000${feature.image.replace(/\\/g, '/')}`} // Ensure the path is fixed
+      src={`https://infinitech-testing1.online${feature.image.replace(/\\/g, '/')}`} // Ensure the path is fixed
       alt={feature.name || 'Feature Image'}
       className="w-32 h-32 object-cover rounded-md"
     />
@@ -961,9 +897,10 @@ const handleFeatureImageChange = (e, index) => {
        {popups.updateBuilding && buildingData && buildingData.length > 0 && (
   <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
     <div className="bg-white p-6 rounded-lg w-full max-w-4xl overflow-auto">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Update Building for '{buildingData[currentBuildingIndex].name}' in {payment.name}
-      </h2>
+  <h2 className="text-xl font-semibold text-gray-800 mb-4">
+  Update Building for &apos;{buildingData[currentBuildingIndex].name}&apos; in {payment.name}
+</h2>
+
 
       <form className="grid grid-cols-2 gap-4 w-full" onSubmit={handleUpdateBuilding}>
         {/* Dynamically render building details */}
@@ -1451,6 +1388,74 @@ const handleFeatureImageChange = (e, index) => {
           
         </div>
       );
+};
+
+export const columns = [
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+      />
+    ),
+    cell: ({ row }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={(value) => row.toggleSelected(!!value)}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Building Name
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+  },
+  {
+    accessorKey: "development_type",
+    header: "Development Type",
+  },
+  {
+    accessorKey: "price_range",
+    header: "Price Range",
+  },
+  {
+    accessorKey: "architectural_theme",
+    header: "Architectural Theme",
+  },
+  {
+    accessorKey: "lat",
+    header: "Lattitude",
+  },
+  {
+    accessorKey: "lng",
+    header: "Longitude",
+  },
+
+  {
+    id: "actions",
+    cell: ({ row, viewType }) => {
+     TableComponent
     },
   },
 
