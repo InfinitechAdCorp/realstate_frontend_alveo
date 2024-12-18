@@ -48,7 +48,7 @@ const AreaModal = ({ isOpen, closeModal }) => {
     try {
       const response = await fetch('http://localhost:8000/api/admin/add-area', {
         method: 'POST',
-        body: formData, // No need to set headers for formData
+        body: formData,
       });
 
       const data = await response.json();
@@ -86,7 +86,7 @@ const AreaModal = ({ isOpen, closeModal }) => {
         className="bg-white p-6 rounded-lg w-11/12 sm:w-96 shadow-lg"
         onClick={handleModalContentClick}
       >
-        <h2 className="text-xl font-semibold text-center mb-4">Architectural Theme</h2>
+        <h2 className="text-xl font-semibold text-center mb-4">Add Data</h2>
 
         {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
         {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}

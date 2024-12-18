@@ -9,13 +9,13 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import DevelopmentTypeModal from '@/components/admin/developmentTypeModal'
 import ArchitecturalThemeModal from '@/components/admin/architecturalThemeModal'
 import StatusModal from '@/components/admin/statusModal'
-
 import { Input } from '@/components/ui/input'
-
 import Demo from './../properties/page'
 import Header from '../pages/header'
 import Link from 'next/link'
 import AreaModal from '@/components/admin/areaModal'
+
+
 export default function Admin ({}) {
   const [isVisible, setIsVisible] = useState(true) // Controls visibility of popup
   const [formData, setFormData] = useState({
@@ -264,7 +264,7 @@ export default function Admin ({}) {
               </span>
             </div>
 
-            <nav className='p-4'>
+            <nav className='p-4 cursor-pointer'>
               <ul className='space-y-2' onClick={openDevelopmentTypeModal}>
                 <li>Development Type</li>
               </ul>
@@ -277,6 +277,13 @@ export default function Admin ({}) {
               <ul className='space-y-2' onClick={openAreaModal}>
                 <li>Location</li>
               </ul>
+
+              <Link
+                href='/appointment'
+                className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
+              >
+                APPOINTMENTS
+              </Link>
             </nav>
 
           </div>
