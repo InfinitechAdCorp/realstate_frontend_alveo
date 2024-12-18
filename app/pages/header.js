@@ -190,7 +190,7 @@ const Header = () => {
                   className='w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6 -mt-2'
                   style={{ transform: 'rotate(-270deg)', cursor: 'pointer' }}
                 />
-                <p className='ml-2 font-bold w-full'>Explore Properties</p>
+                <p className='ml-2 mr-5 font-bold w-full'>Explore Properties</p>
               </a>
             </div>
           )}
