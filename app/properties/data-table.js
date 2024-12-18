@@ -116,7 +116,7 @@ export function DataTable ({ columns, data }) {
     { label: 'Specific Location', value: 'specific_location' },
     { label: 'Price Range', value: 'price_range' },
     { label: 'Units', value: 'units' },
-    { label: 'Land Area', value: 'land_area' },
+    { label: 'Land Area', value: 'land_area' }
   ]
   const pathAndViewFeatures = [
     { label: 'Building Image', value: 'path', type: 'file' },
@@ -206,70 +206,72 @@ export function DataTable ({ columns, data }) {
     })
   }
   const handleSubmit = async e => {
-    e.preventDefault();
+    e.preventDefault()
 
     // Log property data before appending
-    console.log('Property Data before appending:', propertyData);
+    console.log('Property Data before appending:', propertyData)
 
-    const formData = new FormData();
+    const formData = new FormData()
 
     // Ensure that required fields are present
     if (!propertyData.key || !propertyData.name || !propertyData.status) {
-      alert('Please fill in all required fields.');
-      return;
+      alert('Please fill in all required fields.')
+      return
     }
 
     // Reassign 'key' to be the lowercase version of 'location'
     if (propertyData.location) {
-      propertyData.key = propertyData.location.toLowerCase();
+      propertyData.key = propertyData.location.toLowerCase()
     }
 
     // Append all property fields
     Object.keys(propertyData).forEach(key => {
       if (key === 'path' || key === 'view') {
         if (propertyData[key] instanceof File) {
-          console.log(`Appending file for key ${key}:`, propertyData[key]);
-          formData.append(key, propertyData[key]);
+          console.log(`Appending file for key ${key}:`, propertyData[key])
+          formData.append(key, propertyData[key])
         }
       } else {
-        console.log(`Appending regular data for key ${key}:`, propertyData[key]);
-        formData.append(key, propertyData[key]);
+        console.log(`Appending regular data for key ${key}:`, propertyData[key])
+        formData.append(key, propertyData[key])
       }
-    });
+    })
 
     // Log the formData to see what is being appended
     formData.forEach((value, key) => {
-      console.log('Form Data:', key, value);
-    });
+      console.log('Form Data:', key, value)
+    })
 
     try {
-      const response = await fetch('http://localhost:8000/api/admin/addproperty', {
-        method: 'POST',
-        body: formData // No need to set headers, Fetch will handle it
-      });
+      const response = await fetch(
+        'http://localhost:8000/api/admin/addproperty',
+        {
+          method: 'POST',
+          body: formData // No need to set headers, Fetch will handle it
+        }
+      )
 
       // Check if the response is JSON
-      const contentType = response.headers.get('Content-Type');
+      const contentType = response.headers.get('Content-Type')
       if (contentType && contentType.includes('application/json')) {
-        const data = await response.json();
-        console.log('Response Data:', data);
+        const data = await response.json()
+        console.log('Response Data:', data)
 
         if (response.ok) {
-          console.log('Property created successfully');
-          closeAddProperty();
+          console.log('Property created successfully')
+          closeAddProperty()
         } else {
-          console.error('Error creating property:', data);
-          alert(`Error: ${data.message}`);
+          console.error('Error creating property:', data)
+          alert(`Error: ${data.message}`)
         }
       } else {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
+        const errorText = await response.text()
+        console.error('Error response:', errorText)
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error:', error)
     }
-};
-
+  }
 
   useEffect(() => {
     const fetchDevelopmentTypes = async () => {
@@ -302,9 +304,7 @@ export function DataTable ({ columns, data }) {
     }
     const fetchStatus = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8000/api/admin/status'
-        )
+        const response = await fetch('http://localhost:8000/api/admin/status')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
@@ -316,9 +316,7 @@ export function DataTable ({ columns, data }) {
     }
     const fetchArea = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:8000/api/admin/area'
-        )
+        const response = await fetch('http://localhost:8000/api/admin/area')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
@@ -379,74 +377,294 @@ export function DataTable ({ columns, data }) {
                   <label className='text-sm font-medium text-gray-700'>
                     Development Type
                   </label>
-                  <select
-                    id='development_type'
-                    name='development_type'
-                    value={propertyData['development_type'] || ''}
-                    onChange={handleChange}
-                    className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500'
-                  >
-                    {developmentTypes.map(type => (
-                      <option value={type.id} key={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div>
+                    {propertyData['development_type'] === '' ||
+                    propertyData['development_type'] === 'other' ? (
+                      // If the user selects 'Other', or hasn't selected anything, show an input field
+                      <div className='relative'>
+                        <select
+                          id='development_type'
+                          name='development_type'
+                          value={propertyData['development_type']}
+                          onChange={e =>
+                            setPropertyData({
+                              ...propertyData,
+                              development_type:
+                                e.target.value === 'other'
+                                  ? 'other'
+                                  : e.target.value
+                            })
+                          }
+                          className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                        >
+                          {developmentTypes.map(type => (
+                            <option value={type.id} key={type.id}>
+                              {type.name}
+                            </option>
+                          ))}
+                          {/* Option to select 'Other' */}
+                          <option value='other'>
+                            Other (type your custom type)
+                          </option>
+                        </select>
+
+                        {propertyData['development_type'] === 'other' && (
+                          <input
+                            type='text'
+                            placeholder='Enter custom development type'
+                            value={propertyData['custom_development_type']}
+                            onChange={e =>
+                              setPropertyData({
+                                ...propertyData,
+                                custom_development_type: e.target.value
+                              })
+                            }
+                            className='mt-2 rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      // Otherwise, show the select dropdown with options
+                      <select
+                        id='development_type'
+                        name='development_type'
+                        value={propertyData['development_type']}
+                        onChange={handleChange}
+                        className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                      >
+                        {developmentTypes.map(type => (
+                          <option value={type.id} key={type.id}>
+                            {type.name}
+                          </option>
+                        ))}
+                        {/* Add an option for the user to type a custom input */}
+                        <option value='other'>
+                          Other (type your custom type)
+                        </option>
+                      </select>
+                    )}
+                  </div>
                 </div>
+
                 <div className='flex flex-col space-y-2'>
                   <label className='text-sm font-medium text-gray-700'>
                     Architectural Theme
                   </label>
-                  <select
-                    id='architectural_theme'
-                    name='architectural_theme'
-                    value={propertyData['architectural_theme'] || ''}
-                    onChange={handleChange}
-                    className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500'
-                  >
-                    {architecturalTheme.map(type => (
-                      <option value={type.id} key={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div>
+                    {propertyData['architectural_theme'] === '' ||
+                    propertyData['architectural_theme'] === 'other' ? (
+                      // If the user selects 'Other', or hasn't selected anything, show an input field
+                      <div className='relative'>
+                        <select
+                          id='architectural_theme'
+                          name='architectural_theme'
+                          value={propertyData['architectural_theme']}
+                          onChange={e =>
+                            setPropertyData({
+                              ...propertyData,
+                              architectural_theme:
+                                e.target.value === 'other'
+                                  ? 'other'
+                                  : e.target.value
+                            })
+                          }
+                          className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                        >
+                          {architecturalTheme.map(type => (
+                            <option value={type.id} key={type.id}>
+                              {type.name}
+                            </option>
+                          ))}
+                          {/* Option to select 'Other' */}
+                          <option value='other'>
+                            Other (type your custom theme)
+                          </option>
+                        </select>
+
+                        {propertyData['architectural_theme'] === 'other' && (
+                          <input
+                            type='text'
+                            placeholder='Enter custom architectural theme'
+                            value={propertyData['custom_architectural_theme']}
+                            onChange={e =>
+                              setPropertyData({
+                                ...propertyData,
+                                custom_architectural_theme: e.target.value
+                              })
+                            }
+                            className='mt-2 rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      // Otherwise, show the select dropdown with options
+                      <select
+                        id='architectural_theme'
+                        name='architectural_theme'
+                        value={propertyData['architectural_theme']}
+                        onChange={handleChange}
+                        className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                      >
+                        {architecturalTheme.map(type => (
+                          <option value={type.id} key={type.id}>
+                            {type.name}
+                          </option>
+                        ))}
+                        {/* Add an option for the user to type a custom input */}
+                        <option value='other'>
+                          Other (type your custom theme)
+                        </option>
+                      </select>
+                    )}
+                  </div>
                 </div>
+
                 <div className='flex flex-col space-y-2'>
                   <label className='text-sm font-medium text-gray-700'>
-                   Status
+                    Status
                   </label>
-                  <select
-                    id='status'
-                    name='status'
-                    value={propertyData['status'] || ''}
-                    onChange={handleChange}
-                    className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500'
-                  >
-                    {status.map(type => (
-                      <option value={type.id} key={type.id}>
-                        {type.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className='relative'>
+                    {propertyData['status'] === '' ||
+                    propertyData['status'] === 'other' ? (
+                      // If the user selects 'Other', or hasn't selected anything, show an input field
+                      <>
+                        <select
+                          id='status'
+                          name='status'
+                          value={propertyData['status']}
+                          onChange={e =>
+                            setPropertyData({
+                              ...propertyData,
+                              status:
+                                e.target.value === 'other'
+                                  ? 'other'
+                                  : e.target.value
+                            })
+                          }
+                          className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                        >
+                          {status.map(type => (
+                            <option value={type.id} key={type.id}>
+                              {type.name}
+                            </option>
+                          ))}
+                          {/* Option to select 'Other' */}
+                          <option value='other'>
+                            Other (type your custom status)
+                          </option>
+                        </select>
+
+                        {propertyData['status'] === 'other' && (
+                          <input
+                            type='text'
+                            placeholder='Enter custom status'
+                            value={propertyData['custom_status']}
+                            onChange={e =>
+                              setPropertyData({
+                                ...propertyData,
+                                custom_status: e.target.value
+                              })
+                            }
+                            className='mt-2 rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                          />
+                        )}
+                      </>
+                    ) : (
+                      // Otherwise, show the select dropdown with options
+                      <select
+                        id='status'
+                        name='status'
+                        value={propertyData['status']}
+                        onChange={handleChange}
+                        className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                      >
+                        {status.map(type => (
+                          <option value={type.id} key={type.id}>
+                            {type.name}
+                          </option>
+                        ))}
+                        {/* Add an option for the user to type a custom input */}
+                        <option value='other'>
+                          Other (type your custom status)
+                        </option>
+                      </select>
+                    )}
+                  </div>
                 </div>
+
                 <div className='flex flex-col space-y-2'>
                   <label className='text-sm font-medium text-gray-700'>
-                   Location
+                    Location
                   </label>
-                  <select
-                    id='location'
-                    name='location'
-                    value={propertyData['location'] || ''}
-                    onChange={handleChange}
-                    className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500'
-                  >
-                    {area.map(type => (
-                      <option value={type.id} key={type.id}>
-                        {type.area_name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className='relative'>
+                    {propertyData['location'] === '' ||
+                    propertyData['location'] === 'other' ? (
+                      // If the user selects 'Other', or hasn't selected anything, show an input field
+                      <>
+                        <select
+                          id='location'
+                          name='location'
+                          value={propertyData['location']}
+                          onChange={e =>
+                            setPropertyData({
+                              ...propertyData,
+                              location:
+                                e.target.value === 'other'
+                                  ? 'other'
+                                  : e.target.value
+                            })
+                          }
+                          className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                        >
+                          {area.map(type => (
+                            <option value={type.id} key={type.id}>
+                              {type.area_name}
+                            </option>
+                          ))}
+                          {/* Option to select 'Other' */}
+                          <option value='other'>
+                            Other (type your custom location)
+                          </option>
+                        </select>
+
+                        {propertyData['location'] === 'other' && (
+                          <input
+                            type='text'
+                            placeholder='Enter custom location'
+                            value={propertyData['custom_location']}
+                            onChange={e =>
+                              setPropertyData({
+                                ...propertyData,
+                                custom_location: e.target.value
+                              })
+                            }
+                            className='mt-2 rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                          />
+                        )}
+                      </>
+                    ) : (
+                      // Otherwise, show the select dropdown with options
+                      <select
+                        id='location'
+                        name='location'
+                        value={propertyData['location']}
+                        onChange={handleChange}
+                        className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
+                      >
+                        {area.map(type => (
+                          <option value={type.id} key={type.id}>
+                            {type.area_name}
+                          </option>
+                        ))}
+                        {/* Add an option for the user to type a custom input */}
+                        <option value='other'>
+                          Other (type your custom location)
+                        </option>
+                      </select>
+                    )}
+                  </div>
                 </div>
+
                 {pathAndViewFeatures.map(field => (
                   <div
                     key={field.value}
