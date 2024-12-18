@@ -34,7 +34,7 @@ export default function Admin({}) {
 const handleLogin = async (e) => {
   e.preventDefault();
 
-  const response = await fetch("https://infinitech-testing1.online/api/login", {
+  const response = await fetch("http://localhost:8000/api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -58,7 +58,7 @@ const handleLogin = async (e) => {
 
   const fetchCount = async (endpoint, key) => {
     try {
-      const response = await fetch(`https://infinitech-testing1.online/api/admin/${endpoint}`);
+      const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
       const data = await response.json();
       if (response.ok) {
         setCounts((prevCounts) => ({ ...prevCounts, [key]: data.count }));

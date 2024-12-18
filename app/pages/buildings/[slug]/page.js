@@ -15,7 +15,7 @@ export default function BlogPost({ params }) {
     const fetchProperty = async () => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/property/id/${slug}`
+          `http://localhost:8000/api/property/id/${slug}`
         ); // Use the new endpoint for fetching by ID
         const data = await res.json();
 
@@ -37,7 +37,7 @@ export default function BlogPost({ params }) {
     const fetchFacilities = async (propertyId) => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/facilities/id/${propertyId}`
+          `http://localhost:8000/api/facilities/id/${propertyId}`
         ); // Fetch facilities
         const data = await res.json();
 
@@ -55,7 +55,7 @@ export default function BlogPost({ params }) {
     const fetchBuildings = async (propertyId) => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/buildings/id/${propertyId}`
+          `http://localhost:8000/api/buildings/id/${propertyId}`
         ); // Fetch buildings
         const data = await res.json();
 
@@ -99,11 +99,11 @@ export default function BlogPost({ params }) {
         <div className="grid gap-4 lg:flex justify-center items-center text-center w-full 2xl:w-8/12 mx-auto">
      <img
   src={
-    property.path && property.path.startsWith("https://infinitech-testing1.online/")
+    property.path && property.path.startsWith("http://localhost:8000/")
       ? property.path // If it's already a full URL, use it directly
       : property.path && property.path.startsWith("property/")
-      ? `https://infinitech-testing1.online/${property.path}` // If the path starts with 'property/', use it directly with the server URL
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+      ? `http://localhost:8000/${property.path}` // If the path starts with 'property/', use it directly with the server URL
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
           property.path.replace("assets/Location/", "")
         )}` // Otherwise, construct the URL for 'assets/Location/'
   }
@@ -113,11 +113,11 @@ export default function BlogPost({ params }) {
 
          <img
   src={
-    property.view && property.view.startsWith("https://infinitech-testing1.online/")
+    property.view && property.view.startsWith("http://localhost:8000/")
       ? property.view // If it's already a full URL, use it directly
       : property.view && property.view.startsWith("property/")
-      ? `https://infinitech-testing1.online/${property.view}` // If the path starts with 'property/', use it directly with the server URL
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+      ? `http://localhost:8000/${property.view}` // If the path starts with 'property/', use it directly with the server URL
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
           property.view.replace("assets/Location/", "")
         )}` // Otherwise, construct the URL for 'assets/Location/'
   }
@@ -163,11 +163,11 @@ export default function BlogPost({ params }) {
                   <h4>{feature.name}</h4>
                <img
   src={
-    feature.image.startsWith("https://infinitech-testing1.online/") // If it's already a full URL
+    feature.image.startsWith("http://localhost:8000/") // If it's already a full URL
       ? feature.image
       : feature.image.startsWith("/property/") // If it starts with /property/
-      ? `https://infinitech-testing1.online${feature.image.replace(/\\/g, "/")}` // Prepend the base URL
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+      ? `http://localhost:8000${feature.image.replace(/\\/g, "/")}` // Prepend the base URL
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
           feature.image
             .replace(/\\/g, "/") // Replace backslashes with forward slashes
             .replace("assets/Location/", "") // Remove the "assets/Location/" part of the path
@@ -214,11 +214,11 @@ export default function BlogPost({ params }) {
                 </h3>
             <img
   src={
-    building.path.startsWith("https://infinitech-testing1.online/") // If it's already a full URL
+    building.path.startsWith("http://localhost:8000/") // If it's already a full URL
       ? building.path
       : building.path.startsWith("/property/") // If it starts with /property/
-      ? `https://infinitech-testing1.online${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+      ? `http://localhost:8000${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/
+      : `http://localhost:8000/assets/Location/${encodeURIComponent(
           building.path.replace("assets/Location/", "")
         )}` // Otherwise, handle assets/Location paths
   }

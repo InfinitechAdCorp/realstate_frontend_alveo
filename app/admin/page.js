@@ -66,7 +66,7 @@ export default function Admin({}) {
     };
 
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/register", {
+      const response = await fetch("http://localhost:8000/api/register", {
         method: "POST", // Use POST method to send data
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
@@ -113,7 +113,7 @@ export default function Admin({}) {
 
     // Perform the fetch request
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/login", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST", // Use POST method to send data
         headers: {
           "Content-Type": "application/json", // Set content type to JSON
@@ -928,15 +928,15 @@ export default function Admin({}) {
 
     // Define the endpoint based on the viewType
     if (selectedItems[0].viewType === "location") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-location";
+      endpoint = "http://localhost:8000/api/admin/update-location";
     } else if (selectedItems[0].viewType === "properties") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-properties";
+      endpoint = "http://localhost:8000/api/admin/update-properties";
     } else if (selectedItems[0].viewType === "buildings") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-buildings";
+      endpoint = "http://localhost:8000/api/admin/update-buildings";
     } else if (selectedItems[0].viewType === "features") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-features";
+      endpoint = "http://localhost:8000/api/admin/update-features";
     } else if (selectedItems[0].viewType === "facilities") {
-      endpoint = "https://infinitech-testing1.online/api/admin/update-facilities";
+      endpoint = "http://localhost:8000/api/admin/update-facilities";
     } else {
       console.error("Invalid viewType");
       return; // Exit if viewType is not recognized
@@ -1249,7 +1249,7 @@ export default function Admin({}) {
     formData.append("inputIndex", inputIndex);
 
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/admin/upload", {
+      const response = await fetch("http://localhost:8000/api/admin/upload", {
         // Replace with your upload endpoint
         method: "POST",
         body: formData,
@@ -1372,7 +1372,7 @@ export default function Admin({}) {
 
         try {
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/addlocation",
+            "http://localhost:8000/api/admin/addlocation",
             {
               method: "POST",
               body: formData,
@@ -1409,7 +1409,7 @@ export default function Admin({}) {
         try {
           // Make the API request to save the property
           const response = await fetch(
-            "https://infinitech-testing1.online/api/admin/addproperty",
+            "http://localhost:8000/api/admin/addproperty",
             {
               method: "POST",
               body: formData,
@@ -1444,7 +1444,7 @@ export default function Admin({}) {
       const formData = createFormData(buildingInputs);
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addbuildings",
+          "http://localhost:8000/api/admin/addbuildings",
           {
             method: "POST",
             body: formData,
@@ -1472,7 +1472,7 @@ export default function Admin({}) {
       const formData = createFormData(buildingInputs);
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addbuildings",
+          "http://localhost:8000/api/admin/addbuildings",
           {
             method: "POST",
             body: formData,
@@ -1519,7 +1519,7 @@ export default function Admin({}) {
 
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addfeature",
+          "http://localhost:8000/api/admin/addfeature",
           {
             method: "POST",
             body: formData,
@@ -1575,7 +1575,7 @@ export default function Admin({}) {
 
 
       // Send formData to the API
-      fetch("https://infinitech-testing1.online/api/admin/addfeature", {
+      fetch("http://localhost:8000/api/admin/addfeature", {
         method: "POST",
         body: formData,
       })
@@ -1619,7 +1619,7 @@ export default function Admin({}) {
       // Make the API request
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/addfacilitiesalone",
+          "http://localhost:8000/api/admin/addfacilitiesalone",
           {
             method: "POST",
             headers: {
@@ -1671,7 +1671,7 @@ export default function Admin({}) {
 
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/add-facilities",
+          "http://localhost:8000/api/admin/add-facilities",
           {
             method: "POST",
             headers: {
@@ -1710,7 +1710,7 @@ export default function Admin({}) {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/admin/${endpoint}`
+        `http://localhost:8000/api/admin/${endpoint}`
       );
       const data = await response.json();
       if (response.ok) {
@@ -1766,15 +1766,15 @@ export default function Admin({}) {
     }
     let url;
     if (viewType === "location") {
-      url = "https://infinitech-testing1.online/api/admin/deletelocation";
+      url = "http://localhost:8000/api/admin/deletelocation";
     } else if (viewType === "properties") {
-      url = "https://infinitech-testing1.online/api/admin/deleteproperty";
+      url = "http://localhost:8000/api/admin/deleteproperty";
     } else if (viewType === "buildings") {
-      url = "https://infinitech-testing1.online/api/admin/deletebuilding";
+      url = "http://localhost:8000/api/admin/deletebuilding";
     } else if (viewType === "features") {
-      url = "https://infinitech-testing1.online/api/admin/deletefeature";
+      url = "http://localhost:8000/api/admin/deletefeature";
     } else if (viewType === "facilities") {
-      url = "https://infinitech-testing1.online/api/admin/deletefacility";
+      url = "http://localhost:8000/api/admin/deletefacility";
     } else {
       console.error("Invalid viewType");
       return; // Exit if viewType is invalid
@@ -1852,7 +1852,7 @@ export default function Admin({}) {
   };
   const fetchLocations = async () => {
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/locations");
+      const response = await fetch("http://localhost:8000/api/locations");
       const data = await response.json();
       setData(data); // Store fetched properties
       setViewType("location"); // Update state with fetched data
@@ -1864,7 +1864,7 @@ export default function Admin({}) {
     clearSelectedItems();
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/properties"
+        "http://localhost:8000/api/admin/properties"
       ); // Fetch properties API
       const data = await response.json();
       setData(data); // Store fetched properties
@@ -1877,7 +1877,7 @@ export default function Admin({}) {
   const fetchBuildings = async () => {
     clearSelectedItems();
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/admin/buildings"); // Fetch buildings API
+      const response = await fetch("http://localhost:8000/api/admin/buildings"); // Fetch buildings API
       const data = await response.json();
       setData(data); // Store fetched buildings
       setViewType("buildings"); // Set view type to buildings
@@ -1890,7 +1890,7 @@ export default function Admin({}) {
     clearSelectedItems();
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/facilities"
+        "http://localhost:8000/api/admin/facilities"
       );
       const facilitiesData = await response.json();
 
@@ -1905,7 +1905,7 @@ export default function Admin({}) {
   const fetchFeatures = async () => {
     clearSelectedItems();
     try {
-      const response = await fetch("https://infinitech-testing1.online/api/admin/features"); // Fetch features API
+      const response = await fetch("http://localhost:8000/api/admin/features"); // Fetch features API
       const data = await response.json();
       setData(data); // Store fetched features
       setViewType("features"); // Set view type to features
@@ -1951,7 +1951,7 @@ export default function Admin({}) {
     const fetchProperties = async () => {
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/properties"
+          "http://localhost:8000/api/admin/properties"
         ); // Your Next.js API route
         const data = await response.json();
         setProperties(data); // Store fetched properties
@@ -1976,7 +1976,7 @@ export default function Admin({}) {
 
     try {
       // Send the form data to the backend
-      const response = await fetch("https://infinitech-testing1.online/api/login", {
+      const response = await fetch("http://localhost:8000/api/login", {
         method: "POST", // Ensure that the method is POST, not GET
         headers: {
           "Content-Type": "application/json",

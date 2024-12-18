@@ -50,7 +50,7 @@ function ExplorePage() {
 
   const fetchBuildings = async (value) => {
     try {
-      const endpoint = "https://infinitech-testing1.online/api/getbuildings";
+      const endpoint = "http://localhost:8000/api/getbuildings";
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -94,7 +94,7 @@ function ExplorePage() {
   const handleBuildingClick = async (buildingId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/property/id/${buildingId}`
+        `http://localhost:8000/api/property/id/${buildingId}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -160,12 +160,12 @@ function ExplorePage() {
               <div className="card">
                 <img
   src={
-    building.path && building.path.startsWith("https://infinitech-testing1.online/") // Check if building.path exists and is a full URL
+    building.path && building.path.startsWith("http://localhost:8000/") // Check if building.path exists and is a full URL
       ? building.path // Use the full URL directly
       : building.path && building.path.startsWith("/property/") // If it starts with "/property/"
-      ? `https://infinitech-testing1.online${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/ paths
+      ? `http://localhost:8000${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/ paths
       : building.path // Handle other cases, like assets/Location
-      ? `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+      ? `http://localhost:8000/assets/Location/${encodeURIComponent(
           building.path.replace("assets/Location/", "")
         )}` // Handle assets/Location paths
       : '' // Fallback if building.path is null or undefined
