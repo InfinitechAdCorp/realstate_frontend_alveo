@@ -16,28 +16,28 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 export const columns = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={
+  //         table.getIsAllPageRowsSelected() ||
+  //         (table.getIsSomePageRowsSelected() && "indeterminate")
+  //       }
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <Checkbox
+  //       checked={row.getIsSelected()}
+  //       onCheckedChange={(value) => row.toggleSelected(!!value)}
+  //       aria-label="Select row"
+  //     />
+  //   ),
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "name",
     header: ({ column }) => {
@@ -661,7 +661,6 @@ const handleOtherBuildingImageChange = (e) => {
     // Read the file as a data URL (Base64)
     reader.readAsDataURL(file);
   };
-
 const handleSubmit = async (e) => {
   e.preventDefault(); // Prevent default form submission behavior
 
@@ -672,16 +671,21 @@ const handleSubmit = async (e) => {
     // Prepare FormData to handle both file uploads and other fields
     const formData = new FormData();
     formData.append('propertyId', rowData.id); // Assuming rowData has the propertyId
-    formData.append('propertyName', rowData.name); // Assuming rowData has the propertyId
+    formData.append('propertyName', rowData.name); // Assuming rowData has the propertyName
 
     // Loop through updated features to add files dynamically
     updatedFeatures.forEach((feature, index) => {
       Object.entries(feature).forEach(([key, value]) => {
-        if (value instanceof File) {
-          // Append file entries dynamically
-          formData.append(`features[${index}][${key}]`, value);
+        if (key === 'image') {
+          // Check if it's a base64 image
+          if (value.startsWith('data:image')) {
+            formData.append(`features[${index}][image]`, value); // Directly append the base64 string
+          } else {
+            // If it's a file path (relative or absolute), append it as is
+            formData.append(`features[${index}][image]`, value); 
+          }
         } else {
-          // Append other non-file feature values
+          // Append other non-image feature values
           formData.append(`features[${index}][${key}]`, value);
         }
       });
@@ -714,6 +718,7 @@ const handleSubmit = async (e) => {
     alert('An error occurred while updating the features.');
   }
 };
+
 const handleFeatureInputChange = (e, index) => {
   const { name, value, type, files } = e.target;
 
@@ -902,25 +907,38 @@ const handleFeatureImageChange = (e, index) => {
 
                 {/* Display Image */}
             <div className="flex justify-center items-center p-4 bg-gray-50 border rounded-lg">
-{feature.image && feature.image !== 'null' ? (
-  feature.image.startsWith('data:image') ? (
-    // Base64 image handling
-    <img
-      src={feature.image} // Base64 string for the image preview
-      alt={feature.name || 'Feature Image'}
-      className="w-32 h-32 object-cover rounded-md"
-    />
+{
+  feature.image && feature.image !== 'null' ? (
+    feature.image.startsWith('data:image') ? (
+      // Base64 image handling
+      <img
+        src={feature.image} // Base64 string for the image preview
+        alt={feature.name || 'Feature Image'}
+        className="w-32 h-32 object-cover rounded-md"
+      />
+    ) : feature.image.startsWith('/property/') ? (
+      // Handle http://localhost:8000 property URLs (e.g., /property/fortis_residence/...)
+      <img
+        src={`http://localhost:8000${feature.image}`} // Use localhost:8000 for the image
+        alt={feature.name || 'Feature Image'}
+        className="w-32 h-32 object-cover rounded-md"
+      />
+    ) : (
+      // Handle other paths (e.g., localhost:3000 or other assets paths)
+      <img
+        src={`http://localhost:3000/${feature.image.replace(/\\/g, '/')}`} // Normalize path and prepend localhost:3000
+        alt={feature.name || 'Feature Image'}
+        className="w-32 h-32 object-cover rounded-md"
+      />
+    )
   ) : (
-    // Path-based image handling (URL or path)
-    <img
-      src={`http://localhost:8000${feature.image.replace(/\\/g, '/')}`} // Ensure the path is fixed
-      alt={feature.name || 'Feature Image'}
-      className="w-32 h-32 object-cover rounded-md"
-    />
+    // Fallback for missing or null images
+    <div className="text-gray-500">No Image Available</div>
   )
-) : (
-  <div className="text-gray-500">No Image Available</div>
-)}
+}
+
+
+
 
 </div>
 

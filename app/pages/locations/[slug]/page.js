@@ -54,6 +54,7 @@ export default function BlogPost ({ params }) {
 
   const PropertyCard = ({ property, onClick }) => {
     return (
+
       <div className='flex w-80 flex-col bg-gray-100 rounded-lg shadow-lg  mx-auto lg:w-2/3 xl:w-3/12 overflow-hidden text-center transform transition-transform duration-300 ease-in-out  m-2 hover:translate-y-3 hover:shadow-xl'>
         <SEO
           title='REAL ESTATE'
@@ -61,13 +62,20 @@ export default function BlogPost ({ params }) {
           keywords='alveo, real estate, location, property, building location, property location'
           canonical='http://localhost:3000/pages/locations'
         />
-        <Image
-          src={`/${property.path}`}
-          alt={property.name}
-          width={400} // Adjusted width
-          height={300} // Adjusted height
-          className='w-full h-60 object-cover' // Set a fixed height for the image
-        />
+    
+         <Image
+      src={
+        property.path
+          ? (property.path.startsWith('http') || property.path.startsWith('https'))
+            ? property.path // If it's a URL, use it directly
+            : `http://localhost:8000/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+          : '' // Fallback if property.path is null or undefined
+      }
+      alt={property.name}
+      width={400} // Adjusted width
+      height={300} // Adjusted height
+        className='w-full h-60 object-cover' // Set a fixed height for the image
+    />
         <div className='p-6'>
           <h2 className='text-2xl font-bold mb-4 text-gray-800 lg:text-4xl xl:text-3xl'>
             {property.name}

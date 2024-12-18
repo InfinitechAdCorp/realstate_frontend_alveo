@@ -21,6 +21,7 @@ const Directory = ({ currentLocation, specificLocation }) => {
     locationLink = '/location'
   }
 
+
   return (
     <>
       <SEO
@@ -35,6 +36,7 @@ const Directory = ({ currentLocation, specificLocation }) => {
             aria-label='breadcrumb'
             className='text-sm sm:text-xl md:text-2xl lg:text-4xl xl:text-2xl lg:ml-5'
           >
+
             <Link
               underline='hover'
               sx={{ display: 'flex', alignItems: 'center' }}

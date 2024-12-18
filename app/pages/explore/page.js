@@ -103,7 +103,7 @@ function ExplorePage() {
       const propertyData = await response.json();
 
       // Redirect to the new URL using the property ID
-      window.location.href = `http://localhost:3000/pages/buildings/${buildingId}`;
+      window.location.href = `https://realstate-frontend-alveo.vercel.app/pages/buildings/${buildingId}`;
     } catch (error) {
       console.error("Error fetching property:", error);
     }
@@ -120,7 +120,7 @@ function ExplorePage() {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, properties, parkings, building features, property features, property, buildings, building type"
-  canonical="http://localhost:3000/pages/explore"
+  canonical="https://realstate-frontend-alveo.vercel.app/pages/explore"
 />
       <Header />
       <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10">
@@ -151,7 +151,7 @@ function ExplorePage() {
             {buildings.length} PROPERTIES
           </h1>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 ">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 mb-16">
           {buildings.map((building) => (
             <div
               key={building.id}
@@ -159,10 +159,21 @@ function ExplorePage() {
             >
               <div className="card">
                 <img
-                  src={`/${building.path}`}
-                  className="w-auto h-64 object-cover "
-                  alt={building.name}
-                />
+  src={
+    building.path && building.path.startsWith("http://localhost:8000/") // Check if building.path exists and is a full URL
+      ? building.path // Use the full URL directly
+      : building.path && building.path.startsWith("/property/") // If it starts with "/property/"
+      ? `http://localhost:8000${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/ paths
+      : building.path // Handle other cases, like assets/Location
+      ? `http://localhost:8000/assets/Location/${encodeURIComponent(
+          building.path.replace("assets/Location/", "")
+        )}` // Handle assets/Location paths
+      : '' // Fallback if building.path is null or undefined
+  }
+  className="w-auto h-64 object-cover"
+  alt={building.name}
+/>
+
                 <div className="p-4">
                   <p className="text-sm">
                     <strong>Building Name:</strong> {building.name}
