@@ -14,7 +14,7 @@ import Demo from '../../properties/page'
 import Header from '../header'
 import Link from 'next/link'
 import AreaModal from '@/components/admin/areaModal'
-import Appointments from '@/components/admin/appointments'
+import SubmittedProperties from '@/components/admin/submittedProperties'
 
 export default function Admin ({}) {
   const [isVisible, setIsVisible] = useState(true) // Controls visibility of popup
@@ -167,7 +167,7 @@ export default function Admin ({}) {
         <div className='min-h-screen py-20 mt-14 w-[90%] mx-auto overflow-y-auto scrollbar-hidden flex justify-center'>
           <div>
             
-            <Appointments />
+            < SubmittedProperties/>
           </div>
         </div>
 

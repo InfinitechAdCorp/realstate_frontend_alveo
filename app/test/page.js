@@ -671,6 +671,12 @@ export default function Admin ({}) {
               >
                 APPOINTMENTS
               </Link>
+              <Link
+                href='/pages/submitted-properties'
+                className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
+              >
+                SUBMITTED PROPERTIES
+              </Link>
             </nav>
           </div>
         )}
