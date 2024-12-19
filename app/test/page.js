@@ -666,7 +666,7 @@ export default function Admin ({}) {
                 <li>Location</li>
               </ul>
               <Link
-                href='/appointment'
+                href='/pages/appointment'
                 className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
               >
                 APPOINTMENTS

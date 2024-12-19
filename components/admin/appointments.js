@@ -1,10 +1,10 @@
+'use client'
 import { useEffect, useState } from 'react'
 import 'simple-datatables/dist/style.css'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 
 const Table = () => {
   const [appointments, setAppointments] = useState([])
-  const [dataTable, setDataTable] = useState(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -33,13 +33,9 @@ const Table = () => {
     if (appointments.length > 0 && typeof window !== 'undefined') {
       const { DataTable } = require('simple-datatables')
 
-      if (dataTable) {
-        dataTable.destroy()
-      }
-
       const table = document.getElementById('search-table')
       if (table) {
-        const newDataTable = new DataTable(table, {
+        new DataTable(table, {
           searchable: true,
           sortable: true,
           labels: {
@@ -47,63 +43,43 @@ const Table = () => {
             perPage: 'records per page'
           }
         })
-        setDataTable(newDataTable)
       }
     }
   }, [appointments])
 
-  const handleAccept = async (id) => {
-    console.log(`Attempting to accept appointment with ID: ${id}`) // Debug log
+  const handleUpdateStatus = async (id, status) => {
+    console.log('Updating status for ID:', id, 'with status:', status)
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/appointment/accept/${id}`,
+        'http://localhost:8000/api/admin/appointment/accept',
         {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ id, status })
         }
       )
 
       if (!response.ok) {
-        throw new Error('Failed to update appointment status')
+        const errorData = await response.json()
+        console.error('Error response from server:', errorData) // Log the response error data
+        throw new Error(
+          `Failed to update status: ${errorData.message || 'Unknown error'}`
+        )
       }
 
-      // Update the status in local state without re-fetching data
-      setAppointments(prevAppointments =>
-        prevAppointments.map(appointment =>
-          appointment.id === id
-            ? { ...appointment, status: 'ACCEPTED' }
-            : appointment
+      setAppointments(prev =>
+        prev.map(appointment =>
+          appointment.id === id ? { ...appointment, status } : appointment
         )
       )
     } catch (error) {
-      console.error('Error updating status:', error)
-    }
-  }
-
-  const handleDecline = async (id) => {
-    console.log(`Attempting to decline appointment with ID: ${id}`) // Debug log
-
-    try {
-      const response = await fetch(
-        `http://localhost:8000/api/admin/appointment/decline/${id}`,
-        {
-          method: 'POST',
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Failed to update appointment status')
+      console.error('Error updating status:', error.message) // Log the specific error message
+      if (error.response) {
+        console.error('Full error details:', error.response) // Log the full error details if available
       }
-
-      setAppointments(prevAppointments =>
-        prevAppointments.map(appointment =>
-          appointment.id === id
-            ? { ...appointment, status: 'DECLINED' }
-            : appointment
-        )
-      )
-    } catch (error) {
-      console.error('Error updating status:', error)
     }
   }
 
@@ -155,18 +131,24 @@ const Table = () => {
                   {appointment.status}
                 </td>
                 <td className='border border-gray-300 px-4 py-2'>
-                  <div>
+                  <div className='flex space-x-2'>
                     <button
-                      onClick={() => handleAccept(appointment.id)}
+                      type='button'
+                      onClick={() =>
+                        handleUpdateStatus(appointment.id, 'ACCEPTED')
+                      }
                       className='px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600'
                     >
-                      <FaCheckCircle />
+                      Accept
                     </button>
                     <button
-                      onClick={() => handleDecline(appointment.id)}
+                      type='button'
+                      onClick={() =>
+                        handleUpdateStatus(appointment.id, 'DECLINED')
+                      }
                       className='px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600'
                     >
-                      <FaTimesCircle />
+                      Decline
                     </button>
                   </div>
                 </td>

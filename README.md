@@ -41,3 +41,4 @@ Installed Calendar
 Installed Datatable
 Installed React Icons
 Installed React Toastify
+Installed Formik and yup for form validation
