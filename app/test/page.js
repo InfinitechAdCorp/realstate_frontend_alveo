@@ -17,6 +17,7 @@ import AreaModal from '@/components/admin/areaModal'
 
 
 export default function Admin ({}) {
+   const [showProperties, setShowProperties] = useState(false);
   const [isVisible, setIsVisible] = useState(true) // Controls visibility of popup
   const [formData, setFormData] = useState({
     email: '',
@@ -48,6 +49,413 @@ export default function Admin ({}) {
   const openArchitecturalThemeModal = () => setArchitecturalThemeModalOpen(true)
   const openStatusModal = () => setStatusModalOpen(true)
   const openAreaModal = () => setAreaModalOpen(true)
+    const [activeNav, setActiveNav] = useState("Properties"); // Default active nav
+const [data, setData] = useState({
+  newType: '',
+  newTheme: '',
+  newStatus: '',
+  newLocation: '',
+  developmentTypes: [], // Ensure this is initialized as an array
+  architecturalThemes: [],
+  statusOptions: [],
+  chatbotEntries: [], // Ensure chatbotEntries is an array
+  newQuestion: "",
+  newAnswer: "",
+      newAreaName: '',
+    newTitle: '',
+    newDescription: '',
+    newImage: null,
+    locations: [],
+});
+
+ const [chatbotData, setChatbotData] = useState([]);
+const [chatbotFormData, setChatbotFormData] = useState({ question: "", answer: "" });
+
+  const [editing, setEditing] = useState(null);
+  const navItems = [
+    { name: "Properties", onClick: () => console.log("Properties Clicked") },
+    { name: "Details", onClick: () =>console.log("Detailes Clicked") },
+    { name: "Chatbot", onClick: () =>console.log("Detailes Clicked") },
+  ];
+
+const [isEditing, setIsEditing] = useState(false);
+
+  const [success, setSuccess] = useState('');
+const handleAddLoc = async (type, areaName, title, description, image, setData, listType, areaId = null) => {
+  setError('');  // Clear previous errors
+  setSuccess('');  // Clear previous success messages
+
+  // Validate input fields
+  if (!areaName || !title || !description) {
+    setError('All fields are required');
+    return;
+  }
+
+  // Create a new object to send the data, including the Base64 string for the image
+  const requestData = {
+    area_name: areaName,
+    title: title,
+    description: description,
+    image: image || null,  // Send the Base64 string or null if no image is selected
+  };
+
+  // Add area ID if it's an update request
+  if (type === 'update' && areaId) {
+    requestData.id = areaId;
+  }
+
+  // Log the requestData for debugging
+  console.log('Request Data:', requestData);
+
+  try {
+    // Send the request to the backend
+    const response = await fetch('http://localhost:8000/api/admin/add-area', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',  // Ensure content type is set to JSON
+      },
+      body: JSON.stringify(requestData),  // Send the data as JSON string
+    });
+
+    const data = await response.json();  // Parse the JSON response
+
+    if (response.ok) {
+      console.log('Success:', data);
+      // Handle the response, possibly displaying the image URL or other data
+      if (data.image_url) {
+        console.log('Image URL:', data.image_url);
+      }
+    } else {
+      console.error('Error:', data.message);
+      setError(data.message || 'Something went wrong');
+    }
+  } catch (err) {
+    console.error('An error occurred:', err);
+    setError('An error occurred during submission');
+  }
+};
+
+const handleImageChange = (e) => {
+  const file = e.target.files[0];  // Get the selected file
+  if (file) {
+    // Convert the image file to Base64 string using FileReader
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      // Once conversion is complete, update the state with the Base64 string
+      setData({ ...data, newImage: reader.result });
+      console.log('Selected image (Base64):', reader.result);  // Log the Base64 string for debugging
+    };
+    reader.readAsDataURL(file);  // Read the file as Base64 string
+  }
+};
+
+
+useEffect(() => {
+  console.log(activeNav);
+  if (activeNav === "Details") {
+    fetchData(); // Fetch other data for "Details"
+  } else if (activeNav === "Chatbot") {
+    const fetchChatbotData = async () => {
+  
+      try {
+        const response = await fetch('http://localhost:8000/api/admin/getChatbot');
+        const chatbotData = await response.json();
+        console.log(chatbotData)
+        // Update chatbotEntries state
+        setData((prevData) => ({
+          ...prevData,
+          chatbotEntries: chatbotData,
+        }));
+      } catch (error) {
+        console.error("Error fetching chatbot data:", error);
+      }
+    };
+
+    fetchChatbotData();
+  }
+}, [activeNav]);
+ 
+const fetchData = () => {
+  fetch("http://localhost:8000/api/admin/development-types")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Fetched Development Types:", data);
+      setData((prevData) => ({ ...prevData, developmentTypes: data }));
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+
+  fetch("http://localhost:8000/api/admin/architectural-themes")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Fetched Architectural Themes:", data);
+      setData((prevData) => ({ ...prevData, architecturalThemes: data }));
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+
+  fetch("http://localhost:8000/api/admin/status")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Fetched Status:", data);
+      setData((prevData) => ({ ...prevData, statusOptions: data }));
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+
+  fetch("http://localhost:8000/api/admin/area") 
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Fetched Locations:", data);
+      setData((prevData) => ({ ...prevData, locations: data }));
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+};
+const handleAdd = (type, newItem, setData, field) => {
+  console.log("Adding item:", newItem); // Log the new item being added
+
+  // Check if we are adding a chatbot entry
+  if (type === "chatbot") {
+    const { question, answer } = newItem;
+
+    // If we are editing an existing entry, use PUT instead of POST
+    const method = isEditing ? "PUT" : "POST";
+    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/chatbot";
+
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question, answer }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Ensure the response contains success status and new item with id
+        if (data.success) {
+          console.log(`${isEditing ? "Updated" : "Added"} chatbot entry successfully: ${question}`);
+
+          // If adding a new entry, add the entry with id to the chatbotEntries array
+          if (isEditing) {
+            setData((prevData) => ({
+              ...prevData,
+              chatbotEntries: prevData.chatbotEntries.map((item) =>
+                item.id === newItem.id ? { ...item, question, answer } : item
+              ),
+            }));
+          } else {
+            const addedItem = { ...newItem, id: data.data.id }; // Ensure newItem includes id
+            setData((prevData) => ({
+              ...prevData,
+              chatbotEntries: [...prevData.chatbotEntries, addedItem],
+            }));
+          }
+
+          // Clear the input fields
+          setChatbotFormData({ question: "", answer: "" });
+        } else {
+          console.error("Error response from API:", data.message);
+        }
+
+        fetchData(); // Optionally fetch the updated data
+      })
+      .catch((error) => {
+        // Log the error if request fails
+        console.error("Error adding/updating data:", error);
+      });
+
+  }   if (type === "location") {
+    const { question, answer } = newItem;
+
+    // If we are editing an existing entry, use PUT instead of POST
+    const method = isEditing ? "PUT" : "POST";
+    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/chatbot";
+
+    fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question, answer }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Ensure the response contains success status and new item with id
+        if (data.success) {
+          console.log(`${isEditing ? "Updated" : "Added"} chatbot entry successfully: ${question}`);
+
+          // If adding a new entry, add the entry with id to the chatbotEntries array
+          if (isEditing) {
+            setData((prevData) => ({
+              ...prevData,
+              chatbotEntries: prevData.chatbotEntries.map((item) =>
+                item.id === newItem.id ? { ...item, question, answer } : item
+              ),
+            }));
+          } else {
+            const addedItem = { ...newItem, id: data.data.id }; // Ensure newItem includes id
+            setData((prevData) => ({
+              ...prevData,
+              chatbotEntries: [...prevData.chatbotEntries, addedItem],
+            }));
+          }
+
+          // Clear the input fields
+          setChatbotFormData({ question: "", answer: "" });
+        } else {
+          console.error("Error response from API:", data.message);
+        }
+
+        fetchData(); // Optionally fetch the updated data
+      })
+      .catch((error) => {
+        // Log the error if request fails
+        console.error("Error adding/updating data:", error);
+      });
+
+  } else {
+    // Existing logic for other types (e.g., developmentTypes, locations)
+    fetch(`http://localhost:8000/api/admin/add-${type}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: newItem }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Log success and update state
+        if (data.success) {
+          console.log(`Item added successfully: ${newItem}`);
+
+          // Update the data state by adding the new item to the appropriate field
+          setData((prevData) => ({
+            ...prevData,
+            [field]: Array.isArray(prevData[field])
+              ? [...prevData[field], { name: newItem }]  // Add new item to array
+              : [{ name: newItem }],  // Initialize as an array if it was not an array
+          }));
+
+          // Clear the input after adding the new item
+          if (field === "developmentTypes") {
+            setData({ ...data, newType: "" });
+          } else if (field === "architecturalThemes") {
+            setData({ ...data, newTheme: "" });
+          } else if (field === "statusOptions") {
+            setData({ ...data, newStatus: "" });
+          } else if (field === "locations") {
+            setData({
+              ...data,
+              newAreaName: "",
+              newTitle: "",
+              newDescription: "",
+              newImage: null,
+            });
+          }
+        } else {
+          console.error("Error response from API:", data.message);
+        }
+
+        // Optionally, you can fetch the updated data
+        fetchData();
+      })
+      .catch((error) => console.error("Error adding data:", error));
+  }
+};
+const handleDelete = (type, id, field) => {
+  console.log(type, id, field); // Debugging log to check the values
+
+  // Handle deletion of chatbot entries separately
+  if (type === "chatbot") {
+    const url = `http://localhost:8000/api/admin/delete-chatbot/${id}`; // Chatbot-specific endpoint
+    console.log("Deleting from URL:", url);  // Debugging line to check the URL
+
+    fetch(url, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete chatbot entry");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.message);
+
+        // Update state by filtering out the deleted chatbot entry
+        setData((prevData) => {
+          const updatedData = { ...prevData };
+
+          if (Array.isArray(prevData[field])) {
+            updatedData[field] = prevData[field].filter((item) => item.id !== id);
+          }
+
+          // Optionally, reset form values for chatbot after deletion
+          updatedData.newQuestion = "";
+          updatedData.newAnswer = "";
+
+          return updatedData;
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting chatbot entry:", error);
+        alert("An error occurred while deleting the chatbot entry.");
+      });
+  } else {
+    // Existing logic for deleting other types (e.g., developmentTypes, locations)
+    const url = `http://localhost:8000/api/admin/delete-${type}/${id}`;
+    console.log("Deleting from URL:", url);  // Debugging line to check the URL
+
+    fetch(url, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to delete item");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.message);
+
+        // Update state by filtering out the deleted item from array fields
+        setData((prevData) => {
+          const updatedData = { ...prevData };
+
+          if (Array.isArray(prevData[field])) {
+            updatedData[field] = prevData[field].filter((item) => item.id !== id);
+          } else {
+            updatedData[field] = prevData[field] === id ? "" : prevData[field];
+          }
+
+          // Reset the form values after deletion (for each field type)
+          if (field === "developmentTypes") {
+            updatedData.newType = "";
+          } else if (field === "architecturalThemes") {
+            updatedData.newTheme = "";
+          } else if (field === "statusOptions") {
+            updatedData.newStatus = "";
+          } else if (field === "locations") {
+            updatedData.newAreaName = "";
+            updatedData.newTitle = "";
+            updatedData.newDescription = "";
+            updatedData.newImage = null;
+          }
+
+          return updatedData;
+        });
+      })
+      .catch((error) => {
+        console.error("Error deleting data:", error);
+        alert("An error occurred while deleting the item.");
+      });
+  }
+};
+
+const handleInputChange_chatbot = (e) => {
+  const { name, value } = e.target;
+  setChatbotFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+};
 
   const handleInputChange = e => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
@@ -71,37 +479,15 @@ export default function Admin ({}) {
       // If login is successful, show OTP input
       setError('') // Reset any previous error
       console.log('Login successful. OTP sent to email.')
-      setIsOtpSent(true) // Allow the user to enter OTP
+ 
     } else {
       setError('Invalid email or password.')
     }
   }
-
-  const handleOtpVerification = async e => {
-    e.preventDefault()
-
-    // Step 2: User submits OTP for verification
-    const otpResponse = await fetch('http://localhost:8000/api/verify-otp', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: formData.email, // Include email to identify user for OTP check
-        otp: formData.otp // OTP entered by user
-      })
-    })
-
-    if (otpResponse.ok) {
-      // If OTP verification is successful
-      console.log('OTP verified. You are now logged in.')
-      // Redirect user to dashboard or home page
-    } else {
-      setError('Invalid or expired OTP.')
-    }
-
-
-  }
+  const handlePropertiesClick = () => {
+    setShowProperties(!showProperties);
+  };
+ 
 
 
   const fetchCount = async (endpoint, key) => {
@@ -200,15 +586,55 @@ export default function Admin ({}) {
           </div>
         </div>
       )} */}
+      <div className="flex">
+ <div className="text-xl text-black w-1/6 relative border-r shadow-md h-screen bg-gray-100">
+  <div className="mt-80 border-indigo-950">
+<nav className="p-6 space-y-2">
+        <ul>
+          {navItems.map((item) => (
+            <li
+              key={item.name}
+              onClick={() => {
+                setActiveNav(item.name);
+                item.onClick();
+              }}
+              className={`group cursor-pointer transition-all duration-300 rounded-lg ${
+                activeNav === item.name ? "bg-indigo-100" : "hover:bg-indigo-100"
+              }`}
+            >
+              <div
+                className={`p-3 transition-all duration-300 ${
+                  activeNav === item.name
+                    ? "text-indigo-600"
+                    : "text-gray-700 group-hover:text-indigo-600"
+                }`}
+              >
+                {item.name}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-6">
+          <a
+            href="/appointment"
+            className="block bg-indigo-700 hover:bg-indigo-600 text-white py-3 px-6 rounded-lg text-center transition-all duration-300 hover:shadow-lg"
+          >
+            APPOINTMENTS
+          </a>
+        </div>
+      </nav>
+  </div>
+</div>
 
-      <div className='fixed w-full'>
+
+      <div className=' w-5/6'>
         <header className='fixed top-0 left-0 w-full bg-white shadow-lg z-50'>
           <div className='flex justify-between items-center p-4'>
-            <div class='menu-container'>
+            <div >
               <img
                 src='/assets/menu.png'
                 alt='Menu'
-                class='cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6'
+                className='cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6'
                 style={{ width: '25px', height: '25px' }}
                 onClick={openSidebar}
               />
@@ -371,11 +797,290 @@ export default function Admin ({}) {
         </div>
 
 
-        <div className='demo-container min-h-screen mt-14 w-9/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center'>
-          <div>
-            <Demo />
-          </div>
+<div className="demo-container min-h-screen mt-14 w-9/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center">
+  {activeNav === "Properties" && <div><Demo /></div>}
+{activeNav === "Details" && (
+  <div>
+    {/* Development Type and Architectural Theme in 1st Row, 3 Columns */}
+    <div className="grid grid-cols-3 gap-4 mb-6">
+      
+      {/* Development Type */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Development Types</h2>
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="New Type Name"
+            value={data.newType}
+            onChange={(e) => setData({ ...data, newType: e.target.value })}
+            className="border rounded p-2 w-full"
+          />
+          <button
+            onClick={() => {
+              handleAdd("development-type", data.newType, setData, "developmentTypes");
+              setData({ ...data, newType: '' }); // Clear input after adding
+            }}
+            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+          >
+            Add
+          </button>
         </div>
+        <ul>
+          {data.developmentTypes?.length > 0 ? (
+            data.developmentTypes.map((type) => (
+              <li key={type.id} className="flex justify-between p-2 border-b hover:bg-gray-100">
+                <span>{type.name}</span>
+                <button
+                  onClick={() => handleDelete("development-type", type.id, "developmentTypes")}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
+              </li>
+            ))
+          ) : (
+            <li>No Development Types Found</li>
+          )}
+        </ul>
+      </div>
+
+      {/* Architectural Theme */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Architectural Themes</h2>
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="New Theme Name"
+            value={data.newTheme}
+            onChange={(e) => setData({ ...data, newTheme: e.target.value })}
+            className="border rounded p-2 w-full"
+          />
+          <button
+            onClick={() => {
+              handleAdd("architectural-theme", data.newTheme, setData, "architecturalThemes");
+              setData({ ...data, newTheme: '' }); // Clear input after adding
+            }}
+            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+          >
+            Add
+          </button>
+        </div>
+        <ul>
+          {data.architecturalThemes?.length > 0 ? (
+            data.architecturalThemes.map((theme, index) => (
+              <li key={index} className="flex justify-between p-2 border-b hover:bg-gray-100">
+                <span>{theme.name}</span>
+                <button
+                  onClick={() => handleDelete("architectural-theme", theme.id, "architecturalThemes")}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
+              </li>
+            ))
+          ) : (
+            <li>No Architectural Themes Found</li>
+          )}
+        </ul>
+      </div>
+
+      {/* Status */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4">Status</h2>
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="New Status"
+            value={data.newStatus}
+            onChange={(e) => setData({ ...data, newStatus: e.target.value })}
+            className="border rounded p-2 w-full"
+          />
+          <button
+            onClick={() => {
+              handleAdd("status", data.newStatus, setData, "statusOptions");
+              setData({ ...data, newStatus: '' }); // Clear input after adding
+            }}
+            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+          >
+            Add
+          </button>
+        </div>
+        <ul>
+          {data.statusOptions?.length > 0 ? (
+            data.statusOptions.map((status, index) => (
+              <li key={index} className="flex justify-between p-2 border-b hover:bg-gray-100">
+                <span>{status.name}</span>
+                <button
+                  onClick={() => handleDelete("status", status.id, "statusOptions")}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  Delete
+                </button>
+              </li>
+            ))
+          ) : (
+            <li>No Status Options Found</li>
+          )}
+        </ul>
+      </div>
+    </div>
+
+    {/* Location in the 2nd Row, 1 Column */}
+ <div className="grid grid-cols-1 mb-6">
+    <h2 className="text-xl font-semibold mb-4">Locations</h2>
+    <div className="flex gap-2 mb-4">
+      {/* Area Name Input */}
+      <input
+        type="text"
+        placeholder="Area Name"
+        value={data.newAreaName || ''}
+        onChange={(e) => setData({ ...data, newAreaName: e.target.value })}
+        className="border rounded p-2 w-full"
+      />
+
+      {/* Title Input */}
+      <input
+        type="text"
+        placeholder="Title"
+        value={data.newTitle || ''}
+        onChange={(e) => setData({ ...data, newTitle: e.target.value })}
+        className="border rounded p-2 w-full"
+      />
+
+      {/* Description Input */}
+      <input
+        type="text"
+        placeholder="Description"
+        value={data.newDescription || ''}
+        onChange={(e) => setData({ ...data, newDescription: e.target.value })}
+        className="border rounded p-2 w-full"
+      />
+
+      {/* Image Upload */}
+      <input
+        type="file"
+        onChange={handleImageChange}
+        className="border rounded p-2 w-full"
+      />
+
+      {/* Add Button */}
+      <button
+        onClick={() => {
+          handleAddLoc(
+            'location',
+            data.newAreaName,
+            data.newTitle,
+            data.newDescription,
+            data.newImage,  // Pass the image here
+            setData,
+            'locations'
+          );
+        }}
+        className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+      >
+        Add
+      </button>
+    </div>
+
+    {/* Error and Success Messages */}
+    {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
+    {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}
+
+    {/* Locations List */}
+    <ul>
+      {data.locations?.length > 0 ? (
+        data.locations.map((location, index) => (
+          <li key={index} className="flex justify-between p-2 border-b hover:bg-gray-100">
+            <span>{location.area_name} - {location.title}</span>
+            <button
+              onClick={() => handleDelete('location', location.id, 'locations')}
+              className="text-red-500 hover:text-red-700"
+            >
+              Delete
+            </button>
+          </li>
+        ))
+      ) : (
+        <li>No Locations Found</li>
+      )}
+    </ul>
+  </div>
+  </div>
+)}
+
+{activeNav === "Chatbot" && (
+  <div className="p-6 max-w-4xl mx-auto bg-white rounded-lg shadow-md">
+    <h3 className="text-2xl font-semibold text-center text-gray-800 mb-6">Chatbot Table</h3>
+
+    <table className="min-w-full table-auto mb-8 border-collapse">
+      <thead>
+        <tr>
+                <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600 ">ID</th>
+          <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600 ">Question</th>
+          <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600 ">Answer</th>
+          <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600 ">Actions</th>
+        </tr>
+      </thead>
+<tbody>
+  {data.chatbotEntries.map((item) => (
+    <tr key={item.id || `${item.question}-${item.answer}`} className="hover:bg-gray-100">
+            <td className="px-4 py-2 text-sm text-gray-800">{item.id}</td>
+      <td className="px-4 py-2 text-sm text-gray-800">{item.question}</td>
+      <td className="px-4 py-2 text-sm text-gray-800">{item.answer}</td>
+      <td className="px-4 py-2 text-sm text-gray-800">
+        <button
+          className="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-500"
+          onClick={() => handleDelete('chatbot', item.id, 'chatbotEntries')}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
+
+    </table>
+
+    <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
+      <h4 className="text-xl font-semibold text-gray-800 mb-4">
+        {isEditing ? 'Edit' : 'Add'} Chatbot Entry
+      </h4>
+
+      <div className="space-y-4">
+        <input
+          type="text"
+          name="question"
+          value={chatbotFormData.question}
+          onChange={handleInputChange_chatbot}
+          placeholder="Enter question"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <input
+          type="text"
+          name="answer"
+          value={chatbotFormData.answer}
+          onChange={handleInputChange_chatbot}
+          placeholder="Enter answer"
+          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <button
+          className={`w-full py-3 text-white rounded-md ${isEditing ? 'bg-indigo-600 hover:bg-indigo-500' : 'bg-green-600 hover:bg-green-500'}`}
+          onClick={() => handleAdd('chatbot', {
+            question: chatbotFormData.question,
+            answer: chatbotFormData.answer
+          }, setData, 'chatbotEntries')}
+        >
+          {isEditing ? 'Update' : 'Add'}
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+</div>
+
 
         <div>
           <DevelopmentTypeModal
@@ -393,7 +1098,7 @@ export default function Admin ({}) {
 
 
 
-   
+   </div>
     </>
   )
 }

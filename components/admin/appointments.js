@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import 'simple-datatables/dist/style.css'
+  import 'simple-datatables/dist/style.css'
 import { FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
 
 const Table = () => {

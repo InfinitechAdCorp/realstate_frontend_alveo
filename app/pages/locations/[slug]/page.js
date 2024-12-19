@@ -15,35 +15,39 @@ export default function BlogPost ({ params }) {
   const [propertyData, setPropertyData] = useState([])
 
   // Fetch locations dynamically and set posts object
+useEffect(() => {
+  console.log(params.slug);
+  // Fetch data from the backend API using template literal for params
+  fetch(`http://localhost:8000/api/admin/area_specific/${params.slug}`) // Correctly interpolated the URL with params
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Fetched data:', data); // Log the raw data fetched from the API
 
-  useEffect(() => {
-    // Fetch data from the backend API
-    fetch('http://localhost:8000/api/areas') // Adjust URL if needed
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok')
-        }
-        return response.json()
-      })
-      .then(data => {
-        const fetchedPosts = {}
-        // Process the data into a key-value object
-        data.forEach(location => {
-          const key = location.area_name // The transformed area_name from the backend
-          fetchedPosts[key] = {
-            location: location.area_name,
-            key: key,
-            path: location.image, // Assume image path is returned
-            title: location.title,
-            intro: location.description
-          }
-        })
-        setPosts(fetchedPosts) // Set the transformed data to state
-      })
-      .catch(error => {
-        console.error('Error fetching areas:', error)
-      })
-  }, [])
+      const fetchedPosts = {};
+      // Process the data into a key-value object
+      data.forEach(location => {
+        const key = location.area_name; // The transformed area_name from the backend
+        fetchedPosts[key] = {
+          location: location.area_name,
+          key: key,
+          path: location.image, // Image path from the API
+          title: location.title,
+          intro: location.description
+        };
+      });
+      setPosts(fetchedPosts); // Set the transformed data to state
+    })
+    .catch(error => {
+      console.error('Error fetching areas:', error);
+    });
+}, [params]); // Add `params` as a dependency to refetch when params change
+
+
 
   const post = posts[slug] || {
     title: 'Post Not Found',
@@ -110,60 +114,67 @@ export default function BlogPost ({ params }) {
 
   return (
     <>
-      <div className='flex flex-col min-h-screen'>
-        <Header />
-        <div className='flex-grow'>
-          <Directory
-            currentLocation='LOCATION'
-            specificLocation={`  ${post.location.toUpperCase()}`}
-          />
-          <div className='w-full h-full'>
-            <div className='relative mt-1 w-full'>
-              <img
-                src={`http://localhost:8000/images/${post.path}`}
-                alt={post.location}
-                width={2000}
-                height={500}
-                className='w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72'
-                priority
-              />
-              <div className='left-0 right-0 h-28 lg:h-40 bg-blue-900 flex flex-col justify-center p-2 text-white w-screen'>
-                <div className='-mt-10 left-0 right-0 h-1/5 bg-blue-900 flex flex-col justify-center p-2 text-white'>
-                  <p className='mt-6 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-2xl'>
-                    Premium Lots for Sale in {post.location}
-                  </p>
-                  <p className='-mt-4 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-3xl'>
-                    {post.title}
-                  </p>
-                </div>
-              </div>
-              <div className='sm:-mt-3 md:-mt-5 -mt-10 border-black border-2 lg:h-48 xl:h-28 xl:-mt-10 2xl:h-16 bg-white text-justify text-black flex justify-center left-10 h-28 w-3/3 mx-2 text-lg p-2'>
-                <p className='text-sm indent-10 sm:text-lg sm:p-2 md:text-xl lg:text-3xl lg:p-5 xl:text-xl 2xl:p-1'>
-                  {post.intro}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className='relative text-center sm:px-10 md:mx-5 justify-center'>
-            <h1 className='text-2xl font-bold justify-center mt-10 -mb-5 sm:text-4xl lg:text-5xl xl:text-3xl'>
-              FEATURED PROPERTIES
-            </h1>
-            <div className=' justify-start items-start gap-1 mt-5 w-full mb-20 '>
-              {propertyData.map(property => (
-                <Link
-                  key={property.id}
-                  href={`/pages/buildings/${property.id}`}
-                  passHref
-                  className='no-underline'
-                >
-                  <PropertyCard property={property} />
-                </Link>
-              ))}
-            </div>
-          </div>
+  <div className='flex flex-col min-h-screen'>
+  <Header />
+  <div className='flex-grow'>
+   
+   <div className="w-full h-full">
+  {Object.values(posts).map(post => (
+    
+    <div key={post.key} className="relative mt-1 w-full">
+       <Directory
+      currentLocation='LOCATION'
+      specificLocation={`${post.location.toUpperCase()}`} // Pass location here
+    />
+      <img
+        src={`http://localhost:8000/${post.path}`} // Correct URL to fetch image
+        alt={post.location}
+        width={2000}
+        height={500}
+        className="w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72"
+        priority
+      />
+      <div className="left-0 right-0 h-28 lg:h-40 bg-blue-900 flex flex-col justify-center p-2 text-white w-screen">
+        <div className="-mt-10 left-0 right-0 h-1/5 bg-blue-900 flex flex-col justify-center p-2 text-white">
+          <p className="mt-6 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-2xl">
+            Premium Lots for Sale in {post.location}
+          </p>
+          <p className="-mt-4 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-3xl">
+            {post.title}
+          </p>
         </div>
-        <Footer />
       </div>
+      <div className="sm:-mt-3 md:-mt-5 -mt-10 border-black border-2 lg:h-48 xl:h-28 xl:-mt-10 2xl:h-16 bg-white text-justify text-black flex justify-center left-10 h-28 w-3/3 mx-2 text-lg p-2">
+        <p className="text-sm indent-10 sm:text-lg sm:p-2 md:text-xl lg:text-3xl lg:p-5 xl:text-xl 2xl:p-1">
+          {post.intro}
+        </p>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+    <div className='relative text-center sm:px-10 md:mx-5 justify-center'>
+      <h1 className='text-2xl font-bold justify-center mt-10 -mb-5 sm:text-4xl lg:text-5xl xl:text-3xl'>
+        FEATURED PROPERTIES
+      </h1>
+      <div className='justify-start items-start gap-1 mt-5 w-full mb-20'>
+        {propertyData.map(property => (
+          <Link
+            key={property.id}
+            href={`/pages/buildings/${property.id}`}
+            passHref
+            className='no-underline'
+          >
+            <PropertyCard property={property} />
+          </Link>
+        ))}
+      </div>
+    </div>
+  </div>
+  <Footer />
+</div>
+
     </>
   )
 }
