@@ -10,11 +10,11 @@ import ArchitecturalThemeModal from '@/components/admin/architecturalThemeModal'
 import StatusModal from '@/components/admin/statusModal'
 
 import { Input } from '@/components/ui/input'
-import Demo from './../properties/page'
-import Header from '../pages/header'
+import Demo from '../../properties/page'
+import Header from '../header'
 import Link from 'next/link'
 import AreaModal from '@/components/admin/areaModal'
-import Appointments from '@/components/admin/appointments'
+import SubmittedProperties from '@/components/admin/submittedProperties'
 
 export default function Admin ({}) {
   const [isVisible, setIsVisible] = useState(true) // Controls visibility of popup
@@ -153,6 +153,12 @@ export default function Admin ({}) {
               >
                 APPOINTMENTS
               </Link>
+              <Link
+                href='/pages/submitted-properties'
+                className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
+              >
+                SUBMITTED PROPERTIES
+              </Link>
             </nav>
           </div>
         )}
@@ -161,7 +167,7 @@ export default function Admin ({}) {
         <div className='min-h-screen py-20 mt-14 w-[90%] mx-auto overflow-y-auto scrollbar-hidden flex justify-center'>
           <div>
             
-            <Appointments />
+            < SubmittedProperties/>
           </div>
         </div>
 

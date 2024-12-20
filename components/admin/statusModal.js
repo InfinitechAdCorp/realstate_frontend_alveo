@@ -1,39 +1,45 @@
 import React, { useState } from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-const statusModal = ({ isOpen, closeModal }) => {
-  const [inputValue, setInputValue] = useState(''); // State to handle input field
-  const [error, setError] = useState(''); // State to handle errors
-  const [success, setSuccess] = useState(''); // State to show success messages
+const StatusModal = ({ isOpen, closeModal }) => {
+  const [statusMessage, setStatusMessage] = useState(''); // State to hold status messages (success or error)
 
-  // Handle change in input field
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  // Yup validation schema
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required('Development Type is required')
+      .min(3, 'Development Type must be at least 3 characters')
+  });
 
-  // Submit data to the backend using fetch
-  const handleSubmit = async () => {
-    setError(''); // Clear previous errors
-    setSuccess(''); // Clear previous success messages
+  // Handle form submission
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+    setErrors({}); // Clear previous errors
+    setStatusMessage(''); // Clear any previous status messages
 
     const formData = new FormData();
-    formData.append('name', inputValue);
+    formData.append('name', values.name);
 
     try {
       const response = await fetch('http://localhost:8000/api/admin/add-status', {
         method: 'POST',
-        body: formData, // No need to set headers for formData
+        body: formData,
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(data.message || 'Development Type added successfully');
-        setInputValue(''); // Clear the input field
+        // Set success message
+        setStatusMessage(data.message || 'Development Type added successfully');
+        setSubmitting(false);
       } else {
-        setError(data.message || 'Failed to add Development Type');
+        // Set error message
+        setErrors({ name: data.message || 'Failed to add Development Type' });
+        setSubmitting(false);
       }
     } catch (err) {
-      setError('An error occurred while submitting the data');
+      setErrors({ name: 'An error occurred while submitting the data' });
+      setSubmitting(false);
     }
   };
 
@@ -56,34 +62,60 @@ const statusModal = ({ isOpen, closeModal }) => {
       >
         <h2 className="text-xl font-semibold text-center mb-4">Status</h2>
 
-        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
-        {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}
+        {/* Display status message (success or error) */}
+        {statusMessage && (
+          <div className="mb-4">
+            <p
+              className={`text-sm ${statusMessage.startsWith('Failed') ? 'text-red-500' : 'text-green-500'}`}
+            >
+              {statusMessage}
+            </p>
+          </div>
+        )}
 
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Enter Development Type"
-          className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <Formik
+          initialValues={{ name: '' }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <div className="mb-4">
+                <Field
+                  type="text"
+                  name="name"
+                  placeholder="Enter Status"
+                  className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-        <div className="flex justify-between">
-          <button
-            onClick={closeModal}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none"
-          >
-            Close
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
-          >
-            Submit
-          </button>
-        </div>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
 };
 
-export default statusModal;
+export default StatusModal;

@@ -1,49 +1,29 @@
 import React, { useState } from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
 const AreaModal = ({ isOpen, closeModal }) => {
-  const [inputValues, setInputValues] = useState({
-    area_name: '',
-    title: '',
-    description: '',
-    image: null,
-  });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // Handle change in input fields
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setInputValues((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  // Handle image change
-  const handleImageChange = (event) => {
-    const { files } = event.target;
-    setInputValues((prevState) => ({
-      ...prevState,
-      image: files[0],
-    }));
-  };
+  // Yup validation schema
+  const validationSchema = Yup.object({
+    area_name: Yup.string().required('Area Name is required'),
+    title: Yup.string().required('Title is required'),
+    description: Yup.string().required('Description is required'),
+    image: Yup.mixed().required('Image is required'),
+  });
 
   // Submit data to the backend using fetch
-  const handleSubmit = async () => {
+  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     setError(''); // Clear previous errors
     setSuccess(''); // Clear previous success messages
 
-    // Validate input fields
-    if (!inputValues.area_name || !inputValues.title || !inputValues.description || !inputValues.image) {
-      setError('All fields are required');
-      return;
-    }
-
     const formData = new FormData();
-    formData.append('area_name', inputValues.area_name);
-    formData.append('title', inputValues.title);
-    formData.append('description', inputValues.description);
-    formData.append('image', inputValues.image);
+    formData.append('area_name', values.area_name);
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('image', values.image);
 
     try {
       const response = await fetch('http://localhost:8000/api/admin/add-area', {
@@ -54,18 +34,14 @@ const AreaModal = ({ isOpen, closeModal }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(data.message || 'Development Type added successfully');
-        setInputValues({
-          area_name: '',
-          title: '',
-          description: '',
-          image: null,
-        }); // Reset form
+        setSuccess(data.message || 'Area added successfully');
       } else {
-        setError(data.message || 'Failed to add Development Type');
+        setError(data.message || 'Failed to add Area');
       }
+      setSubmitting(false);
     } catch (err) {
       setError('An error occurred while submitting the data');
+      setSubmitting(false);
     }
   };
 
@@ -91,57 +67,73 @@ const AreaModal = ({ isOpen, closeModal }) => {
         {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
         {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}
 
-        {/* Area Name Input */}
-        <input
-          type="text"
-          name="area_name"
-          value={inputValues.area_name}
-          onChange={handleInputChange}
-          placeholder="Enter Area Name"
-          className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <Formik
+          initialValues={{
+            area_name: '',
+            title: '',
+            description: '',
+            image: null,
+          }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ setFieldValue, isSubmitting }) => (
+            <Form>
+              {/* Area Name Input */}
+              <Field
+                type="text"
+                name="area_name"
+                placeholder="Enter Area Name"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <ErrorMessage name="area_name" component="div" className="text-red-500 mb-4" />
 
-        {/* Title Input */}
-        <input
-          type="text"
-          name="title"
-          value={inputValues.title}
-          onChange={handleInputChange}
-          placeholder="Enter Title"
-          className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+              {/* Title Input */}
+              <Field
+                type="text"
+                name="title"
+                placeholder="Enter Title"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <ErrorMessage name="title" component="div" className="text-red-500 mb-4" />
 
-        {/* Description Input */}
-        <textarea
-          name="description"
-          value={inputValues.description}
-          onChange={handleInputChange}
-          placeholder="Enter Description"
-          className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+              {/* Description Input */}
+              <Field
+                as="textarea"
+                name="description"
+                placeholder="Enter Description"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <ErrorMessage name="description" component="div" className="text-red-500 mb-4" />
 
-        {/* Image Upload */}
-        <input
-          type="file"
-          name="image"
-          onChange={handleImageChange}
-          className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+              {/* Image Upload */}
+              <input
+                type="file"
+                name="image"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                onChange={(event) => setFieldValue('image', event.target.files[0])}
+              />
+              <ErrorMessage name="image" component="div" className="text-red-500 mb-4" />
 
-        <div className="flex justify-between">
-          <button
-            onClick={closeModal}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none"
-          >
-            Close
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
-          >
-            Submit
-          </button>
-        </div>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
