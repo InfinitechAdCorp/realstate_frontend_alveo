@@ -661,7 +661,22 @@ const AlveoBanner = () => {
                 <img
                   className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
                   src="/calculator.png"
-                  alt="Room Planner"
+                  alt="loancalculator"
+                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                />
+
+              </Link>
+            </div>
+          </div>
+             <div className="absolute  md:top-10 max-sm:-top-4  sm:-top-4 right-16 m-4 mb-10 ">
+            <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+              <Link href="/pages/agent" passHref>
+
+                <img
+                  className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+                  src="assets/boy.png"
+                  alt="agent"
                   onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 />

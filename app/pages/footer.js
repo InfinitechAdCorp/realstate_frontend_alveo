@@ -1,22 +1,23 @@
-'use client' // Add this line at the top
-import { useRouter } from 'next/router' // Import useRouter for navigation
-import React, { useEffect, useState, useRef } from 'react'
-import Image from 'next/image' // Assuming you're using Next.js's Image component
-import Link from 'next/link'
-import { throttle } from 'lodash'
-import { useSession, signIn, signOut } from 'next-auth/react'
+"use client"; // Add this line at the top
+import { useRouter } from 'next/router'; // Import useRouter for navigation
+import React, { useEffect, useState, useRef } from 'react';
+import Image from 'next/image'; // Assuming you're using Next.js's Image component
+import Link from 'next/link';
+import { throttle } from 'lodash';
+import { useSession, signIn, signOut } from "next-auth/react";
 
-import SEO from './../seo/page'
+import SEO from "./../seo/page"
 const Footer = () => {
-  useEffect(() => {
-    // Reload the page if it hasn't already been reloaded
-    const hasReloaded = sessionStorage.getItem('footerPageReloaded')
-    if (!hasReloaded) {
-      sessionStorage.setItem('footerPageReloaded', 'true') // Set a flag to prevent infinite reloads
-      window.location.reload()
-    }
-  }, [])
+     useEffect(() => {
+        // Reload the page if it hasn't already been reloaded
+        const hasReloaded = sessionStorage.getItem('footerPageReloaded');
+        if (!hasReloaded) {
+            sessionStorage.setItem('footerPageReloaded', 'true'); // Set a flag to prevent infinite reloads
+            window.location.reload();
+        }
+    }, []);
   const handleDownloadClick = () => {
+
     const apkUrl = '/apk/app-apk-67613c8a8b586-1734425738.apk'
     const link = document.createElement('a')
     link.href = apkUrl
@@ -117,10 +118,16 @@ const Footer = () => {
             />
             <h3 className='xl:text-xl text-lg sm:text-xl lg:text-3xl'>Viber</h3>
           </div>
-        </div>
-      </div>
-    </>
-  )
-}
 
-export default Footer
+        </div>
+    </div>
+</div>
+
+       
+        </>
+    );
+    
+};
+ 
+ 
+export default Footer;

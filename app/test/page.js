@@ -761,7 +761,6 @@ export default function Admin ({}) {
             </div>
           </div>
         </div>
-
         <div className='demo-container min-h-screen mt-14 w-9/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center'>
           <div>
             <Demo />
