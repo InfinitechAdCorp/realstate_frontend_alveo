@@ -130,49 +130,56 @@ const Table = () => {
               <th className='border border-gray-300 px-4 py-2'>Action</th>
             </tr>
           </thead>
-          <tbody>
-            {appointments.map(appointment => (
-              <tr key={appointment.id} className='hover:bg-gray-50'>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.fullname}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.email}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.number}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.reason}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.property}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.message}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  {appointment.status}
-                </td>
-                <td className='border border-gray-300 px-4 py-2'>
-                  <div>
-                    <button
-                      onClick={() => handleAccept(appointment.id)}
-                      className='px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600'
-                    >
-                      <FaCheckCircle />
-                    </button>
-                    <button
-                      onClick={() => handleDecline(appointment.id)}
-                      className='px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600'
-                    >
-                      <FaTimesCircle />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+  <tbody>
+  {appointments.map(appointment => (
+    <tr key={appointment.id} className='hover:bg-gray-50'>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.fullname}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.email}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.number}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.reason}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.property}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.message}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        {appointment.status}
+      </td>
+      <td className='border border-gray-300 px-4 py-2'>
+        <div>
+          <button
+            onClick={() => {
+              console.log(`Accepting appointment with ID: ${appointment.id}`);  // Log the ID
+              handleAccept(appointment.id);  // Call the handleAccept function
+            }}
+            className='px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600'
+          >
+            <FaCheckCircle />
+          </button>
+          <button
+            onClick={() => {
+              console.log(`Declining appointment with ID: ${appointment.id}`);  // Log the ID
+              handleDecline(appointment.id);  // Call the handleDecline function
+            }}
+            className='px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600'
+          >
+            <FaTimesCircle />
+          </button>
+        </div>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
         </table>
       </div>
     </div>

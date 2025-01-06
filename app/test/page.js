@@ -14,7 +14,8 @@ import Demo from './../properties/page'
 import Header from '../pages/header'
 import Link from 'next/link'
 import AreaModal from '@/components/admin/areaModal'
-
+import Appointment from '@/components/admin/appointments'
+import Slider from "react-slick";
 
 export default function Admin ({}) {
    const [showProperties, setShowProperties] = useState(false);
@@ -27,6 +28,10 @@ export default function Admin ({}) {
   const [error, setError] = useState('')
   const [isOtpSent, setIsOtpSent] = useState(false) // To track OTP sent state
   const [isLoggedIn, setisLoggedin] = useState(false) // To track OTP sent state
+  const [submittedProperties, setSubmittedProperties] = useState([]);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalImages, setModalImages] = useState([]);
+  const [currentImages, setCurrentImages] = useState([]);
 
   const [properties, setProperties] = useState([]) // State to store fetched data from API
 
@@ -36,6 +41,13 @@ export default function Admin ({}) {
     condominiums: 0,
     locations: 0
   })
+    const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
   const [isSidebarVisible, setSidebarVisible] = useState(false) // State for controlling sidebar visibility
   const [isDevelopmentTypeModalOpen, setDevelopmentTypeModalOpen] =
     useState(false)
@@ -73,9 +85,12 @@ const [chatbotFormData, setChatbotFormData] = useState({ question: "", answer: "
 
   const [editing, setEditing] = useState(null);
   const navItems = [
+    
     { name: "Properties", onClick: () => console.log("Properties Clicked") },
     { name: "Details", onClick: () =>console.log("Detailes Clicked") },
     { name: "Chatbot", onClick: () =>console.log("Detailes Clicked") },
+    { name: "Client Property", onClick: () =>console.log("Detailes Clicked") },
+    { name: "Appointments", onClick: () =>console.log("Detailes Clicked") },
   ];
 
 const [isEditing, setIsEditing] = useState(false);
@@ -121,10 +136,20 @@ const handleAddLoc = async (type, areaName, title, description, image, setData, 
 
     if (response.ok) {
       console.log('Success:', data);
-      // Handle the response, possibly displaying the image URL or other data
-      if (data.image_url) {
-        console.log('Image URL:', data.image_url);
-      }
+      setSuccess('Location added successfully!');
+
+      // Fetch the updated list of locations after adding the new location
+      fetchLocations(setData);
+
+      // Optionally, clear the form fields or reset the state
+      setData(prevData => ({
+        ...prevData,
+        newAreaName: '',
+        newTitle: '',
+        newDescription: '',
+        newImage: null, // Reset the image
+      }));
+
     } else {
       console.error('Error:', data.message);
       setError(data.message || 'Something went wrong');
@@ -132,6 +157,18 @@ const handleAddLoc = async (type, areaName, title, description, image, setData, 
   } catch (err) {
     console.error('An error occurred:', err);
     setError('An error occurred during submission');
+  }
+};
+
+// Fetch locations and update state
+const fetchLocations = async (setData) => {
+  try {
+    const response = await fetch("http://localhost:8000/api/admin/area");
+    const data = await response.json();
+    console.log("Fetched Locations:", data);
+    setData(prevData => ({ ...prevData, locations: data }));
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
 };
 
@@ -148,32 +185,81 @@ const handleImageChange = (e) => {
     reader.readAsDataURL(file);  // Read the file as Base64 string
   }
 };
-
-
-useEffect(() => {
-  console.log(activeNav);
-  if (activeNav === "Details") {
-    fetchData(); // Fetch other data for "Details"
-  } else if (activeNav === "Chatbot") {
-    const fetchChatbotData = async () => {
-  
+  useEffect(() => {
+    // Function to fetch data from the backend
+    const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/admin/getChatbot');
-        const chatbotData = await response.json();
-        console.log(chatbotData)
-        // Update chatbotEntries state
-        setData((prevData) => ({
-          ...prevData,
-          chatbotEntries: chatbotData,
-        }));
+        // Set loading to true when the fetch starts
+
+        // Fetch the data for each category
+        const propertiesRes = await fetch('http://localhost:8000/api/admin/countproperties');
+        const propertiesData = await propertiesRes.json();
+
+        const otherBuildingsRes = await fetch('http://localhost:8000/api/admin/countotherbuildings');
+        const otherBuildingsData = await otherBuildingsRes.json();
+
+        const condominiumsRes = await fetch('http://localhost:8000/api/admin/countcondominiums');
+        const condominiumsData = await condominiumsRes.json();
+
+        const locationsRes = await fetch('http://localhost:8000/api/admin/countlocations');
+        const locationsData = await locationsRes.json();
+
+        // Update the state with the fetched counts
+        setCounts({
+          properties: propertiesData.count || 0,  // Use 0 if count is not available
+          otherBuildings: otherBuildingsData.count || 0,
+          condominiums: condominiumsData.count || 0,
+          locations: locationsData.count || 0
+        });
+       console.log('Updated counts:', {
+          properties: propertiesData.count || 0,
+          otherBuildings: otherBuildingsData.count || 0,
+          condominiums: condominiumsData.count || 0,
+          locations: locationsData.count || 0
+        });
+
       } catch (error) {
-        console.error("Error fetching chatbot data:", error);
-      }
+        console.error('Error fetching data:', error);
+      } 
     };
 
-    fetchChatbotData();
-  }
-}, [activeNav]);
+    // Fetch the data when the component mounts (page loads)
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log(activeNav);
+    if (activeNav === "Details") {
+      fetchData(); // Fetch other data for "Details"
+    } else if (activeNav === "Chatbot") {
+      const fetchChatbotData = async () => {
+    
+        try {
+          const response = await fetch('http://localhost:8000/api/admin/getChatbot');
+          const chatbotData = await response.json();
+          console.log(chatbotData)
+          // Update chatbotEntries state
+          setData((prevData) => ({
+            ...prevData,
+            chatbotEntries: chatbotData,
+          }));
+        } catch (error) {
+          console.error("Error fetching chatbot data:", error);
+        }
+      };
+
+      fetchChatbotData();
+    } else if (activeNav === "Client Property") {
+      fetch('http://localhost:8000/api/admin/submitted-properties')
+        .then(response => response.json())
+        .then(data => {
+          setSubmittedProperties(data);  // Store the data in the state
+        })
+        .catch(error => {
+          console.error('Error fetching submitted properties:', error);
+        });
+    }
+  }, [activeNav]);
  
 const fetchData = () => {
   fetch("http://localhost:8000/api/admin/development-types")
@@ -210,15 +296,16 @@ const fetchData = () => {
 };
 const handleAdd = (type, newItem, setData, field) => {
   console.log("Adding item:", newItem); // Log the new item being added
-
+console.log(type)
   // Check if we are adding a chatbot entry
   if (type === "chatbot") {
     const { question, answer } = newItem;
 
     // If we are editing an existing entry, use PUT instead of POST
     const method = isEditing ? "PUT" : "POST";
-    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/chatbot";
-
+    console.log(method)
+    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/addChatbot";
+    console.log(url)
     fetch(url, {
       method: method,
       headers: {
@@ -261,56 +348,7 @@ const handleAdd = (type, newItem, setData, field) => {
         console.error("Error adding/updating data:", error);
       });
 
-  }   if (type === "location") {
-    const { question, answer } = newItem;
-
-    // If we are editing an existing entry, use PUT instead of POST
-    const method = isEditing ? "PUT" : "POST";
-    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/chatbot";
-
-    fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ question, answer }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Ensure the response contains success status and new item with id
-        if (data.success) {
-          console.log(`${isEditing ? "Updated" : "Added"} chatbot entry successfully: ${question}`);
-
-          // If adding a new entry, add the entry with id to the chatbotEntries array
-          if (isEditing) {
-            setData((prevData) => ({
-              ...prevData,
-              chatbotEntries: prevData.chatbotEntries.map((item) =>
-                item.id === newItem.id ? { ...item, question, answer } : item
-              ),
-            }));
-          } else {
-            const addedItem = { ...newItem, id: data.data.id }; // Ensure newItem includes id
-            setData((prevData) => ({
-              ...prevData,
-              chatbotEntries: [...prevData.chatbotEntries, addedItem],
-            }));
-          }
-
-          // Clear the input fields
-          setChatbotFormData({ question: "", answer: "" });
-        } else {
-          console.error("Error response from API:", data.message);
-        }
-
-        fetchData(); // Optionally fetch the updated data
-      })
-      .catch((error) => {
-        // Log the error if request fails
-        console.error("Error adding/updating data:", error);
-      });
-
-  } else {
+  }  else {
     // Existing logic for other types (e.g., developmentTypes, locations)
     fetch(`http://localhost:8000/api/admin/add-${type}`, {
       method: "POST",
@@ -357,43 +395,54 @@ const handleAdd = (type, newItem, setData, field) => {
       .catch((error) => console.error("Error adding data:", error));
   }
 };
+  const openModal2 = (filesArray) => {
+    setModalImages(filesArray.map((file) => file.replace(/\\/g, '/'))); // Replace backslashes with forward slashes
+    setModalIsOpen(true);
+  };
+
+  // Function to close the modal
+  const closeModal2 = () => {
+    setModalIsOpen(false);
+    setModalImages([]);
+  };
 const handleDelete = (type, id, field) => {
   console.log(type, id, field); // Debugging log to check the values
 
   // Handle deletion of chatbot entries separately
   if (type === "chatbot") {
-    const url = `http://localhost:8000/api/admin/delete-chatbot/${id}`; // Chatbot-specific endpoint
-    console.log("Deleting from URL:", url);  // Debugging line to check the URL
+    const url = `http://localhost:8000/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
+    console.log("Deleting from URL:", url);
 
+    // Send DELETE request
     fetch(url, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => {
+        // Check if the response is successful
         if (!response.ok) {
-          throw new Error("Failed to delete chatbot entry");
+          throw new Error(`Failed to delete chatbot entry with ID: ${id}`);
         }
-        return response.json();
+        return response.json(); // Parse the JSON response
       })
       .then((data) => {
-        console.log(data.message);
+        console.log("Delete Response:", data);
 
-        // Update state by filtering out the deleted chatbot entry
+        // Update state to remove the deleted chatbot entry
         setData((prevData) => {
           const updatedData = { ...prevData };
 
+          // Ensure the field exists and is an array
           if (Array.isArray(prevData[field])) {
             updatedData[field] = prevData[field].filter((item) => item.id !== id);
           }
 
-          // Optionally, reset form values for chatbot after deletion
-          updatedData.newQuestion = "";
-          updatedData.newAnswer = "";
-
-          return updatedData;
+          return updatedData; // Return updated state
         });
+        alert("Chatbot entry deleted successfully."); // Optional: Notify user
       })
       .catch((error) => {
+        // Log error and alert the user
         console.error("Error deleting chatbot entry:", error);
         alert("An error occurred while deleting the chatbot entry.");
       });
@@ -543,7 +592,7 @@ const handleInputChange_chatbot = (e) => {
             <form>
               <div>
                 <label htmlFor='email' className='block text-lg font-medium'>
-                  Email:
+                  Email:s
                 </label>
                 <input
                   type='email'
@@ -586,9 +635,9 @@ const handleInputChange_chatbot = (e) => {
           </div>
         </div>
       )} */}
-      <div className="flex">
+      <div className="flex fixed w-full">
  <div className="text-xl text-black w-1/6 relative border-r shadow-md h-screen bg-gray-100">
-  <div className="mt-80 border-indigo-950">
+  <div className="mt-24 border-indigo-950">
 <nav className="p-6 space-y-2">
         <ul>
           {navItems.map((item) => (
@@ -614,14 +663,7 @@ const handleInputChange_chatbot = (e) => {
             </li>
           ))}
         </ul>
-        <div className="mt-6">
-          <a
-            href="/appointment"
-            className="block bg-indigo-700 hover:bg-indigo-600 text-white py-3 px-6 rounded-lg text-center transition-all duration-300 hover:shadow-lg"
-          >
-            APPOINTMENTS
-          </a>
-        </div>
+ 
       </nav>
   </div>
 </div>
@@ -797,8 +839,92 @@ const handleInputChange_chatbot = (e) => {
         </div>
 
 
-<div className="demo-container min-h-screen mt-14 w-9/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center">
+<div className="demo-container min-h-screen mt-14 w-11/12 mx-auto overflow-y-auto scrollbar-hidden flex justify-center">
   {activeNav === "Properties" && <div><Demo /></div>}
+    {activeNav === "Appointments" && <div><Appointment /></div>}
+ {activeNav === "Client Property" && (
+  <div>
+    {/* Render the submitted properties here */}
+    <table className="table-auto w-full">
+      <thead>
+        <tr>
+          <th className="px-4 py-2">First Name</th>
+          <th className="px-4 py-2">Last Name</th>
+          <th className="px-4 py-2">Email</th>
+          <th className="px-4 py-2">Phone</th>
+          <th className="px-4 py-2">Property Name</th>
+          <th className="px-4 py-2">Location</th>
+          <th className="px-4 py-2">Price</th>
+          <th className="px-4 py-2">Status</th>
+          <th className="px-4 py-2">Description</th>
+          <th className="px-4 py-2">Files</th>
+        </tr>
+      </thead>
+ <tbody>
+              {submittedProperties.map((property) => {
+                // Parse the files field into an array
+                const filesArray = JSON.parse(property.files);
+
+                return (
+                  <tr key={property.id}>
+                    <td className="border px-4 py-2">{property.first_name}</td>
+                    <td className="border px-4 py-2">{property.last_name}</td>
+                    <td className="border px-4 py-2">{property.email}</td>
+                    <td className="border px-4 py-2">{property.phone}</td>
+                    <td className="border px-4 py-2">{property.property_name}</td>
+                    <td className="border px-4 py-2">{property.location}</td>
+                    <td className="border px-4 py-2">{property.price}</td>
+                    <td className="border px-4 py-2">{property.status}</td>
+                    <td className="border px-4 py-2">{property.description}</td>
+
+                    <td className="border px-4 py-2">
+                      {/* Button to show images in the modal */}
+                      {filesArray.length > 0 && (
+                        <button
+                          onClick={() => openModal2(filesArray)}
+                          className="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600"
+                        >
+                          Show Images
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Modal for displaying images */}
+{modalIsOpen && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-4 rounded-lg w-1/3 h-auto overflow-x-auto flex items-center justify-center">
+      <button
+        onClick={closeModal2}
+        className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 rounded p-2"
+      >
+        X
+      </button>
+      <div className="flex justify-center items-center w-full h-full">
+        {modalImages.map((image, index) => (
+          <img
+            key={index}
+            src={`http://localhost:8000/${image}`} // Full URL to the image
+            alt={`Property image ${index + 1}`}
+            className="w-full h-full object-contain" // Make image fill the container
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+
+
+ 
 {activeNav === "Details" && (
   <div>
     {/* Development Type and Architectural Theme in 1st Row, 3 Columns */}
@@ -1022,22 +1148,34 @@ const handleInputChange_chatbot = (e) => {
         </tr>
       </thead>
 <tbody>
-  {data.chatbotEntries.map((item) => (
-    <tr key={item.id || `${item.question}-${item.answer}`} className="hover:bg-gray-100">
-            <td className="px-4 py-2 text-sm text-gray-800">{item.id}</td>
-      <td className="px-4 py-2 text-sm text-gray-800">{item.question}</td>
-      <td className="px-4 py-2 text-sm text-gray-800">{item.answer}</td>
-      <td className="px-4 py-2 text-sm text-gray-800">
-        <button
-          className="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-500"
-          onClick={() => handleDelete('chatbot', item.id, 'chatbotEntries')}
-        >
-          Delete
-        </button>
+  {data.chatbotEntries && data.chatbotEntries.length > 0 ? (
+    data.chatbotEntries.map((item) => (
+      <tr key={item.id || `${item.question}-${item.answer}`} className="hover:bg-gray-100">
+        <td className="px-4 py-2 text-sm text-gray-800">{item.id}</td>
+        <td className="px-4 py-2 text-sm text-gray-800">{item.question}</td>
+        <td className="px-4 py-2 text-sm text-gray-800">{item.answer}</td>
+        <td className="px-4 py-2 text-sm text-gray-800">
+          <button
+            className="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-500"
+            onClick={() => handleDelete('chatbot', item.id, 'chatbotEntries')}
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td
+        colSpan="4"
+        className="px-4 py-2 text-center text-sm text-gray-500"
+      >
+        No data available
       </td>
     </tr>
-  ))}
+  )}
 </tbody>
+
 
 
     </table>

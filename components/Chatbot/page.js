@@ -57,7 +57,7 @@ const MyBot = () => {
   const handleGreeting = (message) => {
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'bot', text: 'Hi there! 👋. How can I assist you today?' },
+      { sender: 'bot', text: 'Welcome to ALVEO! How can I assist you today?' },
     ]);
 
     setMessages((prevMessages) => [
@@ -74,13 +74,45 @@ const MyBot = () => {
     setConversationStage('waitingForResponse');
   };
 
-  const handleViewProperty = (message) => {
+const handleViewProperty = async (message) => {
+  // Step 1: Set initial bot message
+  setMessages((prevMessages) => [
+    ...prevMessages,
+    { sender: 'bot', text: 'In what Location' },
+  ]);
+
+  // Step 2: Fetch locations from API
+  try {
+    const response = await fetch('http://localhost:8000/api/locations'); // Adjust the URL based on your endpoint
+    const data = await response.json();
+
+    // Step 3: Map over the data to ensure you're extracting specific properties (like `name` or `location`)
+    const locationButtons = data.map((location) => ({
+      label: location.location, // Use a property like `name` from the location object
+      value: location.location,   // Assuming you're using the `id` for identification
+    }));
+
+    // Step 4: Add the location buttons to the messages state
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'bot', text: 'Please select: For Sale or For Lease.' },
+      {
+        sender: 'bot',
+        buttons: locationButtons,
+      },
     ]);
+
+    // Step 5: Change conversation stage
     setConversationStage('propertyDetails');
-  };
+  } catch (error) {
+    console.error('Error fetching locations:', error);
+    // Optionally show an error message to the user
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: 'bot', text: 'Sorry, there was an issue fetching the locations.' },
+    ]);
+  }
+};
+
 
   const handlePropertyDetails = (message) => {
     setMessages((prevMessages) => [
@@ -94,10 +126,17 @@ const MyBot = () => {
   };
 
   const handleButtonClick = (value) => {
+    console.log(value)
     if (value === 'viewProperty') {
       setConversationStage('viewProperty');
       handleViewProperty();
     } else if (value === 'otherServices') {
+      setConversationStage('otherServices');
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
+      ]);
+    }else if (value === 'New') {
       setConversationStage('otherServices');
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -147,7 +186,7 @@ const MyBot = () => {
             position: 'fixed',
             bottom: '100px',
             right: '20px',
-            width: '300px',
+            width: 'auto',
             height: '400px',
             backgroundColor: 'white',
             boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
@@ -170,95 +209,113 @@ const MyBot = () => {
             <Image src="/assets/logo.png" alt="Alveo" width={100} height={100} />
           </div>
 
-          <div
-            ref={chatContainerRef}
-            style={{
-              flex: 1,
-              overflowY: 'auto',
-              padding: '10px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-            }}
-          >
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                style={{
-                  display: 'flex',
-                  justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
-                }}
-              >
-                <div
-                  style={{
-                    maxWidth: '70%',
-                    backgroundColor: message.sender === 'user' ? '#007bff' : '#f1f1f1',
-                    color: message.sender === 'user' ? 'white' : 'black',
-                    padding: '8px 15px',
-                    borderRadius: '20px',
-                    fontSize: '14px',
-                    margin: '5px',
-                    wordWrap: 'break-word',
-                  }}
-                >
-                  {message.text}
-                </div>
+       <div
+  ref={chatContainerRef}
+  style={{
+    flex: 1,
+    overflowY: 'auto',
+    padding: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '10px',
+  }}
+>
+  {messages.map((message, index) => (
+    <div
+      key={index}
+      style={{
+        display: 'flex',
+        flexDirection: 'column', // Stack text and buttons vertically within the container
+        justifyContent: message.sender === 'user' ? 'flex-end' : 'flex-start',
+        alignItems: message.sender === 'user' ? 'flex-end' : 'flex-start', // Align text and buttons based on sender
+      }}
+    >
+      <div
+        style={{
+          maxWidth: '90%',
+          height:'100%',
+          backgroundColor: message.sender === 'user' ? '#007bff' : '#f1f1f1',
+          color: message.sender === 'user' ? 'white' : 'black',
+          padding:'5px',
+          borderRadius: '10px',
+          fontSize: '14px',
+        // Space between text and buttons
+          wordWrap: 'break-word',
+        }}
+      >
+        {message.text}
+    {message.buttons && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column', // Stack buttons vertically
+            gap: '5px', // Slight gap between buttons
+            alignItems: 'left', // Center buttons
+          }}
+        >
+          {message.buttons.map((button, i) => (
+            <button
+              key={i}
+              onClick={() => handleButtonClick(button.value)}
+              style={{
+                backgroundColor: '#007bff',
+                color: 'white',
+                border: 'none',
+                padding: '6px 14px', // Adjusted padding for compact buttons
+                borderRadius: '8px', // Rounded corners for a softer appearance
+                cursor: 'pointer',
+                fontSize: '14px',
+                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                transition: 'all 0.3s ease',
+                width: 'auto', // Auto width to avoid stretching the button
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.backgroundColor = '#0056b3';
+                e.target.style.transform = 'scale(1.05)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.backgroundColor = '#007bff';
+                e.target.style.transform = 'scale(1)';
+              }}
+            >
+              {button.label}
+            </button>
+          ))}
+        </div>
+      )}
+      </div>
 
-                {message.buttons && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: '10px',
-                      marginTop: '10px',
-                    }}
-                  >
-                    {message.buttons.map((button, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleButtonClick(button.value)}
-                        style={{
-                          backgroundColor: '#007bff',
-                          color: 'white',
-                          border: 'none',
-                          padding: '10px 20px',
-                          borderRadius: '25px',
-                          cursor: 'pointer',
-                        }}
-                      >
-                        {button.label}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-            {isTyping && (
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '70px',
-                  left: '10px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  animation: 'typingAnimation 1.5s infinite',
-                }}
-              >
-                <div
-                  className="typing-indicator"
-                  style={{
-                    fontSize: '24px',
-                    color: '#007bff',
-                    display: 'flex',
-                    gap: '5px',
-                  }}
-                >
-                  <span>•</span>
-                  <span>•</span>
-                  <span>•</span>
-                </div>
-              </div>
-            )}
-          </div>
+  
+    </div>
+  ))}
+
+  {isTyping && (
+    <div
+      style={{
+        position: 'absolute',
+        bottom: '70px',
+        left: '10px',
+        display: 'flex',
+        justifyContent: 'center',
+        animation: 'typingAnimation 1.5s infinite',
+      }}
+    >
+      <div
+        className="typing-indicator"
+        style={{
+          fontSize: '24px',
+          color: '#007bff',
+          display: 'flex',
+          gap: '5px',
+        }}
+      >
+        <span>•</span>
+        <span>•</span>
+        <span>•</span>
+      </div>
+    </div>
+  )}
+</div>
 
           <div
             style={{
