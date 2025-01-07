@@ -222,28 +222,54 @@ export function DataTable ({ columns, data }) {
     const formData = new FormData()
 
     // Ensure that required fields are present
-    if (!propertyData.key || !propertyData.name || !propertyData.status) {
-      alert('Please fill in all required fields.')
-      return
-    }
+    // if (!propertyData.key || !propertyData.name || !propertyData.status) {
+    //   alert('Please fill in all required fields.')
+    //   return
+    // }
 
     // Reassign 'key' to be the lowercase version of 'location'
-    if (propertyData.location) {
+    if (propertyData.location ==="other") {
+      propertyData.key = propertyData.custom_location.toLowerCase()
+    }else {
       propertyData.key = propertyData.location.toLowerCase()
     }
 
+    if(propertyData.development_type ==="other"){
+      propertyData.development_type = propertyData.custom_development_type
+    }
+      if(propertyData.architectural_theme ==="other"){
+      propertyData.architectural_theme = propertyData.custom_architectural_theme
+    }
+     if(propertyData.status ==="other"){
+      propertyData.status = propertyData.custom_status
+    }
+     if(propertyData.location ==="other"){
+      propertyData.location = propertyData.custom_location
+    }
+
     // Append all property fields
-    Object.keys(propertyData).forEach(key => {
-      if (key === 'path' || key === 'view') {
-        if (propertyData[key] instanceof File) {
-          console.log(`Appending file for key ${key}:`, propertyData[key])
-          formData.append(key, propertyData[key])
-        }
-      } else {
-        console.log(`Appending regular data for key ${key}:`, propertyData[key])
-        formData.append(key, propertyData[key])
-      }
-    })
+Object.keys(propertyData).forEach(key => {
+  // Exclude specific custom keys
+  if (
+    key === 'custom_architectural_theme' ||
+    key === 'custom_development_type' ||
+    key === 'custom_location' ||
+    key === 'custom_status'
+  ) {
+    return; // Skip these keys
+  }
+
+  if (key === 'path' || key === 'view') {
+    if (propertyData[key] instanceof File) {
+      // console.log(`Appending file for key ${key}:`, propertyData[key])
+      formData.append(key, propertyData[key]);
+    }
+  } else {
+    // console.log(`Appending regular data for key ${key}:`, propertyData[key])
+    formData.append(key, propertyData[key]);
+  }
+});
+
 
 
 
@@ -393,31 +419,34 @@ export function DataTable ({ columns, data }) {
                     propertyData['development_type'] === 'other' ? (
                       // If the user selects 'Other', or hasn't selected anything, show an input field
                       <div className='relative'>
-                        <select
-                          id='development_type'
-                          name='development_type'
-                          value={propertyData['development_type']}
-                          onChange={e =>
-                            setPropertyData({
-                              ...propertyData,
-                              development_type:
-                                e.target.value === 'other'
-                                  ? 'other'
-                                  : e.target.value
-                            })
-                          }
-                          className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
-                        >
-                          {developmentTypes.map(type => (
-                            <option value={type.id} key={type.id}>
-                              {type.name}
-                            </option>
-                          ))}
-                          {/* Option to select 'Other' */}
-                          <option value='other'>
-                            Other (type your custom type)
-                          </option>
-                        </select>
+                     <select
+  id="development_type"
+  name="development_type"
+  value={propertyData['development_type']}
+  onChange={e =>
+    setPropertyData({
+      ...propertyData,
+      development_type:
+        e.target.value === 'other' ? 'other' : e.target.value,
+    })
+  }
+  className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
+>
+  {/* Default 'Select' placeholder */}
+  <option value="" disabled>
+    Select
+  </option>
+
+  {developmentTypes.map(type => (
+    <option value={type.name} key={type.id}>
+      {type.name}
+    </option>
+  ))}
+
+  {/* Option to select 'Other' */}
+  <option value="other">Other (type your custom type)</option>
+</select>
+
 
                         {propertyData['development_type'] === 'other' && (
                           <input
@@ -444,7 +473,7 @@ export function DataTable ({ columns, data }) {
                         className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
                       >
                         {developmentTypes.map(type => (
-                          <option value={type.id} key={type.id}>
+                          <option value={type.name} key={type.id}>
                             {type.name}
                           </option>
                         ))}
@@ -481,6 +510,10 @@ export function DataTable ({ columns, data }) {
                           }
                           className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
                         >
+                          <option value="" disabled>
+    Select
+  </option>
+
                           {architecturalTheme.map(type => (
                             <option value={type.id} key={type.id}>
                               {type.name}
@@ -554,8 +587,12 @@ export function DataTable ({ columns, data }) {
                           }
                           className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
                         >
+                          <option value="" disabled>
+    Select
+  </option>
+
                           {status.map(type => (
-                            <option value={type.id} key={type.id}>
+                            <option value={type.name} key={type.id}>
                               {type.name}
                             </option>
                           ))}
@@ -590,7 +627,7 @@ export function DataTable ({ columns, data }) {
                         className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
                       >
                         {status.map(type => (
-                          <option value={type.id} key={type.id}>
+                          <option value={type.name} key={type.id}>
                             {type.name}
                           </option>
                         ))}
@@ -627,8 +664,12 @@ export function DataTable ({ columns, data }) {
                           }
                           className='rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full'
                         >
+                          <option value="" disabled>
+    Select
+  </option>
+
                           {area.map(type => (
-                            <option value={type.id} key={type.id}>
+                            <option value={type.name} key={type.id}>
                               {type.area_name}
                             </option>
                           ))}

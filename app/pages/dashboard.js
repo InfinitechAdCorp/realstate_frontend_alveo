@@ -638,52 +638,105 @@ const AlveoBanner = () => {
 
         <div className="absolute inset-0 bg-cover bg-center bg-[url('/assets/Alveo.png')]">
 
-          <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4  right-3 m-4 mb-10 ">
-            <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-              <div
-                className="cursor-pointer"
-                onClick={handleClick1} // Add the click handler for routing
-              >
-                <img
-                  className="w-7 h-7 sm:w-9 sm:h-9 md:w-7 md:h-7 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-                  src="/assets/RoomPlanner/bed.png"
-                  alt="Room Planner"
-                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="absolute  md:top-10 max-sm:-top-4  sm:-top-4 right-16 m-4 mb-10 ">
-            <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-              <Link href="/pages/loancalculator" passHref>
+         <div className="relative">
+  {/* Room Planner Icon */}
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      
+      <a href='/pages/roomplanner' target="_blank">
+        <div className="cursor-pointer relative group">
+        <img
+          className="w-7 h-7 sm:w-9 sm:h-9 md:w-7 md:h-7 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+          src="/assets/RoomPlanner/bed.png"
+          alt="Room Planner"
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        />
+        <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          Room Planner
+        </span>
+      </div>
+      </a>
+    </div>
+  </div>
 
-                <img
-                  className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-                  src="/calculator.png"
-                  alt="loancalculator"
-                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                />
+  {/* Loan Calculator Icon */}
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <Link href="/pages/loancalculator" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="/calculator.png"
+            alt="Loan Calculator"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Loan Calculator
+          </span>
+        </div>
+      </Link>
+    </div>
+  </div>
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16  m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <Link href="/pages/set-appointment" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="assets/schedule.png"
+            alt="Agent"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Set Appointment
+          </span>
+        </div>
+      </Link>
+    </div>
+  </div>
+  {/* Agent Icon */}
+    <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-28 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <Link href="/pages/add-property" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="assets/add.png"
+            alt="Agent"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Submit Property
+          </span>
+        </div>
+      </Link>
+    </div>
+  </div>
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-40 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <Link href="/pages/agent" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="assets/boy.png"
+            alt="Agent"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Agent
+          </span>
+        </div>
+      </Link>
+    </div>
+  </div>
 
-              </Link>
-            </div>
-          </div>
-             <div className="absolute  md:top-10 max-sm:-top-4  sm:-top-4 right-16 m-4 mb-10 ">
-            <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-              <Link href="/pages/agent" passHref>
+</div>
 
-                <img
-                  className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-                  src="assets/boy.png"
-                  alt="agent"
-                  onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-                  onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                />
-
-              </Link>
-            </div>
-          </div>
           <div className="content sm:mt-10  xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10">
             <div className="w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left ">
               <h1 className="mt-2 text-4xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium">
@@ -1201,7 +1254,7 @@ const DashboardComponent = () => {
           <AboutAlveo />
         </div>
         <div className="xl:w-1/2 ">
-          <Map />
+          {/* <Map /> */}
         </div>
       </div>
       <div className="max-sm:mt-32 sm:mt-32 xl:mt-0 xl:z-50">
