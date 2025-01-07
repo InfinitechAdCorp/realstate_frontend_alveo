@@ -269,6 +269,12 @@ const Header = () => {
           >
             SET APPOINTMENT
           </Link>
+          <Link
+            href='/pages/submit-property'
+            className='block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
+          >
+            SUBMIT PROPERTY
+          </Link>
         </nav>
 
         {isPopupVisible && (

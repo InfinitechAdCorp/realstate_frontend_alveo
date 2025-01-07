@@ -22,6 +22,7 @@
       }
     ],
     "paths": {
+
       "@/*": [
         "./*"
       ]
@@ -33,8 +34,10 @@
     "/*.ts",
     "**/*.tsx",
     ".next/types/app/botui.d.ts",
+
     "components/Chatbot/page.js",
     ".next/types/**/*.ts"
+
   ],
   "exclude": [
     "node_modules"
