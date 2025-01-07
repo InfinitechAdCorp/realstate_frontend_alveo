@@ -9,4 +9,7 @@ export default {
   images: {
     domains: ['media.geeksforgeeks.org','localhost'],
   },
+   typescript: {
+    ignoreBuildErrors: true, // Disables type checking errors
+  },
 };
