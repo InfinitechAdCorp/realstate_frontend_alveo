@@ -17,7 +17,7 @@ const Footer = () => {
         }
     }, []);
   const handleDownloadClick = () => {
-    const apkUrl = '/apk/app-apk-67613c8a8b586-1734425738.apk';
+    const apkUrl = '/apk/app-apk-677ca71aecae2-1736222490.apk';
     const link = document.createElement('a');
     link.href = apkUrl;
     link.download = 'Alveo.apk'; // Specify the desired file name
