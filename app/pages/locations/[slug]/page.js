@@ -63,7 +63,7 @@ useEffect(() => {
           title='REAL ESTATE'
           description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter..'
           keywords='alveo, real estate, location, property, building location, property location'
-          canonical='http://localhost:3000/pages/locations'
+          canonical='https://realstate-frontend-alveo.vercel.app/pages/locations'
         />
     
          <Image
@@ -126,7 +126,7 @@ useEffect(() => {
       specificLocation={`${post.location.toUpperCase()}`} // Pass location here
     />
     <img
-  src={`http://localhost:3000${post.path}`} // Try to load from localhost:3000
+  src={`https://realstate-frontend-alveo.vercel.app${post.path}`} // Try to load from localhost:3000
   onError={(e) => {
     e.target.onerror = null; // Prevent infinite loop if image fails
     e.target.src = `https://infinitech-testing1.online${post.path}`; // Fallback to localhost:8000 if not found

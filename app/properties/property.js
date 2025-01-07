@@ -1017,7 +1017,7 @@ export const columns = [
                               ) : (
                                 // Handle other paths (e.g., localhost:3000 or other assets paths)
                                 <img
-                                  src={`http://localhost:3000/${feature.image.replace(
+                                  src={`https://realstate-frontend-alveo.vercel.app/${feature.image.replace(
                                     /\\/g,
                                     '/'
                                   )}`} // Normalize path and prepend localhost:3000
