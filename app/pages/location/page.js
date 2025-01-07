@@ -23,7 +23,7 @@ const LocationPage = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    fetch('http://localhost:8000/api/admin/area') // Adjust the API endpoint if necessary
+    fetch('https://infinitech-testing1.online/api/admin/area') // Adjust the API endpoint if necessary
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -173,7 +173,7 @@ const LocationPage = () => {
           <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
             <div className="bg-white shadow-md rounded-md overflow-hidden flex flex-col h-full">
               <img
-                src={`http://localhost:8000${path}`} // Assuming image path is relative to the server root
+                src={`https://infinitech-testing1.online${path}`} // Assuming image path is relative to the server root
                 alt={location}
                 className="w-full object-cover h-48 md:h-56 lg:h-64"
               />

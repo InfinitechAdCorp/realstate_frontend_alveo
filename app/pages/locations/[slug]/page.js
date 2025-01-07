@@ -18,7 +18,7 @@ export default function BlogPost ({ params }) {
 useEffect(() => {
   console.log(params.slug);
   // Fetch data from the backend API using template literal for params
-  fetch(`http://localhost:8000/api/areas/${params.slug}`) // Correctly interpolated the URL with params
+  fetch(`https://infinitech-testing1.online/api/areas/${params.slug}`) // Correctly interpolated the URL with params
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -71,7 +71,7 @@ useEffect(() => {
         property.path
           ? (property.path.startsWith('http') || property.path.startsWith('https'))
             ? property.path // If it's a URL, use it directly
-            : `http://localhost:8000/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+            : `https://infinitech-testing1.online/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
           : '' // Fallback if property.path is null or undefined
       }
       alt={property.name}
@@ -100,7 +100,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/blog/${slug}`)
+        const response = await fetch(`https://infinitech-testing1.online/api/blog/${slug}`)
         if (!response.ok) {
           throw new Error('Failed to fetch blog post data')
         }
@@ -129,7 +129,7 @@ useEffect(() => {
   src={`http://localhost:3000${post.path}`} // Try to load from localhost:3000
   onError={(e) => {
     e.target.onerror = null; // Prevent infinite loop if image fails
-    e.target.src = `http://localhost:8000${post.path}`; // Fallback to localhost:8000 if not found
+    e.target.src = `https://infinitech-testing1.online${post.path}`; // Fallback to localhost:8000 if not found
   }}
   alt={post.location}
   width={2000}

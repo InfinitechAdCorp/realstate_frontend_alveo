@@ -12,7 +12,7 @@ const Table = () => {
       try {
         setLoading(true)
         const response = await fetch(
-          'http://localhost:8000/api/admin/appointments'
+          'https://infinitech-testing1.online/api/admin/appointments'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch data')
@@ -52,7 +52,7 @@ const Table = () => {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/api/admin/appointment/accept',
+        'https://infinitech-testing1.online/api/admin/appointment/accept',
         {
           method: 'POST',
           headers: {

@@ -85,7 +85,7 @@ export const columns = [
         // Assuming you have this function defined elsewhere
         try {
           const response = await fetch(
-            'http://localhost:8000/api/admin/properties'
+            'https://infinitech-testing1.online/api/admin/properties'
           ) // Fetch properties API
           const data = await response.json()
 
@@ -98,7 +98,7 @@ export const columns = [
       const fetchBuildings = async () => {
         try {
           const response = await fetch(
-            'http://localhost:8000/api/admin/buildings'
+            'https://infinitech-testing1.online/api/admin/buildings'
           ) // Fetch buildings API
           // Fetch properties API
           const data = await response.json()
@@ -112,7 +112,7 @@ export const columns = [
       const fetchFacilities = async () => {
         try {
           const response = await fetch(
-            'http://localhost:8000/api/admin/facilities'
+            'https://infinitech-testing1.online/api/admin/facilities'
           )
           const data = await response.json()
 
@@ -125,7 +125,7 @@ export const columns = [
       const fetchFeatures = async () => {
         try {
           const response = await fetch(
-            'http://localhost:8000/api/admin/features'
+            'https://infinitech-testing1.online/api/admin/features'
           ) // Fetch features API
           const data = await response.json()
 
@@ -143,13 +143,13 @@ export const columns = [
 
         let url
         if (viewType === 'property') {
-          url = 'http://localhost:8000/api/admin/deleteproperty'
+          url = 'https://infinitech-testing1.online/api/admin/deleteproperty'
         } else if (viewType === 'buildings') {
-          url = 'http://localhost:8000/api/admin/deletebuilding'
+          url = 'https://infinitech-testing1.online/api/admin/deletebuilding'
         } else if (viewType === 'feature') {
-          url = 'http://localhost:8000/api/admin/deletefeature'
+          url = 'https://infinitech-testing1.online/api/admin/deletefeature'
         } else if (viewType === 'facility') {
-          url = 'http://localhost:8000/api/admin/deletefacility'
+          url = 'https://infinitech-testing1.online/api/admin/deletefacility'
         } else {
           console.error('Invalid viewType')
           return
@@ -337,7 +337,7 @@ export const columns = [
 
         try {
           const response = await fetch(
-            'http://localhost:8000/api/admin/addBuildings',
+            'https://infinitech-testing1.online/api/admin/addBuildings',
             {
               method: 'POST',
               body: formDataToSend // Send the FormData directly
@@ -375,7 +375,7 @@ export const columns = [
 
         try {
           const response = await fetch(
-            'http://localhost:8000/api/admin/addFacilities',
+            'https://infinitech-testing1.online/api/admin/addFacilities',
             {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -425,7 +425,7 @@ export const columns = [
             }
           })
 
-          fetch('http://localhost:8000/api/admin/addFeature', {
+          fetch('https://infinitech-testing1.online/api/admin/addFeature', {
             method: 'POST',
             body: data
           })
@@ -456,7 +456,7 @@ export const columns = [
         ]
 
         // Make the API call to update the property
-        fetch('http://localhost:8000/api/admin/update-properties', {
+        fetch('https://infinitech-testing1.online/api/admin/update-properties', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -485,7 +485,7 @@ export const columns = [
       const fetchBuildingData = async buildingId => {
         try {
           const response = await fetch(
-            `http://localhost:8000/api/buildings/id/${buildingId}`
+            `https://infinitech-testing1.online/api/buildings/id/${buildingId}`
           )
           const data = await response.json()
 
@@ -553,7 +553,7 @@ export const columns = [
 
         try {
           const response = await fetch(
-            `http://localhost:8000/api/admin/update-buildings`,
+            `https://infinitech-testing1.online/api/admin/update-buildings`,
             {
               method: 'POST', // Change the HTTP method to POST
               headers: {
@@ -582,7 +582,7 @@ export const columns = [
         try {
           // Replace this with the actual property ID dynamically
           const response = await fetch(
-            `http://localhost:8000/api/facilities/id/${payment.id}`
+            `https://infinitech-testing1.online/api/facilities/id/${payment.id}`
           )
 
           // Check if the response is successful (status 200-299)
@@ -612,7 +612,7 @@ export const columns = [
           property_id: facility.property_id // Add the property ID
         }))
 
-        fetch('http://localhost:8000/api/admin/update-facilities', {
+        fetch('https://infinitech-testing1.online/api/admin/update-facilities', {
           method: 'POST',
           body: JSON.stringify(updatedFacilities), // Send the updated facilities array
           headers: {
@@ -737,7 +737,7 @@ export const columns = [
 
           // Send the request to update the features
           const response = await fetch(
-            'http://localhost:8000/api/admin/update-features',
+            'https://infinitech-testing1.online/api/admin/update-features',
             {
               method: 'POST', // Use POST since you're sending FormData
               body: formData // FormData automatically sets the correct Content-Type (multipart/form-data)
@@ -1008,9 +1008,9 @@ export const columns = [
                                   className='w-32 h-32 object-cover rounded-md'
                                 />
                               ) : feature.image.startsWith('/property/') ? (
-                                // Handle http://localhost:8000 property URLs (e.g., /property/fortis_residence/...)
+                                // Handle https://infinitech-testing1.online property URLs (e.g., /property/fortis_residence/...)
                                 <img
-                                  src={`http://localhost:8000${feature.image}`} // Use localhost:8000 for the image
+                                  src={`https://infinitech-testing1.online${feature.image}`} // Use localhost:8000 for the image
                                   alt={feature.name || 'Feature Image'}
                                   className='w-32 h-32 object-cover rounded-md'
                                 />

@@ -37,7 +37,7 @@ const fetchProperties = async () => {
   // Assuming you have this function defined elsewhere
   try {
 
-    const response = await fetch("http://localhost:8000/api/admin/properties"); // Fetch properties API
+    const response = await fetch("https://infinitech-testing1.online/api/admin/properties"); // Fetch properties API
     const data = await response.json();
     return data; // Return fetched properties
 
@@ -49,7 +49,7 @@ const fetchProperties = async () => {
 const fetchBuildings = async () => {
   try {
 
-    const response = await fetch("http://localhost:8000/api/admin/buildings"); // Fetch buildings API
+    const response = await fetch("https://infinitech-testing1.online/api/admin/buildings"); // Fetch buildings API
 
     // Fetch properties API
     const data = await response.json()
@@ -63,7 +63,7 @@ const fetchBuildings = async () => {
 const fetchFacilities = async () => {
   try {
 
-    const response = await fetch("http://localhost:8000/api/admin/facilities");
+    const response = await fetch("https://infinitech-testing1.online/api/admin/facilities");
     const data = await response.json();
  
     return data; // Return fetched properties
@@ -76,7 +76,7 @@ const fetchFacilities = async () => {
 const fetchFeatures = async () => {
   try {
 
-    const response = await fetch("http://localhost:8000/api/admin/features"); // Fetch features API
+    const response = await fetch("https://infinitech-testing1.online/api/admin/features"); // Fetch features API
     const data = await response.json();
   
     return data; // Return fetched properties
@@ -281,7 +281,7 @@ Object.keys(propertyData).forEach(key => {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/api/admin/addproperty',
+        'https://infinitech-testing1.online/api/admin/addproperty',
         {
           method: 'POST',
           body: formData // No need to set headers, Fetch will handle it
@@ -314,7 +314,7 @@ Object.keys(propertyData).forEach(key => {
     const fetchDevelopmentTypes = async () => {
       try {
         const response = await fetch(
-          'http://localhost:8000/api/admin/development-types'
+          'https://infinitech-testing1.online/api/admin/development-types'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch development types')
@@ -328,7 +328,7 @@ Object.keys(propertyData).forEach(key => {
     const fetchArchitecturalTheme = async () => {
       try {
         const response = await fetch(
-          'http://localhost:8000/api/admin/architectural-themes'
+          'https://infinitech-testing1.online/api/admin/architectural-themes'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch')
@@ -341,7 +341,7 @@ Object.keys(propertyData).forEach(key => {
     }
     const fetchStatus = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/admin/status')
+        const response = await fetch('https://infinitech-testing1.online/api/admin/status')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
@@ -353,7 +353,7 @@ Object.keys(propertyData).forEach(key => {
     }
     const fetchArea = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/admin/area')
+        const response = await fetch('https://infinitech-testing1.online/api/admin/area')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
