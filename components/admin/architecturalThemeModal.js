@@ -1,39 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-const architecturalThemeModal = ({ isOpen, closeModal }) => {
-  const [inputValue, setInputValue] = useState(''); // State to handle input field
-  const [error, setError] = useState(''); // State to handle errors
-  const [success, setSuccess] = useState(''); // State to show success messages
+const ArchitecturalThemeModal = ({ isOpen, closeModal }) => {
+  // Yup validation schema
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required('Development Type is required')
+      .min(3, 'Development Type must be at least 3 characters')
+  });
 
-  // Handle change in input field
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  // Submit data to the backend using fetch
-  const handleSubmit = async () => {
-    setError(''); // Clear previous errors
-    setSuccess(''); // Clear previous success messages
+  // Handle form submission
+  const handleSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
+    setErrors({}); // Clear previous errors
+    setStatus(''); // Clear previous status messages
 
     const formData = new FormData();
-    formData.append('name', inputValue);
+    formData.append('name', values.name);
 
     try {
       const response = await fetch('http://localhost:8000/api/admin/add-architectural-theme', {
         method: 'POST',
-        body: formData, // No need to set headers for formData
+        body: formData,
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(data.message || 'Development Type added successfully');
-        setInputValue(''); // Clear the input field
+        setStatus({ success: data.message || 'Development Type added successfully' });
+        setSubmitting(false);
       } else {
-        setError(data.message || 'Failed to add Development Type');
+        setErrors({ name: data.message || 'Failed to add Development Type' });
+        setSubmitting(false);
       }
     } catch (err) {
-      setError('An error occurred while submitting the data');
+      setErrors({ name: 'An error occurred while submitting the data' });
+      setSubmitting(false);
     }
   };
 
@@ -56,34 +58,52 @@ const architecturalThemeModal = ({ isOpen, closeModal }) => {
       >
         <h2 className="text-xl font-semibold text-center mb-4">Architectural Theme</h2>
 
-        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
-        {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}
+        <Formik
+          initialValues={{ name: '' }}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting, status }) => (
+            <Form>
+              {/* Display status message (success or error) */}
+              {status?.success && (
+                <p className="text-green-500 mb-4">{status.success}</p>
+              )}
+              <ErrorMessage
+                name="name"
+                component="div"
+                className="text-red-500 mb-4"
+              />
 
-        <input
-          type="text"
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Enter Development Type"
-          className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+              <Field
+                type="text"
+                name="name"
+                placeholder="Enter Development Type"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
 
-        <div className="flex justify-between">
-          <button
-            onClick={closeModal}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none"
-          >
-            Close
-          </button>
-          <button
-            onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
-          >
-            Submit
-          </button>
-        </div>
+              <div className="flex justify-between">
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 focus:outline-none"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                >
+                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
 };
 
-export default architecturalThemeModal;
+export default ArchitecturalThemeModal;
