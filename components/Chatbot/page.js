@@ -6,6 +6,8 @@ const MyBot = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([]);
+    const [location, setLocation] = useState([]);
+        const [architectural, setArchitectural] = useState([]);
   const [userMessage, setUserMessage] = useState('');
   const [conversationStage, setConversationStage] = useState('greeting');
   const myBot = createBot();
@@ -34,25 +36,27 @@ const MyBot = () => {
     }
   };
 
-  const processUserResponse = (message) => {
-    switch (conversationStage) {
-      case 'greeting':
-        handleGreeting(message);
-        break;
-      case 'viewProperty':
-        handleViewProperty(message);
-        break;
-      case 'propertyDetails':
-        handlePropertyDetails(message);
-        break;
-      default:
-        setMessages((prevMessages) => [
-          ...prevMessages,
-          { sender: 'bot', text: 'I didn’t understand that.' },
-        ]);
-        break;
-    }
-  };
+const processUserResponse = (message) => {
+  console.log(`processUserResponse called with message: ${message}, Stage: ${conversationStage}`);
+  switch (conversationStage) {
+    case 'greeting':
+      handleGreeting(message);
+      break;
+    case 'viewProperty':
+      handleViewProperty(message);
+      break;
+    case 'handleArchitectural':
+      handleArchitectural(message); // Pass the selected location to handleArchitectural
+      break;
+    default:
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'bot', text: 'I didn’t understand that.' },
+      ]);
+      break;
+  }
+};
+
 
   const handleGreeting = (message) => {
     setMessages((prevMessages) => [
@@ -73,26 +77,28 @@ const MyBot = () => {
 
     setConversationStage('waitingForResponse');
   };
-
-const handleViewProperty = async (message) => {
+const handleViewProperty = async () => {
   // Step 1: Set initial bot message
   setMessages((prevMessages) => [
     ...prevMessages,
-    { sender: 'bot', text: 'In what Location' },
+    { sender: 'bot', text: 'In what Location?' },
   ]);
 
   // Step 2: Fetch locations from API
   try {
-    const response = await fetch('http://localhost:8000/api/locations'); // Adjust the URL based on your endpoint
+    const response = await fetch('http://localhost:8000/api/locations');
     const data = await response.json();
 
-    // Step 3: Map over the data to ensure you're extracting specific properties (like `name` or `location`)
-    const locationButtons = data.map((location) => ({
-      label: location.location, // Use a property like `name` from the location object
-      value: location.location,   // Assuming you're using the `id` for identification
+    // Step 3: Update `location` state with fetched data
+    setLocation(data);
+
+    // Step 4: Map over the data to create clickable buttons
+    const locationButtons = data.map((loc) => ({
+      label: loc.location, // Button text
+      value: loc.location, // Button value (location name)
     }));
 
-    // Step 4: Add the location buttons to the messages state
+    // Step 5: Add buttons to messages
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -101,14 +107,63 @@ const handleViewProperty = async (message) => {
       },
     ]);
 
-    // Step 5: Change conversation stage
-    setConversationStage('propertyDetails');
+    // Step 6: Update conversation stage
+    setConversationStage('handleArchitectural');
+    console.log('Conversation stage updated:', conversationStage);
   } catch (error) {
     console.error('Error fetching locations:', error);
-    // Optionally show an error message to the user
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: 'bot', text: 'Sorry, there was an issue fetching the locations.' },
+    ]);
+  }
+};
+
+const handleArchitectural = async (selectedLocation) => {
+  // Step 1: Inform the user about the selected location
+  setMessages((prevMessages) => [
+    ...prevMessages,
+    {
+      sender: 'bot',
+      text: `You selected ${selectedLocation}. Do you have an architectural theme you prefer?`,
+    },
+  ]);
+
+  // Step 2: Fetch architectural themes from the API
+  try {
+    const response = await fetch('http://localhost:8000/api/getArchitectural'); // Adjust URL if needed
+    const data = await response.json();
+
+    // Step 3: Update the architectural state with fetched data
+    setArchitectural(data);
+
+    // Step 4: Create buttons for the architectural themes
+    const architecturalButtons = data.map((theme) => ({
+      label: theme.architectural_theme, // Assuming `name` is the property for theme names
+      value: theme.architectural_theme,   // Use `id` or any unique identifier for the theme
+    }));
+
+    // Step 5: Add the buttons to the messages state
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: 'bot',
+        buttons: architecturalButtons,
+      },
+    ]);
+console.log(architectural)
+    // Step 6: Change conversation stage
+    setConversationStage('selectArchitectural');
+  } catch (error) {
+    console.error('Error fetching architectural themes:', error);
+
+    // Inform the user about the error
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: 'bot',
+        text: 'Sorry, there was an issue fetching the architectural themes. Please try again later.',
+      },
     ]);
   }
 };
@@ -124,26 +179,35 @@ const handleViewProperty = async (message) => {
     ]);
     setConversationStage('greeting');
   };
+const handleButtonClick = (value) => {
+  // Find the selected location in the array
+  const selectedLocation = location.find((loc) => loc.location === value);
 
-  const handleButtonClick = (value) => {
-    console.log(value)
-    if (value === 'viewProperty') {
-      setConversationStage('viewProperty');
-      handleViewProperty();
-    } else if (value === 'otherServices') {
-      setConversationStage('otherServices');
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
-      ]);
-    }else if (value === 'New') {
-      setConversationStage('otherServices');
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
-      ]);
-    }
-  };
+  // Check if a match was found before accessing properties
+  if (selectedLocation) {
+    console.log('Selected Location:', selectedLocation.location);
+  } else {
+    console.log('No matching location found for value:', value);
+  }
+
+  // Handle button actions based on the value
+  if (value === 'viewProperty') {
+    setConversationStage('viewProperty');
+    handleViewProperty();
+  } else if (value === 'otherServices') {
+    setConversationStage('otherServices');
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
+    ]);
+  } else if (selectedLocation) {
+    setConversationStage('handleArchitectural');
+    handleArchitectural(selectedLocation.location);
+  } else {
+    console.error('Invalid selection or no matching location found.');
+  }
+};
+
 
   useEffect(() => {
     if (chatContainerRef.current) {
