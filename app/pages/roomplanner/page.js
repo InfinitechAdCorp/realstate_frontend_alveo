@@ -320,7 +320,7 @@ const CanvasApp = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/roomplanner");
+      const response = await fetch("https://infinitech-testing1.online/api/roomplanner");
       const data = await response.json();
       const grouped = data.data.reduce((acc, item) => {
         if (!acc[item.category]) {

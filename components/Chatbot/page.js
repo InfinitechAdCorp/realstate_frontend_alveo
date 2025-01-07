@@ -86,7 +86,7 @@ const handleViewProperty = async () => {
 
   // Step 2: Fetch locations from API
   try {
-    const response = await fetch('http://localhost:8000/api/locations');
+    const response = await fetch('https://infinitech-testing1.online/api/locations');
     const data = await response.json();
 
     // Step 3: Update `location` state with fetched data
@@ -131,7 +131,7 @@ const handleArchitectural = async (selectedLocation) => {
 
   // Step 2: Fetch architectural themes from the API
   try {
-    const response = await fetch('http://localhost:8000/api/getArchitectural'); // Adjust URL if needed
+    const response = await fetch('https://infinitech-testing1.online/api/getArchitectural'); // Adjust URL if needed
     const data = await response.json();
 
     // Step 3: Update the architectural state with fetched data

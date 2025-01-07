@@ -47,7 +47,7 @@ const SetAppointment = () => {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/api/set-appointment',
+        'https://infinitech-testing1.online/api/set-appointment',
         {
           method: 'POST',
           body: appointmentData

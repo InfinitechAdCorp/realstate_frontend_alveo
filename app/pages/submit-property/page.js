@@ -67,7 +67,7 @@ const SetAppointment = () => {
 
     try {
       const response = await fetch(
-        'http://localhost:8000/api/submit-property',
+        'https://infinitech-testing1.online/api/submit-property',
         {
           method: 'POST',
           body: formData

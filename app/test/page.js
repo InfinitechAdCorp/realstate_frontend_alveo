@@ -54,7 +54,7 @@
 //     e.preventDefault()
 
 //     // Step 1: User submits email and password to login
-//     const response = await fetch('http://localhost:8000/api/login', {
+//     const response = await fetch('https://infinitech-testing1.online/api/login', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -79,7 +79,7 @@
 //     e.preventDefault()
 
 //     // Step 2: User submits OTP for verification
-//     const otpResponse = await fetch('http://localhost:8000/api/verify-otp', {
+//     const otpResponse = await fetch('https://infinitech-testing1.online/api/verify-otp', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -102,7 +102,7 @@
 
 //   const fetchCount = async (endpoint, key) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
+//       const response = await fetch(`https://infinitech-testing1.online/api/admin/${endpoint}`);
 //       const data = await response.json();
 
 //       if (response.ok) {
@@ -518,7 +518,7 @@ const handleAddLoc = async (type, areaName, title, description, image, setData, 
 
   try {
     // Send the request to the backend
-    const response = await fetch('http://localhost:8000/api/admin/add-area', {
+    const response = await fetch('https://infinitech-testing1.online/api/admin/add-area', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',  // Ensure content type is set to JSON
@@ -557,7 +557,7 @@ const handleAddLoc = async (type, areaName, title, description, image, setData, 
 // Fetch locations and update state
 const fetchLocations = async (setData) => {
   try {
-    const response = await fetch("http://localhost:8000/api/admin/area");
+    const response = await fetch("https://infinitech-testing1.online/api/admin/area");
     const data = await response.json();
     console.log("Fetched Locations:", data);
     setData(prevData => ({ ...prevData, locations: data }));
@@ -586,16 +586,16 @@ const handleImageChange = (e) => {
         // Set loading to true when the fetch starts
 
         // Fetch the data for each category
-        const propertiesRes = await fetch('http://localhost:8000/api/admin/countproperties');
+        const propertiesRes = await fetch('https://infinitech-testing1.online/api/admin/countproperties');
         const propertiesData = await propertiesRes.json();
 
-        const otherBuildingsRes = await fetch('http://localhost:8000/api/admin/countotherbuildings');
+        const otherBuildingsRes = await fetch('https://infinitech-testing1.online/api/admin/countotherbuildings');
         const otherBuildingsData = await otherBuildingsRes.json();
 
-        const condominiumsRes = await fetch('http://localhost:8000/api/admin/countcondominiums');
+        const condominiumsRes = await fetch('https://infinitech-testing1.online/api/admin/countcondominiums');
         const condominiumsData = await condominiumsRes.json();
 
-        const locationsRes = await fetch('http://localhost:8000/api/admin/countlocations');
+        const locationsRes = await fetch('https://infinitech-testing1.online/api/admin/countlocations');
         const locationsData = await locationsRes.json();
 
         // Update the state with the fetched counts
@@ -629,7 +629,7 @@ const handleImageChange = (e) => {
       const fetchChatbotData = async () => {
     
         try {
-          const response = await fetch('http://localhost:8000/api/admin/getChatbot');
+          const response = await fetch('https://infinitech-testing1.online/api/admin/getChatbot');
           const chatbotData = await response.json();
           console.log(chatbotData)
           // Update chatbotEntries state
@@ -644,7 +644,7 @@ const handleImageChange = (e) => {
 
       fetchChatbotData();
     } else if (activeNav === "Client Property") {
-      fetch('http://localhost:8000/api/admin/submitted-properties')
+      fetch('https://infinitech-testing1.online/api/admin/submitted-properties')
         .then(response => response.json())
         .then(data => {
           setSubmittedProperties(data);  // Store the data in the state
@@ -656,7 +656,7 @@ const handleImageChange = (e) => {
   }, [activeNav]);
  
 const fetchData = () => {
-  fetch("http://localhost:8000/api/admin/development-types")
+  fetch("https://infinitech-testing1.online/api/admin/development-types")
     .then((response) => response.json())
     .then((data) => {
       console.log("Fetched Development Types:", data);
@@ -664,7 +664,7 @@ const fetchData = () => {
     })
     .catch((error) => console.error("Error fetching data:", error));
 
-  fetch("http://localhost:8000/api/admin/architectural-themes")
+  fetch("https://infinitech-testing1.online/api/admin/architectural-themes")
     .then((response) => response.json())
     .then((data) => {
       console.log("Fetched Architectural Themes:", data);
@@ -672,7 +672,7 @@ const fetchData = () => {
     })
     .catch((error) => console.error("Error fetching data:", error));
 
-  fetch("http://localhost:8000/api/admin/status")
+  fetch("https://infinitech-testing1.online/api/admin/status")
     .then((response) => response.json())
     .then((data) => {
       console.log("Fetched Status:", data);
@@ -680,7 +680,7 @@ const fetchData = () => {
     })
     .catch((error) => console.error("Error fetching data:", error));
 
-  fetch("http://localhost:8000/api/admin/area") 
+  fetch("https://infinitech-testing1.online/api/admin/area") 
     .then((response) => response.json())
     .then((data) => {
       console.log("Fetched Locations:", data);
@@ -698,7 +698,7 @@ console.log(type)
     // If we are editing an existing entry, use PUT instead of POST
     const method = isEditing ? "PUT" : "POST";
     console.log(method)
-    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/addChatbot";
+    const url = isEditing ? `https://infinitech-testing1.online/api/admin/chatbot/${newItem.id}` : "https://infinitech-testing1.online/api/admin/addChatbot";
     console.log(url)
     fetch(url, {
       method: method,
@@ -744,7 +744,7 @@ console.log(type)
 
   }  else {
     // Existing logic for other types (e.g., developmentTypes, locations)
-    fetch(`http://localhost:8000/api/admin/add-${type}`, {
+    fetch(`https://infinitech-testing1.online/api/admin/add-${type}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name: newItem }),
@@ -804,7 +804,7 @@ const handleDelete = (type, id, field) => {
 
   // Handle deletion of chatbot entries separately
   if (type === "chatbot") {
-    const url = `http://localhost:8000/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
+    const url = `https://infinitech-testing1.online/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
     console.log("Deleting from URL:", url);
 
     // Send DELETE request
@@ -842,7 +842,7 @@ const handleDelete = (type, id, field) => {
       });
   } else {
     // Existing logic for deleting other types (e.g., developmentTypes, locations)
-    const url = `http://localhost:8000/api/admin/delete-${type}/${id}`;
+    const url = `https://infinitech-testing1.online/api/admin/delete-${type}/${id}`;
     console.log("Deleting from URL:", url);  // Debugging line to check the URL
 
     fetch(url, {
@@ -907,7 +907,7 @@ const handleInputChange_chatbot = (e) => {
     e.preventDefault()
 
     // Step 1: User submits email and password to login
-    const response = await fetch('http://localhost:8000/api/login', {
+    const response = await fetch('https://infinitech-testing1.online/api/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -935,7 +935,7 @@ const handleInputChange_chatbot = (e) => {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/${endpoint}`
+        `https://infinitech-testing1.online/api/admin/${endpoint}`
       )
       const data = await response.json()
 
@@ -1304,7 +1304,7 @@ const handleInputChange_chatbot = (e) => {
         {modalImages.map((image, index) => (
           <img
             key={index}
-            src={`http://localhost:8000/${image}`} // Full URL to the image
+            src={`https://infinitech-testing1.online/${image}`} // Full URL to the image
             alt={`Property image ${index + 1}`}
             className="w-full h-full object-contain" // Make image fill the container
           />
