@@ -173,8 +173,11 @@ const LocationPage = () => {
           <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
             <div className="bg-white shadow-md rounded-md overflow-hidden flex flex-col h-full">
               <img
-                src={`https://infinitech-testing1.online${path}`} // Assuming image path is relative to the server root
-                alt={location}
+                  src={`http://localhost:3000${path}`} // Try to load from localhost:3000
+  onError={(e) => {
+    e.target.onerror = null; // Prevent infinite loop if image fails
+    e.target.src = `https://infinitech-testing1.online${path}`; // Fallback to localhost:8000 if not found
+  }}
                 className="w-full object-cover h-48 md:h-56 lg:h-64"
               />
               <div className="p-4 flex flex-col justify-between flex-grow">
