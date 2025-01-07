@@ -926,14 +926,14 @@ const handleInputChange_chatbot = (e) => {
 
  
 {activeNav === "Details" && (
-  <div>
+  <div className='h-96 overflow-y-auto'>
     {/* Development Type and Architectural Theme in 1st Row, 3 Columns */}
     <div className="grid grid-cols-3 gap-4 mb-6">
       
       {/* Development Type */}
-      <div>
+      <div className='h-80 overflow-y-auto'>
         <h2 className="text-xl font-semibold mb-4">Development Types</h2>
-        <div className="flex gap-2 mb-4">
+        <div className="flex gap-2 mb-4 ">
           <input
             type="text"
             placeholder="New Type Name"
@@ -971,9 +971,10 @@ const handleInputChange_chatbot = (e) => {
       </div>
 
       {/* Architectural Theme */}
-      <div>
+      <div className='h-80 overflow-y-auto'>
         <h2 className="text-xl font-semibold mb-4">Architectural Themes</h2>
-        <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-4 ">
+
           <input
             type="text"
             placeholder="New Theme Name"
@@ -1011,7 +1012,7 @@ const handleInputChange_chatbot = (e) => {
       </div>
 
       {/* Status */}
-      <div>
+      <div className='h-80 overflow-y-auto'>
         <h2 className="text-xl font-semibold mb-4">Status</h2>
         <div className="flex gap-2 mb-4">
           <input
@@ -1052,7 +1053,7 @@ const handleInputChange_chatbot = (e) => {
     </div>
 
     {/* Location in the 2nd Row, 1 Column */}
- <div className="grid grid-cols-1 mb-6">
+ <div className="grid grid-cols-1 mb-6 className='h-80 overflow-y-auto'">
     <h2 className="text-xl font-semibold mb-4">Locations</h2>
     <div className="flex gap-2 mb-4">
       {/* Area Name Input */}

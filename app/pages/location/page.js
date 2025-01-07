@@ -173,7 +173,7 @@ const LocationPage = () => {
           <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
             <div className="bg-white shadow-md rounded-md overflow-hidden flex flex-col h-full">
               <img
-                src={`http://localhost:8000/${path}`} // Assuming image path is relative to the server root
+                src={`http://localhost:8000${path}`} // Assuming image path is relative to the server root
                 alt={location}
                 className="w-full object-cover h-48 md:h-56 lg:h-64"
               />

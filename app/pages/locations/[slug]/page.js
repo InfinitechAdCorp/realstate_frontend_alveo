@@ -18,33 +18,32 @@ export default function BlogPost ({ params }) {
 useEffect(() => {
   console.log(params.slug);
   // Fetch data from the backend API using template literal for params
-  fetch(`http://localhost:8000/api/admin/area_specific/${params.slug}`) // Correctly interpolated the URL with params
+  fetch(`http://localhost:8000/api/areas/${params.slug}`) // Correctly interpolated the URL with params
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       return response.json();
     })
-    .then(data => {
-      console.log('Fetched data:', data); // Log the raw data fetched from the API
+.then(response => {
+  console.log('Fetched data:', response.data); // Log the fetched data
 
-      const fetchedPosts = {};
-      // Process the data into a key-value object
-      data.forEach(location => {
-        const key = location.area_name; // The transformed area_name from the backend
-        fetchedPosts[key] = {
-          location: location.area_name,
-          key: key,
-          path: location.image, // Image path from the API
-          title: location.title,
-          intro: location.description
-        };
-      });
-      setPosts(fetchedPosts); // Set the transformed data to state
-    })
-    .catch(error => {
-      console.error('Error fetching areas:', error);
-    });
+  const fetchedPosts = {};
+  // Process the data into a key-value object
+  const location = response.data; // The fetched location object from the API
+  const key = location.area_name; // Use the area_name as the key
+
+  fetchedPosts[key] = {
+    location: location.area_name,
+    key: key,
+    path: location.image, // Image path from the API
+    title: location.title,
+    intro: location.description
+  };
+
+  setPosts(fetchedPosts); // Set the transformed data to state
+});
+
 }, [params]); // Add `params` as a dependency to refetch when params change
 
 
@@ -126,14 +125,19 @@ useEffect(() => {
       currentLocation='LOCATION'
       specificLocation={`${post.location.toUpperCase()}`} // Pass location here
     />
-      <img
-        src={`http://localhost:8000/${post.path}`} // Correct URL to fetch image
-        alt={post.location}
-        width={2000}
-        height={500}
-        className="w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72"
-        priority
-      />
+    <img
+  src={`http://localhost:3000${post.path}`} // Try to load from localhost:3000
+  onError={(e) => {
+    e.target.onerror = null; // Prevent infinite loop if image fails
+    e.target.src = `http://localhost:8000${post.path}`; // Fallback to localhost:8000 if not found
+  }}
+  alt={post.location}
+  width={2000}
+  height={500}
+  className="w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72"
+  priority
+/>
+
       <div className="left-0 right-0 h-28 lg:h-40 bg-blue-900 flex flex-col justify-center p-2 text-white w-screen">
         <div className="-mt-10 left-0 right-0 h-1/5 bg-blue-900 flex flex-col justify-center p-2 text-white">
           <p className="mt-6 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-2xl">
