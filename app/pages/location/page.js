@@ -157,7 +157,9 @@ const LocationPage = () => {
   keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale, property location, location"
   canonical="https://realstate-frontend-alveo.vercel.app/pages/location"
 />
-            <Header />
+              <div className="mb-10">
+    <Header />
+      </div>
 
          <div className="xl:ml-64">
             <Directory currentLocation="LOCATION" specificLocation={``} />

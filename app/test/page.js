@@ -397,7 +397,7 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Terminal } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { showToast } from '@/components/alert/page';
 import DevelopmentTypeModal from '@/components/admin/developmentTypeModal'
 import ArchitecturalThemeModal from '@/components/admin/architecturalThemeModal'
 import StatusModal from '@/components/admin/statusModal'
@@ -529,8 +529,8 @@ const handleAddLoc = async (type, areaName, title, description, image, setData, 
     const data = await response.json();  // Parse the JSON response
 
     if (response.ok) {
-      console.log('Success:', data);
-      setSuccess('Location added successfully!');
+  
+      handleShowSuccessToast('Location added successfully!');
 
       // Fetch the updated list of locations after adding the new location
       fetchLocations(setData);
@@ -553,7 +553,17 @@ const handleAddLoc = async (type, areaName, title, description, image, setData, 
     setError('An error occurred during submission');
   }
 };
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
 // Fetch locations and update state
 const fetchLocations = async (setData) => {
   try {
@@ -711,7 +721,7 @@ console.log(type)
       .then((data) => {
         // Ensure the response contains success status and new item with id
         if (data.success) {
-          console.log(`${isEditing ? "Updated" : "Added"} chatbot entry successfully: ${question}`);
+          handleShowSuccessToast(`${isEditing ? "Updated" : "Added"} chatbot entry successfully!`);
 
           // If adding a new entry, add the entry with id to the chatbotEntries array
           if (isEditing) {
@@ -753,7 +763,7 @@ console.log(type)
       .then((data) => {
         // Log success and update state
         if (data.success) {
-          console.log(`Item added successfully: ${newItem}`);
+          handleShowSuccessToast(`Item added successfully: ${newItem}`);
 
           // Update the data state by adding the new item to the appropriate field
           setData((prevData) => ({
@@ -780,13 +790,13 @@ console.log(type)
             });
           }
         } else {
-          console.error("Error response from API:", data.message);
+          handleShowSuccessToast("Added Successfully");
         }
 
         // Optionally, you can fetch the updated data
         fetchData();
       })
-      .catch((error) => console.error("Error adding data:", error));
+      .catch((error) => handleShowErrorToast("Error adding data:", error));
   }
 };
   const openModal2 = (filesArray) => {
@@ -814,8 +824,10 @@ const handleDelete = (type, id, field) => {
     })
       .then((response) => {
         // Check if the response is successful
-        if (!response.ok) {
-          throw new Error(`Failed to delete chatbot entry with ID: ${id}`);
+        if (response.ok) {
+          handleShowSuccessToast(`Deleted Successfully!`);
+        }else {
+          handleShowErrorToast(`Deletion Failed!`)
         }
         return response.json(); // Parse the JSON response
       })
@@ -833,12 +845,12 @@ const handleDelete = (type, id, field) => {
 
           return updatedData; // Return updated state
         });
-        alert("Chatbot entry deleted successfully."); // Optional: Notify user
+        handleShowSuccessToast("Chatbot entry deleted successfully."); // Optional: Notify user
       })
       .catch((error) => {
-        // Log error and alert the user
+       
         console.error("Error deleting chatbot entry:", error);
-        alert("An error occurred while deleting the chatbot entry.");
+        handleShowErrorToast("An error occurred while deleting the chatbot entry.");
       });
   } else {
     // Existing logic for deleting other types (e.g., developmentTypes, locations)
@@ -850,8 +862,10 @@ const handleDelete = (type, id, field) => {
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to delete item");
+        if (response.ok) {
+          handleShowSuccessToast(`Deleted Successfully: ${id}`);
+        }else {
+          handleShowErrorToast(`Deletion Failed: ${id}`)
         }
         return response.json();
       })
@@ -887,7 +901,7 @@ const handleDelete = (type, id, field) => {
       })
       .catch((error) => {
         console.error("Error deleting data:", error);
-        alert("An error occurred while deleting the item.");
+        handleShowErrorToast("An error occurred while deleting the item.");
       });
   }
 };

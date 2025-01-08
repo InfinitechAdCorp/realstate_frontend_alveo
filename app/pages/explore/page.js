@@ -122,7 +122,9 @@ function ExplorePage() {
   keywords="alveo, real estate, properties, parkings, building features, property features, property, buildings, building type"
   canonical="https://realstate-frontend-alveo.vercel.app/pages/explore"
 />
-      <Header />
+        <div className="mb-10">
+    <Header />
+      </div>
       <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10">
         {" "}
         {/* Parent container */}

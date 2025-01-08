@@ -7,6 +7,7 @@ import 'react-calendar/dist/Calendar.css'
 import Header from '../header'
 import Footer from '../footer'
 import SEO from '../../seo/page'
+import { showToast } from '@/components/alert/page';
 
 const SetAppointment = () => {
   const [date, setDate] = useState(new Date())
@@ -20,7 +21,17 @@ const SetAppointment = () => {
     const formatted = newDate.toLocaleDateString() // Format date as 'MM/DD/YYYY'
     setFormattedDate(formatted)
   }
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   // Handle time selection
   const handleTimeSelection = selectedTime => {
     setTime(selectedTime)
@@ -55,12 +66,12 @@ const SetAppointment = () => {
       )
       if (response.ok) {
         const data = await response.json()
-        setMessage('Appointment scheduled successfully!')
+        handleShowSuccessToast('Appointment scheduled successfully!')
         setMessageType('success') // Success message
         console.log(data)
       } else {
         setErrors({ submit: 'Failed to schedule the appointment.' })
-        setMessage('Failed to schedule the appointment. Please try again.')
+        handleShowErrorToast('Failed to schedule the appointment. Please try again.')
         setMessageType('error') // Error message
       }
     } catch (error) {
@@ -82,8 +93,9 @@ const SetAppointment = () => {
     email: Yup.string()
       .email('Invalid email address')
       .required('Email is required'),
-    number: Yup.string()
-      .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
+    number: Yup.string()  
+  .matches(/^[0-9]{10,13}$/, 'Phone number must be between 10 and 13 digits')
+
       .required('Phone number is required'),
     reason: Yup.string().required('Please select a reason for the appointment'),
     property: Yup.string().required('Please provide property/unit information'),
@@ -101,7 +113,9 @@ const SetAppointment = () => {
       />
 
       {/* Header outside the main content */}
-      <Header />
+        <div className="mb-16">
+    <Header />
+      </div>
 
       <div className='text-center mb-2 mt-10'>
         <h1 className='text-3xl font-bold text-blue-600'>
@@ -140,8 +154,8 @@ const SetAppointment = () => {
       </div>
 
       {/* Main content layout */}
-      <div className='flex flex-col lg:flex-row mt-4 justify-center items-center'>
-        <div className='lg:w-1/2 flex flex-col items-center w-full'>
+      <div className='flex flex-col lg:flex-row mt-4 justify-center items-center w-screen'>
+        <div className='lg:w-screen flex flex-col items-center w-screen'>
           {/* Selected Time and Date */}
           <div className='mb-6'>
             <p className='text-xl font-medium text-gray-700'>
@@ -218,7 +232,7 @@ const SetAppointment = () => {
                         name='fullname'
                         value={values.fullname}
                         onChange={handleChange}
-                        className='w-full p-2 border border-gray-300 rounded-lg max-w-md mt-2'
+                        className='w-full p-2 border border-gray-300 rounded-lg  mt-2'
                         placeholder='e.g. Juan Dela Cruz'
                       />
                       {touched.fullname && errors.fullname && (

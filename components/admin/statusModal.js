@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { showToast } from '@/components/alert/page';
 
 const StatusModal = ({ isOpen, closeModal }) => {
   const [statusMessage, setStatusMessage] = useState(''); // State to hold status messages (success or error)
@@ -11,7 +12,17 @@ const StatusModal = ({ isOpen, closeModal }) => {
       .required('Development Type is required')
       .min(3, 'Development Type must be at least 3 characters')
   });
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     setErrors({}); // Clear previous errors
@@ -30,7 +41,7 @@ const StatusModal = ({ isOpen, closeModal }) => {
 
       if (response.ok) {
         // Set success message
-        setStatusMessage(data.message || 'Development Type added successfully');
+        handleShowSuccessToast(data.message || 'Development Type added successfully');
         setSubmitting(false);
       } else {
         // Set error message

@@ -75,9 +75,9 @@ const calculateLoan = () => {
     // Define the loan data
     const tableData = [
         ["Period", `${loanDetails.selectedYears} Years, ${loanDetails.selectedMonths} Months`],
-        ["Monthly Payment", `₱ ${loanDetails.monthlyPayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
-        ["Total Payment", `₱ ${loanDetails.totalLoan.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
-        ["Total Loan", `₱ ${(loanDetails.totalLoan - loanDetails.loanAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
+        ["Monthly Payment", `PHP ${loanDetails.monthlyPayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
+        ["Total Payment", `PHP ${loanDetails.totalLoan.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
+        ["Total Loan", `PHP ${(loanDetails.totalLoan - loanDetails.loanAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
     ];
 
     const startX = margin;  // Start drawing the table from the margin
@@ -86,7 +86,7 @@ const calculateLoan = () => {
     const columnWidth = (doc.internal.pageSize.width - (2 * margin)) / 4;  // Ensure the columns fit within the page width
 
     // Apply font style (using Arial for the table content)
-    doc.setFont("arial", "normal"); // Use Arial font for table content
+    doc.setFont("helvetica", "normal"); // Use Helvetica font for table content, which supports special characters
 
     // Enlarge font size for headers only
     doc.setFontSize(14); // Set a larger font size for headers
@@ -122,18 +122,19 @@ const calculateLoan = () => {
 
     // Add a section for notes - clearer disclaimer, centralized
     doc.setFontSize(10);
-    doc.setFont("arial", "normal");
+    doc.setFont("helvetica", "normal"); // Ensure the correct font is used for the note
     const noteText = "* Please note that the results provided by this calculator are estimates and may vary. The final loan amount, interest rates, and monthly payments will be determined by the bank upon approval.";
     doc.text(noteText, 105, startY + tableHeight + 10, { align: "center", maxWidth: doc.internal.pageSize.width - (2 * margin) });
 
     // Footer Section - Centered "Thank you" message
     doc.setFontSize(8);
-    doc.setFont("arial", "normal");
+    doc.setFont("helvetica", "normal"); // Use Helvetica for footer
     doc.text("Thank you for using our Loan Calculator", 105, startY + tableHeight + 25, { align: "center" });
 
     // Save the PDF
     doc.save('loan_calculator_summary.pdf');
-    };
+};
+
 
 
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { showToast } from '@/components/alert/page';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,17 @@ const ContactForm = () => {
     location: '',
     message: ''
   });
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -33,7 +44,7 @@ const ContactForm = () => {
     });
 
     if (res.ok) {
-      alert('Message sent successfully!');
+      handleShowSuccessToast('Message sent successfully!');
       setFormData({
         inquiryType: '',
         firstName: '',
@@ -44,7 +55,7 @@ const ContactForm = () => {
         message: ''
       });
     } else {
-      alert('Something went wrong, please try again!');
+      handleShowErrorToast('Something went wrong, please try again!');
     }
   };
 

@@ -33,6 +33,18 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { showToast } from '@/components/alert/page';
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
+
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
 const fetchProperties = async () => {
   // Assuming you have this function defined elsewhere
   try {
@@ -223,7 +235,7 @@ export function DataTable ({ columns, data }) {
 
     // Ensure that required fields are present
     // if (!propertyData.key || !propertyData.name || !propertyData.status) {
-    //   alert('Please fill in all required fields.')
+      //  handleShowWarningToast('Please fill in all required fields.')
     //   return
     // }
 
@@ -295,11 +307,11 @@ Object.keys(propertyData).forEach(key => {
         console.log('Response Data:', data)
 
         if (response.ok) {
-          console.log('Property created successfully')
+          handleShowSuccessToast('Property created successfully')
           closeAddProperty()
         } else {
           console.error('Error creating property:', data)
-          alert(`Error: ${data.message}`)
+          handleShowErrorToast(`Error: ${data.message}`)
         }
       } else {
         const errorText = await response.text()

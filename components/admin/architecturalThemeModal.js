@@ -1,6 +1,7 @@
 import React from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { showToast } from '@/components/alert/page';
 
 const ArchitecturalThemeModal = ({ isOpen, closeModal }) => {
   // Yup validation schema
@@ -9,7 +10,17 @@ const ArchitecturalThemeModal = ({ isOpen, closeModal }) => {
       .required('Development Type is required')
       .min(3, 'Development Type must be at least 3 characters')
   });
+ const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting, setErrors, setStatus }) => {
     setErrors({}); // Clear previous errors
@@ -27,14 +38,14 @@ const ArchitecturalThemeModal = ({ isOpen, closeModal }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setStatus({ success: data.message || 'Development Type added successfully' });
+        handleShowSuccessToast({ success: data.message || 'Development Type added successfully' });
         setSubmitting(false);
       } else {
-        setErrors({ name: data.message || 'Failed to add Development Type' });
+        handleShowErrorToast({ name: data.message || 'Failed to add Development Type' });
         setSubmitting(false);
       }
     } catch (err) {
-      setErrors({ name: 'An error occurred while submitting the data' });
+      handleShowErrorToast({ name: 'An error occurred while submitting the data' });
       setSubmitting(false);
     }
   };
