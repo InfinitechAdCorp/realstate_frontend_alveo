@@ -166,7 +166,7 @@ const headings = [
       <div className="mt-4 text-center">
         <h1 className="text-xl font-bold">Quadruple A contractor</h1>
         <small className="text-sm">
-          The notice on DMCI Homes upgraded category was released on January 18, 2017 by Philippine Contractors Accreditation Board (PCAB). The AAAA license given to DMCI Homes is currently the highest given to firms that satisfy the institution's requirements.
+          The notice on DMCI Homes upgraded category was released on January 18, 2017 by Philippine Contractors Accreditation Board (PCAB). The AAAA license given to DMCI Homes is currently the highest given to firms that satisfy the institutions requirements.
         </small>
       </div>
     </div>
@@ -177,7 +177,7 @@ const headings = [
       <div className="mt-4 text-center">
         <h1 className="text-xl font-bold">Philippine Quill Awards 2012</h1>
         <small className="text-sm">
-          DMCI Homes Ikaw Na, Maybe Customer Service Campaign won an Excellence Award in the 11th Philippine Quill Awards for Communication Management Division Employee/Member Communication Category. The Philippine Quill is the country's most prestigious and relevant award for business communicators.
+          DMCI Homes Ikaw Na, Maybe Customer Service Campaign won an Excellence Award in the 11th Philippine Quill Awards for Communication Management Division Employee/Member Communication Category. The Philippine Quill is the countrys most prestigious and relevant award for business communicators.
         </small>
       </div>
     </div>
