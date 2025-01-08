@@ -378,8 +378,14 @@ const ImageSlider = () => {
               passHref
             >
 
-           <Image
-  src={`/${locations[currentIndex].path}`}  // Add leading slash here
+<Image
+  src={
+    locations[currentIndex].path && locations[currentIndex].path.startsWith("https://")
+      ? locations[currentIndex].path // If it's already a full URL, use it directly
+      : locations[currentIndex].path
+        ? `https://infinitech-testing1.online/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
+        : '' // If there's no path, set it to an empty string or fallback image URL
+  }
   alt={locations[currentIndex].name}
   layout="responsive"
   width={600}
@@ -388,6 +394,7 @@ const ImageSlider = () => {
   onLoad={handleImageLoad}
   priority
 />
+
 
 
             </Link>
