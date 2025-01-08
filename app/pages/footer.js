@@ -65,29 +65,36 @@ const Footer = () => {
     </div>
 
    
-    <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20">
-        <h1 className="xl:text-3xl xl:mt-10 text-2xl sm:text-3xl lg:text-5xl" >Location:</h1>
-        <h5 className="xl:text-lg text-sm sm:text-xl lg:text-2xl">Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634 Taguig City, Metro Manila Philippines</h5>
+<div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20">
+  <h1 className="xl:text-3xl xl:mt-10 text-2xl sm:text-3xl lg:text-5xl">Location:</h1>
+  <h5 className="xl:text-lg text-sm sm:text-xl lg:text-2xl">
+    Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634 Taguig City, Metro Manila Philippines
+  </h5>
 
-        <div className="w-1/3 mx-auto flex flex-col items-left justify-center xl:items-start ">
-            <div className="flex items-center justify-center space-x-2  xl:justify-start  xl:-ml-36 2xl:-ml-52">
-                <img src="/assets/socialmedia/facebook.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8" alt="Facebook" />
-                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Facebook</h3>
-            </div>
-            <div className="flex items-center justify-center space-x-2  xl:justify-start xl:-ml-36 2xl:-ml-52">
-                <img src="/assets/socialmedia/messenger.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8"  alt="Messenger" />
-                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Messenger</h3>
-            </div>
-            <div className="flex items-center justify-center space-x-2  xl:justify-start xl:-ml-36 2xl:-ml-52">
-                <img src="/assets/socialmedia/telegram.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8"  alt="Telegram" />
-                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Telegram</h3>
-            </div>
-            <div className="flex items-center justify-center space-x-2 xl:justify-start xl:-ml-36 2xl:-ml-52">
-                <img src="/assets/socialmedia/viber.png" className="w-6 h-6 -mt-2 lg:w-8 lg:h-8"  alt="Viber" />
-                <h3 className="xl:text-xl text-lg sm:text-xl lg:text-3xl">Viber</h3>
-            </div>
+  {/* Container for Images and Labels */}
+  <div className="flex sm:justify-center xl:justify-start mt-4">
+    <div className="flex flex-col items-start w-full sm:w-20">
+      {[
+        { src: "/assets/socialmedia/facebook.png", label: "Facebook" },
+        { src: "/assets/socialmedia/messenger.png", label: "Messenger" },
+        { src: "/assets/socialmedia/telegram.png", label: "Telegram" },
+        { src: "/assets/socialmedia/viber.png", label: "Viber" },
+      ].map((item, index) => (
+        <div key={index} className="flex items-center space-x-2 mt-2">
+          <img
+            src={item.src}
+            className="w-6 h-6 lg:w-8 lg:h-8"
+            alt={item.label}
+          />
+          <h3 className="text-lg sm:text-xl lg:text-2xl">{item.label}</h3>
         </div>
+      ))}
     </div>
+  </div>
+</div>
+
+
+
 </div>
 
        

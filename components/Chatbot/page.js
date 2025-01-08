@@ -7,12 +7,37 @@ const MyBot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([]);
     const [location, setLocation] = useState([]);
+  const [values, setValues] = useState({
+    location: '',
+    architectural: '',
+    price: '',
+    unit:'',
+  });
+const [unitOptions, setUnitOptions] = useState([
+  { label: '1BR', value: '1BR' },
+  { label: '2BR', value: '2BR' },
+  { label: '3BR', value: '3BR' },
+  { label: 'Studio', value: 'Studio' },
+]);
+const [priceOptions, setPriceOptions] = useState([
+  { label: '1M-3M', value: '1,000,000 - 3,000,000' },
+  { label: '3M-5M', value: '3,000,000 - 5,000,000' },
+  { label: '5M-8M', value: '5,000,000 - 8,000,000' },
+  { label: '8M-15M', value: '8,000,000 - 15,000,000' },
+  { label: '15M-30M', value: '15,000,000 - 30,000,000' },
+  { label: '30M-50M', value: '30,000,000 - 50,000,000' },
+  { label: '50M +', value: '50,000,000' },
+]);
         const [architectural, setArchitectural] = useState([]);
   const [userMessage, setUserMessage] = useState('');
   const [conversationStage, setConversationStage] = useState('greeting');
   const myBot = createBot();
 
   const chatContainerRef = useRef(null);
+useEffect(() => {
+  // Whenever values.location changes, you can perform some action
+  console.log(values);
+}, [values]); // This will run when values.location is updated
 
   const toggleChat = () => {
     setIsChatVisible(!isChatVisible);
@@ -30,7 +55,7 @@ const MyBot = () => {
       setMessages([...messages, { sender: 'user', text: userMessage }]);
       setUserMessage('');
       showTypingIndicator();
-      setTimeout(() => {
+      setTimeout(() => {  
         processUserResponse(userMessage);
       }, 2000);
     }
@@ -48,6 +73,15 @@ const processUserResponse = (message) => {
     case 'handleArchitectural':
       handleArchitectural(message); // Pass the selected location to handleArchitectural
       break;
+    case 'handleUnit':
+      handleUnit(message); // Pass the selected location to handleArchitectural
+      break;
+    case 'handlePrice':
+      handlePrice(message); // Pass the selected location to handleArchitectural
+      break;
+    case 'showProperty':
+      showProperty(message); // Pass the selected location to handleArchitectural
+      break;
     default:
       setMessages((prevMessages) => [
         ...prevMessages,
@@ -56,7 +90,78 @@ const processUserResponse = (message) => {
       break;
   }
 };
+  const handleButtonClick = (value) => {
+    // Find the selected unit in the unit options array
+    const selectedUnit = unitOptions.find((option) => option.value === value);
+     const selectedPrice = priceOptions.find((price) => price.value === value);
+    
+    // Find the selected location in the location array
+    const selectedLocation = location.find((loc) => loc.location === value);
+    console.log(selectedPrice)
+    // Find the selected architectural theme in the architectural array
+    const selectedArchitectural = architectural.find(
+      (item) => item.architectural_theme === value
+    );
 
+    // Update architectural field if a valid architectural theme is found
+    if (selectedArchitectural) {
+      console.log('Selected Architectural:', selectedArchitectural);
+      setValues((prevValues) => ({
+        ...prevValues,
+        architectural: selectedArchitectural.architectural_theme,
+      }));
+    }
+
+    // Update location field if a valid location is found
+    if (selectedLocation) {
+      console.log('Selected Location:', selectedLocation.location);
+      setValues((prevValues) => ({
+        ...prevValues,
+        location: selectedLocation.location,
+      }));
+    }
+
+    // Update unit field if a valid unit is selected
+    if (selectedUnit) {
+      console.log('Selected Unit:', selectedUnit.value);
+      setValues((prevValues) => ({
+        ...prevValues,
+        unit: selectedUnit.value,
+      }));
+    }
+
+    // Handle button actions based on the value
+    if (value === 'viewProperty') {
+      setConversationStage('viewProperty');
+      handleViewProperty();
+    } else if (value === 'otherServices') {
+      setConversationStage('otherServices');
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
+      ]);
+    } else if (selectedLocation) {
+      setConversationStage('handleArchitectural');
+      handleArchitectural(selectedLocation.location);
+    } else if (selectedArchitectural) {
+     
+      setConversationStage('handleUnit');
+      handleUnit(selectedArchitectural);
+      
+    } else if (selectedUnit) {
+      setConversationStage('handlePrice');
+      handlePrice(selectedUnit);
+    } else if (selectedPrice) {
+      setConversationStage('showProperty');
+      showProperty(selectedPrice);
+    }else {
+      console.error('Invalid selection or no matching location found.');
+    }
+  };
+ const showProperty = (message) => {
+ console.log(message.value)
+
+  };
 
   const handleGreeting = (message) => {
     setMessages((prevMessages) => [
@@ -109,7 +214,7 @@ const handleViewProperty = async () => {
 
     // Step 6: Update conversation stage
     setConversationStage('handleArchitectural');
-    console.log('Conversation stage updated:', conversationStage);
+    // console.log('Conversation stage updated:', conversationStage);
   } catch (error) {
     console.error('Error fetching locations:', error);
     setMessages((prevMessages) => [
@@ -118,6 +223,27 @@ const handleViewProperty = async () => {
     ]);
   }
 };
+  const handleUnit = async (message) => {
+    // Step 1: Inform the user about the selected location
+    console.log('Before updating:', message);
+
+    // Setting messages based on updated state
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: 'bot',
+        text: `You selected ${message.architectural_theme} in ${values.location}. What kind of unit do you prefer?`,
+      },
+    ]);
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: 'bot',
+        buttons: unitOptions,
+      },
+    ]);
+  };
 
 const handleArchitectural = async (selectedLocation) => {
   // Step 1: Inform the user about the selected location
@@ -151,7 +277,7 @@ const handleArchitectural = async (selectedLocation) => {
         buttons: architecturalButtons,
       },
     ]);
-console.log(architectural)
+console.log(values)
     // Step 6: Change conversation stage
     setConversationStage('selectArchitectural');
   } catch (error) {
@@ -178,35 +304,47 @@ console.log(architectural)
       },
     ]);
     setConversationStage('greeting');
+    
   };
-const handleButtonClick = (value) => {
-  // Find the selected location in the array
-  const selectedLocation = location.find((loc) => loc.location === value);
+const handlePrice = (value) => {
+  // Update the messages to ask for the price range
+  setMessages((prevMessages) => [ 
+    ...prevMessages,
+    { sender: 'bot', text: `What price range are you looking for your ${value.label} ${values.architectural} in ${values.location}?` },
+  ]);
 
-  // Check if a match was found before accessing properties
-  if (selectedLocation) {
-    console.log('Selected Location:', selectedLocation.location);
-  } else {
-    console.log('No matching location found for value:', value);
-  }
+  // Log the current values to the console
+  console.log(values);
 
-  // Handle button actions based on the value
-  if (value === 'viewProperty') {
-    setConversationStage('viewProperty');
-    handleViewProperty();
-  } else if (value === 'otherServices') {
-    setConversationStage('otherServices');
+  // Make the API request directly here
+  fetch(`https://infinitech-testing1.online/api/propertiesChatbot?location=${values.location}&architectural=${values.architectural}&unit=${values.unit}`)
+    .then((response) => response.json())
+    .then((properties) => {
+      console.log('Fetched Properties:', properties);
+      console.log(value)
+      // You can also update the state with the fetched properties, if needed
+      // For example: setProperties(properties);
+    })
+    .catch((error) => {
+      console.error('Error fetching properties:', error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: 'bot',
+          text: 'Sorry, there was an issue fetching the properties. Please try again later.',
+        },
+      ]);
+    });
+    
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
+      {
+        sender: 'bot',
+        buttons: priceOptions,
+      },
     ]);
-  } else if (selectedLocation) {
-    setConversationStage('handleArchitectural');
-    handleArchitectural(selectedLocation.location);
-  } else {
-    console.error('Invalid selection or no matching location found.');
-  }
 };
+
 
 
   useEffect(() => {

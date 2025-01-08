@@ -173,7 +173,7 @@ const LocationPage = () => {
           <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
             <div className="bg-white shadow-md rounded-md overflow-hidden flex flex-col h-full">
               <img
-                  src={`http://localhost:3000${path}`} // Try to load from localhost:3000
+                  src={`https://realstate-frontend-alveo.vercel.app${path}`} // Try to load from localhost:3000
   onError={(e) => {
     e.target.onerror = null; // Prevent infinite loop if image fails
     e.target.src = `https://infinitech-testing1.online${path}`; // Fallback to localhost:8000 if not found

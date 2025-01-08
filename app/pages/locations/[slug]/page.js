@@ -58,42 +58,44 @@ useEffect(() => {
   const PropertyCard = ({ property, onClick }) => {
     return (
 
-      <div className='flex w-80 flex-col bg-gray-100 rounded-lg shadow-lg  mx-auto lg:w-2/3 xl:w-3/12 overflow-hidden text-center transform transition-transform duration-300 ease-in-out  m-2 hover:translate-y-3 hover:shadow-xl'>
-        <SEO
-          title='REAL ESTATE'
-          description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter..'
-          keywords='alveo, real estate, location, property, building location, property location'
-          canonical='https://realstate-frontend-alveo.vercel.app/pages/locations'
-        />
-    
-         <Image
-      src={
-        property.path
-          ? (property.path.startsWith('http') || property.path.startsWith('https'))
-            ? property.path // If it's a URL, use it directly
-            : `https://infinitech-testing1.online/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
-          : '' // Fallback if property.path is null or undefined
-      }
-      alt={property.name}
-      width={400} // Adjusted width
-      height={300} // Adjusted height
-        className='w-full h-60 object-cover' // Set a fixed height for the image
-    />
-        <div className='p-6'>
-          <h2 className='text-2xl font-bold mb-4 text-gray-800 lg:text-4xl xl:text-3xl'>
-            {property.name}
-          </h2>
-          <p className='text-lg text-orange-600 mb-2 lg:text-2xl xl:text-xl'>
-            <strong>Price Range:</strong> {property.price_range}
-          </p>
-          <p className='text-md text-gray-600 mb-2 lg:text-2xl xl:text-xl'>
-            <strong>Status:</strong> {property.status}
-          </p>
-          <p className='text-md text-gray-600 lg:text-2xl xl:text-xl'>
-            <strong>Location:</strong> {property.specific_location}
-          </p>
-        </div>
-      </div>
+ <div className='flex w-80 flex-col bg-gray-100 rounded-lg shadow-lg mx-auto h-[550px] lg:w-3/3 xl:w-full overflow-hidden text-center transform transition-transform duration-300 ease-in-out m-2 hover:translate-y-3 hover:shadow-xl'>
+  <SEO
+    title='REAL ESTATE'
+    description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.'
+    keywords='alveo, real estate, location, property, building location, property location'
+    canonical='https://realstate-frontend-alveo.vercel.app/pages/locations'
+  />
+  
+  <Image
+    src={
+      property.path
+        ? (property.path.startsWith('http') || property.path.startsWith('https'))
+          ? property.path // If it's a URL, use it directly
+          : `https://infinitech-testing1.online/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+        : '' // Fallback if property.path is null or undefined
+    }
+    alt={property.name}
+    width={400} // Adjusted width
+    height={300} // Adjusted height
+    className='w-full h-[250px] object-cover' // Set a fixed height for the image
+  />
+
+  <div className='p-6 flex flex-col justify-between h-full'>
+    <h2 className='text-2xl font-bold mb-4 text-gray-800 lg:text-4xl xl:text-3xl'>
+      {property.name}
+    </h2>
+    <p className='text-lg text-orange-600 mb-2 lg:text-2xl xl:text-xl'>
+      <strong>Price Range:</strong> {property.price_range}
+    </p>
+    <p className='text-md text-gray-600 mb-2 lg:text-2xl xl:text-xl'>
+      <strong>Status:</strong> {property.status}
+    </p>
+    <p className='text-md text-gray-600 lg:text-2xl xl:text-xl'>
+      <strong>Location:</strong> {property.specific_location}
+    </p>
+  </div>
+</div>
+
     )
   }
 
@@ -158,23 +160,26 @@ useEffect(() => {
 </div>
 
 
-    <div className='relative text-center sm:px-10 md:mx-5 justify-center'>
-      <h1 className='text-2xl font-bold justify-center mt-10 -mb-5 sm:text-4xl lg:text-5xl xl:text-3xl'>
-        FEATURED PROPERTIES
-      </h1>
-      <div className='justify-start items-start gap-1 mt-5 w-full mb-20'>
-        {propertyData.map(property => (
-          <Link
-            key={property.id}
-            href={`/pages/buildings/${property.id}`}
-            passHref
-            className='no-underline'
-          >
-            <PropertyCard property={property} />
-          </Link>
-        ))}
-      </div>
-    </div>
+ <div className='relative text-center sm:px-10 md:mx-5 justify-center'>
+  <h1 className='text-2xl font-bold justify-center mt-10 -mb-5 sm:text-4xl lg:text-5xl xl:text-3xl'>
+    FEATURED PROPERTIES
+  </h1>
+  <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 mt-5 w-full mb-20'>
+    {propertyData.map(property => (
+      <Link
+        key={property.id}
+        href={`/pages/buildings/${property.id}`}
+        passHref
+        className='no-underline'
+      >
+        <div className="w-full">
+          <PropertyCard property={property} />
+        </div>
+      </Link>
+    ))}
+  </div>
+</div>
+
   </div>
   <Footer />
 </div>
