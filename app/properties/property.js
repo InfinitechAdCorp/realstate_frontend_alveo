@@ -12,9 +12,21 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
+import { showToast } from '@/components/alert/page';
 
 import { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown } from 'lucide-react'
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
+
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
 export const columns = [
   // {
   //   id: "select",
@@ -172,16 +184,16 @@ export const columns = [
 
           if (viewType === 'property') {
             fetchProperties()
-            alert(payment.name + ' ' + viewType + ' deleted successfully')
+            handleShowSuccessToast(payment.name + ' ' + viewType + ' deleted successfully')
           } else if (viewType === 'buildings') {
             fetchBuildings()
-            alert(payment.name + ' ' + viewType + ' deleted successfully')
+            handleShowSuccessToast(payment.name + ' ' + viewType + ' deleted successfully')
           } else if (viewType === 'feature') {
             fetchFeatures()
-            alert(payment.name + ' ' + viewType + ' deleted successfully')
+            handleShowSuccessToast(payment.name + ' ' + viewType + ' deleted successfully')
           } else if (viewType === 'facility') {
             fetchFacilities()
-            alert(payment.name + ' ' + viewType + ' deleted successfully')
+            handleShowSuccessToast(payment.name + ' ' + viewType + ' deleted successfully')
           } else {
             console.error('Invalid viewType')
             return
@@ -347,14 +359,14 @@ export const columns = [
           if (response.ok) {
             const responseData = await response.json()
             closePopup('addOtherBuilding')
-            alert('Building added successfully!')
+            handleShowSuccessToast('Building added successfully!')
           } else {
             console.error('Failed to add building:', response.statusText)
-            alert('Failed to add building. Please try again.')
+            handleShowErrorToast('Failed to add building. Please try again.')
           }
         } catch (error) {
           console.error('Error sending form data:', error)
-          alert('Error sending data. Please try again later.')
+          handleShowErrorToast('Error sending data. Please try again later.')
         }
       }
 
@@ -387,14 +399,14 @@ export const columns = [
             const responseData = await response.json()
 
             closePopup('addFacilities')
-            alert('Building facility added successfully!')
+            handleShowSuccessToast('Building facility added successfully!')
           } else {
             console.error('Failed to add facility:', response.statusText)
-            alert('Failed to add facility. Please try again.')
+            handleShowErrorToast('Failed to add facility. Please try again.')
           }
         } catch (error) {
           console.error('Error sending form data:', error)
-          alert('Error sending data. Please try again later.')
+          handleShowErrorToast('Error sending data. Please try again later.')
         }
       }
 
@@ -431,7 +443,7 @@ export const columns = [
           })
             .then(response => response.json())
             .then(data => {
-              alert('Success:', data)
+              handleShowSuccessToast('Success:', data)
             })
             .catch(error => {
               console.error('Error:', error)
@@ -467,10 +479,10 @@ export const columns = [
           .then(data => {
             if (data.message === 'Properties updated successfully.') {
               // Handle success (e.g., show a success message)
-              alert('Property updated successfully')
+              handleShowSuccessToast('Property updated successfully')
             } else {
               // Handle failure (e.g., show an error message)
-              alert('Failed to update property')
+              handleShowErrorToast('Failed to update property')
             }
           })
           .catch(error => {
@@ -565,7 +577,7 @@ export const columns = [
 
           if (response.ok) {
             // Handle successful update (you can refresh the data or give feedback to the user)
-            alert('Building updated successfully!')
+            handleShowSuccessToast('Building updated successfully!')
             // Optionally, you can refetch the data here to reflect the update
             closePopup('updateBuilding')
           } else {
@@ -573,7 +585,7 @@ export const columns = [
           }
         } catch (error) {
           console.error('Error updating building:', error)
-          alert('There was an error updating the building.')
+          handleShowErrorToast('There was an error updating the building.')
         }
       }
 
@@ -621,11 +633,11 @@ export const columns = [
         })
           .then(response => response.json())
           .then(data => {
-            alert('Successfully updating facilities ') // Handle the response if necessary
+            handleShowSuccessToast('Successfully updating facilities ') // Handle the response if necessary
             closePopup('updateFacility')
           })
           .catch(error => {
-            alert('Error updating facilities:', error) // Handle any errors
+            handleShowErrorToast('Error updating facilities:', error) // Handle any errors
           })
       }
 
@@ -748,15 +760,15 @@ export const columns = [
           if (response.ok) {
             const data = await response.json()
             console.log('Updated features response:', data) // Log the response data
-            alert('Features updated successfully!')
+            handleShowSuccessToast('Features updated successfully!')
             closePopup('updateFeature') // Close the popup after successful update
           } else {
             const error = await response.json()
-            alert(`Error: ${error.message || 'Something went wrong'}`)
+            handleShowErrorToast(`Error: ${error.message || 'Something went wrong'}`)
           }
         } catch (error) {
           console.error('Error updating features:', error)
-          alert('An error occurred while updating the features.')
+          handleShowErrorToast('An error occurred while updating the features.')
         }
       }
 

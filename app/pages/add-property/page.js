@@ -2,7 +2,20 @@
 import React, { useState } from "react";
 import Header from './../header'
 import Footer from './../footer'
+import { showToast } from '@/components/alert/page';
+
 function App() {
+    const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
+
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   // State to manage the property form input
   const [property, setProperty] = useState({
     name: "",
@@ -134,14 +147,14 @@ const handleSubmit = async (e) => {
 
     // Handle the response
     if (response.ok) {
-      alert("Property Added Successfully!");
+      handleShowSuccessToast("Property Added Successfully!");
       console.log("Response Data:", data);
     } else {
-      alert("There was an error adding the property.");
+      handleShowErrorToast("There was an error adding the property.");
     }
   } catch (error) {
     console.error('Error submitting property:', error);
-    alert("An error occurred while submitting the property.");
+    handleShowErrorToast("An error occurred while submitting the property.");
   }
 };
 

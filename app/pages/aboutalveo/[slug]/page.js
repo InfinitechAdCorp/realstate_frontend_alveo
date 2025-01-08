@@ -19,33 +19,7 @@ const headings = [
         "MASTERPLANNED DEVELOPMENTS",
         "DYNAMIC COMMUNITIES"
     ];
-const accordionData = [
-  {
-    value: "item-1",
-    trigger: "AWARDS AND RECOGNITION",
-    content: "Yes. It adheres to the WAI-ARIA design pattern.",
-  },
-  {
-    value: "item-2",
-    trigger: "2024",
-    content: "The Accordion is a UI component that allows users to hide or reveal content.",
-  },
-  {
-    value: "item-3",
-    trigger: "2023",
-    content: "It saves space and makes information easier to digest by organizing content.",
-  },
-  {
-    value: "item-4",
-    trigger: "2022",
-    content: "Details about events and achievements in 2022.",
-  },
-  {
-    value: "item-5",
-    trigger: "2021",
-    content: "Details about events and achievements in 2021.",
-  },
-];
+
 
     const posts = {
         aboutalveo: {
@@ -96,7 +70,8 @@ const accordionData = [
 }, [headings.length]);
 
     return (
-       <div className="w-full ">
+      <>
+      <div className="w-full h-screen">
          <SEO
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
@@ -174,28 +149,50 @@ const accordionData = [
         </tbody>
       </table>
       <div className="mt-10 ml-0 w-11/12 justify-center text-center sm:mx-10">
-        <h1 className="font-bold text-xl underline md:text-4xl">OUR FOUNDATION</h1>
+        <h1 className="font-bold text-xl  md:text-4xl">OUR FOUNDATION</h1>
         <p className="text-sm md:text-2xl">With more than 35 years of experience ...</p>
-        <h1 className="font-bold text-xl underline mt-8 md:text-4xl">CONTEMPORARY ENVIRONMENTS FOR HOME, WORK, AND LEISURE</h1>
+        <h1 className="font-bold text-xl  mt-8 md:text-4xl">CONTEMPORARY ENVIRONMENTS FOR HOME, WORK, AND LEISURE</h1>
         <p className="text-sm md:text-2xl" >Alveo Lands extensive range of holistic developments...</p>
       </div>
     </div>
-<div className="relative top-96 w-11/12  overflow-auto sm:mx-10 sm:-mt-14 max-sm:mb-96  md:mt-20 xl:-mt-10 xl:mb-20 lg:mb-96 md:mb-96 sm:mb-96 2xl:-mt-10 2xl:mb-0 2xl:h-2/4">
-  <div className="accordion1 relative z-10 2xl:h-2/4">
-    <div className="accordion2" style={{ width: '100%' }}>
-      <Accordion type="single" collapsible>
-        {accordionData.map((item) => (
-          <AccordionItem className="accordion-item" key={item.value} value={item.value}>
-            <AccordionTrigger className="accordion-trigger w-full md:text-2xl">
-              <span>{item.trigger}</span>
-            </AccordionTrigger>
-            <AccordionContent className="accordion-content z-20 md:text-xl">
-              {item.content}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+        
+       <div className="h-fit relative mt-96 justify-center">
+  <h1 className="text-3xl justify-center text-center">AWARDS AND RECOGNITION</h1>
+  <div className="flex space-x-8 mt-8">
+    
+    {/* First Award */}
+    <div className="flex flex-col items-center w-1/3">
+      <img src="/assets/certifications-and-awards-1551190300720.png" alt="Certifications and Awards" className="w-2/3 h-1/3" />
+      <div className="mt-4 text-center">
+        <h1 className="text-xl font-bold">Quadruple A contractor</h1>
+        <small className="text-sm">
+          The notice on DMCI Homes upgraded category was released on January 18, 2017 by Philippine Contractors Accreditation Board (PCAB). The AAAA license given to DMCI Homes is currently the highest given to firms that satisfy the institution's requirements.
+        </small>
+      </div>
     </div>
+    
+    {/* Second Award */}
+    <div className="flex flex-col items-center w-1/3">
+      <img src="/assets/certifications-and-awards-1551158091582.png" alt="Philippine Quill Awards" className="w-2/3 h-1/3" />
+      <div className="mt-4 text-center">
+        <h1 className="text-xl font-bold">Philippine Quill Awards 2012</h1>
+        <small className="text-sm">
+          DMCI Homes Ikaw Na, Maybe Customer Service Campaign won an Excellence Award in the 11th Philippine Quill Awards for Communication Management Division Employee/Member Communication Category. The Philippine Quill is the country's most prestigious and relevant award for business communicators.
+        </small>
+      </div>
+    </div>
+    
+    {/* Third Award */}
+    <div className="flex flex-col items-center w-1/3">
+      <img src="/assets/certifications-and-awards-1551158690171.png" alt="ULI Healthy Places Awards" className="w-2/3 h-1/3"/>
+      <div className="mt-4 text-center">
+        <h1 className="text-xl font-bold">ULI Healthy Places Awards</h1>
+        <small className="text-sm">
+          Aiming to recognize outstanding and innovative development with advanced design strategies that focus on the development of the environment and promote healthy living in the country, the recently-concluded 1st ULI Philippines Healthy Places Awards conferred DMCI Homes Arista Place as the winner in the residential category.
+        </small>
+      </div>
+    </div>
+    
   </div>
 </div>
 
@@ -203,11 +200,15 @@ const accordionData = [
 
   </div>
 )}
-<div className="bg-black xl:mt-96">
-      <Footer />
-    </div>
 
         </div>
+        {/* <div className="mb-0"> 
+   <Footer/>
+        </div> */}
+    
+
+      </>
+       
         
     );
 }

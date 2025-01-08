@@ -135,69 +135,70 @@ const Header = () => {
 
   return (
     <>
-      <header className={`${scrolled ? 'scrolled' : ''}`}>
-        <div className='bg-blue-500 flex items-center px-3 pt-3 h-12 w-screen relative'>
-          {/* Menu Icon */}
-          <div className='flex items-center'>
-            <Image
-              src='/assets/menu.png'
-              alt='Menu'
-              width={25}
-              height={25}
-              className='cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6'
-              onClick={openSidebar}
-            />
-          </div>
+  <header className={`${scrolled ? 'scrolled' : ''} fixed top-0 left-0 w-full z-50`}>
+  <div className="bg-blue-500 flex items-center px-3 pt-3 h-12 w-screen relative">
+    {/* Menu Icon */}
+    <div className="flex items-center">
+      <Image
+        src="/assets/menu.png"
+        alt="Menu"
+        width={25}
+        height={25}
+        className="cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6"
+        onClick={openSidebar}
+      />
+    </div>
 
-          {/* Branding */}
-          <div className='absolute left-1/2 transform -translate-x-1/2'>
-            <a
-              href='/'
-              className='branding-text'
-              style={{ textDecoration: 'none', color: 'inherit' }}
-            >
-              <h1 className='text-lg sm:text-lg lg:text-xl font-bold'>ALVEO</h1>
-            </a>
-          </div>
+    {/* Branding */}
+    <div className="absolute left-1/2 transform -translate-x-1/2">
+      <a
+        href="/"
+        className="branding-text"
+        style={{ textDecoration: 'none', color: 'inherit' }}
+      >
+        <h1 className="text-lg sm:text-lg lg:text-xl font-bold">ALVEO</h1>
+      </a>
+    </div>
 
-          {/* Explore Our Properties Section */}
-          {!isExplorePage && (
-            <div className='ml-auto flex items-end justify-end text-sm sm:text-base lg:text-lg xl:text-xl font-medium mt-1 w-1/2 pl-10'>
-              <a
-                href='/pages/explore'
-                className='flex items-center'
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <Image
-                  src='/assets/search.png'
-                  alt='Search'
-                  width={25}
-                  height={25}
-                  className='w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6 -mt-2'
-                  style={{ transform: 'rotate(-270deg)', cursor: 'pointer' }}
-                />
-                <p className='ml-2 mr-5 font-bold w-full'>Explore Properties</p>
-              </a>
-            </div>
-          )}
+    {/* Explore Our Properties Section */}
+    {!isExplorePage && (
+      <div className="ml-auto flex items-end justify-end text-sm sm:text-base lg:text-lg xl:text-xl font-medium mt-1 w-1/2 pl-10">
+        <a
+          href="/pages/explore"
+          className="flex items-center"
+          style={{ textDecoration: 'none', color: 'inherit' }}
+        >
+          <Image
+            src="/assets/search.png"
+            alt="Search"
+            width={25}
+            height={25}
+            className="w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6 -mt-2"
+            style={{ transform: 'rotate(-270deg)', cursor: 'pointer' }}
+          />
+          <p className="ml-2 mr-5 font-bold w-full">Explore Properties</p>
+        </a>
+      </div>
+    )}
 
-          {/* Call Section */}
-          {isExplorePage && (
-            <div className='ml-auto flex items-center'>
-              <Image
-                src='/assets/call.png'
-                alt='Call'
-                width={15}
-                height={15}
-                className='w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 -mt-3 '
-              />
-              <p className='ml-2 text-sm sm:text-base lg:text-lg xl:text-xl'>
-                CALL (632) 88485000
-              </p>
-            </div>
-          )}
-        </div>
-      </header>
+    {/* Call Section */}
+    {isExplorePage && (
+      <div className="ml-auto flex items-center">
+        <Image
+          src="/assets/call.png"
+          alt="Call"
+          width={15}
+          height={15}
+          className="w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 -mt-3"
+        />
+        <p className="ml-2 text-sm sm:text-base lg:text-lg xl:text-xl">
+          CALL (632) 88485000
+        </p>
+      </div>
+    )}
+  </div>
+</header>
+
 
       <div
         className={`fixed top-0 left-0 h-full w-64 bg-blue-950 text-white transition-transform transform z-50 

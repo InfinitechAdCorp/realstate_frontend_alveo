@@ -93,7 +93,9 @@ export default function BlogPost({ params }) {
   keywords="alveo, real estate, luxury property, property features, building information, property information, building features, condominium features"
   canonical="https://realstate-frontend-alveo.vercel.app"
 />
-      <Header />
+        <div className="mb-10">
+    <Header />
+      </div>
       <div className=" p-4 md:p-8 mt-2 w-full mb-20">
         <h1 className="text-2xl font-bold mb-4 text-center">{property.name}</h1>
         <div className="grid gap-4 lg:flex justify-center items-center text-center w-full 2xl:w-8/12 mx-auto">

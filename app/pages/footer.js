@@ -72,7 +72,7 @@ const Footer = () => {
   </h5>
 
   {/* Container for Images and Labels */}
-  <div className="flex sm:justify-center xl:justify-start mt-4">
+  {/* <div className="flex sm:justify-center xl:justify-start mt-4">
     <div className="flex flex-col items-start w-full sm:w-20">
       {[
         { src: "/assets/socialmedia/facebook.png", label: "Facebook" },
@@ -90,7 +90,7 @@ const Footer = () => {
         </div>
       ))}
     </div>
-  </div>
+  </div> */}
 </div>
 
 

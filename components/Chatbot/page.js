@@ -6,6 +6,7 @@ const MyBot = () => {
   const [isChatVisible, setIsChatVisible] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState([]);
+   const [property, setProperty] = useState([]);
     const [location, setLocation] = useState([]);
   const [values, setValues] = useState({
     location: '',
@@ -138,7 +139,7 @@ const processUserResponse = (message) => {
       setConversationStage('otherServices');
       setMessages((prevMessages) => [
         ...prevMessages,
-        { sender: 'bot', text: 'Our team is here to assist with any other services you may need!' },
+        { sender: 'bot', text: 'Our team is here to assist with any other services you may need! But it is currently unavailable.' },
       ]);
     } else if (selectedLocation) {
       setConversationStage('handleArchitectural');
@@ -158,10 +159,89 @@ const processUserResponse = (message) => {
       console.error('Invalid selection or no matching location found.');
     }
   };
- const showProperty = (message) => {
- console.log(message.value)
+const showProperty = (message) => {
+  console.log(message.value);
+  console.log(property);
 
+  // Check if the price range fits
+  const checkPriceRange = (messageValue, property) => {
+    const messageRange = messageValue.split(" - ");
+    const messageStart = parseFloat(messageRange[0].replace(/[^0-9.-]+/g, ""));
+    const messageEnd = parseFloat(messageRange[1].replace(/[^0-9.-]+/g, ""));
+
+    for (let i = 0; i < property.length; i++) {
+      const propertyRange = property[i].price_range.split(" - ");
+      const propertyStart = parseFloat(propertyRange[0].replace(/[^0-9.-]+/g, ""));
+      const propertyEnd = parseFloat(propertyRange[1].replace(/[^0-9.-]+/g, ""));
+
+      // Check if message value is within property range or overlaps
+      if ((messageStart >= propertyStart && messageStart <= propertyEnd) || 
+          (messageEnd >= propertyStart && messageEnd <= propertyEnd) || 
+          (messageStart <= propertyStart && messageEnd >= propertyEnd)) {
+        return true;
+      }
+    }
+    return false;
   };
+
+  // Format properties for display with HTML
+const formatPropertyInfo = (property) => {
+  return property.map(p => {
+    return `
+      <div style="border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
+        <div style="font-size: 18px; font-weight: bold; color: #007bff; text-align: center; ">
+          <a href='/pages/buildings/${p.id}' style="color: #007bff; text-decoration: none; font-weight: bold;">Click here to view the full property details</a>
+        </div>
+
+        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
+          <strong style="font-weight: bold;">Property Name:</strong> ${p.name}
+        </div>
+        
+        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
+          <strong style="font-weight: bold;">Location:</strong> ${p.location}
+        </div>
+
+        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
+          <strong style="font-weight: bold;">Specific Location:</strong> ${p.specific_location}
+        </div>
+
+        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
+          <strong style="font-weight: bold;">Land Area:</strong> ${p.land_area}
+        </div>
+
+        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
+          <strong style="font-weight: bold;">Price Range:</strong> 
+          <span style="color: #28a745; font-weight: bold;">${p.price_range}</span>
+        </div>
+
+        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
+          <strong style="font-weight: bold;">Units Available:</strong> 
+          <span style="color: #ffc107; font-weight: bold;">${p.units}</span>
+        </div>
+      </div>
+    `;
+  }).join('<br /><hr style="border-color: #ddd;" /><br />');
+};
+
+
+  // Check if the price range fits and send the formatted message
+  const isWithinPriceRange = checkPriceRange(message.value, property);
+  
+  if (isWithinPriceRange) {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: 'bot', text: `We found properties that fit your price range: ${message.value}. Here's more information about the property:` },
+      { sender: 'bot', text: formatPropertyInfo(property) }
+    ]);
+  } else {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { sender: 'bot', text: `Sorry, no properties found that match your price range: ${message.value}.` }
+    ]);
+  }
+};
+
+
 
   const handleGreeting = (message) => {
     setMessages((prevMessages) => [
@@ -321,6 +401,7 @@ const handlePrice = (value) => {
     .then((response) => response.json())
     .then((properties) => {
       console.log('Fetched Properties:', properties);
+      setProperty(properties)
       console.log(value)
       // You can also update the state with the fetched properties, if needed
       // For example: setProperties(properties);
@@ -410,8 +491,7 @@ const handlePrice = (value) => {
           >
             <Image src="/assets/logo.png" alt="Alveo" width={100} height={100} />
           </div>
-
-       <div
+<div
   ref={chatContainerRef}
   style={{
     flex: 1,
@@ -435,89 +515,63 @@ const handlePrice = (value) => {
       <div
         style={{
           maxWidth: '90%',
-          height:'100%',
+          height: '100%',
           backgroundColor: message.sender === 'user' ? '#007bff' : '#f1f1f1',
           color: message.sender === 'user' ? 'white' : 'black',
-          padding:'5px',
+          padding: '5px',
           borderRadius: '10px',
           fontSize: '14px',
-        // Space between text and buttons
           wordWrap: 'break-word',
         }}
       >
-        {message.text}
-    {message.buttons && (
+        {/* Render message text with dangerous HTML injection */}
         <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column', // Stack buttons vertically
-            gap: '5px', // Slight gap between buttons
-            alignItems: 'left', // Center buttons
-          }}
-        >
-          {message.buttons.map((button, i) => (
-            <button
-              key={i}
-              onClick={() => handleButtonClick(button.value)}
-              style={{
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                padding: '6px 14px', // Adjusted padding for compact buttons
-                borderRadius: '8px', // Rounded corners for a softer appearance
-                cursor: 'pointer',
-                fontSize: '14px',
-                boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                transition: 'all 0.3s ease',
-                width: 'auto', // Auto width to avoid stretching the button
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = '#0056b3';
-                e.target.style.transform = 'scale(1.05)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = '#007bff';
-                e.target.style.transform = 'scale(1)';
-              }}
-            >
-              {button.label}
-            </button>
-          ))}
-        </div>
-      )}
+          dangerouslySetInnerHTML={{ __html: message.text }}
+        />
+        {message.buttons && (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column', // Stack buttons vertically
+              gap: '5px', // Slight gap between buttons
+              alignItems: 'left', // Center buttons
+            }}
+          >
+            {message.buttons.map((button, i) => (
+              <button
+                key={i}
+                onClick={() => handleButtonClick(button.value)}
+                style={{
+                  backgroundColor: '#007bff',
+                  color: 'white',
+                  border: 'none',
+                  padding: '6px 14px',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+                  transition: 'all 0.3s ease',
+                  width: 'auto', // Auto width to avoid stretching the button
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = '#0056b3';
+                  e.target.style.transform = 'scale(1.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = '#007bff';
+                  e.target.style.transform = 'scale(1)';
+                }}
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
-
-  
     </div>
   ))}
-
-  {isTyping && (
-    <div
-      style={{
-        position: 'absolute',
-        bottom: '70px',
-        left: '10px',
-        display: 'flex',
-        justifyContent: 'center',
-        animation: 'typingAnimation 1.5s infinite',
-      }}
-    >
-      <div
-        className="typing-indicator"
-        style={{
-          fontSize: '24px',
-          color: '#007bff',
-          display: 'flex',
-          gap: '5px',
-        }}
-      >
-        <span>•</span>
-        <span>•</span>
-        <span>•</span>
-      </div>
-    </div>
-  )}
 </div>
+
 
           <div
             style={{

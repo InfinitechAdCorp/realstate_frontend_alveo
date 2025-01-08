@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { showToast } from '@/components/alert/page';
 
 const AreaModal = ({ isOpen, closeModal }) => {
   const [error, setError] = useState('');
@@ -13,7 +14,17 @@ const AreaModal = ({ isOpen, closeModal }) => {
     description: Yup.string().required('Description is required'),
     image: Yup.mixed().required('Image is required'),
   });
+ const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   // Submit data to the backend using fetch
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     setError(''); // Clear previous errors
@@ -34,13 +45,13 @@ const AreaModal = ({ isOpen, closeModal }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(data.message || 'Area added successfully');
+        handleShowSuccessToast(data.message || 'Area added successfully');
       } else {
-        setError(data.message || 'Failed to add Area');
+        handleShowErrorToast(data.message || 'Failed to add Area');
       }
       setSubmitting(false);
     } catch (err) {
-      setError('An error occurred while submitting the data');
+      handleShowErrorToast('An error occurred while submitting the data');
       setSubmitting(false);
     }
   };

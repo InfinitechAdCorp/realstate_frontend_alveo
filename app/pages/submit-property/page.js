@@ -8,6 +8,7 @@ import Header from '../header'
 import Footer from '../footer'
 import SEO from '../../seo/page'
 import { FaImage } from 'react-icons/fa'
+import { showToast } from '@/components/alert/page';
 
 const SetAppointment = () => {
   const [message, setMessage] = useState('')
@@ -49,7 +50,17 @@ const SetAppointment = () => {
         value ? Array.from(value).every(file => file.size <= 2048 * 1024) : true
     )
   })
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     const formData = new FormData()
 
@@ -76,17 +87,17 @@ const SetAppointment = () => {
 
       if (response.ok) {
         const responseData = await response.json()
-        setMessage(responseData.message || 'Property submitted successfully!')
+        handleShowSuccessToast(responseData.message || 'Property submitted successfully!')
         setMessageType('success')
         resetForm() // Reset the form after successful submission
       } else {
         const errorData = await response.json()
-        setMessage(errorData.message || 'Property failed to submit!')
+        handleShowErrorToast(errorData.message || 'Property failed to submit!')
         setMessageType('error')
       }
     } catch (error) {
       console.error('Error submitting property:', error)
-      setMessage('An unexpected error occurred while submitting the property.')
+      handleShowErrorToast('An unexpected error occurred while submitting the property.')
       setMessageType('error')
     } finally {
       setSubmitting(false) // Enable the form's submit button again
@@ -113,7 +124,9 @@ const SetAppointment = () => {
       />
 
       {/* Header outside the main content */}
-      <Header />
+        <div className="mb-10">
+    <Header />
+      </div>
 
       <div className='text-center mb-2 mt-10'>
         <h1 className='text-3xl font-bold text-blue-600'>Submit Property</h1>

@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
+import { showToast } from '@/components/alert/page';
 
 const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
   const [inputValue, setInputValue] = useState(''); // State to handle input field
   const [error, setError] = useState(''); // State to handle errors
   const [success, setSuccess] = useState(''); // State to show success messages
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
 
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
   // Handle change in input field
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -27,13 +38,13 @@ const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
       const data = await response.json();
 
       if (response.ok) {
-        setSuccess(data.message || 'Development Type added successfully');
+        handleShowSuccessToast(data.message || 'Development Type added successfully');
         setInputValue(''); // Clear the input field
       } else {
-        setError(data.message || 'Failed to add Development Type');
+        handleShowErrorToast(data.message || 'Failed to add Development Type');
       }
     } catch (err) {
-      setError('An error occurred while submitting the data');
+      handleShowErrorToast('An error occurred while submitting the data');
     }
   };
 

@@ -1,11 +1,12 @@
 "use client"; // Marks this component as client-side
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import Image from "next/image"; // Assuming you're using Next.js' Image component
 import { useRouter } from "next/navigation"; // Hook for navigation
 import Link from 'next/link';
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import ClipLoader from "react-spinners/ClipLoader";
+import { showToast } from '../../components/alert/page'; // Adjust the import path if necessary
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -15,6 +16,7 @@ import SEO from "./../seo/page"
 import Header from "./header";
 import Footer from "./footer";
 import MyBot from "../../components/Chatbot/page";
+import SocialMediaFloating from "./socialmedia-icons/page"
 const containerStyle = {
   width: "100%",
   height: "200px",
@@ -48,57 +50,30 @@ const styles = {
     transition: "color 0.3s ease",
   },
 };
+  const handleShowSuccessToast = (message) => {
+    showToast(message, 'success');
+  };
+
+  const handleShowErrorToast = (message) => {
+    showToast(message, 'error'); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, 'warning'); // Warning toast
+  };
 const Carousel = () => {
   const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null); // State to hold selected image info
-
-  const router = useRouter(); // Correct usage inside a component
-
-  const settings = {
-    speed: 500, // Adjust this value for the slide transition speed
-    slidesToShow: 4, // Number of slides visible at once
-    slidesToScroll: 2, // Only scroll one slide at a time for smoothness
-    autoplay: true, // Enable autoplay for automatic slide transition
-    autoplaySpeed: 3000, // Slide changes every 3 seconds
-    cssEase: "ease-in-out",
-    responsive: [
-      {
-        breakpoint: 1200, // For smaller screens
-        settings: {
-          slidesToShow: 2, // Show 3 slides
-        },
-      },
-      {
-        breakpoint: 992, // Medium-sized screens
-        settings: {
-          slidesToShow: 2, // Show 2 slides
-        },
-      },
-      {
-        breakpoint: 768, // Small screens
-        settings: {
-          slidesToShow: 2, // Show 1 slide
-        },
-      },
-      {
-        breakpoint: 650, // Small screens
-        settings: {
-          slidesToShow: 1, // Show 1 slide
-        },
-      },
-    ],
-  };
+  const sliderRef = useRef(null); // Create a reference for the Slider component
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("https://infinitech-testing1.online/api/allproperty"); // Replace with your API endpoint
+        const response = await fetch("https://infinitech-testing1.online/api/allproperty");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setLocations(data); // Assuming data is an array of location objects
-
+        setLocations(data);
       } catch (error) {
         console.error("Error fetching locations:", error);
       }
@@ -107,67 +82,107 @@ const Carousel = () => {
     fetchLocations();
   }, []);
 
-
+  const settings = {
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 2,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    cssEase: "ease-in-out",
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 650,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   return (
-    <>
-      <div className="w-full mx-auto overflow-hidden mt-3 p-1 text-center h-full ">
-        <h1 className="text-2xl font-bold mb-4">FEATURED PROPERTIES</h1>
-        <Slider {...settings} arrows={false}>
-          {" "}
-          {/* Set arrows to false */}
-          {locations.map((location, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center text-center p-4 border border-gray-300 rounded-lg bg-gray-100 shadow-md hover:-translate-y-1 transition-transform duration-300"
-            >
-              <Link href={`/pages/buildings/${location.id}`} passHref className="no-underline">
-                <div className="cursor-pointer">
-                  <img
-                    src={`/${location.path}`}
-                    alt={location.name}
-                    className="w-full h-60 object-cover rounded-lg mb-4"
-                  />
-                  <div className="text-center">
-                    <h3 className="text-lg font-bold my-1">{location.name}</h3>
-                    <p className="text-sm text-gray-600 my-1">
-                      {location.development_type}
-                    </p>
-                    <p className="text-sm text-gray-600 my-1">
-                      {location.location}
-                    </p>
-                    <p className="text-sm text-gray-600 my-1">
-                      {location.price_range}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-
-
-            </div>
-          ))}
-        </Slider>
-
-        {selectedLocation && (
-          <div className="mt-5 text-left border border-gray-300 p-4 rounded-lg bg-white">
-            <h2 className="text-lg font-bold mb-2">Selected Property:</h2>
-            <img
-              src={selectedLocation.path}
-              alt={selectedLocation.name}
-              className="w-full h-auto rounded-lg mb-4"
-            />
-            <h3 className="text-lg font-bold">{selectedLocation.name}</h3>
-            <p className="text-sm text-gray-600">
-              {selectedLocation.development_type}
-            </p>
-            <p className="text-sm text-gray-600">{selectedLocation.location}</p>
-            <p className="text-sm text-gray-600">
-              {selectedLocation.price_range}
-            </p>
-          </div>
-        )}
+   <div className="w-full mx-auto overflow-hidden mt-3 p-1 text-center h-full relative">
+  <h1 className="text-2xl font-bold mb-4">FEATURED PROPERTIES</h1>
+  <Slider ref={sliderRef} {...settings}>
+    {locations.map((location, index) => (
+      <div
+        key={index}
+        className="flex flex-col items-center text-center p-4 border border-gray-300 rounded-lg bg-gray-100 shadow-md hover:-translate-y-1 transition-transform duration-300 h-fit"
+      >
+        <img
+          src={`/${location.path}`}
+          alt={location.name}
+          className="w-full h-60 object-cover rounded-lg mb-4"
+        />
+        <div className="text-center h-full">
+          <h3 className="text-lg font-bold my-1">{location.name}</h3>
+          <p className="text-sm text-gray-600 my-1">{location.development_type}</p>
+          <p className="text-sm text-gray-600 my-1">{location.location}</p>
+          <p className="text-sm text-gray-600 my-1">{location.price_range}</p>
+        </div>
       </div>
-    </>
+    ))}
+  </Slider>
+
+  {/* Navigation buttons at the side of the carousel */}
+  <button
+    onClick={() => sliderRef.current?.slickPrev()}
+    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-3 rounded-full shadow-lg hover:bg-gray-800 transition duration-300"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      className="w-6 h-6 transform rotate-0"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M15 19l-7-7 7-7"
+      />
+    </svg>
+  </button>
+
+  <button
+    onClick={() => sliderRef.current?.slickNext()}
+    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-3 rounded-full shadow-lg hover:bg-gray-800 transition duration-300"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      className="w-6 h-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+        d="M9 5l7 7-7 7"
+      />
+    </svg>
+  </button>
+</div>
+
   );
 };
 const Map = () => {
@@ -316,7 +331,7 @@ const ImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
- const fetchLocations = async () => {
+  const fetchLocations = async () => {
   try {
     const response = await fetch("https://infinitech-testing1.online/api/properties");
     if (!response.ok) {
@@ -324,29 +339,37 @@ const ImageSlider = () => {
     }
     const data = await response.json();
 
-    // Parse the features string to a JavaScript array
-    data.properties.forEach(location => {
-      location.features = JSON.parse(location.features);
-    });
+    // Log the response to see its structure
+    console.log(data);
 
-    setLocations(data.properties); // Set the modified locations data
-    console.log(data.properties); // Check if the data is now correct
+    // Process the data to only extract id, name, and location
+    if (Array.isArray(data)) {
+      const simplifiedProperties = data.map(property => {
+        return {
+          id: property.id,
+          name: property.name,
+          location: property.location,
+          path : property.path
+        };
+      });
+
+      setLocations(simplifiedProperties); // Assuming setLocations sets the state
+    } else {
+      console.error("Invalid properties data structure", data);
+    }
   } catch (error) {
     console.error("Error fetching locations:", error);
   }
 };
 
-
-  // Call fetchLocations when the component mounts
   useEffect(() => {
     fetchLocations();
-
   }, []);
 
   // Update the image every 3 seconds
   const nextImage = useCallback(() => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % locations.length);
-  }, [locations.length]);
+  }, [locations]);
 
   useEffect(() => {
     if (locations.length > 0) {
@@ -361,55 +384,50 @@ const ImageSlider = () => {
   };
 
   return (
-    <>
-      <div className="relative flex items-center justify-center w-auto h-auto p-0 m-0 max-sm:w-auto sm:w-1/3 md:w-auto lg:w-5/12">
-        {/* Check for loading state */}
-        {loading && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
-            <span className="text-white">Loading...</span>
+    <div className="relative flex items-center justify-center w-auto h-auto p-0 m-0 max-sm:w-auto sm:w-1/3 md:w-auto lg:w-5/12">
+      {/* Check for loading state */}
+      {loading && (
+        <div className="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
+          <span className="text-white">Loading...</span>
+        </div>
+      )}
+
+      {/* Only show the location image if there are locations */}
+      {locations && locations.length > 0 && (
+        <div className="relative w-full h-auto rounded-lg overflow-hidden cursor-pointer z-10">
+          <Link
+            href={`/pages/buildings/${encodeURIComponent(locations[currentIndex].id)}`}
+            passHref
+          >
+            <Image
+              src={
+                locations[currentIndex].path && locations[currentIndex].path.startsWith("https://")
+                  ? locations[currentIndex].path // If it's already a full URL, use it directly
+                  : locations[currentIndex].path
+                  ? `https://infinitech-testing1.online/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
+                  : '' // If there's no path, set it to an empty string or fallback image URL
+              }
+              alt={locations[currentIndex].name}
+              layout="responsive"
+              width={600}
+              height={400}
+              className={`object-cover transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"} w-80 xl:w-full 2xl:w-full h-full`}
+              onLoad={handleImageLoad}
+              priority
+            />
+          </Link>
+
+          {/* Location info overlay */}
+          <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center p-3 text-sm z-30">
+            <h5 className="m-0 text-xs sm:text-sm md:text-base truncate">{locations[currentIndex].name}</h5>
+            <p className="m-0 text-xs sm:text-sm md:text-base truncate">{locations[currentIndex].location}</p>
           </div>
-        )}
-
-        {/* Only show the location image if there are locations */}
-        {locations.length > 0 && (
-          <div className="relative w-full h-auto rounded-lg overflow-hidden cursor-pointer z-10">
-            <Link
-              href={`/pages/buildings/${encodeURIComponent(locations[currentIndex].id)}`}
-              passHref
-            >
-
-<Image
-  src={
-    locations[currentIndex].path && locations[currentIndex].path.startsWith("https://")
-      ? locations[currentIndex].path // If it's already a full URL, use it directly
-      : locations[currentIndex].path
-        ? `https://infinitech-testing1.online/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
-        : '' // If there's no path, set it to an empty string or fallback image URL
-  }
-  alt={locations[currentIndex].name}
-  layout="responsive"
-  width={600}
-  height={400}
-  className={`object-cover transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"} w-80 xl:w-full 2xl:w-full h-full`}
-  onLoad={handleImageLoad}
-  priority
-/>
-
-
-
-            </Link>
-
-            {/* Location info overlay */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center p-3 text-sm z-30">
-              <h5 className="m-0 text-xs sm:text-sm md:text-base truncate">{locations[currentIndex].name}</h5>
-              <p className="m-0 text-xs sm:text-sm md:text-base truncate">{locations[currentIndex].location}</p>
-            </div>
-          </div>
-        )}
-      </div>
-    </>
+        </div>
+      )}
+    </div>
   );
 };
+
 let dropdownValue;
 let searchValue;
 const AlveoBanner = () => {
@@ -456,64 +474,48 @@ const AlveoBanner = () => {
     setSuggestions([]); // Clear suggestions when dropdown changes
     setShowSuggestions(false);
   };
-
-  const handleSearchInputChange = (event) => {
+ const handleSearchInputChange = (event) => {
     const searchValue = event.target.value;
     setSearchInput(searchValue);
-  
+
     // Trigger fetch only if both dropdown and input have values
     if (selectedValue && searchValue) {
       fetchSuggestions(selectedValue, searchValue);
-      setShowSuggestions(true); // Make sure this is true when suggestions are ready
-      setIsSuggestionsVisible(true); // Ensure suggestions are visible
+      setIsSuggestionsVisible(true); // Show suggestions
     } else {
       setSuggestions([]); // Clear suggestions if either value is missing
       setIsSuggestionsVisible(false); // Hide suggestions if no valid search
     }
   };
 const fetchSuggestions = async (filter, searchValue) => {
+  console.log(`Filter: ${filter}, Search Value: ${searchValue}`);
+
   try {
-    // Corrected URL to pass filter and search as query parameters
-    console.log(filter, searchValue);
-
-    const response = await fetch(
-      `https://infinitech-testing1.online/api/properties?filter=${filter}&search=${searchValue}`
-    );
-
+    const response = await fetch(`https://infinitech-testing1.online/api/properties`);
     const data = await response.json();
 
-    // Ensure that the data contains the properties array
-    if (data.properties && Array.isArray(data.properties)) {
-      // Filter suggestions based on the search value and selected filter
-      const uniqueSuggestions = [];
+    console.log("API response data:", data);
 
-      data.properties.forEach((item) => {
-        const currentValue = item[filter];
-        // Only include items where the filter value contains the search term
-        if (currentValue && currentValue.toLowerCase().includes(searchValue.toLowerCase())) {
-          // Check if the item is already in the uniqueSuggestions array
-          const alreadyExists = uniqueSuggestions.some(
-            (existingItem) => existingItem[filter] === currentValue
-          );
+    // Filter the data based on the search value
+    const filteredSuggestions = data.filter((item) =>
+      item[filter]?.toLowerCase().includes(searchValue.toLowerCase())
+    );
 
-          if (!alreadyExists) {
-            uniqueSuggestions.push(item); // Add the item if it's not already in the array
-          }
-        }
-      });
+    // Remove duplicates based on the selected filter value
+    const seen = new Set();
+    const uniqueSuggestions = filteredSuggestions.filter((item) => {
+      const value = item[filter];
+      if (seen.has(value)) {
+        return false; // If the value is already seen, filter it out
+      } else {
+        seen.add(value);
+        return true; // Otherwise, keep it
+      }
+    });
 
-      // Set unique suggestions based on filter and search value
-      setSuggestions(uniqueSuggestions);
-      setShowSuggestions(true); // Show suggestions
-    } else {
-      console.error("Data received does not contain a properties array", data);
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
+    setSuggestions(uniqueSuggestions); // Set unique filtered suggestions
   } catch (error) {
     console.error("Error fetching suggestions:", error);
-    setSuggestions([]);
-    setShowSuggestions(false);
   }
 };
 
@@ -559,7 +561,7 @@ const fetchSuggestions = async (filter, searchValue) => {
       }
 
       const features = await response.json();
-
+      console.log(features)
       return features;
     } catch (error) {
       console.error("Error fetching building features:", error);
@@ -591,10 +593,10 @@ const fetchSuggestions = async (filter, searchValue) => {
   };
 
   const fetchData = async (filter, searchValue, callback) => {
-
+    console.log(filter,searchValue,callback)
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/properties?filter=${filter}&search=${searchValue}`,
+        `https://infinitech-testing1.online/api/searchProperty?filter=${filter}&search=${searchValue}`,
         {
           method: "GET",
           headers: {
@@ -608,15 +610,16 @@ const fetchSuggestions = async (filter, searchValue) => {
       }
 
       const data = await response.json();
-
+      console.log(data)
       // Fetch buildings for each property
-      const propertiesWithBuildings = await Promise.all(
-        data.map(async (property) => {
-          const buildings = await fetchBuildings(property.id);
-          const buildingfeatures = await fetchBuildingFeatures(property.id); // Fetch buildings using property ID
-          return { ...property, buildings, buildingfeatures }; // Attach buildings to the property
-        })
-      );
+  const propertiesWithBuildings = await Promise.all(
+  data.properties.map(async (property) => {
+    const buildings = await fetchBuildings(property.id);
+    const buildingfeatures = await fetchBuildingFeatures(property.id); // Fetch buildings using property ID
+    return { ...property, buildings, buildingfeatures }; // Attach buildings to the property
+  })
+);
+
 
       setFetchedData(propertiesWithBuildings); // Update state with properties and buildings
 
@@ -631,6 +634,7 @@ const fetchSuggestions = async (filter, searchValue) => {
       setSuggestions([]); // Clear suggestions on error
     }
   };
+  
   const handleClick1 = () => {
     // Check if the viewport width is 1366 or more
     if (window.innerWidth >= 1366) {
@@ -638,7 +642,8 @@ const fetchSuggestions = async (filter, searchValue) => {
       const randomParam = `?cacheBuster=${new Date().getTime()}`;
       window.location.href = `/pages/roomplanner${randomParam}`; // Refresh the page after navigation
     } else {
-      alert("This feature is only available on larger screens (1366px or wider).");
+      handleShowErrorToast("This feature is only available on larger screens (1366px or wider).")
+     
     }
   };
 
@@ -649,7 +654,7 @@ const fetchSuggestions = async (filter, searchValue) => {
     setShowSuggestions(false);
     openPopup();
     setLoading(true);
-
+    console.log(selectedValue,searchInput)
     if (selectedValue && searchInput) {
       // Fetch the property data based on selected value and search input
       fetchData(selectedValue, searchInput, async (properties) => {
@@ -687,7 +692,7 @@ const fetchSuggestions = async (filter, searchValue) => {
 
         <div className="absolute inset-0 bg-cover bg-center bg-[url('/assets/Alveo.png')]">
 
-         <div className="relative">
+         <div className="fixed top-10 right-3 z-50">
   {/* Room Planner Icon */}
   <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10">
     <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
@@ -813,6 +818,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                   className="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 xl:ml-60 md:text-md md:h-9 md:w-72 focus:ring-blue-500 w-60 sm:w-96 lg:h-10 lg:w-4/12 xl:w-40 xl:p-0 xl:h-10 xl:text-sm"
                 >
                   <option value="" disabled>Select</option>
+                    <option value="All">All</option>
                   <option value="name">Residence Name</option>
                   <option value="status">Status</option>
                   <option value="location">Location</option>
@@ -833,26 +839,34 @@ const fetchSuggestions = async (filter, searchValue) => {
                   onChange={handleSearchInputChange}
                 />
               </div>
-              <div>
-                {isSuggestionsVisible && searchInput.trim() && (
-                  <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1 sm:ml-0 sm:left-36 md:left-44 lg:mt-4 xl:mt-6 lg:left-1/3 xl:left-1/3  2xl:left-1/4">
-                    {suggestions.map((item, index) => (
-                      <div
-                        key={index}
-                        className="cursor-pointer hover:bg-gray-100 p-2 rounded max-h-40"
-                        onClick={() => {
+<div>
+  {isSuggestionsVisible && searchInput.trim() && (
+    <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1 sm:ml-0 sm:left-36 md:left-44 lg:mt-4 xl:mt-6 lg:left-1/3 xl:left-1/3 2xl:left-1/4">
+      {suggestions.length > 0 && selectedValue !== "All" ? (
+        suggestions.map((item, index) => (
+          <div
+            key={index}
+            className="cursor-pointer hover:bg-gray-100 p-2 rounded max-h-40"
+            onClick={() => {
+              setSearchInput(item[selectedValue]); // Dynamically set search input
+              setSuggestions([]);
+              setIsSuggestionsVisible(false);
+            }}
+          >
+            {item[selectedValue]} {/* Render suggestion based on filter */}
+          </div>
+        ))
+      ) : (
+        selectedValue !== "All" && (
+          <div className="text-gray-500 text-center py-2">No Data Available</div> // Show message only if filter is not 'All'
+        )
+      )}
+    </div>
+  )}
+</div>
 
-                          setSearchInput(renderSuggestion(item));
-                          setSuggestions([]);
-                          setShowSuggestions(false);
-                        }}
-                      >
-                        {renderSuggestion(item)}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+
+
             </div>
 
             {/* Right Column: Image Slider */}
@@ -878,56 +892,7 @@ const fetchSuggestions = async (filter, searchValue) => {
 
 
 
-          <div className="social-media-icons max-sm:hidden sm:hidden xl:block xl:items-end xl:absolute xl:mt-48 xl:top-0 xl:right-0 xl:p-4 2xl:mt-72">
-            <a href="https://www.facebook.com/AlveoLand/" target="_blank">
-              <img
-                className="w-10 h-10"
-                src="/assets/socialmedia/facebook.png"
-                alt="Facebook"
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.1)")
-                }
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              />
-            </a>
-           
-            <a href="https://t.me/+6309175480999" target="_blank">
-              <img
-                className="w-10 h-10 mt-3"
-                src="/assets/socialmedia/telegram.png"
-                alt="Telegram"
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.1)")
-                }
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              />
-            </a>
-            <a
-              href="https://api.whatsapp.com/send/?phone=639175480999&text&type=phone_number&app_absent=0"
-              target="_blank"
-            >
-              <img
-                className="w-10 h-10 mt-3"
-                src="/assets/socialmedia/whatsapp.png"
-                alt="WhatsApp"
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.1)")
-                }
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              />
-            </a>
-            <a href="https://www.viber.com/en/" target="_blank">
-              <img
-                className="w-10 h-10 mt-3"
-                src="/assets/socialmedia/viber.png"
-                alt="Viber"
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.1)")
-                }
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              />
-            </a>
-          </div>
+        
 
 
           {enlargedImage && (
@@ -1257,6 +1222,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                         )}
 
                       </div>
+                      
                     </div>
                   ))
                 ) : (
@@ -1281,12 +1247,15 @@ const DashboardComponent = () => {
         canonical="https://realstate-frontend-alveo.vercel.app"
       />
 
-      <Header />
+      <div className="mb-10">
+    <Header />
+      </div>
+
+  
 
 
       <AlveoBanner />
-
-
+   
 
 
 
@@ -1301,6 +1270,7 @@ const DashboardComponent = () => {
         </div>
       </div>
       <div className="max-sm:mt-32 sm:mt-32 xl:mt-0 xl:z-50">
+        <SocialMediaFloating/>
         <MyBot />
         <Footer />
       </div>
