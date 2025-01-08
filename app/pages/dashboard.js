@@ -215,65 +215,78 @@ const Map = () => {
   }, []);
 
   return (
-    <LoadScript googleMapsApiKey="AIzaSyAS_yg3EUDpuONWhT1dJQjc5JETJf5uITI">
-      <div className="flex flex-col w-full p-0 bg-gray-100 h-auto ">
-        {/* Parent container */}
-        <div className="relative w-full h-80">
-          {/* Map container */}
-          <h1 className="text-center text-3xl font-bold mt-5 mb-3">
-            PROPERTIES LOCATION
-          </h1>
-          <GoogleMap
-            mapContainerStyle={{ height: "100%", width: "100%" }}
-            center={{ lat: 14.5995, lng: 120.9842 }} // Default center (Manila)
-            zoom={10}
-          >
-            {locations.map((location) => (
-              <Marker
-                key={location.name}
-                position={{
-                  lat: parseFloat(location.lat), // Ensure lat is a valid number
-                  lng: parseFloat(location.lng), // Ensure lng is a valid number
-                }}
-                title={location.name}
-                onClick={() => handleMarkerClick(location)}
-              />
-            ))}
-
-            {selectedLocation && (
-              <div className="absolute top-2.5 left-2.5 p-4 bg-white/90 shadow-lg rounded-lg z-50">
-                <span
-                  className="text-lg cursor-pointer mr-2"
-                  onClick={closeInfoContainer}
-                >
-                  &times;
-                </span>
-                <h1 className="text-lg ml-2">{selectedLocation.name}</h1>
-                <img
-                  className="max-w-52 max-h-36 ml-2 rounded"
-                  src={`${selectedLocation.location_image}`}
-                  alt={selectedLocation.name}
-                />
-                <Link href={`/pages/buildings/${selectedLocation.id}`} passHref className="no-underline">
-                  <button
-                    className="mt-2 p-2 bg-blue-500 text-white rounded"
-                  // Console log the selectedLocation.id
-                  >
-                    View Property Details
-                  </button>
-                </Link>
-
-
-              </div>
-            )}
-
-          </GoogleMap>
-        </div>
-      </div>
-    </LoadScript>
+    <>
+      {/* Embed Google Map iframe */}
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.6866183300262!2d121.01093307577298!3d14.559904978070358!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c90b830e5f29%3A0x89fe307dfecd3c0d!2sCampos%20Rueda%20Building!5e0!3m2!1sen!2sph!4v1736238470025!5m2!1sen!2sph"
+        width="100%" // Make iframe responsive
+        height="450"
+        style={{ border: "0" }} // Use object notation for styles
+        allowFullScreen=""
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </>
   );
 };
 
+  //  <LoadScript googleMapsApiKey="AIzaSyAS_yg3EUDpuONWhT1dJQjc5JETJf5uITI">
+  //     <div className="flex flex-col w-full p-0 bg-gray-100 h-auto ">
+  //       {/* Parent container */}
+  //       <div className="relative w-full h-80">
+  //         {/* Map container */}
+  //         <h1 className="text-center text-3xl font-bold mt-5 mb-3">
+  //           PROPERTIES LOCATION
+  //         </h1>
+  //         <GoogleMap
+  //           mapContainerStyle={{ height: "100%", width: "100%" }}
+  //           center={{ lat: 14.5995, lng: 120.9842 }} // Default center (Manila)
+  //           zoom={10}
+  //         >
+  //           {locations.map((location) => (
+  //             <Marker
+  //               key={location.name}
+  //               position={{
+  //                 lat: parseFloat(location.lat), // Ensure lat is a valid number
+  //                 lng: parseFloat(location.lng), // Ensure lng is a valid number
+  //               }}
+  //               title={location.name}
+  //               onClick={() => handleMarkerClick(location)}
+  //             />
+  //           ))}
+
+  //           {selectedLocation && (
+  //             <div className="absolute top-2.5 left-2.5 p-4 bg-white/90 shadow-lg rounded-lg z-50">
+  //               <span
+  //                 className="text-lg cursor-pointer mr-2"
+  //                 onClick={closeInfoContainer}
+  //               >
+  //                 &times;
+  //               </span>
+  //               <h1 className="text-lg ml-2">{selectedLocation.name}</h1>
+  //               <img
+  //                 className="max-w-52 max-h-36 ml-2 rounded"
+  //                 src={`${selectedLocation.location_image}`}
+  //                 alt={selectedLocation.name}
+  //               />
+  //               <Link href={`/pages/buildings/${selectedLocation.id}`} passHref className="no-underline">
+  //                 <button
+  //                   className="mt-2 p-2 bg-blue-500 text-white rounded"
+  //                 // Console log the selectedLocation.id
+  //                 >
+  //                   View Property Details
+  //                 </button>
+  //               </Link>
+
+
+  //             </div>
+  //           )}
+
+  //         </GoogleMap>
+  //       </div>
+  //     </div>
+  //   </LoadScript>
+    
 const AboutAlveo = () => {
   return (
     <>
@@ -303,23 +316,31 @@ const ImageSlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  // Function to fetch locations data from the backend
-  const fetchLocations = async () => {
-    try {
-      const response = await fetch("https://infinitech-testing1.online/api/locations");
-      if (!response.ok) {
-        throw new Error("Failed to fetch locations");
-      }
-      const data = await response.json();
-      setLocations(data);
-    } catch (error) {
-      console.error("Error fetching locations:", error);
+ const fetchLocations = async () => {
+  try {
+    const response = await fetch("https://infinitech-testing1.online/api/properties");
+    if (!response.ok) {
+      throw new Error("Failed to fetch locations");
     }
-  };
+    const data = await response.json();
+
+    // Parse the features string to a JavaScript array
+    data.properties.forEach(location => {
+      location.features = JSON.parse(location.features);
+    });
+
+    setLocations(data.properties); // Set the modified locations data
+    console.log(data.properties); // Check if the data is now correct
+  } catch (error) {
+    console.error("Error fetching locations:", error);
+  }
+};
+
 
   // Call fetchLocations when the component mounts
   useEffect(() => {
     fetchLocations();
+
   }, []);
 
   // Update the image every 3 seconds
@@ -357,16 +378,17 @@ const ImageSlider = () => {
               passHref
             >
 
-              <Image
-                src={`${locations[currentIndex].location_image}`}
-                alt={locations[currentIndex].name}
-                layout="responsive"
-                width={600}
-                height={400}
-                className={`object-cover transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"} w-80 xl:w-full 2xl:w-full h-full`} // Ensure the image takes the full container space
-                onLoad={handleImageLoad}
-                priority
-              />
+           <Image
+  src={`/${locations[currentIndex].path}`}  // Add leading slash here
+  alt={locations[currentIndex].name}
+  layout="responsive"
+  width={600}
+  height={400}
+  className={`object-cover transition-opacity duration-300 ${loading ? "opacity-0" : "opacity-100"} w-80 xl:w-full 2xl:w-full h-full`}
+  onLoad={handleImageLoad}
+  priority
+/>
+
 
             </Link>
 
@@ -431,6 +453,7 @@ const AlveoBanner = () => {
   const handleSearchInputChange = (event) => {
     const searchValue = event.target.value;
     setSearchInput(searchValue);
+  
     // Trigger fetch only if both dropdown and input have values
     if (selectedValue && searchValue) {
       fetchSuggestions(selectedValue, searchValue);
@@ -441,32 +464,51 @@ const AlveoBanner = () => {
       setIsSuggestionsVisible(false); // Hide suggestions if no valid search
     }
   };
+const fetchSuggestions = async (filter, searchValue) => {
+  try {
+    // Corrected URL to pass filter and search as query parameters
+    console.log(filter, searchValue);
 
-  const fetchSuggestions = async (filter, searchValue) => {
-    try {
-      // Corrected URL to pass filter and search as query parameters
-      const response = await fetch(
-        `https://infinitech-testing1.online/api/properties?filter=${filter}&search=${searchValue}`
-      );
+    const response = await fetch(
+      `https://infinitech-testing1.online/api/properties?filter=${filter}&search=${searchValue}`
+    );
 
-      const data = await response.json();
+    const data = await response.json();
 
-      const uniqueSuggestions = data.reduce((accumulator, currentItem) => {
-        const currentValue = currentItem[filter];
-        if (!accumulator.some((item) => item[filter] === currentValue)) {
-          accumulator.push(currentItem);
+    // Ensure that the data contains the properties array
+    if (data.properties && Array.isArray(data.properties)) {
+      // Filter suggestions based on the search value and selected filter
+      const uniqueSuggestions = [];
+
+      data.properties.forEach((item) => {
+        const currentValue = item[filter];
+        // Only include items where the filter value contains the search term
+        if (currentValue && currentValue.toLowerCase().includes(searchValue.toLowerCase())) {
+          // Check if the item is already in the uniqueSuggestions array
+          const alreadyExists = uniqueSuggestions.some(
+            (existingItem) => existingItem[filter] === currentValue
+          );
+
+          if (!alreadyExists) {
+            uniqueSuggestions.push(item); // Add the item if it's not already in the array
+          }
         }
-        return accumulator;
-      }, []);
+      });
 
-      setSuggestions(uniqueSuggestions); // Update suggestions state
+      // Set unique suggestions based on filter and search value
+      setSuggestions(uniqueSuggestions);
       setShowSuggestions(true); // Show suggestions
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
+    } else {
+      console.error("Data received does not contain a properties array", data);
       setSuggestions([]);
       setShowSuggestions(false);
     }
-  };
+  } catch (error) {
+    console.error("Error fetching suggestions:", error);
+    setSuggestions([]);
+    setShowSuggestions(false);
+  }
+};
 
   const renderSuggestion = (item) => {
     // Determine which property to display based on the selected dropdown value
@@ -737,16 +779,20 @@ const AlveoBanner = () => {
 
 </div>
 
-          <div className="content sm:mt-10  xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10">
-            <div className="w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left ">
-              <h1 className="mt-2 text-4xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium">
-                ALVEO LAND
-              </h1>
-              <h4 className="text-lg font-medium sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl">
-                LIVE WELL ACROSS THE PHILIPPINES
-              </h4>
-            </div>
-          </div>
+        <div className="content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10">
+  <div className="w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left">
+    {/* Title */}
+    <h1 className="mt-2 text-4xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+      ALVEO LAND
+    </h1>
+
+    {/* Subtitle */}
+    <h4 className="text-lg font-medium sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+      LIVE WELL ACROSS THE PHILIPPINES
+    </h4>
+  </div>
+</div>
+
 
           <div className="my-6 h-auto grid grid-cols-1 gap-6 relative">
             {/* Left Column: Search Inputs */}
@@ -782,7 +828,7 @@ const AlveoBanner = () => {
               </div>
               <div>
                 {isSuggestionsVisible && searchInput.trim() && (
-                  <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/2 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1 sm:ml-0 sm:left-36 md:left-44 lg:mt-4 xl:mt-6 lg:left-54 xl:right-96 2xl:-left-20">
+                  <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1 sm:ml-0 sm:left-36 md:left-44 lg:mt-4 xl:mt-6 lg:left-1/3 xl:left-1/3  2xl:left-1/4">
                     {suggestions.map((item, index) => (
                       <div
                         key={index}
@@ -826,7 +872,7 @@ const AlveoBanner = () => {
 
 
           <div className="social-media-icons max-sm:hidden sm:hidden xl:block xl:items-end xl:absolute xl:mt-48 xl:top-0 xl:right-0 xl:p-4 2xl:mt-72">
-            <a href="https://www.facebook.com" target="_blank">
+            <a href="https://www.facebook.com/AlveoLand/" target="_blank">
               <img
                 className="w-10 h-10"
                 src="/assets/socialmedia/facebook.png"
@@ -837,17 +883,7 @@ const AlveoBanner = () => {
                 onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
               />
             </a>
-            <a href="https://www.messenger.com" target="_blank">
-              <img
-                className="w-10 h-10 mt-3"
-                src="/assets/socialmedia/messenger.png"
-                alt="Messenger"
-                onMouseOver={(e) =>
-                  (e.currentTarget.style.transform = "scale(1.1)")
-                }
-                onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              />
-            </a>
+           
             <a href="https://t.me/+6309175480999" target="_blank">
               <img
                 className="w-10 h-10 mt-3"
@@ -1254,7 +1290,7 @@ const DashboardComponent = () => {
           <AboutAlveo />
         </div>
         <div className="xl:w-1/2 ">
-          {/* <Map /> */}
+          <Map />
         </div>
       </div>
       <div className="max-sm:mt-32 sm:mt-32 xl:mt-0 xl:z-50">

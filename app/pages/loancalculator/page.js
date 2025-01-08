@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import Header from "../header"
 import SEO from "./../../seo/page"
+import { jsPDF } from 'jspdf';
 export default function LoanCalculator() {
     const [years, setYears] = useState(0);
     const [months, setMonths] = useState(0);
@@ -25,36 +26,120 @@ export default function LoanCalculator() {
     const formatNumber = (value) => {
         return value.replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
+const calculateLoan = () => {
+    const yearsValue = parseInt(years) || 0;
+    const monthsValue = parseInt(months) || 0;
+    const amountValue = parseFloat(amount.replace(/,/g, "")) || 0;
+    const interestRateValue = parseFloat(interest) || 0;
 
-    const calculateLoan = () => {
-        const yearsValue = parseInt(years) || 0;
-        const monthsValue = parseInt(months) || 0;
-        const amountValue = parseFloat(amount.replace(/,/g, "")) || 0;
-        const interestRateValue = parseFloat(interest) || 0;
+    const totalMonthsValue = yearsValue * 12 + monthsValue;
 
-        const totalMonthsValue = yearsValue * 12 + monthsValue;
+    let totalLoanAmount = amountValue;
+    let monthlyPayment = 0;
 
-        let totalLoanAmount = amountValue;
-        if (totalMonthsValue > 0 && interestRateValue > 0) {
-            const monthlyInterestRate = interestRateValue / 100 / 12;
-            totalLoanAmount = amountValue * Math.pow(1 + monthlyInterestRate, totalMonthsValue);
-        }
+    if (totalMonthsValue > 0 && interestRateValue > 0) {
+        // Monthly Interest Rate
+        const monthlyInterestRate = interestRateValue / 100 / 12;
 
-        let monthlyPayment = 0;
-        if (totalMonthsValue > 0) {
-            monthlyPayment = totalLoanAmount / totalMonthsValue;
-        }
+        // Amortization Formula for Monthly Payment
+        monthlyPayment = (totalLoanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalMonthsValue)) / (Math.pow(1 + monthlyInterestRate, totalMonthsValue) - 1);
 
-        setLoanDetails({
-            selectedYears: yearsValue,
-            selectedMonths: monthsValue,
-            loanAmount: amountValue,
-            interestRate: interestRateValue,
-            totalLoan: totalLoanAmount,
-            monthlyPayment,
-            totalMonths: totalMonthsValue,
-        });
+        // Total Loan Amount (Principal + Interest)
+        totalLoanAmount = monthlyPayment * totalMonthsValue;
+    }
+
+    // Calculate Total Interest
+    const totalInterest = totalLoanAmount - amountValue;
+
+    // Set Loan Details to State
+    setLoanDetails({
+        selectedYears: yearsValue,
+        selectedMonths: monthsValue,
+        loanAmount: amountValue,
+        interestRate: interestRateValue,
+        totalLoan: totalLoanAmount,
+        monthlyPayment,
+        totalInterest,
+        totalMonths: totalMonthsValue,
+    });
+};
+    const exportPDF = () => {
+    const margin = 14.2;  // Convert 0.5 inches to mm (1 inch = 25.4mm, so 0.5 * 25.4 = 12.7mm, rounded to 14.2mm for consistency)
+    const doc = new jsPDF({ unit: "mm", format: "letter" });  // Set to letter size (8.5" x 11")
+
+    // Title Section - Larger font and centered
+    doc.setFontSize(22);
+    doc.setFont("times", "bold");  // Change font to Times for title
+    doc.text("Loan Payment Summary", 105, margin + 10, { align: "center" });  // Added padding top for header
+
+    // Define the loan data
+    const tableData = [
+        ["Period", `${loanDetails.selectedYears} Years, ${loanDetails.selectedMonths} Months`],
+        ["Monthly Payment", `₱ ${loanDetails.monthlyPayment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
+        ["Total Payment", `₱ ${loanDetails.totalLoan.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
+        ["Total Loan", `₱ ${(loanDetails.totalLoan - loanDetails.loanAmount).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`],
+    ];
+
+    const startX = margin;  // Start drawing the table from the margin
+    let startY = margin + 30;  // Start below the title (with padding for header)
+    const rowHeight = 15;  // Adjusted row height for better readability
+    const columnWidth = (doc.internal.pageSize.width - (2 * margin)) / 4;  // Ensure the columns fit within the page width
+
+    // Apply font style (using Arial for the table content)
+    doc.setFont("arial", "normal"); // Use Arial font for table content
+
+    // Enlarge font size for headers only
+    doc.setFontSize(14); // Set a larger font size for headers
+
+    // Add padding for header
+    const headerPadding = 5; // Padding for header text
+
+    // Draw the table headers - centralize headers with padding
+    const headerTexts = tableData.map(row => row[0]);
+    headerTexts.forEach((header, index) => {
+        doc.text(header, startX + (index * columnWidth) + (columnWidth / 2), startY + headerPadding, { align: "center" });
+    });
+
+    // Set normal font size for table content
+    doc.setFontSize(12);
+
+    // Add padding for table values
+    const valuePadding = 5; // Padding for value cells
+
+    // Draw the table values below the headers - center values with padding
+    const valueTexts = tableData.map(row => row[1]);
+    valueTexts.forEach((value, index) => {
+        const valueX = startX + (index * columnWidth) + (columnWidth / 2);
+        doc.text(value, valueX, startY + rowHeight + valuePadding, { align: "center" });
+    });
+
+    // Add subtle borders to the table for better separation (slightly visible)
+    doc.setLineWidth(0.05);  // Reduced line width for subtle visibility
+    const tableHeight = rowHeight * 2;
+    tableData.forEach((_, index) => {
+        doc.rect(startX + index * columnWidth - 2, startY - 4, columnWidth, tableHeight);
+    });
+
+    // Add a section for notes - clearer disclaimer, centralized
+    doc.setFontSize(10);
+    doc.setFont("arial", "normal");
+    const noteText = "* Please note that the results provided by this calculator are estimates and may vary. The final loan amount, interest rates, and monthly payments will be determined by the bank upon approval.";
+    doc.text(noteText, 105, startY + tableHeight + 10, { align: "center", maxWidth: doc.internal.pageSize.width - (2 * margin) });
+
+    // Footer Section - Centered "Thank you" message
+    doc.setFontSize(8);
+    doc.setFont("arial", "normal");
+    doc.text("Thank you for using our Loan Calculator", 105, startY + tableHeight + 25, { align: "center" });
+
+    // Save the PDF
+    doc.save('loan_calculator_summary.pdf');
     };
+
+
+
+
+// Button to trigger the PDF export
+
 return (
     <>
      <SEO
@@ -172,6 +257,9 @@ return (
                 <div className="text-sm text-gray-500 mt-4">
                     * Please note that the results provided by this calculator are estimates and may vary. The final loan amount, interest rates, and monthly payments will be determined by the bank upon approval.
                 </div>
+                <button onClick={exportPDF} className="mt-8 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+  Export as PDF
+</button>
             </div>
         </div>
     </div>

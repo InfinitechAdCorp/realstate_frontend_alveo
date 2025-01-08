@@ -187,12 +187,12 @@ const Header = () => {
               <Image
                 src='/assets/call.png'
                 alt='Call'
-                width={25}
-                height={25}
-                className='w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8'
+                width={15}
+                height={15}
+                className='w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 -mt-3 '
               />
               <p className='ml-2 text-sm sm:text-base lg:text-lg xl:text-xl'>
-                123-4567
+                CALL (632) 88485000
               </p>
             </div>
           )}

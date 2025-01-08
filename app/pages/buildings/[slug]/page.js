@@ -97,33 +97,27 @@ export default function BlogPost({ params }) {
       <div className=" p-4 md:p-8 mt-2 w-full mb-20">
         <h1 className="text-2xl font-bold mb-4 text-center">{property.name}</h1>
         <div className="grid gap-4 lg:flex justify-center items-center text-center w-full 2xl:w-8/12 mx-auto">
-     <img
+ <img
   src={
-    property.path && property.path.startsWith("https://infinitech-testing1.online/")
+    property.path?.startsWith("https://") 
       ? property.path // If it's already a full URL, use it directly
-      : property.path && property.path.startsWith("property/")
-      ? `https://infinitech-testing1.online/${property.path}` // If the path starts with 'property/', use it directly with the server URL
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
-          property.path.replace("assets/Location/", "")
-        )}` // Otherwise, construct the URL for 'assets/Location/'
+      : `https://infinitech-testing1.online/${property.path}`
   }
   alt={property.name}
   className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
 />
 
-         <img
+
+     <img
   src={
-    property.view && property.view.startsWith("https://infinitech-testing1.online/")
+    property.view?.startsWith("https://") 
       ? property.view // If it's already a full URL, use it directly
-      : property.view && property.view.startsWith("property/")
-      ? `https://infinitech-testing1.online/${property.view}` // If the path starts with 'property/', use it directly with the server URL
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
-          property.view.replace("assets/Location/", "")
-        )}` // Otherwise, construct the URL for 'assets/Location/'
+      : `https://infinitech-testing1.online/${property.view}`
   }
   alt={property.name}
   className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
 />
+
 
         </div>
 
@@ -161,17 +155,11 @@ export default function BlogPost({ params }) {
                   className="border rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 hover:shadow-xl"
                 >
                   <h4>{feature.name}</h4>
-               <img
+      <img
   src={
-    feature.image.startsWith("https://infinitech-testing1.online/") // If it's already a full URL
-      ? feature.image
-      : feature.image.startsWith("/property/") // If it starts with /property/
-      ? `https://infinitech-testing1.online${feature.image.replace(/\\/g, "/")}` // Prepend the base URL
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
-          feature.image
-            .replace(/\\/g, "/") // Replace backslashes with forward slashes
-            .replace("assets/Location/", "") // Remove the "assets/Location/" part of the path
-        )}` // Otherwise, handle assets/Location paths
+    feature.image?.startsWith("https://") 
+      ? feature.image // If it's already a full URL, use it directly
+      : `https://infinitech-testing1.online/${feature.image.replace(/\\/g, "/")}` // Replace backslashes and prepend the base URL
   }
   alt={feature.name}
   className="w-full h-auto"
@@ -212,15 +200,13 @@ export default function BlogPost({ params }) {
                 <h3 className="text-xl font-semibold text-center mb-6">
                   {building.name}
                 </h3>
-            <img
+  <img
   src={
-    building.path.startsWith("https://infinitech-testing1.online/") // If it's already a full URL
-      ? building.path
-      : building.path.startsWith("/property/") // If it starts with /property/
-      ? `https://infinitech-testing1.online${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/
-      : `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
-          building.path.replace("assets/Location/", "")
-        )}` // Otherwise, handle assets/Location paths
+    building.path && building.path.startsWith("https://")
+      ? building.path // If it's already a full URL, use it directly
+      : building.path 
+        ? `https://infinitech-testing1.online/${building.path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
+        : '' // If there's no path, set it to an empty string or fallback image URL
   }
   alt={building.name}
   className="w-full h-60 rounded-lg mb-6"
