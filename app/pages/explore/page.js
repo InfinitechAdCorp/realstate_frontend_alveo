@@ -50,7 +50,7 @@ function ExplorePage() {
 
   const fetchBuildings = async (value) => {
     try {
-      const endpoint = "https://infinitech-testing1.online/api/getbuildings";
+      const endpoint = "http://localhost:8000/api/getbuildings";
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -94,7 +94,7 @@ function ExplorePage() {
   const handleBuildingClick = async (buildingId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/property/id/${buildingId}`
+        `http://localhost:8000/api/property/id/${buildingId}`
       );
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -103,7 +103,7 @@ function ExplorePage() {
       const propertyData = await response.json();
 
       // Redirect to the new URL using the property ID
-      window.location.href = `https://realstate-frontend-alveo.vercel.app/pages/buildings/${buildingId}`;
+      window.location.href = `http://localhost:3000/pages/buildings/${buildingId}`;
     } catch (error) {
       console.error("Error fetching property:", error);
     }
@@ -120,7 +120,7 @@ function ExplorePage() {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, properties, parkings, building features, property features, property, buildings, building type"
-  canonical="https://realstate-frontend-alveo.vercel.app/pages/explore"
+  canonical="http://localhost:3000/pages/explore"
 />
         <div className="mb-10">
     <Header />
@@ -162,12 +162,12 @@ function ExplorePage() {
               <div className="card">
                 <img
   src={
-    building.path && building.path.startsWith("https://infinitech-testing1.online/") // Check if building.path exists and is a full URL
+    building.path && building.path.startsWith("http://localhost:8000/") // Check if building.path exists and is a full URL
       ? building.path // Use the full URL directly
       : building.path && building.path.startsWith("/property/") // If it starts with "/property/"
-      ? `https://infinitech-testing1.online${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/ paths
+      ? `http://localhost:8000${building.path.replace(/\\/g, "/")}` // Prepend the base URL for /property/ paths
       : building.path // Handle other cases, like assets/Location
-      ? `https://infinitech-testing1.online/assets/Location/${encodeURIComponent(
+      ? `http://localhost:8000/assets/Location/${encodeURIComponent(
           building.path.replace("assets/Location/", "")
         )}` // Handle assets/Location paths
       : '' // Fallback if building.path is null or undefined

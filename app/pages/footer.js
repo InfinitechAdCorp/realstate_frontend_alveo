@@ -26,6 +26,7 @@ const Footer = () => {
     document.body.removeChild(link) // Remove from DOM
   }
 
+
   return (
     <>
       <SEO

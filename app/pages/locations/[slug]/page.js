@@ -16,34 +16,41 @@ export default function BlogPost ({ params }) {
 
   // Fetch locations dynamically and set posts object
 useEffect(() => {
-  console.log(params.slug);
+  console.log(params.slug); // Check if params.slug is correct
   // Fetch data from the backend API using template literal for params
-  fetch(`https://infinitech-testing1.online/api/areas/${params.slug}`) // Correctly interpolated the URL with params
+  fetch(`http://localhost:8000/api/areas/${params.slug}`)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       return response.json();
     })
-.then(response => {
-  console.log('Fetched data:', response.data); // Log the fetched data
+    .then(response => {
+      console.log('Fetched data:', response.data); // Log the fetched data
 
-  const fetchedPosts = {};
-  // Process the data into a key-value object
-  const location = response.data; // The fetched location object from the API
-  const key = location.area_name; // Use the area_name as the key
+      if (response.data && Array.isArray(response.data) && response.data.length > 0) {
+        const fetchedPosts = {};
 
-  fetchedPosts[key] = {
-    location: location.area_name,
-    key: key,
-    path: location.image, // Image path from the API
-    title: location.title,
-    intro: location.description
-  };
+        // Assuming the first item in the array is the relevant data
+        const location = response.data[0];
+        const key = location.area_name;
 
-  setPosts(fetchedPosts); // Set the transformed data to state
-});
+        fetchedPosts[key] = {
+          location: location.area_name,
+          key: key,
+          path: location.image, // Image path from the API
+          title: location.title,
+          intro: location.description,
+        };
 
+        setPosts(fetchedPosts); // Set the transformed data to state
+      } else {
+        console.error('No data available in the response');
+      }
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
 }, [params]); // Add `params` as a dependency to refetch when params change
 
 
@@ -58,12 +65,12 @@ useEffect(() => {
   const PropertyCard = ({ property, onClick }) => {
     return (
 
- <div className='flex w-80 flex-col bg-gray-100 rounded-lg shadow-lg mx-auto h-[550px] lg:w-3/3 xl:w-full overflow-hidden text-center transform transition-transform duration-300 ease-in-out m-2 hover:translate-y-3 hover:shadow-xl'>
+ <div className='flex w-80 flex-col bg-gray-100 rounded-lg shadow-lg mx-auto h-[350px] lg:w-3/3 xl:w-full overflow-hidden text-center transform transition-transform duration-300 ease-in-out m-2 hover:translate-y-3 hover:shadow-xl'>
   <SEO
     title='REAL ESTATE'
     description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.'
     keywords='alveo, real estate, location, property, building location, property location'
-    canonical='https://realstate-frontend-alveo.vercel.app/pages/locations'
+    canonical='http://localhost:3000/pages/locations'
   />
   
   <Image
@@ -71,47 +78,60 @@ useEffect(() => {
       property.path
         ? (property.path.startsWith('http') || property.path.startsWith('https'))
           ? property.path // If it's a URL, use it directly
-          : `https://infinitech-testing1.online/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
+          : `http://localhost:8000/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the local server URL
         : '' // Fallback if property.path is null or undefined
     }
     alt={property.name}
-    width={400} // Adjusted width
-    height={300} // Adjusted height
+    width={500} // Adjusted width
+    height={800} // Adjusted height
     className='w-full h-[250px] object-cover' // Set a fixed height for the image
   />
 
-  <div className='p-6 flex flex-col justify-between h-full'>
-    <h2 className='text-2xl font-bold mb-4 text-gray-800 lg:text-4xl xl:text-3xl'>
-      {property.name}
-    </h2>
-    <p className='text-lg text-orange-600 mb-2 lg:text-2xl xl:text-xl'>
-      <strong>Price Range:</strong> {property.price_range}
-    </p>
-    <p className='text-md text-gray-600 mb-2 lg:text-2xl xl:text-xl'>
-      <strong>Status:</strong> {property.status}
-    </p>
-    <p className='text-md text-gray-600 lg:text-2xl xl:text-xl'>
-      <strong>Location:</strong> {property.specific_location}
-    </p>
-  </div>
+<div className="p-4 flex flex-col justify-between h-full">
+  <h2 className="text-lg font-semibold mb-2 text-gray-800 lg:text-xl xl:text-lg">
+    {property.name}
+  </h2>
+  <p className="text-sm text-orange-600 mb-1 lg:text-base xl:text-sm">
+    <strong>Price Range:</strong> {property.price_range}
+  </p>
+  <p className="text-sm text-gray-600 mb-1 lg:text-base xl:text-sm">
+    <strong>Status:</strong> {property.status}
+  </p>
+  <p className="text-sm text-gray-600 lg:text-base xl:text-sm">
+    <strong>Location:</strong> {property.specific_location}
+  </p>
+</div>
+
 </div>
 
     )
   }
 
-  useEffect(() => {
-    const fetchApi = async () => {
-      try {
-        const response = await fetch(`https://infinitech-testing1.online/api/blog/${slug}`)
-        if (!response.ok) {
-          throw new Error('Failed to fetch blog post data')
-        }
-        const fetchedData = await response.json()
-        setPropertyData(fetchedData)
-      } catch (err) {}
+useEffect(() => {
+  const fetchApi = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/blog/${slug}`)
+      if (!response.ok) {
+        throw new Error('Failed to fetch blog post data')
+      }
+      const fetchedData = await response.json()
+      console.log(fetchedData)
+
+      // If fetchedData is an object (single property), wrap it in an array
+  if (Array.isArray(fetchedData) && fetchedData.length > 0) {
+  setPropertyData(fetchedData);  // Directly set the array if it's an array
+} else if (fetchedData && typeof fetchedData === 'object' && !Array.isArray(fetchedData)) {
+  setPropertyData([fetchedData]);  // Wrap in array if it's a single object
+} else {
+  console.error("Fetched data is not the expected format:", fetchedData);
+}
+
+    } catch (err) {
+      console.error("Error fetching data:", err)
     }
-    fetchApi() // Call the fetch function
-  }, [slug])
+  }
+  fetchApi()
+}, [slug])
 
   return (
     <>
@@ -125,13 +145,13 @@ useEffect(() => {
     <div key={post.key} className="relative mt-1 w-full">
        <Directory
       currentLocation='LOCATION'
-      specificLocation={`${post.location.toUpperCase()}`} // Pass location here
+      specificLocation={`${post.location}`} // Pass location here
     />
     <img
-  src={`https://realstate-frontend-alveo.vercel.app${post.path}`} // Try to load from localhost:3000
+  src={`http://localhost:3000${post.path}`} // Try to load from localhost:3000
   onError={(e) => {
     e.target.onerror = null; // Prevent infinite loop if image fails
-    e.target.src = `https://infinitech-testing1.online${post.path}`; // Fallback to localhost:8000 if not found
+    e.target.src = `http://localhost:8000${post.path}`; // Fallback to localhost:8000 if not found
   }}
   alt={post.location}
   width={2000}
@@ -165,18 +185,19 @@ useEffect(() => {
     FEATURED PROPERTIES
   </h1>
   <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 mt-5 w-full mb-20'>
-    {propertyData.map(property => (
-      <Link
-        key={property.id}
-        href={`/pages/buildings/${property.id}`}
-        passHref
-        className='no-underline'
-      >
-        <div className="w-full">
-          <PropertyCard property={property} />
-        </div>
-      </Link>
-    ))}
+{propertyData.map(property => (
+  <Link
+    key={property.id}
+    href={`/pages/buildings/${property.id}`}
+    passHref
+    className='no-underline'
+  >
+    <div className="w-full">
+      <PropertyCard property={property} />
+    </div>
+  </Link>
+))}
+
   </div>
 </div>
 
