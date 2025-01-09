@@ -117,7 +117,9 @@ const Header = () => {
   useEffect(() => {
     const fetchArea = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/admin/area");
+        const response = await fetch(
+          "https://infinitech-testing1.online/api/admin/area"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch");
         }

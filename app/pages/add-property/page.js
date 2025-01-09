@@ -165,7 +165,7 @@ function App() {
     // Send the data to the API using fetch
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/submit-property",
+        "https://infinitech-testing1.online/api/admin/submit-property",
         {
           method: "POST",
           headers: {

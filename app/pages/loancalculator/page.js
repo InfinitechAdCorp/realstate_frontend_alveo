@@ -189,7 +189,7 @@ export default function LoanCalculator() {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, property sale, property investment, property price, property loan, building price, condiminium loan"
-        canonical="http://localhost:3000/pages/loancalculator"
+        canonical="https://realstate-frontend-alveo.vercel.app/pages/loancalculator"
       />
 
       <Header />
