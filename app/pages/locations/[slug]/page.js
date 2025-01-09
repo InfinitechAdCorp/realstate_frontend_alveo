@@ -17,7 +17,7 @@ export default function BlogPost({ params }) {
   useEffect(() => {
     console.log(params.slug); // Check if params.slug is correct
     // Fetch data from the backend API using template literal for params
-    fetch(`https://infinitech-testing1.online/api/areas/${params.slug}`)
+    fetch(`http://localhost:8000/api/areas/${params.slug}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -70,7 +70,7 @@ export default function BlogPost({ params }) {
           title="REAL ESTATE"
           description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter."
           keywords="alveo, real estate, location, property, building location, property location"
-          canonical="https://realstate-frontend-alveo.vercel.app/pages/locations"
+          canonical="http://localhost:3000/pages/locations"
         />
 
         <Image
@@ -79,10 +79,7 @@ export default function BlogPost({ params }) {
               ? property.path.startsWith("http") ||
                 property.path.startsWith("https")
                 ? property.path // If it's a URL, use it directly
-                : `https://infinitech-testing1.online/${property.path.replace(
-                    /\\/g,
-                    "/"
-                  )}` // If it's a local asset, prepend the local server URL
+                : `http://localhost:8000/${property.path.replace(/\\/g, "/")}` // If it's a local asset, prepend the local server URL
               : "" // Fallback if property.path is null or undefined
           }
           alt={property.name}
@@ -112,9 +109,7 @@ export default function BlogPost({ params }) {
   useEffect(() => {
     const fetchApi = async () => {
       try {
-        const response = await fetch(
-          `https://infinitech-testing1.online/api/blog/${slug}`
-        );
+        const response = await fetch(`http://localhost:8000/api/blog/${slug}`);
         if (!response.ok) {
           throw new Error("Failed to fetch blog post data");
         }
@@ -156,10 +151,10 @@ export default function BlogPost({ params }) {
                   specificLocation={`${post.location}`} // Pass location here
                 />
                 <img
-                  src={`https://realstate-frontend-alveo.vercel.app${post.path}`} // Try to load from localhost:3000
+                  src={`http://localhost:3000${post.path}`} // Try to load from localhost:3000
                   onError={(e) => {
                     e.target.onerror = null; // Prevent infinite loop if image fails
-                    e.target.src = `https://infinitech-testing1.online${post.path}`; // Fallback to localhost:8000 if not found
+                    e.target.src = `http://localhost:8000${post.path}`; // Fallback to localhost:8000 if not found
                   }}
                   alt={post.location}
                   width={2000}

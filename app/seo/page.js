@@ -21,10 +21,7 @@ export default function SEO({ title, description, keywords, canonical }) {
         name="keywords"
         content={keywords || "ALVEO, REALSTATE, REAL-STATE, INFINITECH"}
       />
-      <link
-        rel="canonical"
-        href={canonical || "https://realstate-frontend-alveo.vercel.app/"}
-      />
+      <link rel="canonical" href={canonical || "http://localhost:3000/"} />
       <link rel="icon" href="/favicon.ico" />
 
       {/* Open Graph */}
@@ -36,10 +33,7 @@ export default function SEO({ title, description, keywords, canonical }) {
           "Alveo delivers innovative real estate solutions, offering upscale living and workspaces in dynamic growth hubs nationwide."
         }
       />
-      <meta
-        property="og:url"
-        content={canonical || "https://realstate-frontend-alveo.vercel.app/"}
-      />
+      <meta property="og:url" content={canonical || "http://localhost:3000/"} />
       <meta property="og:type" content="website" />
       <meta property="og:image" content="/assets/Alveo.png" />
 
@@ -64,7 +58,7 @@ export default function SEO({ title, description, keywords, canonical }) {
           "@context": "https://schema.org",
           "@type": "RealEstateAgent",
           name: title || "REAL ESTATE",
-          url: canonical || "https://realstate-frontend-alveo.vercel.app/",
+          url: canonical || "http://localhost:3000/",
           description:
             description ||
             "Alveo delivers innovative real estate solutions, offering upscale living and workspaces in dynamic growth hubs nationwide.",

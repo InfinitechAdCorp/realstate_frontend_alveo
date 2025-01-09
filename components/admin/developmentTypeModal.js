@@ -31,7 +31,7 @@ const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
 
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/add-development-type",
+        "http://localhost:8000/api/admin/add-development-type",
         {
           method: "POST",
           body: formData, // No need to set headers for formData

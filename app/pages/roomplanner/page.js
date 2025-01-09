@@ -317,9 +317,7 @@ const CanvasApp = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "https://infinitech-testing1.online/api/roomplanner"
-      );
+      const response = await fetch("http://localhost:8000/api/roomplanner");
       const data = await response.json();
       const grouped = data.data.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -497,7 +495,7 @@ const CanvasApp = () => {
     const width = (item.dataset.width * 37.8) / scaling;
     const height = (item.dataset.height * 37.8) / scaling;
 
-    const imageURL = `https://realstate-frontend-alveo.vercel.app/assets/RoomPlanner/${encodeURIComponent(
+    const imageURL = `http://localhost:3000/assets/RoomPlanner/${encodeURIComponent(
       category
     )}/${encodeURIComponent(picture)}`;
 
@@ -865,7 +863,7 @@ const CanvasApp = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, property customize, building format, property layout, roomplanner, roomlayout, realstate customization,room layout"
-        canonical="https://realstate-frontend-alveo.vercel.app/pages/roomplanner"
+        canonical="http://localhost:3000/pages/roomplanner"
       />
       <div className="header-container bg-blue-500">
         <div className="button-container flex flex-wrap gap-1 justify-center p-3 bg-blue-500">
@@ -952,7 +950,7 @@ const CanvasApp = () => {
                           {item.height} x {item.width}
                         </p>
                         <img
-                          src={`https://realstate-frontend-alveo.vercel.app/assets/RoomPlanner/${category}/${item.picture}`}
+                          src={`http://localhost:3000/assets/RoomPlanner/${category}/${item.picture}`}
                           alt={item.name}
                           className="w-16 h-16 xl:w-24 xl:h-24 cursor-pointer"
                           data-category={category}
