@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { showToast } from '@/components/alert/page';
+import React, { useState } from "react";
+import { showToast } from "@/components/alert/page";
 
 const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
-  const [inputValue, setInputValue] = useState(''); // State to handle input field
-  const [error, setError] = useState(''); // State to handle errors
-  const [success, setSuccess] = useState(''); // State to show success messages
+  const [inputValue, setInputValue] = useState(""); // State to handle input field
+  const [error, setError] = useState(""); // State to handle errors
+  const [success, setSuccess] = useState(""); // State to show success messages
   const handleShowSuccessToast = (message) => {
-    showToast(message, 'success');
+    showToast(message, "success");
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, 'error'); // Error toast
+    showToast(message, "error"); // Error toast
   };
 
   const handleShowWarningToast = (message) => {
-    showToast(message, 'warning'); // Warning toast
+    showToast(message, "warning"); // Warning toast
   };
   // Handle change in input field
   const handleInputChange = (event) => {
@@ -23,28 +23,33 @@ const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
 
   // Submit data to the backend using fetch
   const handleSubmit = async () => {
-    setError(''); // Clear previous errors
-    setSuccess(''); // Clear previous success messages
+    setError(""); // Clear previous errors
+    setSuccess(""); // Clear previous success messages
 
     const formData = new FormData();
-    formData.append('name', inputValue);
+    formData.append("name", inputValue);
 
     try {
-      const response = await fetch('http://localhost:8000/api/admin/add-development-type', {
-        method: 'POST',
-        body: formData, // No need to set headers for formData
-      });
+      const response = await fetch(
+        "https://infinitech-testing1.online/api/admin/add-development-type",
+        {
+          method: "POST",
+          body: formData, // No need to set headers for formData
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        handleShowSuccessToast(data.message || 'Development Type added successfully');
-        setInputValue(''); // Clear the input field
+        handleShowSuccessToast(
+          data.message || "Development Type added successfully"
+        );
+        setInputValue(""); // Clear the input field
       } else {
-        handleShowErrorToast(data.message || 'Failed to add Development Type');
+        handleShowErrorToast(data.message || "Failed to add Development Type");
       }
     } catch (err) {
-      handleShowErrorToast('An error occurred while submitting the data');
+      handleShowErrorToast("An error occurred while submitting the data");
     }
   };
 
@@ -65,11 +70,13 @@ const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
         className="bg-white p-6 rounded-lg w-11/12 sm:w-96 shadow-lg"
         onClick={handleModalContentClick}
       >
-        <h2 className="text-xl font-semibold text-center mb-4">Development Type</h2>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
-        {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}
-
+        <h2 className="text-xl font-semibold text-center mb-4">
+          Development Type
+        </h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
+        {/* Error message */}
+        {success && <p className="text-green-500 mb-4">{success}</p>}{" "}
+        {/* Success message */}
         <input
           type="text"
           value={inputValue}
@@ -77,7 +84,6 @@ const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
           placeholder="Enter Development Type"
           className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-
         <div className="flex justify-between">
           <button
             onClick={closeModal}

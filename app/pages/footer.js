@@ -2,7 +2,6 @@
 import { useRouter } from "next/router"; // Import useRouter for navigation
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image"; // Assuming you're using Next.js's Image component
-import Link from "next/link";
 import { throttle } from "lodash";
 import { useSession, signIn, signOut } from "next-auth/react";
 
@@ -32,28 +31,25 @@ const Footer = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury living, property, contacts, services, account"
-        canonical="http://localhost:3000"
+        canonical="https://realstate-frontend-alveo.vercel.app"
       />
       <div
         className="text-center xl:-mt-14 2xl:mt-1 xl:z-50 text-white h-100 gap-12 lg:text-2xl xl:text-left xl:flex xl:flex-row xl:items-start"
         style={{ background: "#002B47" }}
       >
-
-        <div className='xl:w-1/3 max-sm:-mt-3 sm:mt-5 flex flex-col items-center justify-center'>
-          <div className='flex flex-col text-left xl:text-left max-sm:mt-5 sm:pt-10 '>
+        <div className="xl:w-1/3 max-sm:-mt-3 sm:mt-5 flex flex-col items-start justify-start">
+          <div className="flex flex-col text-left xl:text-left max-sm:mt-5 sm:pt-10 ms-40">
             <h1>Λ L V E O</h1>
-            <p className='text-sm'>an AyalaLand company</p>
+            <p>an AyalaLand company</p>
           </div>
-          <div className='mb-3 text-sm '>
+          <div className="mt-4 text-sm ms-40">
             <button
               onClick={handleDownloadClick}
-              className='bg-blue-500 text-white py-2 px-4 rounded'
-
+              className="bg-blue-500 text-white py-2 px-4 rounded"
             >
               Download APK
             </button>
           </div>
-
         </div>
 
         <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20">
@@ -78,67 +74,36 @@ const Footer = () => {
             info@alveoland.com.ph
           </p>
         </div>
-        {/* For large and medium screens */}
-        <div className='hidden md:flex flex-col xl:flex-row gap-12 p-3'>
-          {/* Contact Us Section */}
-          <div className='w-full xl:w-1/3 px-4 xl:px-8 text-left'>
-            <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'>
-              Contact Us
-            </h1>
-            <p className='text-sm sm:text-base mb-6'>
-              Our dedicated teams are ready to assist you with needed
-              information on Alveo Land properties, wherever you are.
-            </p>
-            <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
-              Customer Hotline:
-            </h1>
-            <p className='text-sm sm:text-base mb-6'>(+632) 8848 5000</p>
-            <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
-              Email:
-            </h1>
-            <p className='text-sm sm:text-base'>info@alveoland.com.ph</p>
-          </div>
 
-          {/* Location Section */}
-          <div className='w-full xl:w-1/3 px-4 xl:px-8 text-left'>
-            <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'>
-              Location:
-            </h1>
-            <p className='text-sm sm:text-base'>
-              Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
-              Taguig City, Metro Manila, Philippines
-            </p>
-          </div>
+        <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20">
+          <h1 className="xl:text-3xl xl:mt-10 text-2xl sm:text-3xl lg:text-5xl">
+            Location:
+          </h1>
+          <h5 className="xl:text-lg text-sm sm:text-xl lg:text-2xl">
+            Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
+            Taguig City, Metro Manila Philippines
+          </h5>
 
+          {/* Container for Images and Labels */}
+          {/* <div className="flex sm:justify-center xl:justify-start mt-4">
+    <div className="flex flex-col items-start w-full sm:w-20">
+      {[
+        { src: "/assets/socialmedia/facebook.png", label: "Facebook" },
+        { src: "/assets/socialmedia/messenger.png", label: "Messenger" },
+        { src: "/assets/socialmedia/telegram.png", label: "Telegram" },
+        { src: "/assets/socialmedia/viber.png", label: "Viber" },
+      ].map((item, index) => (
+        <div key={index} className="flex items-center space-x-2 mt-2">
+          <img
+            src={item.src}
+            className="w-6 h-6 lg:w-8 lg:h-8"
+            alt={item.label}
+          />
+          <h3 className="text-lg sm:text-xl lg:text-2xl">{item.label}</h3>
         </div>
-
-        {/* For small screens */}
-        <div className='flex flex-col gap-12 p-3 md:hidden'>
-          {/* Contact Us Section */}
-          <div className='w-full px-4 text-left'>
-            <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'>
-              Contact Us
-            </h1>
-            <p className='text-sm sm:text-base mb-6'>
-              Our dedicated teams are ready to assist you with needed
-              information on Alveo Land properties, wherever you are.
-            </p>
-            <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
-              Customer Hotline:
-            </h1>
-            <p className='text-sm sm:text-base mb-6'>(+632) 8848 5000</p>
-            <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
-              Email:
-            </h1>
-            <p className='text-sm sm:text-base'>info@alveoland.com.ph</p>
-            <h1 className='text-xl sm:text-2xl lg:text-3xl font-bold mb-2'>
-              Location:
-            </h1>
-            <p className='text-sm sm:text-base'>
-              Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
-              Taguig City, Metro Manila, Philippines
-            </p>
-          </div>
+      ))}
+    </div>
+  </div> */}
         </div>
       </div>
     </>

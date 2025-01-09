@@ -1,61 +1,61 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { showToast } from '@/components/alert/page';
+import { useState } from "react";
+import { showToast } from "@/components/alert/page";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
-    inquiryType: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    location: '',
-    message: ''
+    inquiryType: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    location: "",
+    message: "",
   });
   const handleShowSuccessToast = (message) => {
-    showToast(message, 'success');
+    showToast(message, "success");
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, 'error'); // Error toast
+    showToast(message, "error"); // Error toast
   };
 
   const handleShowWarningToast = (message) => {
-    showToast(message, 'warning'); // Warning toast
+    showToast(message, "warning"); // Warning toast
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('http://localhost:8000/api/contact', {
-      method: 'POST',
+    const res = await fetch("https://infinitech-testing1.online/api/contact", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     });
 
     if (res.ok) {
-      handleShowSuccessToast('Message sent successfully!');
+      handleShowSuccessToast("Message sent successfully!");
       setFormData({
-        inquiryType: '',
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        location: '',
-        message: ''
+        inquiryType: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        location: "",
+        message: "",
       });
     } else {
-      handleShowErrorToast('Something went wrong, please try again!');
+      handleShowErrorToast("Something went wrong, please try again!");
     }
   };
 
@@ -66,7 +66,10 @@ const ContactForm = () => {
         <h2 className="text-3xl font-bold mb-6 text-gray-800">Get in Touch</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="inquiryType">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="inquiryType"
+            >
               What can we help you with?
             </label>
             <select
@@ -87,7 +90,10 @@ const ContactForm = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-gray-700 font-medium mb-1" htmlFor="firstName">
+              <label
+                className="block text-gray-700 font-medium mb-1"
+                htmlFor="firstName"
+              >
                 First Name
               </label>
               <input
@@ -101,7 +107,10 @@ const ContactForm = () => {
               />
             </div>
             <div>
-              <label className="block text-gray-700 font-medium mb-1" htmlFor="lastName">
+              <label
+                className="block text-gray-700 font-medium mb-1"
+                htmlFor="lastName"
+              >
                 Last Name
               </label>
               <input
@@ -117,7 +126,10 @@ const ContactForm = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="email">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="email"
+            >
               Email
             </label>
             <input
@@ -132,7 +144,10 @@ const ContactForm = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="phone">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="phone"
+            >
               Phone Number
             </label>
             <input
@@ -147,7 +162,10 @@ const ContactForm = () => {
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="message">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="message"
+            >
               Message
             </label>
             <textarea
@@ -172,7 +190,9 @@ const ContactForm = () => {
 
       {/* Contact Info */}
       <div className="bg-gray-50 p-8 rounded">
-        <h3 className="text-2xl font-bold mb-6 text-gray-800">Contact Information</h3>
+        <h3 className="text-2xl font-bold mb-6 text-gray-800">
+          Contact Information
+        </h3>
         <div className="space-y-6 text-gray-700">
           <div>
             <h4 className="font-semibold mb-2">📞 Phone</h4>
@@ -185,15 +205,31 @@ const ContactForm = () => {
           <div>
             <h4 className="font-semibold mb-2">📧 Email</h4>
             <ul>
-              <li>Sales: <a href="mailto:sales@dmcihomes.com" className="text-blue-600">sales@dmcihomes.com</a></li>
-              <li>Customer Care: <a href="mailto:customercare@dmcihomes.com" className="text-blue-600">customercare@dmcihomes.com</a></li>
+              <li>
+                Sales:{" "}
+                <a href="mailto:sales@dmcihomes.com" className="text-blue-600">
+                  sales@dmcihomes.com
+                </a>
+              </li>
+              <li>
+                Customer Care:{" "}
+                <a
+                  href="mailto:customercare@dmcihomes.com"
+                  className="text-blue-600"
+                >
+                  customercare@dmcihomes.com
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="font-semibold mb-2">📅 Set an Appointment</h4>
             <p>
-              Avoid the queues, book a visit at{' '}
-              <a href="https://book.dmcihomes.com" className="text-blue-600 underline">
+              Avoid the queues, book a visit at{" "}
+              <a
+                href="https://book.dmcihomes.com"
+                className="text-blue-600 underline"
+              >
                 book.dmcihomes.com
               </a>
             </p>
