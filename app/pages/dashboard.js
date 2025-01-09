@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { showToast } from '../../components/alert/page' // Adjust the import path if necessary
-
+import { CiSearch } from "react-icons/ci";
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -68,9 +68,9 @@ const Carousel = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-
-        const response = await fetch("http://localhost:8000/api/allproperty");
-
+        const response = await fetch(
+          'https://127.0.0.1/api/allproperty'
+        )
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
@@ -199,11 +199,11 @@ const Map = () => {
     // Fetch locations from the Laravel API
     const fetchLocations = async () => {
       try {
-
-        const response = await fetch("http://localhost:8000/api/locations");
-        const data = await response.json();
-        setLocations(data); // Update state with fetched data
-
+        const response = await fetch(
+          'https://infinitech-testing1.online/api/locations'
+        )
+        const data = await response.json()
+        setLocations(data) // Update state with fetched data
       } catch (error) {
         console.error('Error fetching locations:', error)
       }
@@ -338,6 +338,7 @@ const ImageSlider = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchLocations = async () => {
+
   try {
     const response = await fetch("http://localhost:8000/api/properties");
     if (!response.ok) {
@@ -362,6 +363,7 @@ const ImageSlider = () => {
       setLocations(simplifiedProperties); // Assuming setLocations sets the state
     } else {
       console.error("Invalid properties data structure", data);
+
     }
   } catch (error) {
     console.error("Error fetching locations:", error);
@@ -400,6 +402,7 @@ const ImageSlider = () => {
 
       {/* Only show the location image if there are locations */}
       {locations && locations.length > 0 && (
+
         <div className="relative w-full h-auto rounded-lg overflow-hidden cursor-pointer z-10">
           <a
             href={`/pages/buildings/${encodeURIComponent(locations[currentIndex].id)}`}
@@ -410,6 +413,7 @@ const ImageSlider = () => {
                 locations[currentIndex].path && locations[currentIndex].path.startsWith("https://")
                   ? locations[currentIndex].path // If it's already a full URL, use it directly
                   : locations[currentIndex].path
+
                   ? `http://localhost:8000/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
                   : '' // If there's no path, set it to an empty string or fallback image URL
               }
@@ -421,7 +425,7 @@ const ImageSlider = () => {
               onLoad={handleImageLoad}
               priority
             />
-          </a>
+          </Link>
 
           {/* Location info overlay */}
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center p-3 text-sm z-30">
@@ -471,21 +475,19 @@ const AlveoBanner = () => {
   }
 
   const closePopup = () => {
-
-    closeEnlargedImage();
-    setPopupVisible(false);
-  };
-  const handleSelectChange = (event) => {
-    const dropdownValue = event.target.value;
-    console.log(dropdownValue)
-    setSelectedValue(dropdownValue);
-    setSearchInput(""); // Clear search input when dropdown changes
-    setSuggestions([]); // Clear suggestions when dropdown changes
-    setShowSuggestions(false);
-  };
- const handleSearchInputChange = (event) => {
-    const searchValue = event.target.value;
-    setSearchInput(searchValue);
+    closeEnlargedImage()
+    setPopupVisible(false)
+  }
+  const handleSelectChange = event => {
+    const dropdownValue = event.target.value
+    setSelectedValue(dropdownValue)
+    setSearchInput('') // Clear search input when dropdown changes
+    setSuggestions([]) // Clear suggestions when dropdown changes
+    setShowSuggestions(false)
+  }
+  const handleSearchInputChange = event => {
+    const searchValue = event.target.value
+    setSearchInput(searchValue)
 
     // Trigger fetch only if both dropdown and input have values
     if (selectedValue && searchValue) {
@@ -495,6 +497,7 @@ const AlveoBanner = () => {
       setSuggestions([]) // Clear suggestions if either value is missing
       setIsSuggestionsVisible(false) // Hide suggestions if no valid search
     }
+
 
   };
 const fetchSuggestions = async (filter, searchValue) => {
@@ -526,6 +529,7 @@ const fetchSuggestions = async (filter, searchValue) => {
     setSuggestions(uniqueSuggestions); // Set unique filtered suggestions
   } catch (error) {
     console.error("Error fetching suggestions:", error);
+
   }
 };
 
@@ -557,7 +561,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   const fetchBuildingFeatures = async propertyId => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/buildingfeatures?property_id=${propertyId}`,
+        `https://infinitech-testing1.online/api/buildingfeatures?property_id=${propertyId}`,
         {
           method: 'GET',
           headers: {
@@ -581,7 +585,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   const fetchBuildings = async propertyId => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/buildings?property_id=${propertyId}`,
+        `https://infinitech-testing1.online/api/buildings?property_id=${propertyId}`,
         {
           method: 'GET',
           headers: {
@@ -603,14 +607,10 @@ const fetchSuggestions = async (filter, searchValue) => {
   }
 
   const fetchData = async (filter, searchValue, callback) => {
-
-    if (!filter){
-      filter ="All"
-    }
-    console.log(filter)
+    console.log(filter, searchValue, callback)
     try {
       const response = await fetch(
-        `http://localhost:8000/api/searchProperty?filter=${filter}&search=${searchValue}`,
+        `https://infinitech-testing1.online/api/searchProperty?filter=${filter}&search=${searchValue}`,
         {
           method: 'GET',
           headers: {
@@ -661,25 +661,13 @@ const fetchSuggestions = async (filter, searchValue) => {
     }
   }
 
-
-  const arrowFetch = () => {  
-   if (!selectedValue  || selectedValue ==="All") {
-    console.log("No value selected in dropdown");
-  } else {
-    console.log("Selected Value:", selectedValue);
-  }
-
-  // Log search input with a check for emptiness
-  if (!searchInput) {
-    console.log("No input in search field");
-  } else {
-    console.log("Search Input:", searchInput);
-  }
-    hideSuggestions();
-    setShowSuggestions(false);
-    openPopup();
-    setLoading(true);
-
+  const arrowFetch = () => {
+    hideSuggestions()
+    setShowSuggestions(false)
+    openPopup()
+    setLoading(true)
+    console.log(selectedValue, searchInput)
+    if (selectedValue && searchInput) {
       // Fetch the property data based on selected value and search input
       fetchData(selectedValue, searchInput, async properties => {
         if (properties.length > 0) {
@@ -699,12 +687,12 @@ const fetchSuggestions = async (filter, searchValue) => {
           setFetchedData(propertiesWithBuildings)
         } else {
         }
-
-        setLoading(false);
-        setShowSuggestions(false);
-      });
-  
-  };
+        setLoading(false)
+        setShowSuggestions(false)
+      })
+    } else {
+    }
+  }
 
   return (
     <>
@@ -712,6 +700,7 @@ const fetchSuggestions = async (filter, searchValue) => {
 
         <div className="absolute inset-0 bg-cover bg-center bg-[url('/assets/Alveo.png')]">
 
+
          <div className="fixed top-10 right-3 z-50">
   {/* Room Planner Icon */}
   <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10">
@@ -810,104 +799,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   </div>
 
 </div>
-         <div className="fixed top-10 right-3 z-50">
-  {/* Room Planner Icon */}
-  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10">
-    <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      
-      <a href='/pages/roomplanner' target="_blank">
-        <div className="cursor-pointer relative group">
-        <img
-          className="w-7 h-7 sm:w-9 sm:h-9 md:w-7 md:h-7 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-          src="/assets/RoomPlanner/bed.png"
-          alt="Room Planner"
-          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        />
-        <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          Room Planner
-        </span>
-      </div>
-      </a>
-    </div>
-  </div>
 
-  {/* Loan Calculator Icon */}
-  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10">
-    <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <a href="/pages/loancalculator" passHref>
-        <div className="relative group">
-          <img
-            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-            src="/calculator.png"
-            alt="Loan Calculator"
-            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          />
-          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            Loan Calculator
-          </span>
-        </div>
-      </a>
-    </div>
-  </div>
-  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16  m-4 mb-10">
-    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <a href="/pages/set-appointment" passHref>
-        <div className="relative group">
-          <img
-            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-            src="assets/schedule.png"
-            alt="Agent"
-            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          />
-          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            Set Appointment
-          </span>
-        </div>
-      </a>
-    </div>
-  </div>
-  {/* Agent Icon */}
-    <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-28 m-4 mb-10">
-    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <a href="/pages/add-property" passHref>
-        <div className="relative group">
-          <img
-            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-            src="assets/add.png"
-            alt="Agent"
-            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          />
-          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            Submit Property
-          </span>
-        </div>
-      </a>
-    </div>
-  </div>
-  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-40 m-4 mb-10">
-    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <a href="/pages/agent" passHref>
-        <div className="relative group">
-          <img
-            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
-            src="assets/boy.png"
-            alt="Agent"
-            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
-            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
-          />
-          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            Agent
-          </span>
-        </div>
-      </a>
-    </div>
-  </div>
-
-</div>
 
      <div className='content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
             <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
@@ -923,7 +815,7 @@ const fetchSuggestions = async (filter, searchValue) => {
             </div>
           </div>
 
-          <div className='my-6 h-auto grid grid-cols-1 gap-6 relative'>
+          <div className='my-6 mt-10 h-auto grid grid-cols-1 gap-10 relative'>
             {/* Left Column: Search Inputs */}
             <div className='space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative'>
               {/* Search Inputs */}
@@ -962,9 +854,11 @@ const fetchSuggestions = async (filter, searchValue) => {
                   />
                   <button
                     onClick={arrowFetch}
-                    className='absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200'
+                    className='absolute top-1/2 right-0 transform 
+                    -translate-y-1/2  text-black text-xl 
+                    px-4 py-2 transition duration-200'
                   >
-                    Search
+                    <CiSearch />
                   </button>
                 </div>
               </div>
@@ -1058,6 +952,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                       </div>
 
                       {/* Image Gallery */}
+
                       {[property.path, property.view].map((imgPath, imgIndex) => {
                         // Construct the image source URL based on whether it's a relative path or an absolute URL
                         const imageSrc = (() => {
@@ -1092,8 +987,6 @@ const fetchSuggestions = async (filter, searchValue) => {
                           </div>
                         );
                       })}
-
-
 
                       {/* Property Info */}
                       <div className="property-info bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out">
@@ -1162,6 +1055,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                         </span>
                         <ul className="features-list space-y-8 flex flex-col items-center justify-center w-full max-w-4xl -ml-10">
                           {/* Check if there are features available */}
+
                           {property.features && JSON.parse(property.features).length > 0 ? (
                             JSON.parse(property.features).map((feature, featureIndex) => {
                               // Check the type of image path and create the appropriate source URL
@@ -1176,6 +1070,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                                 // If the image path starts with 'http' or 'https', it's already a full URL
                                 if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
                                   return imagePath;
+
                                 }
 
                                 // If it's a relative path (assets folder), convert it to the correct path
@@ -1284,6 +1179,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                               </span>
                               <ul className="mt-3 flex -ml-9 flex-wrap w-80 gap-5">
                                 {/* Grid layout */}
+
                                 {property.buildings.map((building, buildingIndex) => (
                                   <li
                                     key={buildingIndex}
@@ -1361,10 +1257,12 @@ const DashboardComponent = () => {
   return (
     <>
       <SEO
+
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale"
         canonical="http://localhost:3000"
+
       />
 
       <div className="mb-10">
