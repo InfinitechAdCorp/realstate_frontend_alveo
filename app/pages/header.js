@@ -2,7 +2,7 @@
 import { useRouter } from 'next/router' // Import useRouter for navigation
 import React, { useEffect, useState, useRef } from 'react'
 import Image from 'next/image' // Assuming you're using Next.js's Image component
-import Link from 'next/link'
+
 import { throttle } from 'lodash'
 import { useSession, signIn, signOut } from 'next-auth/react'
 /** 
@@ -16,16 +16,16 @@ const services = [
 
 const properties = [
   { title: 'Condominiums', slug: 'condominiums' },
-  { title: 'Residentials', slug: 'residential' },
+  { title: 'Lots', slug: 'residential' },
   { title: 'Commercials', slug: 'commercial' },
   { title: 'Offices', slug: 'office' }
 ]
 ;<ul>
   {properties.map((item, index) => (
     <li key={index}>
-      <Link href={`/pages/explore?specificLocation=${item.slug}`}>
+      <a href={`/pages/explore?specificLocation=${item.slug}`}>
         {item.title}
-      </Link>
+      </a>
     </li>
   ))}
 </ul>
@@ -136,7 +136,7 @@ const Header = () => {
   return (
     <>
   <header className={`${scrolled ? 'scrolled' : ''} fixed top-0 left-0 w-full z-50`}>
-  <div className="bg-blue-500 flex items-center px-3 pt-3 h-12 w-screen relative">
+  <div className="bg-blue-600 flex items-center px-3 pt-3 h-12 w-screen relative">
     {/* Menu Icon */}
     <div className="flex items-center">
       <Image
@@ -156,7 +156,7 @@ const Header = () => {
         className="branding-text"
         style={{ textDecoration: 'none', color: 'inherit' }}
       >
-        <h1 className="text-lg sm:text-lg lg:text-xl font-bold">ALVEO</h1>
+        <h1 className="text-lg sm:text-lg lg:text-xl font-bold">Λ L V E O</h1>
       </a>
     </div>
 
@@ -210,12 +210,12 @@ const Header = () => {
         onKeyDown={e => e.key === 'Escape' && closeSidebar()} // Allows closing on Escape key
       >
         <div className='flex justify-between items-center p-4 border-b border-gray-700 '>
-          <Link
+          <a
             href='/pages/aboutalveo/aboutalveo'
             className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
           >
             ABOUT ALVEO
-          </Link>
+          </a>
           <span
             className='text-xl font-bold cursor-pointer'
             onClick={closeSidebar}
@@ -225,12 +225,12 @@ const Header = () => {
         </div>
 
         <nav className='p-4'>
-          <Link
+          <a
             href='/pages/location'
             className='block text-lg mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
           >
             LOCATIONS
-          </Link>
+          </a>
           <ul className='space-y-2'>
             {areas.map(area => (
               <li key={area.key}>
@@ -245,37 +245,37 @@ const Header = () => {
               </li>
             ))}
           </ul>
-          <Link
+          <a
             href='/pages/explore'
             className='block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
           >
             PROPERTIES FOR SALE
-          </Link>
+          </a>
           <ul className='space-y-2'>
             {properties.map((item, index) => (
               <li key={index}>
-                <Link
+                <a
                   href={`/pages/explore?specificLocation=${item.slug}`}
                   className='block hover:text-gray-300 no-underline text-white lg:text-xl xl:text-sm'
                 >
                   {item.title}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
 
-          <Link
+          <a
             href='/pages/set-appointment'
             className='block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
           >
             SET APPOINTMENT
-          </Link>
-          <Link
+          </a>
+          <a
             href='/pages/submit-property'
             className='block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg'
           >
             SUBMIT PROPERTY
-          </Link>
+          </a>
         </nav>
 
         {isPopupVisible && (
