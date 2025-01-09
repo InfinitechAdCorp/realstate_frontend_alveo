@@ -141,7 +141,7 @@ const SetAppointment = () => {
             <button
               key={timeSlot}
               onClick={() => handleTimeSelection(timeSlot)}
-              className={`px-4 py-2 me-2 border rounded-lg ${
+              className={`px-4 py-2 m-2 me-2 border rounded-lg ${
                 time === timeSlot
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 border-gray-300 hover:bg-blue-100'

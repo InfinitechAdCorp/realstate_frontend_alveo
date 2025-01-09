@@ -151,7 +151,7 @@ export default function BlogPost({ params }) {
               </div>
             </div>
 
-            <div className='h-fit relative mt-96 justify-center p-3'>
+            <div className='h-fit relative mt-96 justify-center p-4 '>
               <div className='container'>
                 <h1 className='text-3xl text-center'>AWARDS AND RECOGNITION</h1>
                 <div className='flex space-x-8 mt-8 justify-center'>

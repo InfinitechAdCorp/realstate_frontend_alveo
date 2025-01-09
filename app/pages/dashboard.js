@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { showToast } from '../../components/alert/page' // Adjust the import path if necessary
-
+import { CiSearch } from "react-icons/ci";
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -836,7 +836,7 @@ const AlveoBanner = () => {
             </div>
           </div>
 
-          <div className='my-6 h-auto grid grid-cols-1 gap-6 relative'>
+          <div className='my-6 mt-10 h-auto grid grid-cols-1 gap-10 relative'>
             {/* Left Column: Search Inputs */}
             <div className='space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative'>
               {/* Search Inputs */}
@@ -875,9 +875,11 @@ const AlveoBanner = () => {
                   />
                   <button
                     onClick={arrowFetch}
-                    className='absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200'
+                    className='absolute top-1/2 right-0 transform 
+                    -translate-y-1/2  text-black text-xl 
+                    px-4 py-2 transition duration-200'
                   >
-                    Search
+                    <CiSearch />
                   </button>
                 </div>
               </div>
