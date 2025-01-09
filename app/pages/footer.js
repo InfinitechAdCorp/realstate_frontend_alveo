@@ -32,7 +32,7 @@ const Footer = () => {
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, luxury living, property, contacts, services, account"
-  canonical="https://realstate-frontend-alveo.vercel.app"
+  canonical="http://localhost:3000"
 />
      <div className="text-center xl:-mt-14 2xl:mt-1 xl:z-50 text-white h-100 gap-12 lg:text-2xl xl:text-left xl:flex xl:flex-row xl:items-start" style={{background:'#002B47'}}>
  

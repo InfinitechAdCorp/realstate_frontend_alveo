@@ -35,7 +35,7 @@ const ContactForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const res = await fetch('https://infinitech-testing1.online/api/contact', {
+    const res = await fetch('http://localhost:8000/api/contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

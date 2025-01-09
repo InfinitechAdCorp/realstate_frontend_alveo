@@ -76,7 +76,7 @@ const headings = [
   title="REAL ESTATE"
   description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
   keywords="alveo, real estate, property, lands, investment, loan, buildings,"
-  canonical="https://realstate-frontend-alveo.vercel.app"
+  canonical="http://localhost:3000"
 />
         <Header/>
             <Directory currentLocation={post.currentLocation} specificLocation={post.specificLocation} />
