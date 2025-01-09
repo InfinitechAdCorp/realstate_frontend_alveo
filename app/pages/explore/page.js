@@ -132,8 +132,8 @@ function ExplorePage() {
           {images.map((image, index) => (
             <div
               key={index}
-              className={`relative inline-block ml-5 sm:ml-8 justify-center lg:mt-5  ${
-                clickedIndex === index ? "bg-gray-300 shadow-lg" : ""
+              className={`relative inline-block ml-5 cursor-pointer items-center sm:ml-8 justify-center lg:mt-5  ${
+                clickedIndex === index ? "bg-blue-400 shadow-lg p-3 items-center rounded-xl" : ""
               }`}
               onClick={() => handleImageClick(index, image.value)}
             >
@@ -142,7 +142,7 @@ function ExplorePage() {
                 alt={image.alt}
                 className="transition-transform transform duration-200 ease-in-out hover:scale-110 hover:opacity-80 8-5 h-8 gap-10 md:w-10 md:h-10 lg:w-14 lg:h-14 xl:w-10 xl:h-10"
               />
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-70 text-white text-center py-1 px-2 rounded-md opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
+              <div className="absolute text-xs top-1/20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-black bg-opacity-70 text-white text-center py-1 px-2 rounded-md opacity-0 transition-opacity duration-300 ease-in-out hover:opacity-100">
                 {image.label}
               </div>
             </div>

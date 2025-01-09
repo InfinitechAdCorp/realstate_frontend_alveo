@@ -70,7 +70,7 @@ export default function Admin ({}) {
 
   return (
     <>
-      <div className='fixed w-full'>
+      <div className=' w-full'>
         <header className='fixed top-0 left-0 w-full bg-white shadow-lg z-50'>
           <div className='flex justify-between items-center p-4'>
             <div class='menu-container'>

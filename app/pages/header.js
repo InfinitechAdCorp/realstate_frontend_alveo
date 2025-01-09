@@ -16,7 +16,7 @@ const services = [
 
 const properties = [
   { title: 'Condominiums', slug: 'condominiums' },
-  { title: 'Lots', slug: 'residential' },
+  { title: 'Residentials', slug: 'residential' },
   { title: 'Commercials', slug: 'commercial' },
   { title: 'Offices', slug: 'office' }
 ]

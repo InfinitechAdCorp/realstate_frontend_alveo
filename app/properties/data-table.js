@@ -293,7 +293,7 @@ Object.keys(propertyData).forEach(key => {
 
     try {
       const response = await fetch(
-        'https://infinitech-testing1.online/api/admin/addproperty',
+        'https://127.0.0.1/api/admin/addproperty',
         {
           method: 'POST',
           body: formData // No need to set headers, Fetch will handle it
