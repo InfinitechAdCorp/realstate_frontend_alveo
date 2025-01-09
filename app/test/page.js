@@ -54,7 +54,7 @@
 //     e.preventDefault()
 
 //     // Step 1: User submits email and password to login
-//     const response = await fetch('http://localhost:8000/api/login', {
+//     const response = await fetch('https://infinitech-testing1.online/api/login', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -79,7 +79,7 @@
 //     e.preventDefault()
 
 //     // Step 2: User submits OTP for verification
-//     const otpResponse = await fetch('http://localhost:8000/api/verify-otp', {
+//     const otpResponse = await fetch('https://infinitech-testing1.online/api/verify-otp', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -102,7 +102,7 @@
 
 //   const fetchCount = async (endpoint, key) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
+//       const response = await fetch(`https://infinitech-testing1.online/api/admin/${endpoint}`);
 //       const data = await response.json();
 
 //       if (response.ok) {
@@ -535,17 +535,8 @@ export default function Admin ({}) {
       requestData.id = areaId
     }
 
-
-  try {
-    // Send the request to the backend
-    const response = await fetch('http://localhost:8000/api/admin/add-area', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',  // Ensure content type is set to JSON
-      },
-      body: JSON.stringify(requestData),  // Send the data as JSON string
-    });
-
+    // Log the requestData for debugging
+    console.log('Request Data:', requestData)
 
     try {
       // Send the request to the backend
@@ -596,29 +587,18 @@ export default function Admin ({}) {
   const handleShowWarningToast = message => {
     showToast(message, 'warning') // Warning toast
   }
-
-};
-  const handleShowSuccessToast = (message) => {
-    showToast(message, 'success');
-  };
-
-  const handleShowErrorToast = (message) => {
-    showToast(message, 'error'); // Error toast
-  };
-
-  const handleShowWarningToast = (message) => {
-    showToast(message, 'warning'); // Warning toast
-  };
-// Fetch locations and update state
-const fetchLocations = async (setData) => {
-  try {
-    const response = await fetch("http://localhost:8000/api/admin/area");
-    const data = await response.json();
-    console.log("Fetched Locations:", data);
-    setData(prevData => ({ ...prevData, locations: data }));
-  } catch (error) {
-    console.error("Error fetching data:", error);
-
+  // Fetch locations and update state
+  const fetchLocations = async setData => {
+    try {
+      const response = await fetch(
+        'https://infinitech-testing1.online/api/admin/area'
+      )
+      const data = await response.json()
+      console.log('Fetched Locations:', data)
+      setData(prevData => ({ ...prevData, locations: data }))
+    } catch (error) {
+      console.error('Error fetching data:', error)
+    }
   }
 
   const handleImageChange = e => {
@@ -641,19 +621,25 @@ const fetchLocations = async (setData) => {
         // Set loading to true when the fetch starts
 
         // Fetch the data for each category
+        const propertiesRes = await fetch(
+          'https://infinitech-testing1.online/api/admin/countproperties'
+        )
+        const propertiesData = await propertiesRes.json()
 
-        const propertiesRes = await fetch('http://localhost:8000/api/admin/countproperties');
-        const propertiesData = await propertiesRes.json();
+        const otherBuildingsRes = await fetch(
+          'https://infinitech-testing1.online/api/admin/countotherbuildings'
+        )
+        const otherBuildingsData = await otherBuildingsRes.json()
 
-        const otherBuildingsRes = await fetch('http://localhost:8000/api/admin/countotherbuildings');
-        const otherBuildingsData = await otherBuildingsRes.json();
+        const condominiumsRes = await fetch(
+          'https://infinitech-testing1.online/api/admin/countcondominiums'
+        )
+        const condominiumsData = await condominiumsRes.json()
 
-        const condominiumsRes = await fetch('http://localhost:8000/api/admin/countcondominiums');
-        const condominiumsData = await condominiumsRes.json();
-
-        const locationsRes = await fetch('http://localhost:8000/api/admin/countlocations');
-        const locationsData = await locationsRes.json();
-
+        const locationsRes = await fetch(
+          'https://infinitech-testing1.online/api/admin/countlocations'
+        )
+        const locationsData = await locationsRes.json()
 
         // Update the state with the fetched counts
         setCounts({
@@ -684,10 +670,10 @@ const fetchLocations = async (setData) => {
     } else if (activeNav === 'Chatbot') {
       const fetchChatbotData = async () => {
         try {
-
-          const response = await fetch('http://localhost:8000/api/admin/getChatbot');
-          const chatbotData = await response.json();
-
+          const response = await fetch(
+            'https://infinitech-testing1.online/api/admin/getChatbot'
+          )
+          const chatbotData = await response.json()
           console.log(chatbotData)
           // Update chatbotEntries state
           setData(prevData => ({
@@ -699,11 +685,9 @@ const fetchLocations = async (setData) => {
         }
       }
 
-
-      fetchChatbotData();
-    } else if (activeNav === "Client Property") {
-      fetch('http://localhost:8000/api/admin/submitted-properties')
-
+      fetchChatbotData()
+    } else if (activeNav === 'Client Property') {
+      fetch('https://infinitech-testing1.online/api/admin/submitted-properties')
         .then(response => response.json())
         .then(data => {
           setSubmittedProperties(data) // Store the data in the state
@@ -712,83 +696,16 @@ const fetchLocations = async (setData) => {
           console.error('Error fetching submitted properties:', error)
         })
     }
+  }, [activeNav])
 
-  }, [activeNav]);
- 
-const fetchData = () => {
-  fetch("http://localhost:8000/api/admin/development-types")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Fetched Development Types:", data);
-      setData((prevData) => ({ ...prevData, developmentTypes: data }));
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-
-  fetch("http://localhost:8000/api/admin/architectural-themes")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Fetched Architectural Themes:", data);
-      setData((prevData) => ({ ...prevData, architecturalThemes: data }));
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-
-  fetch("http://localhost:8000/api/admin/status")
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Fetched Status:", data);
-      setData((prevData) => ({ ...prevData, statusOptions: data }));
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-
-  fetch("http://localhost:8000/api/admin/area") 
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Fetched Locations:", data);
-      setData((prevData) => ({ ...prevData, locations: data }));
-    })
-    .catch((error) => console.error("Error fetching data:", error));
-};
-const handleAdd = (type, newItem, setData, field) => {
-  console.log("Adding item:", newItem); // Log the new item being added
-console.log(type)
-  // Check if we are adding a chatbot entry
-  if (type === "chatbot") {
-    const { question, answer } = newItem;
-
-    // If we are editing an existing entry, use PUT instead of POST
-    const method = isEditing ? "PUT" : "POST";
-    console.log(method)
-    const url = isEditing ? `http://localhost:8000/api/admin/chatbot/${newItem.id}` : "http://localhost:8000/api/admin/addChatbot";
-    console.log(url)
-    fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ question, answer }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Ensure the response contains success status and new item with id
-        if (data.success) {
-          handleShowSuccessToast(`${isEditing ? "Updated" : "Added"} chatbot entry successfully!`);
-
-          // If adding a new entry, add the entry with id to the chatbotEntries array
-          if (isEditing) {
-            setData((prevData) => ({
-              ...prevData,
-              chatbotEntries: prevData.chatbotEntries.map((item) =>
-                item.id === newItem.id ? { ...item, question, answer } : item
-              ),
-            }));
-          } else {
-            const addedItem = { ...newItem, id: data.data.id }; // Ensure newItem includes id
-            setData((prevData) => ({
-              ...prevData,
-              chatbotEntries: [...prevData.chatbotEntries, addedItem],
-            }));
-          }
-
+  const fetchData = () => {
+    fetch('https://infinitech-testing1.online/api/admin/development-types')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Fetched Development Types:', data)
+        setData(prevData => ({ ...prevData, developmentTypes: data }))
+      })
+      .catch(error => console.error('Error fetching data:', error))
 
     fetch('https://infinitech-testing1.online/api/admin/architectural-themes')
       .then(response => response.json())
@@ -804,52 +721,7 @@ console.log(type)
         console.log('Fetched Status:', data)
         setData(prevData => ({ ...prevData, statusOptions: data }))
       })
-
-      .catch((error) => {
-        // Log the error if request fails
-        console.error("Error adding/updating data:", error);
-      });
-
-  }  else {
-    // Existing logic for other types (e.g., developmentTypes, locations)
-    fetch(`http://localhost:8000/api/admin/add-${type}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newItem }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Log success and update state
-        if (data.success) {
-          handleShowSuccessToast(`Item added successfully: ${newItem}`);
-
-          // Update the data state by adding the new item to the appropriate field
-          setData((prevData) => ({
-            ...prevData,
-            [field]: Array.isArray(prevData[field])
-              ? [...prevData[field], { name: newItem }]  // Add new item to array
-              : [{ name: newItem }],  // Initialize as an array if it was not an array
-          }));
-
-          // Clear the input after adding the new item
-          if (field === "developmentTypes") {
-            setData({ ...data, newType: "" });
-          } else if (field === "architecturalThemes") {
-            setData({ ...data, newTheme: "" });
-          } else if (field === "statusOptions") {
-            setData({ ...data, newStatus: "" });
-          } else if (field === "locations") {
-            setData({
-              ...data,
-              newAreaName: "",
-              newTitle: "",
-              newDescription: "",
-              newImage: null,
-            });
-          }
-        } else {
-          handleShowSuccessToast("Added Successfully");
-        }
+      .catch(error => console.error('Error fetching data:', error))
 
     fetch('https://infinitech-testing1.online/api/admin/area')
       .then(response => response.json())
@@ -859,40 +731,26 @@ console.log(type)
       })
       .catch(error => console.error('Error fetching data:', error))
   }
+  const handleAdd = (type, newItem, setData, field) => {
+    console.log('Adding item:', newItem) // Log the new item being added
+    console.log(type)
+    // Check if we are adding a chatbot entry
+    if (type === 'chatbot') {
+      const { question, answer } = newItem
 
-};
-  const openModal2 = (filesArray) => {
-    setModalImages(filesArray.map((file) => file.replace(/\\/g, '/'))); // Replace backslashes with forward slashes
-    setModalIsOpen(true);
-  };
-
-  // Function to close the modal
-  const closeModal2 = () => {
-    setModalIsOpen(false);
-    setModalImages([]);
-  };
-const handleDelete = (type, id, field) => {
-  console.log(type, id, field); // Debugging log to check the values
-
-  // Handle deletion of chatbot entries separately
-  if (type === "chatbot") {
-    const url = `http://localhost:8000/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
-    console.log("Deleting from URL:", url);
-
-    // Send DELETE request
-    fetch(url, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => {
-        // Check if the response is successful
-        if (response.ok) {
-          handleShowSuccessToast(`Deleted Successfully!`);
-        }else {
-          handleShowErrorToast(`Deletion Failed!`)
-        }
-        return response.json(); // Parse the JSON response
-
+      // If we are editing an existing entry, use PUT instead of POST
+      const method = isEditing ? 'PUT' : 'POST'
+      console.log(method)
+      const url = isEditing
+        ? `https://infinitech-testing1.online/api/admin/chatbot/${newItem.id}`
+        : 'https://infinitech-testing1.online/api/admin/addChatbot'
+      console.log(url)
+      fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ question, answer })
       })
         .then(response => response.json())
         .then(data => {
@@ -924,33 +782,18 @@ const handleDelete = (type, id, field) => {
             console.error('Error response from API:', data.message)
           }
 
-
-          return updatedData; // Return updated state
-        });
-        handleShowSuccessToast("Chatbot entry deleted successfully."); // Optional: Notify user
-      })
-      .catch((error) => {
-       
-        console.error("Error deleting chatbot entry:", error);
-        handleShowErrorToast("An error occurred while deleting the chatbot entry.");
-      });
-  } else {
-    // Existing logic for deleting other types (e.g., developmentTypes, locations)
-    const url = `http://localhost:8000/api/admin/delete-${type}/${id}`;
-    console.log("Deleting from URL:", url);  // Debugging line to check the URL
-
-    fetch(url, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-    })
-      .then((response) => {
-        if (response.ok) {
-          handleShowSuccessToast(`Deleted Successfully: ${id}`);
-        }else {
-          handleShowErrorToast(`Deletion Failed: ${id}`)
-        }
-        return response.json();
-
+          fetchData() // Optionally fetch the updated data
+        })
+        .catch(error => {
+          // Log the error if request fails
+          console.error('Error adding/updating data:', error)
+        })
+    } else {
+      // Existing logic for other types (e.g., developmentTypes, locations)
+      fetch(`https://infinitech-testing1.online/api/admin/add-${type}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newItem })
       })
         .then(response => response.json())
         .then(data => {
@@ -1119,18 +962,19 @@ const handleDelete = (type, id, field) => {
     e.preventDefault()
 
     // Step 1: User submits email and password to login
-
-    const response = await fetch('http://localhost:8000/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password
-      })
-    })
-
+    const response = await fetch(
+      'https://infinitech-testing1.online/api/login',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      }
+    )
 
     if (response.ok) {
       // If login is successful, show OTP input
@@ -1148,7 +992,7 @@ const handleDelete = (type, id, field) => {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/${endpoint}`
+        `https://infinitech-testing1.online/api/admin/${endpoint}`
       )
       const data = await response.json()
 
@@ -1554,7 +1398,6 @@ const handleDelete = (type, id, field) => {
                       ) : (
                         <li>No Development Types Found</li>
                       )}
-
                     </ul>
                   </div>
 
@@ -1890,7 +1733,6 @@ const handleDelete = (type, id, field) => {
             )}
             {activeNav === 'Manage Other Data' && (
               <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 w-full h-0'>
-
                 <button
                   className='bg-blue-500 text-white px-6 py-3 rounded-md text-lg hover:bg-blue-700 transition duration-300'
                   onClick={openDevelopmentTypeModal}
