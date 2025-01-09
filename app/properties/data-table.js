@@ -282,6 +282,7 @@ const handleSubmit = async e => {
     }
   });
 
+
   // Log the FormData content for debugging
   formData.forEach((value, key) => {
     console.log(`FormData - ${key}:`, value);
