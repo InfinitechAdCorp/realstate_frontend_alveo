@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { jsPDF } from "jspdf";
 import Image from "next/image";
-import SEO from "./../../seo/page"
+import SEO from "./../../seo/page";
 const CanvasApp = () => {
   const [canvas, setCanvas] = useState(null);
   const [scaling, setScaling] = useState(25);
@@ -36,7 +36,6 @@ const CanvasApp = () => {
   const initCanvas = () => {
     // If the canvas is already initialized, dispose of it
     if (canvasInstance) {
-
       canvasInstance.dispose(); // Dispose of the current canvas to avoid duplication
     }
 
@@ -56,7 +55,6 @@ const CanvasApp = () => {
       height: window.innerHeight,
     });
 
- 
     return canvasInstance;
   };
 
@@ -315,12 +313,13 @@ const CanvasApp = () => {
     });
 
     // Optional: Log the calculations for debugging
-
   };
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/roomplanner");
+      const response = await fetch(
+        "https://infinitech-testing1.online/api/roomplanner"
+      );
       const data = await response.json();
       const grouped = data.data.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -456,26 +455,22 @@ const CanvasApp = () => {
 
         // Ensure labels exist and are part of the canvas before attempting to remove
         if (roomIdLabel) {
-  
           canvas.remove(roomIdLabel);
         }
         if (widthLabel) {
-      
           canvas.remove(widthLabel);
         }
         if (heightLabel) {
-      
           canvas.remove(heightLabel);
         }
 
         // Remove the room rectangle itself
-  
+
         canvas.remove(activeObject);
 
         // Re-render the canvas to apply the changes
         canvas.renderAll();
       } else {
-       
       }
     }
 
@@ -502,10 +497,9 @@ const CanvasApp = () => {
     const width = (item.dataset.width * 37.8) / scaling;
     const height = (item.dataset.height * 37.8) / scaling;
 
-    const imageURL = `http://localhost:3000/assets/RoomPlanner/${encodeURIComponent(
+    const imageURL = `https://realstate-frontend-alveo.vercel.app/assets/RoomPlanner/${encodeURIComponent(
       category
     )}/${encodeURIComponent(picture)}`;
-
 
     const altText = item.getAttribute("alt");
     const imgElement = new window.Image(); // Using window.Image to avoid Next.js conflict
@@ -522,11 +516,8 @@ const CanvasApp = () => {
       // Generate the item ID using the updated count
       const imageId = `${altText} item-${newCount}`;
 
-  
-
       // Check if the image has already been added (either through ID check or canvas object check)
       if (loadedImageIds.has(imageId)) {
-       
         return newCounters; // Prevent adding the image again
       }
 
@@ -535,7 +526,6 @@ const CanvasApp = () => {
         .getObjects("image")
         .find((img) => img.id === imageId);
       if (existingImage) {
-      
         return newCounters; // Skip adding it again
       }
 
@@ -837,7 +827,6 @@ const CanvasApp = () => {
       // Save the PDF file
       doc.save("exported_data.pdf");
     } else {
-
     }
   };
 
@@ -846,11 +835,11 @@ const CanvasApp = () => {
       // Dispose of the current canvas instance to avoid "already initialized" error
       canvas.dispose();
     }
-  setRoomIdCounter(1);
+    setRoomIdCounter(1);
     setAltTextCounters({});
 
-  // Clear the loadedImageIds set
-  loadedImageIds.clear();
+    // Clear the loadedImageIds set
+    loadedImageIds.clear();
     // Initialize a new canvas and set it to the state
     const newCanvas = initCanvas();
     setCanvas(newCanvas); // Set the new canvas instance
@@ -867,142 +856,141 @@ const CanvasApp = () => {
     setShowPopup(false);
   };
   const handlePointerDown = (e) => {
-
     // Add your logic here
   };
 
   return (
-    
-  <div className="header-container">
-     <SEO
-  title="REAL ESTATE"
-  description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
-  keywords="alveo, real estate, property customize, building format, property layout, roomplanner, roomlayout, realstate customization,room layout"
-  canonical="http://localhost:3000/pages/roomplanner"
-/>
-  <div className="header-container bg-blue-500">
-    <div className="button-container flex flex-wrap gap-1 justify-center p-3 bg-blue-500">
-      <button
-        className="new-btn h-12 bg-blue-700 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={resetCanvas}
-      >
-        New
-      </button>
-      <button
-        className="generate-room-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={() => createRoom(10, 10)}
-      >
-        Generate Room
-      </button>
-      <button
-        className="label-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={handleAddTextbox}
-      >
-        Label
-      </button>
-      <button
-        className="delete-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={handleDelete}
-      >
-        Delete
-      </button>
-      <button
-        className="zoom-btn plus h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={() => handleZoom(true)}
-      >
-        Zoom In
-      </button>
-      <button
-        className="zoom-btn minus h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={() => handleZoom(false)}
-      >
-        Zoom Out
-      </button>
-      <button
-        className="label-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={toggleLabels}
-      >
-        Show/Hide Label
-      </button>
-      <button
-        className="export-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={handleExport}
-      >
-        Export Planner
-      </button>
-      <button
-        className="label-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
-        onClick={logActiveObjectIds}
-      >
-        Export Data
-      </button>
-    </div>
-  </div>
-  {/* Main content */}
-  <div className="flex flex-col lg:flex-row fixed w-full">
-    {/* Accordion section */}
-    <div className="w-full lg:w-1/3 xl:w-1/4  bg-white z-50 p-2">
-      <Accordion type="single" collapsible>
-        {Object.keys(groupedData).map((category, index) => (
-          <AccordionItem key={index} value={`item-${index}`}>
-            <AccordionTrigger className="text-lg xl:text-xl w-full p-4 flex justify-between items-center">
-              {category}
-            </AccordionTrigger>
-            <AccordionContent>
-              <div className="grid grid-cols-2 w-full justify-items-center max-h-64 xl:max-h-96 overflow-y-auto gap-4">
-                {groupedData[category].map((item, itemIndex) => (
-                  <div
-                    key={itemIndex}
-                    className={`text-center w-4/5 ${
-                      itemIndex % 2 === 0 &&
-                      itemIndex === groupedData[category].length - 1
-                        ? "col-span-2"
-                        : ""
-                    }`}
-                  >
-                    <h4 className="text-sm xl:text-base">{item.name}</h4>
-                    <p className="text-xs xl:text-sm">
-                      {item.height} x {item.width}
-                    </p>
-                    <img
-                      src={`http://localhost:3000/assets/RoomPlanner/${category}/${item.picture}`}
-                      alt={item.name}
-                      className="w-16 h-16 xl:w-24 xl:h-24 cursor-pointer"
-                      data-category={category}
-                      data-picture={item.picture}
-                      data-width={item.width}
-                      data-height={item.height}
-                      onClick={(e) => handleItemClick(e.target)}
-                    />
+    <div className="header-container">
+      <SEO
+        title="REAL ESTATE"
+        description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
+        keywords="alveo, real estate, property customize, building format, property layout, roomplanner, roomlayout, realstate customization,room layout"
+        canonical="https://realstate-frontend-alveo.vercel.app/pages/roomplanner"
+      />
+      <div className="header-container bg-blue-500">
+        <div className="button-container flex flex-wrap gap-1 justify-center p-3 bg-blue-500">
+          <button
+            className="new-btn h-12 bg-blue-700 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={resetCanvas}
+          >
+            New
+          </button>
+          <button
+            className="generate-room-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={() => createRoom(10, 10)}
+          >
+            Generate Room
+          </button>
+          <button
+            className="label-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={handleAddTextbox}
+          >
+            Label
+          </button>
+          <button
+            className="delete-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+          <button
+            className="zoom-btn plus h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={() => handleZoom(true)}
+          >
+            Zoom In
+          </button>
+          <button
+            className="zoom-btn minus h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={() => handleZoom(false)}
+          >
+            Zoom Out
+          </button>
+          <button
+            className="label-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={toggleLabels}
+          >
+            Show/Hide Label
+          </button>
+          <button
+            className="export-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={handleExport}
+          >
+            Export Planner
+          </button>
+          <button
+            className="label-btn h-12 bg-blue-600 text-white text-lg font-bold rounded px-4 py-2 hover:opacity-90"
+            onClick={logActiveObjectIds}
+          >
+            Export Data
+          </button>
+        </div>
+      </div>
+      {/* Main content */}
+      <div className="flex flex-col lg:flex-row fixed w-full">
+        {/* Accordion section */}
+        <div className="w-full lg:w-1/3 xl:w-1/4  bg-white z-50 p-2">
+          <Accordion type="single" collapsible>
+            {Object.keys(groupedData).map((category, index) => (
+              <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger className="text-lg xl:text-xl w-full p-4 flex justify-between items-center">
+                  {category}
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="grid grid-cols-2 w-full justify-items-center max-h-64 xl:max-h-96 overflow-y-auto gap-4">
+                    {groupedData[category].map((item, itemIndex) => (
+                      <div
+                        key={itemIndex}
+                        className={`text-center w-4/5 ${
+                          itemIndex % 2 === 0 &&
+                          itemIndex === groupedData[category].length - 1
+                            ? "col-span-2"
+                            : ""
+                        }`}
+                      >
+                        <h4 className="text-sm xl:text-base">{item.name}</h4>
+                        <p className="text-xs xl:text-sm">
+                          {item.height} x {item.width}
+                        </p>
+                        <img
+                          src={`https://realstate-frontend-alveo.vercel.app/assets/RoomPlanner/${category}/${item.picture}`}
+                          alt={item.name}
+                          className="w-16 h-16 xl:w-24 xl:h-24 cursor-pointer"
+                          data-category={category}
+                          data-picture={item.picture}
+                          data-width={item.width}
+                          data-height={item.height}
+                          onClick={(e) => handleItemClick(e.target)}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
-        ))}
-      </Accordion>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
+
+        {/* Canvas container */}
+        <div
+          className="relative flex-grow xl:w-3/4 2xl:w-3/4 "
+          onClick={handlePointerDown}
+        >
+          <canvas
+            id="canvas"
+            className="border-black w-screen h-32 xl:h-screen lg:h-auto  "
+          ></canvas>
+          <div
+            id="dimensionDisplay"
+            className="text-lg w-auto fixed top-10 left-5 bg-white text-black p-2 border-2 border-black rounded z-50 xl:left-1/4 xl:top-20 mt-2"
+            dangerouslySetInnerHTML={{
+              __html: `Height: ${dimensions.height.toFixed(
+                2
+              )} m<br/>Width: ${dimensions.width.toFixed(2)} m`,
+            }}
+          />
+        </div>
+      </div>
     </div>
-
-    {/* Canvas container */}
-    <div className="relative flex-grow xl:w-3/4 2xl:w-3/4 " onClick={handlePointerDown}>
-  <canvas
-    id="canvas"
-    className="border-black w-screen h-32 xl:h-screen lg:h-auto  "
-  ></canvas>
-  <div
-    id="dimensionDisplay"
-    className="text-lg w-auto fixed top-10 left-5 bg-white text-black p-2 border-2 border-black rounded z-50 xl:left-1/4 xl:top-20 mt-2"
-    dangerouslySetInnerHTML={{
-      __html: `Height: ${dimensions.height.toFixed(
-        2
-      )} m<br/>Width: ${dimensions.width.toFixed(2)} m`,
-    }}
-  />
-</div>
-
-  </div>
-</div>
-
   );
 };
 

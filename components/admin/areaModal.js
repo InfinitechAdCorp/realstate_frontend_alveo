@@ -1,57 +1,60 @@
-import React, { useState } from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { showToast } from '@/components/alert/page';
+import React, { useState } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { showToast } from "@/components/alert/page";
 
 const AreaModal = ({ isOpen, closeModal }) => {
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // Yup validation schema
   const validationSchema = Yup.object({
-    area_name: Yup.string().required('Area Name is required'),
-    title: Yup.string().required('Title is required'),
-    description: Yup.string().required('Description is required'),
-    image: Yup.mixed().required('Image is required'),
+    area_name: Yup.string().required("Area Name is required"),
+    title: Yup.string().required("Title is required"),
+    description: Yup.string().required("Description is required"),
+    image: Yup.mixed().required("Image is required"),
   });
- const handleShowSuccessToast = (message) => {
-    showToast(message, 'success');
+  const handleShowSuccessToast = (message) => {
+    showToast(message, "success");
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, 'error'); // Error toast
+    showToast(message, "error"); // Error toast
   };
 
   const handleShowWarningToast = (message) => {
-    showToast(message, 'warning'); // Warning toast
+    showToast(message, "warning"); // Warning toast
   };
   // Submit data to the backend using fetch
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    setError(''); // Clear previous errors
-    setSuccess(''); // Clear previous success messages
+    setError(""); // Clear previous errors
+    setSuccess(""); // Clear previous success messages
 
     const formData = new FormData();
-    formData.append('area_name', values.area_name);
-    formData.append('title', values.title);
-    formData.append('description', values.description);
-    formData.append('image', values.image);
+    formData.append("area_name", values.area_name);
+    formData.append("title", values.title);
+    formData.append("description", values.description);
+    formData.append("image", values.image);
 
     try {
-      const response = await fetch('http://localhost:8000/api/admin/add-area', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        "https://infinitech-testing1.online/api/admin/add-area",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
-        handleShowSuccessToast(data.message || 'Area added successfully');
+        handleShowSuccessToast(data.message || "Area added successfully");
       } else {
-        handleShowErrorToast(data.message || 'Failed to add Area');
+        handleShowErrorToast(data.message || "Failed to add Area");
       }
       setSubmitting(false);
     } catch (err) {
-      handleShowErrorToast('An error occurred while submitting the data');
+      handleShowErrorToast("An error occurred while submitting the data");
       setSubmitting(false);
     }
   };
@@ -74,15 +77,15 @@ const AreaModal = ({ isOpen, closeModal }) => {
         onClick={handleModalContentClick}
       >
         <h2 className="text-xl font-semibold text-center mb-4">Add Data</h2>
-
-        {error && <p className="text-red-500 mb-4">{error}</p>} {/* Error message */}
-        {success && <p className="text-green-500 mb-4">{success}</p>} {/* Success message */}
-
+        {error && <p className="text-red-500 mb-4">{error}</p>}{" "}
+        {/* Error message */}
+        {success && <p className="text-green-500 mb-4">{success}</p>}{" "}
+        {/* Success message */}
         <Formik
           initialValues={{
-            area_name: '',
-            title: '',
-            description: '',
+            area_name: "",
+            title: "",
+            description: "",
             image: null,
           }}
           validationSchema={validationSchema}
@@ -97,7 +100,11 @@ const AreaModal = ({ isOpen, closeModal }) => {
                 placeholder="Enter Area Name"
                 className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <ErrorMessage name="area_name" component="div" className="text-red-500 mb-4" />
+              <ErrorMessage
+                name="area_name"
+                component="div"
+                className="text-red-500 mb-4"
+              />
 
               {/* Title Input */}
               <Field
@@ -106,7 +113,11 @@ const AreaModal = ({ isOpen, closeModal }) => {
                 placeholder="Enter Title"
                 className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <ErrorMessage name="title" component="div" className="text-red-500 mb-4" />
+              <ErrorMessage
+                name="title"
+                component="div"
+                className="text-red-500 mb-4"
+              />
 
               {/* Description Input */}
               <Field
@@ -115,16 +126,26 @@ const AreaModal = ({ isOpen, closeModal }) => {
                 placeholder="Enter Description"
                 className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <ErrorMessage name="description" component="div" className="text-red-500 mb-4" />
+              <ErrorMessage
+                name="description"
+                component="div"
+                className="text-red-500 mb-4"
+              />
 
               {/* Image Upload */}
               <input
                 type="file"
                 name="image"
                 className="w-full p-3 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                onChange={(event) => setFieldValue('image', event.target.files[0])}
+                onChange={(event) =>
+                  setFieldValue("image", event.target.files[0])
+                }
               />
-              <ErrorMessage name="image" component="div" className="text-red-500 mb-4" />
+              <ErrorMessage
+                name="image"
+                component="div"
+                className="text-red-500 mb-4"
+              />
 
               <div className="flex justify-between">
                 <button
@@ -139,7 +160,7 @@ const AreaModal = ({ isOpen, closeModal }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </Form>

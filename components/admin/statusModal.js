@@ -1,55 +1,60 @@
-import React, { useState } from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { showToast } from '@/components/alert/page';
+import React, { useState } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { showToast } from "@/components/alert/page";
 
 const StatusModal = ({ isOpen, closeModal }) => {
-  const [statusMessage, setStatusMessage] = useState(''); // State to hold status messages (success or error)
+  const [statusMessage, setStatusMessage] = useState(""); // State to hold status messages (success or error)
 
   // Yup validation schema
   const validationSchema = Yup.object({
     name: Yup.string()
-      .required('Development Type is required')
-      .min(3, 'Development Type must be at least 3 characters')
+      .required("Development Type is required")
+      .min(3, "Development Type must be at least 3 characters"),
   });
   const handleShowSuccessToast = (message) => {
-    showToast(message, 'success');
+    showToast(message, "success");
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, 'error'); // Error toast
+    showToast(message, "error"); // Error toast
   };
 
   const handleShowWarningToast = (message) => {
-    showToast(message, 'warning'); // Warning toast
+    showToast(message, "warning"); // Warning toast
   };
   // Handle form submission
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     setErrors({}); // Clear previous errors
-    setStatusMessage(''); // Clear any previous status messages
+    setStatusMessage(""); // Clear any previous status messages
 
     const formData = new FormData();
-    formData.append('name', values.name);
+    formData.append("name", values.name);
 
     try {
-      const response = await fetch('http://localhost:8000/api/admin/add-status', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        "https://infinitech-testing1.online/api/admin/add-status",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
       if (response.ok) {
         // Set success message
-        handleShowSuccessToast(data.message || 'Development Type added successfully');
+        handleShowSuccessToast(
+          data.message || "Development Type added successfully"
+        );
         setSubmitting(false);
       } else {
         // Set error message
-        setErrors({ name: data.message || 'Failed to add Development Type' });
+        setErrors({ name: data.message || "Failed to add Development Type" });
         setSubmitting(false);
       }
     } catch (err) {
-      setErrors({ name: 'An error occurred while submitting the data' });
+      setErrors({ name: "An error occurred while submitting the data" });
       setSubmitting(false);
     }
   };
@@ -77,7 +82,11 @@ const StatusModal = ({ isOpen, closeModal }) => {
         {statusMessage && (
           <div className="mb-4">
             <p
-              className={`text-sm ${statusMessage.startsWith('Failed') ? 'text-red-500' : 'text-green-500'}`}
+              className={`text-sm ${
+                statusMessage.startsWith("Failed")
+                  ? "text-red-500"
+                  : "text-green-500"
+              }`}
             >
               {statusMessage}
             </p>
@@ -85,7 +94,7 @@ const StatusModal = ({ isOpen, closeModal }) => {
         )}
 
         <Formik
-          initialValues={{ name: '' }}
+          initialValues={{ name: "" }}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
@@ -118,7 +127,7 @@ const StatusModal = ({ isOpen, closeModal }) => {
                   disabled={isSubmitting}
                   className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
                 >
-                  {isSubmitting ? 'Submitting...' : 'Submit'}
+                  {isSubmitting ? "Submitting..." : "Submit"}
                 </button>
               </div>
             </Form>

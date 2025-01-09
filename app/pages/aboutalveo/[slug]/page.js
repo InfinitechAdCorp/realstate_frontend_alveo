@@ -151,7 +151,7 @@ export default function BlogPost({ params }) {
           title="REAL ESTATE"
           description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
           keywords="alveo, real estate, property, lands, investment, loan, buildings,"
-          canonical="http://localhost:3000"
+          canonical="https://realstate-frontend-alveo.vercel.app"
         />
         <Header />
         <Directory
@@ -222,11 +222,10 @@ export default function BlogPost({ params }) {
               </div>
             </div>
 
-
-            <div className='h-fit relative mt-96 justify-center p-4 '>
-              <div className='container'>
-                <h1 className='text-3xl text-center'>AWARDS AND RECOGNITION</h1>
-                <div className='flex space-x-8 mt-8 justify-center'>
+            <div className="h-fit relative mt-96 justify-center p-4 ">
+              <div className="container">
+                <h1 className="text-3xl text-center">AWARDS AND RECOGNITION</h1>
+                <div className="flex space-x-8 mt-8 justify-center">
                   {/* First Award */}
                   <Accordion type="single" collapsible className="w-full">
                     {awardsData.map((item) => (
