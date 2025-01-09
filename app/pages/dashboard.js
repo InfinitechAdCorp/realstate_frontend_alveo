@@ -68,9 +68,7 @@ const Carousel = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch(
-          "https://infinitech-testing1.online/api/allproperty"
-        );
+        const response = await fetch("http://localhost:8000/api/allproperty");
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -200,9 +198,7 @@ const Map = () => {
     // Fetch locations from the Laravel API
     const fetchLocations = async () => {
       try {
-        const response = await fetch(
-          "https://infinitech-testing1.online/api/locations"
-        );
+        const response = await fetch("http://localhost:8000/api/locations");
         const data = await response.json();
         setLocations(data); // Update state with fetched data
       } catch (error) {
@@ -340,9 +336,7 @@ const ImageSlider = () => {
 
   const fetchLocations = async () => {
     try {
-      const response = await fetch(
-        "https://infinitech-testing1.online/api/properties"
-      );
+      const response = await fetch("http://localhost:8000/api/properties");
       if (!response.ok) {
         throw new Error("Failed to fetch locations");
       }
@@ -416,7 +410,7 @@ const ImageSlider = () => {
                 locations[currentIndex].path.startsWith("https://")
                   ? locations[currentIndex].path // If it's already a full URL, use it directly
                   : locations[currentIndex].path
-                  ? `https://infinitech-testing1.online/${locations[
+                  ? `http://localhost:8000/${locations[
                       currentIndex
                     ].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
                   : "" // If there's no path, set it to an empty string or fallback image URL
@@ -512,9 +506,7 @@ const AlveoBanner = () => {
     console.log(`Filter: ${filter}, Search Value: ${searchValue}`);
 
     try {
-      const response = await fetch(
-        `https://infinitech-testing1.online/api/properties`
-      );
+      const response = await fetch(`http://localhost:8000/api/properties`);
       const data = await response.json();
 
       console.log("API response data:", data);
@@ -570,7 +562,7 @@ const AlveoBanner = () => {
   const fetchBuildingFeatures = async (propertyId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildingfeatures?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildingfeatures?property_id=${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -594,7 +586,7 @@ const AlveoBanner = () => {
   const fetchBuildings = async (propertyId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildings?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildings?property_id=${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -622,7 +614,7 @@ const AlveoBanner = () => {
     console.log(filter);
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/searchProperty?filter=${filter}&search=${searchValue}`,
+        `http://localhost:8000/api/searchProperty?filter=${filter}&search=${searchValue}`,
         {
           method: "GET",
           headers: {
@@ -1118,14 +1110,14 @@ const AlveoBanner = () => {
 
                             if (imgPath.startsWith("property/")) {
                               // If the image path starts with "property/", it is assumed to be in the "public" folder
-                              return `https://infinitech-testing1.online/${imgPath.replace(
+                              return `http://localhost:8000/${imgPath.replace(
                                 /\\/g,
                                 "/"
                               )}`;
                             }
 
                             // For any other local paths, prepend the base URL
-                            return `https://infinitech-testing1.online/${imgPath.replace(
+                            return `http://localhost:8000/${imgPath.replace(
                               /\\/g,
                               "/"
                             )}`;
@@ -1227,7 +1219,7 @@ const AlveoBanner = () => {
 
                                   // If the image path starts with '/property/', treat it as a URL that requires the base URL
                                   if (imagePath.startsWith("/property/")) {
-                                    return `https://infinitech-testing1.online${imagePath.replace(
+                                    return `http://localhost:8000${imagePath.replace(
                                       /\\/g,
                                       "/"
                                     )}`;
@@ -1379,7 +1371,7 @@ const AlveoBanner = () => {
                                                   : building.path.startsWith(
                                                       "/property/"
                                                     )
-                                                  ? `https://infinitech-testing1.online${building.path.replace(
+                                                  ? `http://localhost:8000${building.path.replace(
                                                       /\\/g,
                                                       "/"
                                                     )}` // If it's a local asset with '/property/', prepend the local server URL
@@ -1466,7 +1458,7 @@ const DashboardComponent = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale"
-        canonical="https://realstate-frontend-alveo.vercel.app"
+        canonical="http://localhost:3000"
       />
 
       <div className="mb-10">

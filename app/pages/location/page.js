@@ -22,7 +22,7 @@ const LocationPage = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    fetch("https://infinitech-testing1.online/api/admin/area") // Adjust the API endpoint if necessary
+    fetch("http://localhost:8000/api/admin/area") // Adjust the API endpoint if necessary
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -169,7 +169,7 @@ const LocationPage = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale, property location, location"
-        canonical="https://realstate-frontend-alveo.vercel.app/pages/location"
+        canonical="http://localhost:3000/pages/location"
       />
       <div className="mb-10">
         <Header />
@@ -190,10 +190,10 @@ const LocationPage = () => {
                 <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
                   <div className="bg-white shadow-md rounded-md overflow-hidden flex flex-col h-full">
                     <img
-                      src={`https://realstate-frontend-alveo.vercel.app${path}`} // Try to load from localhost:3000
+                      src={`http://localhost:3000${path}`} // Try to load from localhost:3000
                       onError={(e) => {
                         e.target.onerror = null; // Prevent infinite loop if image fails
-                        e.target.src = `https://infinitech-testing1.online${path}`; // Fallback to localhost:8000 if not found
+                        e.target.src = `http://localhost:8000${path}`; // Fallback to localhost:8000 if not found
                       }}
                       className="w-full object-cover h-48 md:h-56 lg:h-64"
                     />
