@@ -53,7 +53,7 @@
 //     e.preventDefault()
 
 //     // Step 1: User submits email and password to login
-//     const response = await fetch('http://localhost:8000/api/login', {
+//     const response = await fetch('https://infinitech-testing1.online/api/login', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -78,7 +78,7 @@
 //     e.preventDefault()
 
 //     // Step 2: User submits OTP for verification
-//     const otpResponse = await fetch('http://localhost:8000/api/verify-otp', {
+//     const otpResponse = await fetch('https://infinitech-testing1.online/api/verify-otp', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -101,7 +101,7 @@
 
 //   const fetchCount = async (endpoint, key) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
+//       const response = await fetch(`https://infinitech-testing1.online/api/admin/${endpoint}`);
 //       const data = await response.json();
 
 //       if (response.ok) {
@@ -539,13 +539,16 @@ export default function Admin({}) {
 
     try {
       // Send the request to the backend
-      const response = await fetch("http://localhost:8000/api/admin/add-area", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Ensure content type is set to JSON
-        },
-        body: JSON.stringify(requestData), // Send the data as JSON string
-      });
+      const response = await fetch(
+        "https://infinitech-testing1.online/api/admin/add-area",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Ensure content type is set to JSON
+          },
+          body: JSON.stringify(requestData), // Send the data as JSON string
+        }
+      );
 
       const data = await response.json(); // Parse the JSON response
 
@@ -586,7 +589,9 @@ export default function Admin({}) {
   // Fetch locations and update state
   const fetchLocations = async (setData) => {
     try {
-      const response = await fetch("http://localhost:8000/api/admin/area");
+      const response = await fetch(
+        "https://infinitech-testing1.online/api/admin/area"
+      );
       const data = await response.json();
       console.log("Fetched Locations:", data);
       setData((prevData) => ({ ...prevData, locations: data }));
@@ -617,22 +622,22 @@ export default function Admin({}) {
 
         // Fetch the data for each category
         const propertiesRes = await fetch(
-          "http://localhost:8000/api/admin/countproperties"
+          "https://infinitech-testing1.online/api/admin/countproperties"
         );
         const propertiesData = await propertiesRes.json();
 
         const otherBuildingsRes = await fetch(
-          "http://localhost:8000/api/admin/countotherbuildings"
+          "https://infinitech-testing1.online/api/admin/countotherbuildings"
         );
         const otherBuildingsData = await otherBuildingsRes.json();
 
         const condominiumsRes = await fetch(
-          "http://localhost:8000/api/admin/countcondominiums"
+          "https://infinitech-testing1.online/api/admin/countcondominiums"
         );
         const condominiumsData = await condominiumsRes.json();
 
         const locationsRes = await fetch(
-          "http://localhost:8000/api/admin/countlocations"
+          "https://infinitech-testing1.online/api/admin/countlocations"
         );
         const locationsData = await locationsRes.json();
 
@@ -666,7 +671,7 @@ export default function Admin({}) {
       const fetchChatbotData = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/getChatbot"
+            "https://infinitech-testing1.online/api/admin/getChatbot"
           );
           const chatbotData = await response.json();
           console.log(chatbotData);
@@ -682,7 +687,7 @@ export default function Admin({}) {
 
       fetchChatbotData();
     } else if (activeNav === "Client Property") {
-      fetch("http://localhost:8000/api/admin/submitted-properties")
+      fetch("https://infinitech-testing1.online/api/admin/submitted-properties")
         .then((response) => response.json())
         .then((data) => {
           setSubmittedProperties(data); // Store the data in the state
@@ -694,7 +699,7 @@ export default function Admin({}) {
   }, [activeNav]);
 
   const fetchData = () => {
-    fetch("http://localhost:8000/api/admin/development-types")
+    fetch("https://infinitech-testing1.online/api/admin/development-types")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Development Types:", data);
@@ -702,7 +707,7 @@ export default function Admin({}) {
       })
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch("http://localhost:8000/api/admin/architectural-themes")
+    fetch("https://infinitech-testing1.online/api/admin/architectural-themes")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Architectural Themes:", data);
@@ -711,7 +716,7 @@ export default function Admin({}) {
 
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch("http://localhost:8000/api/admin/status")
+    fetch("https://infinitech-testing1.online/api/admin/status")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Status:", data);
@@ -719,7 +724,7 @@ export default function Admin({}) {
       })
       .catch((error) => console.error("Error fetching data:", error));
 
-    fetch("http://localhost:8000/api/admin/area")
+    fetch("https://infinitech-testing1.online/api/admin/area")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Locations:", data);
@@ -738,8 +743,8 @@ export default function Admin({}) {
       const method = isEditing ? "PUT" : "POST";
       console.log(method);
       const url = isEditing
-        ? `http://localhost:8000/api/admin/chatbot/${newItem.id}`
-        : "http://localhost:8000/api/admin/addChatbot";
+        ? `https://infinitech-testing1.online/api/admin/chatbot/${newItem.id}`
+        : "https://infinitech-testing1.online/api/admin/addChatbot";
       console.log(url);
       fetch(url, {
         method: method,
@@ -786,7 +791,7 @@ export default function Admin({}) {
         });
     } else {
       // Existing logic for other types (e.g., developmentTypes, locations)
-      fetch(`http://localhost:8000/api/admin/add-${type}`, {
+      fetch(`https://infinitech-testing1.online/api/admin/add-${type}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newItem }),
@@ -846,7 +851,7 @@ export default function Admin({}) {
 
     // Handle deletion of chatbot entries separately
     if (type === "chatbot") {
-      const url = `http://localhost:8000/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
+      const url = `https://infinitech-testing1.online/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
       console.log("Deleting from URL:", url);
 
       // Send DELETE request
@@ -889,7 +894,7 @@ export default function Admin({}) {
         });
     } else {
       // Existing logic for deleting other types (e.g., developmentTypes, locations)
-      const url = `http://localhost:8000/api/admin/delete-${type}/${id}`;
+      const url = `https://infinitech-testing1.online/api/admin/delete-${type}/${id}`;
       console.log("Deleting from URL:", url); // Debugging line to check the URL
 
       fetch(url, {
@@ -959,16 +964,19 @@ export default function Admin({}) {
     e.preventDefault();
     console.log(formData);
 
-    const response = await fetch("http://localhost:8000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
-        password: formData.password,
-      }),
-    });
+    const response = await fetch(
+      "https://infinitech-testing1.online/api/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      }
+    );
 
     const data = await response.json(); // Get the JSON response
 
@@ -990,7 +998,7 @@ export default function Admin({}) {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/${endpoint}`
+        `https://infinitech-testing1.online/api/admin/${endpoint}`
       );
       const data = await response.json();
 
@@ -1327,7 +1335,7 @@ export default function Admin({}) {
                     {modalImages.map((image, index) => (
                       <img
                         key={index}
-                        src={`http://localhost:8000/${image}`} // Full URL to the image
+                        src={`https://infinitech-testing1.online/${image}`} // Full URL to the image
                         alt={`Property image ${index + 1}`}
                         className="w-full h-full object-contain" // Make image fill the container
                       />
