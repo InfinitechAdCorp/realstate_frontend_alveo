@@ -68,7 +68,7 @@ const Carousel = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch("https://infinitech-testing1.online/api/allproperty");
+        const response = await fetch("http://localhost:8000/api/allproperty");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -194,7 +194,7 @@ const Map = () => {
     // Fetch locations from the Laravel API
     const fetchLocations = async () => {
       try {
-        const response = await fetch("https://infinitech-testing1.online/api/locations");
+        const response = await fetch("http://localhost:8000/api/locations");
         const data = await response.json();
         setLocations(data); // Update state with fetched data
       } catch (error) {
@@ -333,7 +333,7 @@ const ImageSlider = () => {
 
   const fetchLocations = async () => {
   try {
-    const response = await fetch("https://infinitech-testing1.online/api/properties");
+    const response = await fetch("http://localhost:8000/api/properties");
     if (!response.ok) {
       throw new Error("Failed to fetch locations");
     }
@@ -395,7 +395,7 @@ const ImageSlider = () => {
       {/* Only show the location image if there are locations */}
       {locations && locations.length > 0 && (
         <div className="relative w-full h-auto rounded-lg overflow-hidden cursor-pointer z-10">
-          <Link
+          <a
             href={`/pages/buildings/${encodeURIComponent(locations[currentIndex].id)}`}
             passHref
           >
@@ -404,7 +404,7 @@ const ImageSlider = () => {
                 locations[currentIndex].path && locations[currentIndex].path.startsWith("https://")
                   ? locations[currentIndex].path // If it's already a full URL, use it directly
                   : locations[currentIndex].path
-                  ? `https://infinitech-testing1.online/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
+                  ? `http://localhost:8000/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
                   : '' // If there's no path, set it to an empty string or fallback image URL
               }
               alt={locations[currentIndex].name}
@@ -415,7 +415,7 @@ const ImageSlider = () => {
               onLoad={handleImageLoad}
               priority
             />
-          </Link>
+          </a>
 
           {/* Location info overlay */}
           <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center p-3 text-sm z-30">
@@ -469,6 +469,7 @@ const AlveoBanner = () => {
   };
   const handleSelectChange = (event) => {
     const dropdownValue = event.target.value;
+    console.log(dropdownValue)
     setSelectedValue(dropdownValue);
     setSearchInput(""); // Clear search input when dropdown changes
     setSuggestions([]); // Clear suggestions when dropdown changes
@@ -491,7 +492,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   console.log(`Filter: ${filter}, Search Value: ${searchValue}`);
 
   try {
-    const response = await fetch(`https://infinitech-testing1.online/api/properties`);
+    const response = await fetch(`http://localhost:8000/api/properties`);
     const data = await response.json();
 
     console.log("API response data:", data);
@@ -547,7 +548,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   const fetchBuildingFeatures = async (propertyId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildingfeatures?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildingfeatures?property_id=${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -571,7 +572,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   const fetchBuildings = async (propertyId) => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildings?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildings?property_id=${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -593,10 +594,13 @@ const fetchSuggestions = async (filter, searchValue) => {
   };
 
   const fetchData = async (filter, searchValue, callback) => {
-    console.log(filter,searchValue,callback)
+    if (!filter){
+      filter ="All"
+    }
+    console.log(filter)
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/searchProperty?filter=${filter}&search=${searchValue}`,
+        `http://localhost:8000/api/searchProperty?filter=${filter}&search=${searchValue}`,
         {
           method: "GET",
           headers: {
@@ -649,13 +653,24 @@ const fetchSuggestions = async (filter, searchValue) => {
 
 
 
-  const arrowFetch = () => {
+  const arrowFetch = () => {  
+   if (!selectedValue  || selectedValue ==="All") {
+    console.log("No value selected in dropdown");
+  } else {
+    console.log("Selected Value:", selectedValue);
+  }
+
+  // Log search input with a check for emptiness
+  if (!searchInput) {
+    console.log("No input in search field");
+  } else {
+    console.log("Search Input:", searchInput);
+  }
     hideSuggestions();
     setShowSuggestions(false);
     openPopup();
     setLoading(true);
-    console.log(selectedValue,searchInput)
-    if (selectedValue && searchInput) {
+
       // Fetch the property data based on selected value and search input
       fetchData(selectedValue, searchInput, async (properties) => {
 
@@ -681,9 +696,7 @@ const fetchSuggestions = async (filter, searchValue) => {
         setLoading(false);
         setShowSuggestions(false);
       });
-    } else {
-
-    }
+  
   };
 
   return (
@@ -717,7 +730,7 @@ const fetchSuggestions = async (filter, searchValue) => {
   {/* Loan Calculator Icon */}
   <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10">
     <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <Link href="/pages/loancalculator" passHref>
+      <a href="/pages/loancalculator" passHref>
         <div className="relative group">
           <img
             className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
@@ -730,12 +743,12 @@ const fetchSuggestions = async (filter, searchValue) => {
             Loan Calculator
           </span>
         </div>
-      </Link>
+      </a>
     </div>
   </div>
   <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16  m-4 mb-10">
     <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <Link href="/pages/set-appointment" passHref>
+      <a href="/pages/set-appointment" passHref>
         <div className="relative group">
           <img
             className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
@@ -748,13 +761,13 @@ const fetchSuggestions = async (filter, searchValue) => {
             Set Appointment
           </span>
         </div>
-      </Link>
+      </a>
     </div>
   </div>
   {/* Agent Icon */}
     <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-28 m-4 mb-10">
     <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <Link href="/pages/add-property" passHref>
+      <a href="/pages/add-property" passHref>
         <div className="relative group">
           <img
             className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
@@ -767,12 +780,12 @@ const fetchSuggestions = async (filter, searchValue) => {
             Submit Property
           </span>
         </div>
-      </Link>
+      </a>
     </div>
   </div>
   <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-40 m-4 mb-10">
     <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
-      <Link href="/pages/agent" passHref>
+      <a href="/pages/agent" passHref>
         <div className="relative group">
           <img
             className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
@@ -785,7 +798,7 @@ const fetchSuggestions = async (filter, searchValue) => {
             Agent
           </span>
         </div>
-      </Link>
+      </a>
     </div>
   </div>
 
@@ -813,12 +826,12 @@ const fetchSuggestions = async (filter, searchValue) => {
               <div className="flex flex-col xl:flex-row xl:gap-4 items-center xl:items-start">
                 <select
                   id="locationDropdown"
-                  value={selectedValue}
+                  value={selectedValue }
                   onChange={handleSelectChange}
                   className="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 xl:ml-60 md:text-md md:h-9 md:w-72 focus:ring-blue-500 w-60 sm:w-96 lg:h-10 lg:w-4/12 xl:w-40 xl:p-0 xl:h-10 xl:text-sm"
                 >
                   <option value="" disabled>Select</option>
-                    <option value="All">All</option>
+               <option value="All">All</option>
                   <option value="name">Residence Name</option>
                   <option value="status">Status</option>
                   <option value="location">Location</option>
@@ -828,6 +841,7 @@ const fetchSuggestions = async (filter, searchValue) => {
                   <option value="land_area">Land Area</option>
                   <option value="development_type">Development Type</option>
                   <option value="architectural_theme">Architectural Theme</option>
+                     
                 </select>
                 <input
                   type="text"
@@ -948,11 +962,11 @@ const fetchSuggestions = async (filter, searchValue) => {
 
     if (imgPath.startsWith('property/')) {
       // If the image path starts with "property/", it is assumed to be in the "public" folder
-      return `https://infinitech-testing1.online/${imgPath.replace(/\\/g, '/')}`;
+      return `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`;
     }
 
     // For any other local paths, prepend the base URL
-    return `https://infinitech-testing1.online/${imgPath.replace(/\\/g, '/')}`;
+    return `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`;
   })();
 
                         console.log('Image Source:', imageSrc); // Log the image source to verify the correct path
@@ -1050,7 +1064,7 @@ const fetchSuggestions = async (filter, searchValue) => {
 
         // If the image path starts with '/property/', treat it as a URL that requires the base URL
         if (imagePath.startsWith('/property/')) {
-          return `https://infinitech-testing1.online${imagePath.replace(/\\/g, '/')}`;
+          return `http://localhost:8000${imagePath.replace(/\\/g, '/')}`;
         }
 
                                 // If the image path starts with 'http' or 'https', it's already a full URL
@@ -1182,7 +1196,7 @@ const fetchSuggestions = async (filter, searchValue) => {
         ? (building.path.startsWith('http') || building.path.startsWith('https'))
           ? building.path // If it's a URL, use it directly
           : building.path.startsWith('/property/')
-          ? `https://infinitech-testing1.online${building.path.replace(/\\/g, '/')}` // If it's a local asset with '/property/', prepend the local server URL
+          ? `http://localhost:8000${building.path.replace(/\\/g, '/')}` // If it's a local asset with '/property/', prepend the local server URL
           : `${building.path.replace(/\\/g, '/')}` // If it's a relative asset, prepend '/assets'
         : '' // Fallback in case building.path is null or undefined
     }
@@ -1244,7 +1258,7 @@ const DashboardComponent = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale"
-        canonical="https://realstate-frontend-alveo.vercel.app"
+        canonical="http://localhost:3000"
       />
 
       <div className="mb-10">

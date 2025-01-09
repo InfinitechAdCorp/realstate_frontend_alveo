@@ -49,7 +49,7 @@ const fetchProperties = async () => {
   // Assuming you have this function defined elsewhere
   try {
 
-    const response = await fetch("https://infinitech-testing1.online/api/admin/properties"); // Fetch properties API
+    const response = await fetch("http://localhost:8000/api/admin/properties"); // Fetch properties API
     const data = await response.json();
     return data; // Return fetched properties
 
@@ -61,7 +61,7 @@ const fetchProperties = async () => {
 const fetchBuildings = async () => {
   try {
 
-    const response = await fetch("https://infinitech-testing1.online/api/admin/buildings"); // Fetch buildings API
+    const response = await fetch("http://localhost:8000/api/admin/buildings"); // Fetch buildings API
 
     // Fetch properties API
     const data = await response.json()
@@ -75,7 +75,7 @@ const fetchBuildings = async () => {
 const fetchFacilities = async () => {
   try {
 
-    const response = await fetch("https://infinitech-testing1.online/api/admin/facilities");
+    const response = await fetch("http://localhost:8000/api/admin/facilities");
     const data = await response.json();
  
     return data; // Return fetched properties
@@ -88,7 +88,7 @@ const fetchFacilities = async () => {
 const fetchFeatures = async () => {
   try {
 
-    const response = await fetch("https://infinitech-testing1.online/api/admin/features"); // Fetch features API
+    const response = await fetch("http://localhost:8000/api/admin/features"); // Fetch features API
     const data = await response.json();
   
     return data; // Return fetched properties
@@ -225,108 +225,103 @@ export function DataTable ({ columns, data }) {
       [name]: file
     })
   }
-  const handleSubmit = async e => {
-    e.preventDefault()
+const handleSubmit = async e => {
+  e.preventDefault();
 
-    // Log property data before appending
-    console.log('Property Data before appending:', propertyData)
+  // Log property data before appending
+  console.log('Property Data before appending:', propertyData);
 
-    const formData = new FormData()
+  const formData = new FormData();
 
-    // Ensure that required fields are present
-    // if (!propertyData.key || !propertyData.name || !propertyData.status) {
-      //  handleShowWarningToast('Please fill in all required fields.')
-    //   return
-    // }
+  // Ensure that required fields are present
+  // if (!propertyData.key || !propertyData.name || !propertyData.status) {
+  //   handleShowWarningToast('Please fill in all required fields.');
+  //   return;
+  // }
 
-    // Reassign 'key' to be the lowercase version of 'location'
-    if (propertyData.location ==="other") {
-      propertyData.key = propertyData.custom_location.toLowerCase()
-    }else {
-      propertyData.key = propertyData.location.toLowerCase()
-    }
-
-    if(propertyData.development_type ==="other"){
-      propertyData.development_type = propertyData.custom_development_type
-    }
-      if(propertyData.architectural_theme ==="other"){
-      propertyData.architectural_theme = propertyData.custom_architectural_theme
-    }
-     if(propertyData.status ==="other"){
-      propertyData.status = propertyData.custom_status
-    }
-     if(propertyData.location ==="other"){
-      propertyData.location = propertyData.custom_location
-    }
-
-    // Append all property fields
-Object.keys(propertyData).forEach(key => {
-  // Exclude specific custom keys
-  if (
-    key === 'custom_architectural_theme' ||
-    key === 'custom_development_type' ||
-    key === 'custom_location' ||
-    key === 'custom_status'
-  ) {
-    return; // Skip these keys
+  // Reassign 'key' to be the lowercase version of 'location'
+  if (propertyData.location === "other") {
+    propertyData.key = propertyData.custom_location.toLowerCase();
+  } else {
+    propertyData.key = propertyData.location.toLowerCase();
   }
 
-  if (key === 'path' || key === 'view') {
-    if (propertyData[key] instanceof File) {
-      // console.log(`Appending file for key ${key}:`, propertyData[key])
+  if (propertyData.development_type === "other") {
+    propertyData.development_type = propertyData.custom_development_type;
+  }
+  if (propertyData.architectural_theme === "other") {
+    propertyData.architectural_theme = propertyData.custom_architectural_theme;
+  }
+  if (propertyData.status === "other") {
+    propertyData.status = propertyData.custom_status;
+  }
+  if (propertyData.location === "other") {
+    propertyData.location = propertyData.custom_location;
+  }
+
+  // Append all property fields
+  Object.keys(propertyData).forEach(key => {
+    // Exclude specific custom keys
+    if (
+      key === 'custom_architectural_theme' ||
+      key === 'custom_development_type' ||
+      key === 'custom_location' ||
+      key === 'custom_status'
+    ) {
+      return; // Skip these keys
+    }
+
+    if (key === 'path' || key === 'view') {
+      if (propertyData[key] instanceof File) {
+        // Append file if it's an instance of File
+        formData.append(key, propertyData[key]);
+      }
+    } else {
+      // Append regular data
       formData.append(key, propertyData[key]);
     }
-  } else {
-    // console.log(`Appending regular data for key ${key}:`, propertyData[key])
-    formData.append(key, propertyData[key]);
-  }
-});
+  });
 
+  // Log the FormData content for debugging
+  formData.forEach((value, key) => {
+    console.log(`FormData - ${key}:`, value);
+  });
 
+  try {
+    const response = await fetch('http://localhost:8000/api/admin/addproperty', {
+      method: 'POST',
+      body: formData // No need to set headers, Fetch will handle it
+    });
 
+    // Check if the response is JSON
+    const contentType = response.headers.get('Content-Type');
+    console.log(true);
+    if (contentType && contentType.includes('application/json')) {
+      const data = await response.json();
+      console.log('Response Data:', data);
 
-    // Log the formData to see what is being appended
-    formData.forEach((value, key) => {
-      console.log('Form Data:', key, value)
-    })
-
-
-    try {
-      const response = await fetch(
-        'https://infinitech-testing1.online/api/admin/addproperty',
-        {
-          method: 'POST',
-          body: formData // No need to set headers, Fetch will handle it
-        }
-      )
-
-      // Check if the response is JSON
-      const contentType = response.headers.get('Content-Type')
-      if (contentType && contentType.includes('application/json')) {
-        const data = await response.json()
-        console.log('Response Data:', data)
-
-        if (response.ok) {
-          handleShowSuccessToast('Property created successfully')
-          closeAddProperty()
-        } else {
-          console.error('Error creating property:', data)
-          handleShowErrorToast(`Error: ${data.message}`)
-        }
+      if (response.ok) {
+        handleShowSuccessToast('Property created successfully');
+        closeAddProperty();
       } else {
-        const errorText = await response.text()
-        console.error('Error response:', errorText)
+        console.error('Error creating property:', data);
+        handleShowErrorToast(`Error: ${data.message}`);
       }
-    } catch (error) {
-      console.error('Error:', error)
+    } else {
+      const errorText = await response.text();
+      console.error('Error response:', errorText);
     }
+  } catch (error) {
+    console.error('Error:', error);
   }
+};
+
 
   useEffect(() => {
     const fetchDevelopmentTypes = async () => {
       try {
         const response = await fetch(
-          'https://infinitech-testing1.online/api/admin/development-types'
+          'http://localhost:8000/api/admin/development-types'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch development types')
@@ -340,7 +335,7 @@ Object.keys(propertyData).forEach(key => {
     const fetchArchitecturalTheme = async () => {
       try {
         const response = await fetch(
-          'https://infinitech-testing1.online/api/admin/architectural-themes'
+          'http://localhost:8000/api/admin/architectural-themes'
         )
         if (!response.ok) {
           throw new Error('Failed to fetch')
@@ -353,7 +348,7 @@ Object.keys(propertyData).forEach(key => {
     }
     const fetchStatus = async () => {
       try {
-        const response = await fetch('https://infinitech-testing1.online/api/admin/status')
+        const response = await fetch('http://localhost:8000/api/admin/status')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
@@ -365,7 +360,7 @@ Object.keys(propertyData).forEach(key => {
     }
     const fetchArea = async () => {
       try {
-        const response = await fetch('https://infinitech-testing1.online/api/admin/area')
+        const response = await fetch('http://localhost:8000/api/admin/area')
         if (!response.ok) {
           throw new Error('Failed to fetch')
         }
