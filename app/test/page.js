@@ -53,7 +53,7 @@
 //     e.preventDefault()
 
 //     // Step 1: User submits email and password to login
-//     const response = await fetch('http://localhost:8000/api/login', {
+//     const response = await fetch('https://infinitech-testing1.online/api/login', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -78,7 +78,7 @@
 //     e.preventDefault()
 
 //     // Step 2: User submits OTP for verification
-//     const otpResponse = await fetch('http://localhost:8000/api/verify-otp', {
+//     const otpResponse = await fetch('https://infinitech-testing1.online/api/verify-otp', {
 //       method: 'POST',
 //       headers: {
 //         'Content-Type': 'application/json'
@@ -101,7 +101,7 @@
 
 //   const fetchCount = async (endpoint, key) => {
 //     try {
-//       const response = await fetch(`http://localhost:8000/api/admin/${endpoint}`);
+//       const response = await fetch(`https://infinitech-testing1.online/api/admin/${endpoint}`);
 //       const data = await response.json();
 
 //       if (response.ok) {
@@ -534,6 +534,7 @@ export default function Admin({}) {
     }
 
     // Log the requestData for debugging
+
     console.log("Request Data:", requestData);
 
     try {
@@ -570,6 +571,7 @@ export default function Admin({}) {
       console.error("An error occurred:", err);
       setError("An error occurred during submission");
     }
+
   };
   const handleShowSuccessToast = (message) => {
     showToast(message, "success");
@@ -596,6 +598,7 @@ export default function Admin({}) {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0]; // Get the selected file
+
     if (file) {
       // Convert the image file to Base64 string using FileReader
       const reader = new FileReader();
@@ -664,6 +667,7 @@ export default function Admin({}) {
       const fetchChatbotData = async () => {
         try {
           const response = await fetch(
+
             "http://localhost:8000/api/admin/getChatbot"
           );
           const chatbotData = await response.json();
@@ -676,6 +680,7 @@ export default function Admin({}) {
         } catch (error) {
           console.error("Error fetching chatbot data:", error);
         }
+
       };
 
       fetchChatbotData();
@@ -689,6 +694,7 @@ export default function Admin({}) {
           console.error("Error fetching submitted properties:", error);
         });
     }
+
   }, [activeNav]);
 
   const fetchData = () => {
@@ -706,6 +712,7 @@ export default function Admin({}) {
         console.log("Fetched Architectural Themes:", data);
         setData((prevData) => ({ ...prevData, architecturalThemes: data }));
       })
+
       .catch((error) => console.error("Error fetching data:", error));
 
     fetch("http://localhost:8000/api/admin/status")
@@ -775,6 +782,7 @@ export default function Admin({}) {
             console.error("Error response from API:", data.message);
           }
 
+
           fetchData(); // Optionally fetch the updated data
         })
         .catch((error) => {
@@ -787,6 +795,7 @@ export default function Admin({}) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newItem }),
+
       })
         .then((response) => response.json())
         .then((data) => {
@@ -949,6 +958,7 @@ export default function Admin({}) {
     }));
   };
 
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -987,6 +997,7 @@ export default function Admin({}) {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
+
         `http://localhost:8000/api/admin/${endpoint}`
       );
       const data = await response.json();
@@ -1726,8 +1737,10 @@ export default function Admin({}) {
                 </div>
               </div>
             )}
-            {activeNav === "Manage Other Data" && (
-              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full h-0">
+
+            {activeNav === 'Manage Other Data' && (
+              <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 w-full h-0'>
+
                 <button
                   className="bg-blue-500 text-white px-6 py-3 rounded-md text-lg hover:bg-blue-700 transition duration-300"
                   onClick={openDevelopmentTypeModal}
