@@ -909,120 +909,121 @@ const fetchSuggestions = async (filter, searchValue) => {
 
 </div>
 
-        <div className="content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10">
-  <div className="w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left">
-    {/* Title */}
-    <h1 className="mt-2 text-4xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
-      ALVEO LAND
-    </h1>
+     <div className='content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
+            <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
+              {/* Title */}
+              <h1 className='mt-2 text-4xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
+                ALVEO LAND
+              </h1>
 
-    {/* Subtitle */}
-    <h4 className="text-lg font-medium sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-      LIVE WELL ACROSS THE PHILIPPINES
-    </h4>
-  </div>
-</div>
-
-
-          <div className="my-6 h-auto grid grid-cols-1 gap-6 relative">
-            {/* Left Column: Search Inputs */}
-            <div className="space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative">
-              {/* Search Inputs */}
-              <div className="flex flex-col xl:flex-row xl:gap-4 items-center xl:items-start">
-                <select
-                  id="locationDropdown"
-                  value={selectedValue }
-                  onChange={handleSelectChange}
-                  className="px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 xl:ml-60 md:text-md md:h-9 md:w-72 focus:ring-blue-500 w-60 sm:w-96 lg:h-10 lg:w-4/12 xl:w-40 xl:p-0 xl:h-10 xl:text-sm"
-                >
-                  <option value="" disabled>Select</option>
-               <option value="All">All</option>
-                  <option value="name">Residence Name</option>
-                  <option value="status">Status</option>
-                  <option value="location">Location</option>
-                  <option value="specific_location">Specific Location</option>
-                  <option value="price_range">Price Range</option>
-                  <option value="units">Units</option>
-                  <option value="land_area">Land Area</option>
-                  <option value="development_type">Development Type</option>
-                  <option value="architectural_theme">Architectural Theme</option>
-                     
-                </select>
-                <input
-                  type="text"
-                  placeholder="Search any location/residence"
-                  aria-label="Search"
-                  id="searchInput"
-                  className="max-sm:mt-2 sm:mt-2 md:mt-2 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 md:text-md md:h-9 md:w-72 focus:ring-blue-500 w-60 sm:w-96 lg:h-10 lg:w-4/12 xl:w-3/12 xl:h-10 xl:ml-1 xl:mt-0"
-                  value={searchInput || ""}
-                  onChange={handleSearchInputChange}
-                />
-              </div>
-<div>
-  {isSuggestionsVisible && searchInput.trim() && (
-    <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1 sm:ml-0 sm:left-36 md:left-44 lg:mt-4 xl:mt-6 lg:left-1/3 xl:left-1/3 2xl:left-1/4">
-      {suggestions.length > 0 && selectedValue !== "All" ? (
-        suggestions.map((item, index) => (
-          <div
-            key={index}
-            className="cursor-pointer hover:bg-gray-100 p-2 rounded max-h-40"
-            onClick={() => {
-              setSearchInput(item[selectedValue]); // Dynamically set search input
-              setSuggestions([]);
-              setIsSuggestionsVisible(false);
-            }}
-          >
-            {item[selectedValue]} {/* Render suggestion based on filter */}
+              {/* Subtitle */}
+              <h4 className='text-lg font-medium sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]'>
+                LIVE WELL ACROSS THE PHILIPPINES
+              </h4>
+            </div>
           </div>
-        ))
-      ) : (
-        selectedValue !== "All" && (
-          <div className="text-gray-500 text-center py-2">No Data Available</div> // Show message only if filter is not 'All'
-        )
-      )}
-    </div>
-  )}
-</div>
 
-
-
+          <div className='my-6 h-auto grid grid-cols-1 gap-6 relative'>
+            {/* Left Column: Search Inputs */}
+            <div className='space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative'>
+              {/* Search Inputs */}
+              <div className='flex flex-col xl:flex-row xl:gap-4 items-center xl:items-start'>
+                <select
+                  id='locationDropdown'
+                  value={selectedValue}
+                  onChange={handleSelectChange}
+                  className='px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 xl:ml-60 md:text-md md:h-9 md:w-72 focus:ring-blue-500 w-60 sm:w-96 lg:h-10 lg:w-4/12 xl:w-40 xl:p-0 xl:h-10 xl:text-sm'
+                >
+                  <option value='' disabled>
+                    Select
+                  </option>
+                  <option value='All'>All</option>
+                  <option value='name'>Residence Name</option>
+                  <option value='status'>Status</option>
+                  <option value='location'>Location</option>
+                  <option value='specific_location'>Specific Location</option>
+                  <option value='price_range'>Price Range</option>
+                  <option value='units'>Units</option>
+                  <option value='land_area'>Land Area</option>
+                  <option value='development_type'>Development Type</option>
+                  <option value='architectural_theme'>
+                    Architectural Theme
+                  </option>
+                </select>
+                <div className='relative w-60 sm:w-96 lg:w-4/12 xl:w-3/12'>
+                  <input
+                    type='text'
+                    placeholder='Search any location/residence'
+                    aria-label='Search'
+                    id='searchInput'
+                    className='w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 md:text-md md:h-9 lg:h-10 xl:h-10'
+                    value={searchInput || ''}
+                    onChange={handleSearchInputChange}
+                  />
+                  <button
+                    onClick={arrowFetch}
+                    className='absolute top-1/2 right-0 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200'
+                  >
+                    Search
+                  </button>
+                </div>
+              </div>
+              <div>
+                {isSuggestionsVisible && searchInput.trim() && (
+                  <div className='absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1 sm:ml-0 sm:left-36 md:left-44 lg:mt-4 xl:mt-6 lg:left-1/3 xl:left-1/3 2xl:left-1/4'>
+                    {suggestions.length > 0 && selectedValue !== 'All'
+                      ? suggestions.map((item, index) => (
+                          <div
+                            key={index}
+                            className='cursor-pointer hover:bg-gray-100 p-2 rounded max-h-40'
+                            onClick={() => {
+                              setSearchInput(item[selectedValue]) // Dynamically set search input
+                              setSuggestions([])
+                              setIsSuggestionsVisible(false)
+                            }}
+                          >
+                            {item[selectedValue]}{' '}
+                            {/* Render suggestion based on filter */}
+                          </div>
+                        ))
+                      : selectedValue !== 'All' && (
+                          <div className='text-gray-500 text-center py-2'>
+                            No Data Available
+                          </div> // Show message only if filter is not 'All'
+                        )}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Right Column: Image Slider */}
             {/* Search Button */}
-            <div className="flex items-center justify-center xl:mt-8 xl:w-32 xl:absolute xl:left-1/3 xl:ml-32 xl:transform xl:-translate-x-1/2 2xl:left-1/3">
+            {/* <div className='flex items-center justify-center xl:mt-8 xl:w-32 xl:absolute xl:left-1/3 xl:ml-32 xl:transform xl:-translate-x-1/2 2xl:left-1/3'>
               <button
                 onClick={arrowFetch} // Move the onClick here to ensure it only triggers when clicking the button
-                className="bg-blue-500 text-white py-2 px-4 mt-0 w-28 h-10 rounded-lg hover:bg-blue-600 transition duration-200 xl:text-xs sm:text-base lg:text-lg"
+                className='bg-blue-500 text-white py-2 px-4 mt-0 w-28 h-10 rounded-lg hover:bg-blue-600 transition duration-200 xl:text-xs sm:text-base lg:text-lg'
               >
                 Search
               </button>
-            </div>
+            </div> */}
 
-            <div className="relative flex justify-center items-center w-4/5 max-sm:left-8 sm:left-1/3 sm:top-20 md:left-40 xl:-mt-10 max-sm:h-40 md:w-1/2 md:top-20  md:ml-16 lg:left-1/3 lg:ml-1 lg:w-1/3 xl:w-5/12 xl:left-1/2 xl:ml-10 xl:absolute xl:-translate-y-1/3 xl:flex xl:justify-start xl:items-center">
-              <div className="absolute inset-0 w-full flex">
-                <ImageSlider /> {/* Ensuring this takes full width of its parent container */}
+            <div className='relative flex justify-center items-center w-4/5 max-sm:left-8 sm:left-1/3 sm:top-20 md:left-40 xl:-mt-10 max-sm:h-40 md:w-1/2 md:top-20  md:ml-16 lg:left-1/3 lg:ml-1 lg:w-1/3 xl:w-5/12 xl:left-1/2 xl:ml-10 xl:absolute xl:-translate-y-1/3 xl:flex xl:justify-start xl:items-center'>
+              <div className='absolute inset-0 w-full flex'>
+                <ImageSlider />{' '}
+                {/* Ensuring this takes full width of its parent container */}
               </div>
             </div>
-
           </div>
-
-
-
-
-
-        
-
 
           {enlargedImage && (
             <div
-              className="absolute top-1 w-screen  h-1/2 md:w-1/2 md:h-screen z-40"
+              className='absolute top-1 w-screen  h-1/2 md:w-1/2 md:h-screen z-40'
               onClick={closeEnlargedImage}
             >
               <img
                 src={enlargedImage}
-                alt="Enlarged"
-                className="w-full h-full"// Adjust as necessary
+                alt='Enlarged'
+                className='w-full h-full' // Adjust as necessary
               />
             </div>
           )}
