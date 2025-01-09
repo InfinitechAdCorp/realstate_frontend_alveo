@@ -26,6 +26,7 @@ const Footer = () => {
     document.body.removeChild(link) // Remove from DOM
   }
 
+
   return (
     <>
       <SEO
@@ -42,6 +43,7 @@ const Footer = () => {
   <div className='flex flex-col text-left xl:text-left max-sm:mt-5 sm:pt-10 ms-40'>
     <h1>Λ L V E O</h1>
     <p>an AyalaLand company</p>
+
   </div>
   <div className='mt-4 text-sm ms-40'>
     <button

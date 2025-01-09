@@ -68,9 +68,9 @@ const Carousel = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const response = await fetch(
-          'https://127.0.0.1/api/allproperty'
-        )
+
+        const response = await fetch("http://localhost:8000/api/allproperty");
+
         if (!response.ok) {
           throw new Error('Network response was not ok')
         }
@@ -199,11 +199,11 @@ const Map = () => {
     // Fetch locations from the Laravel API
     const fetchLocations = async () => {
       try {
-        const response = await fetch(
-          'https://infinitech-testing1.online/api/locations'
-        )
-        const data = await response.json()
-        setLocations(data) // Update state with fetched data
+
+        const response = await fetch("http://localhost:8000/api/locations");
+        const data = await response.json();
+        setLocations(data); // Update state with fetched data
+
       } catch (error) {
         console.error('Error fetching locations:', error)
       }
@@ -338,35 +338,32 @@ const ImageSlider = () => {
   const [loading, setLoading] = useState(true)
 
   const fetchLocations = async () => {
-    try {
-      const response = await fetch(
-        'https://infinitech-testing1.online/api/properties'
-      )
-      if (!response.ok) {
-        throw new Error('Failed to fetch locations')
-      }
-      const data = await response.json()
 
-      // Log the response to see its structure
-      console.log(data)
+  try {
+    const response = await fetch("http://localhost:8000/api/properties");
+    if (!response.ok) {
+      throw new Error("Failed to fetch locations");
+    }
+    const data = await response.json();
 
-      // Process the data to only extract id, name, and location
-      if (Array.isArray(data)) {
-        const simplifiedProperties = data.map(property => {
-          return {
-            id: property.id,
-            name: property.name,
-            location: property.location,
-            path: property.path
-          }
-        })
+    // Log the response to see its structure
+    console.log(data);
 
-        setLocations(simplifiedProperties) // Assuming setLocations sets the state
-      } else {
-        console.error('Invalid properties data structure', data)
-      }
-    } catch (error) {
-      console.error('Error fetching locations:', error)
+    // Process the data to only extract id, name, and location
+    if (Array.isArray(data)) {
+      const simplifiedProperties = data.map(property => {
+        return {
+          id: property.id,
+          name: property.name,
+          location: property.location,
+          path : property.path
+        };
+      });
+
+      setLocations(simplifiedProperties); // Assuming setLocations sets the state
+    } else {
+      console.error("Invalid properties data structure", data);
+
     }
   }
 
@@ -402,11 +399,11 @@ const ImageSlider = () => {
 
       {/* Only show the location image if there are locations */}
       {locations && locations.length > 0 && (
-        <div className='relative w-full h-auto rounded-lg overflow-hidden cursor-pointer z-10'>
-          <Link
-            href={`/pages/buildings/${encodeURIComponent(
-              locations[currentIndex].id
-            )}`}
+
+        <div className="relative w-full h-auto rounded-lg overflow-hidden cursor-pointer z-10">
+          <a
+            href={`/pages/buildings/${encodeURIComponent(locations[currentIndex].id)}`}
+
             passHref
           >
             <Image
@@ -415,9 +412,9 @@ const ImageSlider = () => {
                 locations[currentIndex].path.startsWith('https://')
                   ? locations[currentIndex].path // If it's already a full URL, use it directly
                   : locations[currentIndex].path
-                  ? `https://infinitech-testing1.online/${locations[
-                      currentIndex
-                    ].path.replace(/\\/g, '/')}` // If it's a relative path, construct the full URL
+
+                  ? `http://localhost:8000/${locations[currentIndex].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
+
                   : '' // If there's no path, set it to an empty string or fallback image URL
               }
               alt={locations[currentIndex].name}
@@ -430,7 +427,7 @@ const ImageSlider = () => {
               onLoad={handleImageLoad}
               priority
             />
-          </Link>
+          </a>
 
           {/* Location info overlay */}
           <div className='absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white text-center p-3 text-sm z-30'>
@@ -483,19 +480,21 @@ const AlveoBanner = () => {
   }
 
   const closePopup = () => {
-    closeEnlargedImage()
-    setPopupVisible(false)
-  }
-  const handleSelectChange = event => {
-    const dropdownValue = event.target.value
-    setSelectedValue(dropdownValue)
-    setSearchInput('') // Clear search input when dropdown changes
-    setSuggestions([]) // Clear suggestions when dropdown changes
-    setShowSuggestions(false)
-  }
-  const handleSearchInputChange = event => {
-    const searchValue = event.target.value
-    setSearchInput(searchValue)
+
+    closeEnlargedImage();
+    setPopupVisible(false);
+  };
+  const handleSelectChange = (event) => {
+    const dropdownValue = event.target.value;
+    console.log(dropdownValue)
+    setSelectedValue(dropdownValue);
+    setSearchInput(""); // Clear search input when dropdown changes
+    setSuggestions([]); // Clear suggestions when dropdown changes
+    setShowSuggestions(false);
+  };
+ const handleSearchInputChange = (event) => {
+    const searchValue = event.target.value;
+    setSearchInput(searchValue);
 
     // Trigger fetch only if both dropdown and input have values
     if (selectedValue && searchValue) {
@@ -505,9 +504,34 @@ const AlveoBanner = () => {
       setSuggestions([]) // Clear suggestions if either value is missing
       setIsSuggestionsVisible(false) // Hide suggestions if no valid search
     }
-  }
-  const fetchSuggestions = async (filter, searchValue) => {
-    console.log(`Filter: ${filter}, Search Value: ${searchValue}`)
+
+  };
+const fetchSuggestions = async (filter, searchValue) => {
+  console.log(`Filter: ${filter}, Search Value: ${searchValue}`);
+
+  try {
+    const response = await fetch(`http://localhost:8000/api/properties`);
+    const data = await response.json();
+
+    console.log("API response data:", data);
+
+    // Filter the data based on the search value
+    const filteredSuggestions = data.filter((item) =>
+      item[filter]?.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    // Remove duplicates based on the selected filter value
+    const seen = new Set();
+    const uniqueSuggestions = filteredSuggestions.filter((item) => {
+      const value = item[filter];
+      if (seen.has(value)) {
+        return false; // If the value is already seen, filter it out
+      } else {
+        seen.add(value);
+        return true; // Otherwise, keep it
+      }
+    });
+
 
     try {
       const response = await fetch(
@@ -568,7 +592,7 @@ const AlveoBanner = () => {
   const fetchBuildingFeatures = async propertyId => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildingfeatures?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildingfeatures?property_id=${propertyId}`,
         {
           method: 'GET',
           headers: {
@@ -592,7 +616,7 @@ const AlveoBanner = () => {
   const fetchBuildings = async propertyId => {
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/buildings?property_id=${propertyId}`,
+        `http://localhost:8000/api/buildings?property_id=${propertyId}`,
         {
           method: 'GET',
           headers: {
@@ -614,10 +638,14 @@ const AlveoBanner = () => {
   }
 
   const fetchData = async (filter, searchValue, callback) => {
-    console.log(filter, searchValue, callback)
+
+    if (!filter){
+      filter ="All"
+    }
+    console.log(filter)
     try {
       const response = await fetch(
-        `https://infinitech-testing1.online/api/searchProperty?filter=${filter}&search=${searchValue}`,
+        `http://localhost:8000/api/searchProperty?filter=${filter}&search=${searchValue}`,
         {
           method: 'GET',
           headers: {
@@ -668,13 +696,25 @@ const AlveoBanner = () => {
     }
   }
 
-  const arrowFetch = () => {
-    hideSuggestions()
-    setShowSuggestions(false)
-    openPopup()
-    setLoading(true)
-    console.log(selectedValue, searchInput)
-    if (selectedValue && searchInput) {
+
+  const arrowFetch = () => {  
+   if (!selectedValue  || selectedValue ==="All") {
+    console.log("No value selected in dropdown");
+  } else {
+    console.log("Selected Value:", selectedValue);
+  }
+
+  // Log search input with a check for emptiness
+  if (!searchInput) {
+    console.log("No input in search field");
+  } else {
+    console.log("Search Input:", searchInput);
+  }
+    hideSuggestions();
+    setShowSuggestions(false);
+    openPopup();
+    setLoading(true);
+
       // Fetch the property data based on selected value and search input
       fetchData(selectedValue, searchInput, async properties => {
         if (properties.length > 0) {
@@ -694,12 +734,12 @@ const AlveoBanner = () => {
           setFetchedData(propertiesWithBuildings)
         } else {
         }
-        setLoading(false)
-        setShowSuggestions(false)
-      })
-    } else {
-    }
-  }
+
+        setLoading(false);
+        setShowSuggestions(false);
+      });
+  
+  };
 
   return (
     <>
@@ -730,97 +770,119 @@ const AlveoBanner = () => {
               </div>
             </div>
 
-            {/* Loan Calculator Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700'>
-                <Link href='/pages/loancalculator' passHref>
-                  <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7'
-                      src='/calculator.png'
-                      alt='Loan Calculator'
-                      onMouseOver={e =>
-                        (e.currentTarget.style.transform = 'scale(1.1)')
-                      }
-                      onMouseOut={e =>
-                        (e.currentTarget.style.transform = 'scale(1)')
-                      }
-                    />
-                    <span className='tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-                      Loan Calculator
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16  m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700'>
-                <Link href='/pages/set-appointment' passHref>
-                  <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7'
-                      src='assets/schedule.png'
-                      alt='Agent'
-                      onMouseOver={e =>
-                        (e.currentTarget.style.transform = 'scale(1.1)')
-                      }
-                      onMouseOut={e =>
-                        (e.currentTarget.style.transform = 'scale(1)')
-                      }
-                    />
-                    <span className='tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-                      Set Appointment
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            {/* Agent Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-28 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700'>
-                <Link href='/pages/add-property' passHref>
-                  <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7'
-                      src='assets/add.png'
-                      alt='Agent'
-                      onMouseOver={e =>
-                        (e.currentTarget.style.transform = 'scale(1.1)')
-                      }
-                      onMouseOut={e =>
-                        (e.currentTarget.style.transform = 'scale(1)')
-                      }
-                    />
-                    <span className='tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-                      Submit Property
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-40 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700'>
-                <Link href='/pages/agent' passHref>
-                  <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7'
-                      src='assets/boy.png'
-                      alt='Agent'
-                      onMouseOver={e =>
-                        (e.currentTarget.style.transform = 'scale(1.1)')
-                      }
-                      onMouseOut={e =>
-                        (e.currentTarget.style.transform = 'scale(1)')
-                      }
-                    />
-                    <span className='tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity'>
-                      Agent
-                    </span>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
+         <div className="fixed top-10 right-3 z-50">
+  {/* Room Planner Icon */}
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      
+      <a href='/pages/roomplanner' target="_blank">
+        <div className="cursor-pointer relative group">
+        <img
+          className="w-7 h-7 sm:w-9 sm:h-9 md:w-7 md:h-7 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+          src="/assets/RoomPlanner/bed.png"
+          alt="Room Planner"
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        />
+        <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          Room Planner
+        </span>
+      </div>
+      </a>
+    </div>
+  </div>
+
+  {/* Loan Calculator Icon */}
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <a href="/pages/loancalculator" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="/calculator.png"
+            alt="Loan Calculator"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Loan Calculator
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16  m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <a href="/pages/set-appointment" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="assets/schedule.png"
+            alt="Agent"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Set Appointment
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+  {/* Agent Icon */}
+    <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-28 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <a href="/pages/add-property" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="assets/add.png"
+            alt="Agent"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Submit Property
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-40 m-4 mb-10">
+    <div className="bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-blue-700">
+      <a href="/pages/agent" passHref>
+        <div className="relative group">
+          <img
+            className="w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7"
+            src="assets/boy.png"
+            alt="Agent"
+            onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          />
+          <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            Agent
+          </span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+        <div className="content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10">
+  <div className="w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left">
+    {/* Title */}
+    <h1 className="mt-2 text-4xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]">
+      ALVEO LAND
+    </h1>
+
+    {/* Subtitle */}
+    <h4 className="text-lg font-medium sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+      LIVE WELL ACROSS THE PHILIPPINES
+    </h4>
+  </div>
+</div>
+
 
           <div className='content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
             <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
@@ -842,26 +904,26 @@ const AlveoBanner = () => {
               {/* Search Inputs */}
               <div className='flex flex-col xl:flex-row xl:gap-4 items-center xl:items-start'>
                 <select
-                  id='locationDropdown'
-                  value={selectedValue}
+
+                  id="locationDropdown"
+                  value={selectedValue }
+
                   onChange={handleSelectChange}
                   className='px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 focus:outline-none focus:ring-2 xl:ml-60 md:text-md md:h-9 md:w-72 focus:ring-blue-500 w-60 sm:w-96 lg:h-10 lg:w-4/12 xl:w-40 xl:p-0 xl:h-10 xl:text-sm'
                 >
-                  <option value='' disabled>
-                    Select
-                  </option>
-                  <option value='All'>All</option>
-                  <option value='name'>Residence Name</option>
-                  <option value='status'>Status</option>
-                  <option value='location'>Location</option>
-                  <option value='specific_location'>Specific Location</option>
-                  <option value='price_range'>Price Range</option>
-                  <option value='units'>Units</option>
-                  <option value='land_area'>Land Area</option>
-                  <option value='development_type'>Development Type</option>
-                  <option value='architectural_theme'>
-                    Architectural Theme
-                  </option>
+
+                  <option value="" disabled>Select</option>
+               <option value="All">All</option>
+                  <option value="name">Residence Name</option>
+                  <option value="status">Status</option>
+                  <option value="location">Location</option>
+                  <option value="specific_location">Specific Location</option>
+                  <option value="price_range">Price Range</option>
+                  <option value="units">Units</option>
+                  <option value="land_area">Land Area</option>
+                  <option value="development_type">Development Type</option>
+                  <option value="architectural_theme">Architectural Theme</option>
+
                 </select>
                 <div className='relative w-60 sm:w-96 lg:w-4/12 xl:w-3/12'>
                   <input
@@ -973,51 +1035,43 @@ const AlveoBanner = () => {
                       </div>
 
                       {/* Image Gallery */}
-                      {[property.path, property.view].map(
-                        (imgPath, imgIndex) => {
-                          // Construct the image source URL based on whether it's a relative path or an absolute URL
-                          const imageSrc = (() => {
-                            if (
-                              imgPath.startsWith('http') ||
-                              imgPath.startsWith('https')
-                            ) {
-                              // If it's an absolute URL, use it directly
-                              return imgPath
-                            }
 
-                            if (imgPath.startsWith('property/')) {
-                              // If the image path starts with "property/", it is assumed to be in the "public" folder
-                              return `https://infinitech-testing1.online/${imgPath.replace(
-                                /\\/g,
-                                '/'
-                              )}`
-                            }
+                      {[property.path, property.view].map((imgPath, imgIndex) => {
+                        // Construct the image source URL based on whether it's a relative path or an absolute URL
+                        const imageSrc = (() => {
+                          if (imgPath.startsWith('http') || imgPath.startsWith('https')) {
+                            // If it's an absolute URL, use it directly
+                            return imgPath;
+                          }
 
-                            // For any other local paths, prepend the base URL
-                            return `https://infinitech-testing1.online/${imgPath.replace(
-                              /\\/g,
-                              '/'
-                            )}`
-                          })()
+    if (imgPath.startsWith('property/')) {
+      // If the image path starts with "property/", it is assumed to be in the "public" folder
+      return `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`;
+    }
 
-                          console.log('Image Source:', imageSrc) // Log the image source to verify the correct path
+    // For any other local paths, prepend the base URL
+    return `http://localhost:8000/${imgPath.replace(/\\/g, '/')}`;
+  })();
 
-                          return (
-                            <div className='relative' key={imgIndex}>
-                              <img
-                                src={imageSrc}
-                                alt={`${property.name} view ${imgIndex + 1}`}
-                                onMouseEnter={() => setHoveredImage(imageSrc)}
-                                onMouseLeave={() => setHoveredImage(null)}
-                                onClick={() => handleImageClick(imageSrc)}
-                                className='w-full h-auto rounded-lg shadow-md group-hover:shadow-xl transform transition-all duration-300 ease-in-out hover:scale-105 object-cover'
-                              />
-                              {/* Hover overlay */}
-                              <div className='absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out rounded-lg'></div>
-                            </div>
-                          )
-                        }
-                      )}
+                        console.log('Image Source:', imageSrc); // Log the image source to verify the correct path
+
+                        return (
+                          <div className="relative" key={imgIndex}>
+                            <img
+                              src={imageSrc}
+                              alt={`${property.name} view ${imgIndex + 1}`}
+                              onMouseEnter={() => setHoveredImage(imageSrc)}
+                              onMouseLeave={() => setHoveredImage(null)}
+                              onClick={() => handleImageClick(imageSrc)}
+                              className="w-full h-auto rounded-lg shadow-md group-hover:shadow-xl transform transition-all duration-300 ease-in-out hover:scale-105 object-cover"
+                            />
+                            {/* Hover overlay */}
+                            <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 transition-opacity duration-300 ease-in-out rounded-lg"></div>
+                          </div>
+                        );
+                      })}
+
+
 
                       {/* Property Info */}
                       <div className='property-info bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 ease-in-out'>
@@ -1086,32 +1140,22 @@ const AlveoBanner = () => {
                         </span>
                         <ul className='features-list space-y-8 flex flex-col items-center justify-center w-full max-w-4xl -ml-10'>
                           {/* Check if there are features available */}
-                          {property.features &&
-                          JSON.parse(property.features).length > 0 ? (
-                            JSON.parse(property.features).map(
-                              (feature, featureIndex) => {
-                                // Check the type of image path and create the appropriate source URL
-                                const getImageSrc = imagePath => {
-                                  if (!imagePath) return '' // If no image path, return empty string or placeholder
 
-                                  // If the image path starts with '/property/', treat it as a URL that requires the base URL
-                                  if (imagePath.startsWith('/property/')) {
-                                    return `https://infinitech-testing1.online${imagePath.replace(
-                                      /\\/g,
-                                      '/'
-                                    )}`
-                                  }
+                          {property.features && JSON.parse(property.features).length > 0 ? (
+                            JSON.parse(property.features).map((feature, featureIndex) => {
+                              // Check the type of image path and create the appropriate source URL
+                              const getImageSrc = (imagePath) => {
+                                if (!imagePath) return ''; // If no image path, return empty string or placeholder
 
-                                  // If the image path starts with 'http' or 'https', it's already a full URL
-                                  if (
-                                    imagePath.startsWith('http') ||
-                                    imagePath.startsWith('https')
-                                  ) {
-                                    return imagePath
-                                  }
+        // If the image path starts with '/property/', treat it as a URL that requires the base URL
+        if (imagePath.startsWith('/property/')) {
+          return `http://localhost:8000${imagePath.replace(/\\/g, '/')}`;
+        }
 
-                                  // If it's a relative path (assets folder), convert it to the correct path
-                                  return `${imagePath.replace(/\\/g, '/')}`
+                                // If the image path starts with 'http' or 'https', it's already a full URL
+                                if (imagePath.startsWith('http') || imagePath.startsWith('https')) {
+                                  return imagePath;
+
                                 }
 
                                 const imageSrc = getImageSrc(feature.image) // Get the image source based on the logic
@@ -1221,93 +1265,59 @@ const AlveoBanner = () => {
                               </span>
                               <ul className='mt-3 flex -ml-9 flex-wrap w-80 gap-5'>
                                 {/* Grid layout */}
-                                {property.buildings.map(
-                                  (building, buildingIndex) => (
-                                    <li
-                                      key={buildingIndex}
-                                      className='space-y-4 bg-white rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 p-4'
-                                    >
-                                      {/* Building Name */}
-                                      <h5 className='text-xl font-semibold text-gray-800'>
-                                        {building.name}
-                                      </h5>
 
-                                      {/* Image Container */}
-                                      <div className='relative'>
-                                        <img
-                                          src={
-                                            building.path
-                                              ? building.path.startsWith(
-                                                  'http'
-                                                ) ||
-                                                building.path.startsWith(
-                                                  'https'
-                                                )
-                                                ? building.path // If it's a URL, use it directly
-                                                : building.path.startsWith(
-                                                    '/property/'
-                                                  )
-                                                ? `https://infinitech-testing1.online${building.path.replace(
-                                                    /\\/g,
-                                                    '/'
-                                                  )}` // If it's a local asset with '/property/', prepend the local server URL
-                                                : `${building.path.replace(
-                                                    /\\/g,
-                                                    '/'
-                                                  )}` // If it's a relative asset, prepend '/assets'
-                                              : '' // Fallback in case building.path is null or undefined
-                                          }
-                                          alt={building.name}
-                                          onMouseEnter={() =>
-                                            setHoveredImage(building.path)
-                                          }
-                                          onMouseLeave={() =>
-                                            setHoveredImage(null)
-                                          }
-                                          onClick={() =>
-                                            handleImageClick(building.path)
-                                          }
-                                          className='w-full h-64 object-cover rounded-lg transition-all duration-300 transform hover:scale-105'
-                                        />
-                                        {/* Hover Effect: Show image details on hover */}
-                                      </div>
+                                {property.buildings.map((building, buildingIndex) => (
+                                  <li
+                                    key={buildingIndex}
+                                    className="space-y-4 bg-white rounded-lg shadow-xl hover:shadow-2xl transition-shadow duration-300 p-4"
+                                  >
+                                    {/* Building Name */}
+                                    <h5 className="text-xl font-semibold text-gray-800">
+                                      {building.name}
+                                    </h5>
 
-                                      {/* Building Info List */}
-                                      <ul className='mt-4 text-gray-700 space-y-2 list-none pl-0'>
-                                        <li>
-                                          <strong className='text-gray-800'>
-                                            Development Type:
-                                          </strong>{' '}
-                                          {building.development_type}
-                                        </li>
-                                        <li>
-                                          <strong className='text-gray-800'>
-                                            Residential Levels:
-                                          </strong>{' '}
-                                          {building.residential_levels}
-                                        </li>
-                                        <li>
-                                          <strong className='text-gray-800'>
-                                            Basement Parking Levels:
-                                          </strong>{' '}
-                                          {building.basement_parking_levels}
-                                        </li>
-                                        <li>
-                                          <strong className='text-gray-800'>
-                                            Podium Parking Levels:
-                                          </strong>{' '}
-                                          {building.podium_parking_levels}
-                                        </li>
-                                        <li>
-                                          <strong className='text-gray-800'>
-                                            Commercial Units:
-                                          </strong>{' '}
-                                          {building.commercial_units}
-                                        </li>
-                                      </ul>
-                                    </li>
-                                  )
-                                )}
+            {/* Image Container */}
+   <div className="relative">
+  <img
+    src={
+      building.path
+        ? (building.path.startsWith('http') || building.path.startsWith('https'))
+          ? building.path // If it's a URL, use it directly
+          : building.path.startsWith('/property/')
+          ? `http://localhost:8000${building.path.replace(/\\/g, '/')}` // If it's a local asset with '/property/', prepend the local server URL
+          : `${building.path.replace(/\\/g, '/')}` // If it's a relative asset, prepend '/assets'
+        : '' // Fallback in case building.path is null or undefined
+    }
+    alt={building.name}
+    onMouseEnter={() => setHoveredImage(building.path)}
+    onMouseLeave={() => setHoveredImage(null)}
+    onClick={() => handleImageClick(building.path)}
+    className="w-full h-64 object-cover rounded-lg transition-all duration-300 transform hover:scale-105"
+  />
+  {/* Hover Effect: Show image details on hover */}
+</div>
+
+
+                                    {/* Building Info List */}
+                                    <ul className="mt-4 text-gray-700 space-y-2 list-none pl-0">
+                                      <li>
+                                        <strong className="text-gray-800">Development Type:</strong> {building.development_type}
+                                      </li>
+                                      <li>
+                                        <strong className="text-gray-800">Residential Levels:</strong> {building.residential_levels}
+                                      </li>
+                                      <li>
+                                        <strong className="text-gray-800">Basement Parking Levels:</strong> {building.basement_parking_levels}
+                                      </li>
+                                      <li>
+                                        <strong className="text-gray-800">Podium Parking Levels:</strong> {building.podium_parking_levels}
+                                      </li>
+                                      <li>
+                                        <strong className="text-gray-800">Commercial Units:</strong> {building.commercial_units}
+                                      </li>
+                                    </ul>
+                                  </li>
+                                ))}
                               </ul>
                             </div>
                           </div>
@@ -1331,10 +1341,12 @@ const DashboardComponent = () => {
   return (
     <>
       <SEO
-        title='REAL ESTATE'
-        description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter..'
-        keywords='alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale'
-        canonical='https://realstate-frontend-alveo.vercel.app'
+
+        title="REAL ESTATE"
+        description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
+        keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale"
+        canonical="http://localhost:3000"
+
       />
 
       <div className='mb-10'>

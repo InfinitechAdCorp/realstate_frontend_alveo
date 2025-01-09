@@ -37,7 +37,7 @@ const AreaModal = ({ isOpen, closeModal }) => {
     formData.append('image', values.image);
 
     try {
-      const response = await fetch('https://infinitech-testing1.online/api/admin/add-area', {
+      const response = await fetch('http://localhost:8000/api/admin/add-area', {
         method: 'POST',
         body: formData,
       });

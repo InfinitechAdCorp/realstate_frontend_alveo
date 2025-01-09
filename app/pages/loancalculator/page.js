@@ -185,6 +185,7 @@ export default function LoanCalculator () {
 
   return (
     <>
+
       <SEO
         title='REAL ESTATE'
         description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter..'
@@ -212,6 +213,7 @@ export default function LoanCalculator () {
             <div className='space-y-8 xl:space-y-2'>
               {/* Input Fields - Horizontal Layout */}
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8'>
+
                 <div>
                   <label
                     htmlFor='years'

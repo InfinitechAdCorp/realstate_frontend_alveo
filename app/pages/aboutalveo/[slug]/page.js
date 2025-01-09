@@ -67,6 +67,7 @@ export default function BlogPost({ params }) {
 
   useEffect(() => {
     const interval = setInterval(() => {
+
       setIndex(prevIndex => (prevIndex + 1) % headings.length)
     }, 2000) // Change every 2 seconds
 
@@ -225,6 +226,7 @@ export default function BlogPost({ params }) {
             </div>
           </div>
         )}
+
       </div>
     </>
   )

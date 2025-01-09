@@ -133,7 +133,7 @@ const handleSubmit = async (e) => {
 
   // Send the data to the API using fetch
   try {
-    const response = await fetch('https://infinitech-testing1.online/api/admin/submit-property', {
+    const response = await fetch('http://localhost:8000/api/admin/submit-property', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
