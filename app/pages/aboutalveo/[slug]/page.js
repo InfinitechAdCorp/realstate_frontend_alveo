@@ -12,7 +12,8 @@ import {
 
 import Header from '../../header'
 import Footer from './../../footer'
-export default function BlogPost ({ params }) {
+
+export default function BlogPost({ params }) {
   const { slug } = params // Extract slug from params
   const headings = [
     'ALL ACROSS THE PHILIPPINES',
@@ -61,6 +62,7 @@ export default function BlogPost ({ params }) {
   useEffect(() => {
     // Add any side-effects here if necessary
   }, [slug])
+  
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -86,8 +88,8 @@ export default function BlogPost ({ params }) {
           specificLocation={post.specificLocation}
         />
         {slug === 'aboutalveo' && post.path && (
-          <div className='directory-wrapper lg:mt-5 lg:h-2/3  xl:h-2/4 xl:-mt-5'>
-            <div className='relative relative-wrapper '>
+          <div className='directory-wrapper lg:h-2/3 xl:h-2/4'>
+            <div className='relative'>
               <img
                 src={post.path}
                 alt={post.title}
@@ -97,49 +99,25 @@ export default function BlogPost ({ params }) {
               />
               <div className='absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-b from-transparent to-[#00008b] pointer-events-none' />
             </div>
-            <div className='absolute top-1/3 mt-3 left-5 w-4/5 z-10 text-white text-sm mx-1 sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10  '>
+            <div className='absolute top-1/3 mt-3 left-5 w-4/5 z-10 text-white text-sm mx-1 sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10'>
               <div className='flex space-x-4 h-36 lg:mt-48 lg:top-64 lg:ml-10 xl:-mt-16 xl:ml-40'>
-                <h1
-                  className={`
-        ${
-          index === 0
-            ? 'opacity-100 transform translate-x-0 transition-all duration-1500'
-            : 'opacity-0 transform translate-x-5'
-        }
-        w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl
-      `}
-                >
-                  {headings[0]}
-                </h1>
-                <h1
-                  className={`
-        ${
-          index === 1
-            ? 'opacity-100 transform translate-x-0 transition-all duration-1500'
-            : 'opacity-0 transform translate-x-5'
-        }
-        w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl
-      `}
-                >
-                  {headings[1]}
-                </h1>
-                <h1
-                  className={`
-        ${
-          index === 2
-            ? 'opacity-100 transform translate-x-0 transition-all duration-1500'
-            : 'opacity-0 transform translate-x-5'
-        }
-        w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl
-      `}
-                >
-                  {headings[2]}
-                </h1>
+                {headings.map((heading, idx) => (
+                  <h1
+                    key={idx}
+                    className={`${
+                      index === idx
+                        ? 'opacity-100 transform translate-x-0 transition-all duration-1500'
+                        : 'opacity-0 transform translate-x-5'
+                    } w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl`}
+                  >
+                    {heading}
+                  </h1>
+                ))}
               </div>
             </div>
 
-            <div className='relative -mt-5 h-24 text-black lg:mt-20 xl:mt-12'>
-              <table className='w-96 sm:w-10/12 sm:mx-14 xl:mx-28 '>
+            <div className='relative mt-5 h-24 p-2 text-black lg:mt-20 xl:mt-12'>
+              <table className='w-full sm:w-10/12 sm:mx-14 xl:mx-28'>
                 <tbody>
                   <tr>
                     <td className='font-bold text-xl bg-[#002B47] text-white py-2 px-4 md:text-4xl lg:text-3xl'>
@@ -173,7 +151,7 @@ export default function BlogPost ({ params }) {
               </div>
             </div>
 
-            <div className='h-fit relative mt-96 justify-center'>
+            <div className='h-fit relative mt-96 justify-center p-3'>
               <div className='container'>
                 <h1 className='text-3xl text-center'>AWARDS AND RECOGNITION</h1>
                 <div className='flex space-x-8 mt-8 justify-center'>
@@ -248,9 +226,6 @@ export default function BlogPost ({ params }) {
           </div>
         )}
       </div>
-      {/* <div className="mb-0"> 
-   <Footer/>
-        </div> */}
     </>
   )
 }

@@ -1121,16 +1121,7 @@ export default function Admin ({}) {
         <div className=' w-5/6'>
           <header className='fixed top-0 left-0 w-full bg-white shadow-lg z-50'>
             <div className='flex justify-between items-center p-4'>
-              <div>
-                <img
-                  src='/assets/menu.png'
-                  alt='Menu'
-                  className='cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6'
-                  style={{ width: '25px', height: '25px' }}
-                  onClick={openSidebar}
-                />
-              </div>
-              <div className='logosec'>
+              <div className='logosec text-center items-center'>
                 <Link href='/'>
                   <div className='logo cursor-pointer text-darkblue font-semibold text-lg'>
                     ALVEO LAND
@@ -1159,56 +1150,6 @@ export default function Admin ({}) {
               </div>
             </div>
           </header>
-          {isSidebarVisible && (
-            <div
-              className='fixed top-0 left-0 h-full w-64 bg-blue-950 text-white transition-transform transform z-50 sm:w-72 overflow-y-auto lg:w-2/5 xl:w-2/12 2xl:w-2/12'
-              tabIndex='-1'
-              onClick={closeSidebar}
-              onKeyDown={e => e.key === 'Escape' && closeSidebar()}
-            >
-              <div className='flex justify-between items-center p-4 border-b border-gray-700 '>
-                <Link
-                  href='/pages/aboutalveo/aboutalveo'
-                  className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
-                >
-                  ALVEO
-                </Link>
-                <span
-                  className='text-xl font-bold cursor-pointer'
-                  onClick={closeSidebar}
-                >
-                  &times;
-                </span>
-              </div>
-
-              <nav className='p-4'>
-                <ul className='space-y-2' onClick={openDevelopmentTypeModal}>
-                  <li>Development Type</li>
-                </ul>
-                <ul className='space-y-2' onClick={openArchitecturalThemeModal}>
-                  <li>Architectural Theme</li>
-                </ul>
-                <ul className='space-y-2' onClick={openStatusModal}>
-                  <li>Status</li>
-                </ul>
-                <ul className='space-y-2' onClick={openAreaModal}>
-                  <li>Location</li>
-                </ul>
-                <Link
-                  href='/pages/appointment'
-                  className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
-                >
-                  APPOINTMENTS
-                </Link>
-                <Link
-                  href='/pages/submitted-properties'
-                  className='text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg'
-                >
-                  SUBMITTED PROPERTIES
-                </Link>
-              </nav>
-            </div>
-          )}
 
           {/* <div className='main-container mt-24 p-4 ms-10 flex justify-center items-center'>
             <div className='main max-w-screen-xl mx-auto'>
