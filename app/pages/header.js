@@ -53,6 +53,23 @@ const Header = () => {
     setViewportSize(`Viewport size: ${width}px x ${height}px`);
   };
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        // Scroll threshold, adjust as needed
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  useEffect(() => {
     // Check if the current URL path is '/pages/explore'
     if (typeof window !== "undefined") {
       setIsExplorePage(window.location.pathname === "/pages/explore");
@@ -136,25 +153,39 @@ const Header = () => {
       <header
         className={`${
           scrolled ? "scrolled" : ""
-        } fixed top-0 left-0 w-full z-50`}
+        } fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out`}
       >
         <div
-          style={{ backgroundColor: "#002B47" }}
-          className=" flex items-center px-3 pt-3 h-12 w-screen relative"
+          className={`flex items-center px-3 pt-3 h-16 w-screen relative`}
+          style={{
+            backgroundColor: scrolled ? "rgba(0, 43, 71, 0.8)" : "#002B47", // Adjust background color for the entire container
+            boxShadow: scrolled ? "0 4px 6px rgba(0, 43, 71, 0.5)" : "none", // Shadow on scroll
+            backgroundImage: scrolled
+              ? "linear-gradient(180deg, rgba(0, 43, 71, 0.8), rgba(0, 43, 71, 0) 80%)"
+              : "none", // Add a gradient pattern effect on scroll
+            transition:
+              "all 0.6s ease-in-out, background-image 0.6s ease-in-out", // Smooth transition effect
+          }}
         >
-          {/* Menu Icon */}
-          <div className="flex items-center">
-            <Image
-              src="/assets/menu.png"
-              alt="Menu"
-              width={25}
-              height={25}
-              className="cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6"
-              onClick={openSidebar}
-            />
+          {/* Left Half with Color Change Effect */}
+          <div className="w-1/2 h-full">
+            <div className="flex items-center pl-5">
+              <Image
+                src="/assets/menus.png"
+                alt="Menu"
+                width={45}
+                height={45}
+                className="cursor-pointer transform hover:opacity-80 w-8 h-8 sm:w-5 sm:h-5 lg:w-10 lg:h-10 text-white"
+                style={{
+                  clipPath: "inset(0 0 40% 0)", // Hide the right half of the image
+                  objectFit: "cover", // Ensure proper scaling
+                }}
+                onClick={openSidebar}
+              />
+            </div>
           </div>
 
-          {/* Branding */}
+          {/* Right Half Branding Section */}
           <div className="absolute left-1/2 transform -translate-x-1/2">
             <a
               href="/"
@@ -167,9 +198,9 @@ const Header = () => {
             </a>
           </div>
 
-          {/* Explore Our Properties Section */}
-          {!isExplorePage && (
-            <div className="ml-auto flex items-end justify-end text-sm sm:text-base lg:text-lg xl:text-xl font-medium mt-1 w-1/2 pl-10">
+          {/* Right Section: Explore or Call */}
+          <div className="ml-auto flex items-center justify-end text-sm sm:text-base lg:text-lg xl:text-xl font-medium mt-1 w-1/2 pl-10">
+            {!isExplorePage ? (
               <a
                 href="/pages/explore"
                 className="flex items-center"
@@ -180,29 +211,38 @@ const Header = () => {
                   alt="Search"
                   width={25}
                   height={25}
-                  className="w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6 -mt-2"
-                  style={{ transform: "rotate(-270deg)", cursor: "pointer" }}
+                  className="w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6 -mt-4 -mr-2"
+                  style={{ transform: "rotate(90deg)", cursor: "pointer" }}
                 />
-                <p className="ml-2 mr-5 font-bold w-full">Explore Properties</p>
+                <p
+                  className="ml-2 mr-5  w-full"
+                  style={{
+                    fontFamily: "Assistant, sans-serif",
+                    fontStyle: "normal",
+                    fontWeight: 500,
+                    color: "rgb(254, 254, 254)",
+                    fontSize: "12px",
+                    lineHeight: "14px",
+                  }}
+                >
+                  EXPLORE OUR PROPERTIES
+                </p>
               </a>
-            </div>
-          )}
-
-          {/* Call Section */}
-          {isExplorePage && (
-            <div className="ml-auto flex items-center">
-              <Image
-                src="/assets/call.png"
-                alt="Call"
-                width={15}
-                height={15}
-                className="w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 -mt-3"
-              />
-              <p className="ml-2 text-sm sm:text-base lg:text-lg xl:text-xl">
-                CALL (632) 88485000
-              </p>
-            </div>
-          )}
+            ) : (
+              <div className="ml-auto flex items-center">
+                <Image
+                  src="/assets/call.png"
+                  alt="Call"
+                  width={15}
+                  height={15}
+                  className="w-3 h-3 sm:w-4 sm:h-4 lg:w-6 lg:h-6 -mt-3"
+                />
+                <p className="ml-2 text-sm sm:text-base lg:text-lg xl:text-xl">
+                  CALL (632) 88485000
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
