@@ -86,6 +86,9 @@ const Table = () => {
   return (
     <div className="w-full px-4">
       <div className="overflow-x-auto">
+        <div className="text-3xl justify-center text-center my-5">
+          <h1>SCHEDULED APPOINTMENT</h1>
+        </div>
         <table
           id="search-table"
           className="table-auto border-collapse border border-gray-200 w-full text-sm text-left text-gray-700"
