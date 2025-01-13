@@ -254,27 +254,28 @@ const Map = () => {
 const AboutAlveo = () => {
   return (
     <>
-      <div className='relative mt-0 p-4  bg-gray-100 shadow-md text-justify w-full lg:mt-0 2xl:h-full '>
+      <div className='relative mt-0 p-4 bg-gray-100 shadow-md text-justify w-full lg:mt-0 2xl:h-full'>
         <div className='text-center'>
-          <h1 className='text-5xl font-thin text-gray-800 my-4 lg:text-7xl xl:text-6xl 2xl:pt-5 tracking-widest'>
+          <h1 className='text-5xl font-thin text-gray-800 my-4 lg:text-5xl xl:text-5xl 2xl:pt-5 tracking-widest'>
             ABOUT Λ L V E O LAND
           </h1>
-          
         </div>
 
-        <p className='text-lg leading-relaxed text-gray-700 indent-14 lg:text-3xl lg:p-5 xl:text-2xl'>
+        <p className='text-lg leading-relaxed text-gray-700 indent-14 lg:text-xl lg:p-5 xl:text-xl xl:p-5'>
           As Ayala Lands upscale residential arm, Alveo offers a vibrant
           portfolio of groundbreaking real estate developments that provides
           upscale living and working spaces within various thriving and emerging
           growth centers around the country.
         </p>
-        <p className='text-lg leading-relaxed text-gray-700 mt-2 indent-14 lg:text-3xl lg:p-5 xl:text-2xl 2xl:pb-10'>
+
+        <p className='text-lg leading-relaxed text-gray-700 mt-2 indent-14 lg:text-xl lg:p-5 xl:text-xl xl:p-5'>
           Armed with sharper foresight, unparalleled excellence, and total
           commitment, the company is committed to providing
           thoughtfully-designed and master-planned living environments for the
           unique needs of its discerning market.
         </p>
-        <div id='map' className='my-4'></div>
+
+        <div id='map' className='my-4 full'></div>
       </div>
     </>
   )
@@ -699,8 +700,8 @@ const AlveoBanner = () => {
             <div className='relative z-10 content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
               <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
                 {/* Title */}
-                <h1 className='mt-2 text-3xl font-semibold sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
-                Λ L V E O LAND
+                <h1 className='mt-2 text-3xl font-medium sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
+                  Λ L V E O LAND
                 </h1>
 
                 {/* Subtitle */}
@@ -1393,7 +1394,6 @@ const DashboardComponent = () => {
       <Carousel />
       <div className='xl:flex w-screen xl:-z-10'>
         <div className='xl:w-1/2 xl:-z-10'>
-        
           <AboutAlveo />
         </div>
         <div className='xl:w-1/2 '>
