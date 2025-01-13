@@ -11,14 +11,13 @@ import { showToast } from "@/components/alert/page";
 
 const SetAppointment = () => {
   const [date, setDate] = useState(new Date());
-  const [time, setTime] = useState(""); // Time in HH:mm format
+  const [time, setTime] = useState("");
   const [formattedDate, setFormattedDate] = useState("");
-  const [message, setMessage] = useState(""); // To store success or error message
+  const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
-  // Handle date change
   const handleDateChange = (newDate) => {
     setDate(newDate);
-    const formatted = newDate.toLocaleDateString(); // Format date as 'MM/DD/YYYY'
+    const formatted = newDate.toLocaleDateString();
     setFormattedDate(formatted);
   };
   const handleShowSuccessToast = (message) => {
@@ -26,18 +25,16 @@ const SetAppointment = () => {
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, "error"); // Error toast
+    showToast(message, "error");
   };
 
   const handleShowWarningToast = (message) => {
-    showToast(message, "warning"); // Warning toast
+    showToast(message, "warning");
   };
-  // Handle time selection
   const handleTimeSelection = (selectedTime) => {
     setTime(selectedTime);
   };
 
-  // Update the combined datetime field
   const updateDateTime = (selectedDate, selectedTime) => {
     if (selectedDate && selectedTime) {
       return `${selectedDate} ${selectedTime}`;
@@ -45,7 +42,6 @@ const SetAppointment = () => {
     return "";
   };
 
-  // Handle form submission
   const handleSubmit = async (values, { setSubmitting, setErrors }) => {
     const appointmentData = new FormData();
     appointmentData.append("fullname", values.fullname);
@@ -67,14 +63,14 @@ const SetAppointment = () => {
       if (response.ok) {
         const data = await response.json();
         handleShowSuccessToast("Appointment scheduled successfully!");
-        setMessageType("success"); // Success message
+        setMessageType("success");
         console.log(data);
       } else {
         setErrors({ submit: "Failed to schedule the appointment." });
         handleShowErrorToast(
           "Failed to schedule the appointment. Please try again."
         );
-        setMessageType("error"); // Error message
+        setMessageType("error");
       }
     } catch (error) {
       console.error("Error scheduling appointment:", error);
@@ -84,12 +80,11 @@ const SetAppointment = () => {
       setMessage(
         "An error occurred while scheduling the appointment. Please try again."
       );
-      setMessageType("error"); // Error message
+      setMessageType("error");
     }
     setSubmitting(false);
   };
 
-  // Validation schema with Yup
   const validationSchema = Yup.object({
     fullname: Yup.string().required("Full name is required"),
     email: Yup.string()
@@ -109,7 +104,6 @@ const SetAppointment = () => {
 
   return (
     <div className="">
-      {/* SEO setup */}
       <SEO
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter."
@@ -117,7 +111,6 @@ const SetAppointment = () => {
         canonical="http://localhost:3000/pages/locations"
       />
 
-      {/* Header outside the main content */}
       <div className="mb-16">
         <Header />
       </div>
@@ -126,62 +119,64 @@ const SetAppointment = () => {
         <h1 className="text-3xl font-bold text-blue-600">
           Schedule Your Appointment
         </h1>
-        <p className="text-lg text-gray-700 mt-2">
-          Select a date and time for your appointment, and fill out the form
-          below.
-        </p>
-        {/* Time Slot Selection */}
-        <div className="px-2 p-2 items-center">
-          {[
-            "08:00 AM",
-            "09:00 AM",
-            "10:00 AM",
-            "11:00 AM",
-            "01:00 PM",
-            "02:00 PM",
-            "03:00 PM",
-            "04:00 PM",
-            "05:00 PM",
-          ].map((timeSlot) => (
-            <button
-              key={timeSlot}
-              onClick={() => handleTimeSelection(timeSlot)}
-              className={`px-4 py-2 m-2 me-2 border rounded-lg ${
-                time === timeSlot
-                  ? "bg-blue-600 text-white"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
-              }`}
-            >
-              {timeSlot}
-            </button>
-          ))}
-        </div>
       </div>
 
-      {/* Main content layout */}
       <div className="flex flex-col lg:flex-row mt-4 justify-center items-center w-screen">
         <div className="lg:w-screen flex flex-col items-center w-screen">
-          {/* Selected Time and Date */}
-          <div className="mb-6">
-            <p className="text-xl font-medium text-gray-700">
-              Time and Date:{" "}
-              <span className="text-blue-600">
-                {time
-                  ? `${formattedDate} - ${time}`
-                  : "No date and time selected"}
-              </span>
-            </p>
-          </div>
 
           {/* Calendar and Form Wrapper */}
           <div className="flex flex-col lg:flex-row w-full gap-4 p-5">
             {/* Calendar */}
-            <div className="w-full lg:max-w-lg">
-              <Calendar
-                onChange={handleDateChange}
-                value={date}
-                className="border border-gray-300 rounded-lg shadow-lg w-full p-4 items-center justify-center h-full"
-              />
+            <div className="w-full lg:max-w-lg bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+              {/* Time */}
+              <p className="text-sm font-semibold text-gray-700 mt-2 mb-4">
+                Select a date and time for your appointment, and fill out the form
+                below.
+              </p>
+
+              {/* Date and */}
+              <p className="text-sm font-medium text-gray-700 flex justify-center">
+                Time and Date:{" "}
+                <span className="text-blue-600">
+                  {time ? `${formattedDate} - ${time}` : "No date and time selected"}
+                </span>
+              </p>
+
+              <div className="px-2 p-2 items-center">
+                <div className="flex flex-wrap justify-start gap-2">
+                  {[
+                    "08:00 AM",
+                    "09:00 AM",
+                    "10:00 AM",
+                    "11:00 AM",
+                    "01:00 PM",
+                    "02:00 PM",
+                    "03:00 PM",
+                    "04:00 PM",
+                    "05:00 PM",
+                    "06:00 PM",
+                  ].map((timeSlot) => (
+                    <button
+                      key={timeSlot}
+                      onClick={() => handleTimeSelection(timeSlot)}
+                      className={`px-2 py-1 text-xs m-1 border rounded-lg ${time === timeSlot
+                        ? "bg-blue-600 text-white"
+                        : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
+                        }`}
+                    >
+                      {timeSlot}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <Calendar
+                  onChange={handleDateChange}
+                  value={date}
+                  className="border border-gray-300 rounded-lg shadow-lg w-full p-4 h-auto"
+                />
+              </div>
             </div>
 
             {/* Appointment Form */}
@@ -191,11 +186,10 @@ const SetAppointment = () => {
               </h2>
               {message && (
                 <div
-                  className={`p-4 mt-4 text-white rounded-lg text-center ${
-                    messageType === "success"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
+                  className={`p-4 mt-4 text-white rounded-lg text-center ${messageType === "success"
+                    ? "text-green-600"
+                    : "text-red-600"
+                    }`}
                 >
                   {message}
                 </div>
@@ -225,6 +219,23 @@ const SetAppointment = () => {
                     {errors.submit && (
                       <p className="text-red-500 mb-4">{errors.submit}</p>
                     )}
+                    {/* Date and Time */}
+                    <div className="mb-4">
+                      <label
+                        htmlFor="datetime"
+                        className="block text-sm font-medium text-gray-600"
+                      >
+                        Selected Date and Time
+                      </label>
+                      <input
+                        type="text"
+                        id="datetime"
+                        name="datetime"
+                        value={updateDateTime(formattedDate, time)}
+                        readOnly
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                      />
+                    </div>
                     {/* Full Name */}
                     <div className="mb-4">
                       <label
@@ -375,23 +386,6 @@ const SetAppointment = () => {
                           {errors.message}
                         </div>
                       )}
-                    </div>
-                    {/* Date and Time */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="datetime"
-                        className="block text-sm font-medium text-gray-600"
-                      >
-                        Selected Date and Time
-                      </label>
-                      <input
-                        type="text"
-                        id="datetime"
-                        name="datetime"
-                        value={updateDateTime(formattedDate, time)}
-                        readOnly
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                      />
                     </div>
                     {/* Submit Button */}
                     <button
