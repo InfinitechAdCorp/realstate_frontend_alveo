@@ -11,7 +11,7 @@ const DataTable = () => {
     const fetchProperties = async () => {
       try {
         const response = await fetch(
-          "https://infinitech-testing1.online/api/admin/submitted-properties" // Replace with your API URL
+          "http://localhost:8000/api/admin/submitted-properties" // Replace with your API URL
         );
 
         if (!response.ok) {
@@ -55,7 +55,7 @@ const DataTable = () => {
 
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/submitted-properties/update",
+        "http://localhost:8000/api/admin/submitted-properties/update",
         {
           method: "POST",
           headers: {
@@ -138,7 +138,7 @@ const DataTable = () => {
                       property.images.map((image, imgIndex) => (
                         <img
                           key={imgIndex}
-                          src={`https://infinitech-testing1.online/${image}`}
+                          src={`http://localhost:8000/${image}`}
                           alt={`Property Image ${imgIndex + 1}`}
                           className="w-16 h-16 object-cover border rounded"
                           onError={(e) => {

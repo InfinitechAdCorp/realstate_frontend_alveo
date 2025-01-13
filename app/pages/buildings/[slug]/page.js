@@ -51,7 +51,7 @@ export default function BlogPost({ params }) {
     const fetchProperty = async () => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/property/id/${slug}`
+          `http://localhost:8000/api/property/id/${slug}`
         ); // Use the new endpoint for fetching by ID
         const data = await res.json();
 
@@ -73,7 +73,7 @@ export default function BlogPost({ params }) {
     const fetchFacilities = async (propertyId) => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/facilities/id/${propertyId}`
+          `http://localhost:8000/api/facilities/id/${propertyId}`
         ); // Fetch facilities
         const data = await res.json();
 
@@ -90,7 +90,7 @@ export default function BlogPost({ params }) {
     const fetchBuildings = async (propertyId) => {
       try {
         const res = await fetch(
-          `https://infinitech-testing1.online/api/buildings/id/${propertyId}`
+          `http://localhost:8000/api/buildings/id/${propertyId}`
         ); // Fetch buildings
         const data = await res.json();
 
@@ -162,7 +162,7 @@ export default function BlogPost({ params }) {
   const submitAppointment = (formDataToSubmit) => {
     console.log("Appointment Details to send:", formDataToSubmit);
 
-    fetch("https://infinitech-testing1.online/api/appointments", {
+    fetch("http://localhost:8000/api/appointments", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -204,7 +204,7 @@ export default function BlogPost({ params }) {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury property, property features, building information, property information, building features, condominium features"
-        canonical="https://realstate-frontend-alveo.vercel.app"
+        canonical="http://localhost:3000"
       />
       <div className="mb-10">
         <Header />
@@ -216,7 +216,7 @@ export default function BlogPost({ params }) {
             src={
               property.path?.startsWith("https://")
                 ? property.path // If it's already a full URL, use it directly
-                : `https://infinitech-testing1.online/${property.path}`
+                : `http://localhost:8000/${property.path}`
             }
             alt={property.name}
             className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
@@ -226,7 +226,7 @@ export default function BlogPost({ params }) {
             src={
               property.view?.startsWith("https://")
                 ? property.view // If it's already a full URL, use it directly
-                : `https://infinitech-testing1.online/${property.view}`
+                : `http://localhost:8000/${property.view}`
             }
             alt={property.name}
             className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
@@ -410,7 +410,7 @@ export default function BlogPost({ params }) {
 
         <div className="features mb-4">
           <h2 className="text-xl font-semibold mb-2">Features</h2>
-          {parsedFeatures.length === 0 ? (
+          {!parsedFeatures || parsedFeatures.length === 0 ? (
             <p>No features available for this property.</p>
           ) : (
             <div className="grid gap-4 md:grid-cols-3 text-center">
@@ -424,7 +424,7 @@ export default function BlogPost({ params }) {
                     src={
                       feature.image?.startsWith("https://")
                         ? feature.image // If it's already a full URL, use it directly
-                        : `https://infinitech-testing1.online/${feature.image.replace(
+                        : `http://localhost:8000/${feature.image.replace(
                             /\\/g,
                             "/"
                           )}` // Replace backslashes and prepend the base URL
@@ -469,14 +469,13 @@ export default function BlogPost({ params }) {
                 </h3>
                 <img
                   src={
-                    building.path && building.path.startsWith("https://")
-                      ? building.path // If it's already a full URL, use it directly
+                    building.path?.startsWith("https://")
+                      ? building.path
                       : building.path
-                      ? `https://infinitech-testing1.online/${building.path.replace(
-                          /\\/g,
-                          "/"
-                        )}` // If it's a relative path, construct the full URL
-                      : "" // If there's no path, set it to an empty string or fallback image URL
+                      ? `http://localhost:8000/${building.path
+                          .replace(/^\/+/, "")
+                          .replace(/\\/g, "/")}`
+                      : ""
                   }
                   alt={building.name}
                   className="w-full h-60 rounded-lg mb-6"

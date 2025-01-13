@@ -34,7 +34,7 @@ const ArchitecturalThemeModal = ({ isOpen, closeModal }) => {
 
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/admin/add-architectural-theme",
+        "http://localhost:8000/api/admin/add-architectural-theme",
         {
           method: "POST",
           body: formData,

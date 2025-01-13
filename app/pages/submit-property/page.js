@@ -78,9 +78,14 @@ const SetAppointment = () => {
       }
     });
 
+    // Log the FormData content
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
+
     try {
       const response = await fetch(
-        "https://infinitech-testing1.online/api/submit-property",
+        "http://localhost:8000/api/submit-property",
         {
           method: "POST",
           body: formData,
@@ -126,7 +131,7 @@ const SetAppointment = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter."
         keywords="alveo, real estate, location, property, building location, property location"
-        canonical="https://realstate-frontend-alveo.vercel.app/pages/locations"
+        canonical="http://localhost:3000/pages/locations"
       />
 
       {/* Header outside the main content */}
