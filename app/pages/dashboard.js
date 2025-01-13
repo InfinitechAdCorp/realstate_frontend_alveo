@@ -21,11 +21,11 @@ const containerStyle = {
   width: "100%",
   height: "200px",
 };
-
 const center = {
   lat: 13.736,
   lng: 121.0583, // Set your longitude
 };
+
 const styles = {
   slide: {
     padding: "20px",
@@ -458,6 +458,24 @@ const AlveoBanner = () => {
   const [loading, setLoading] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(null);
   const [enlargedImage, setEnlargedImage] = useState(null);
+  const dashboardClips = [
+    "/assets/dashboard/854325-hd_1280_720_25fps.mp4",
+    "/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4",
+    "/assets/dashboard/3648257-uhd_3840_2160_30fps.mp4",
+    "/assets/dashboard/3773486-hd_1920_1080_30fps.mp4",
+    "/assets/dashboard/3773488-hd_1920_1080_30fps.mp4",
+    "/assets/dashboard/4193140-uhd_2562_1440_24fps.mp4",
+    "/assets/dashboard/8996835-uhd_3840_2160_30fps.mp4",
+  ];
+
+  const [currentClip, setCurrentClip] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentClip((prev) => (prev + 1) % dashboardClips.length);
+    }, 10000); // Change video every 10 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   const router = useRouter();
   // Image enlargement handler
@@ -711,7 +729,37 @@ const AlveoBanner = () => {
   return (
     <>
       <div className="relative w-full h-screen">
-        <div className="absolute inset-0 bg-cover bg-center bg-[url('/assets/Alveo.png')]">
+        <div className="absolute inset-0 bg-cover bg-center ">
+          <div className="flex h-1/3">
+            {/* Left Column */}
+            <div
+              style={{ backgroundColor: "#00304A " }}
+              className="relative w-1/2 flex justify-center items-center pr-[2%]" // Padding on the right
+            >
+              <video
+                className="w-[95%] h-[95%] object-cover"
+                autoPlay
+                muted
+                loop
+                src={dashboardClips[currentClip]}
+              />
+            </div>
+
+            {/* Right Column */}
+            <div
+              style={{ backgroundColor: "#00304A" }}
+              className="relative w-1/2 flex justify-center items-center pl-[2%]" // Padding on the left
+            >
+              <video
+                className="w-[90%] h-[90%] object-cover"
+                autoPlay
+                muted
+                loop
+                src={dashboardClips[(currentClip + 1) % dashboardClips.length]}
+              />
+            </div>
+          </div>
+
           <div className="fixed top-10 right-3 z-50">
             {/* Room Planner Icon */}
             <div className="absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10">

@@ -138,7 +138,10 @@ const Header = () => {
           scrolled ? "scrolled" : ""
         } fixed top-0 left-0 w-full z-50`}
       >
-        <div className="bg-blue-600 flex items-center px-3 pt-3 h-12 w-screen relative">
+        <div
+          style={{ backgroundColor: "#002B47" }}
+          className=" flex items-center px-3 pt-3 h-12 w-screen relative"
+        >
           {/* Menu Icon */}
           <div className="flex items-center">
             <Image
@@ -158,7 +161,7 @@ const Header = () => {
               className="branding-text"
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <h1 className="text-lg sm:text-lg lg:text-xl font-bold">
+              <h1 className="text-lg sm:text-lg lg:text-xl font-bold text-white">
                 Λ L V E O
               </h1>
             </a>
