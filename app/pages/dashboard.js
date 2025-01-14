@@ -1,25 +1,24 @@
+"use client"; // Marks this component as client-side
 
-'use client' // Marks this component as client-side
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import Image from "next/image"; // Assuming you're using Next.js' Image component
+import { useRouter } from "next/navigation"; // Hook for navigation
 
-import React, { useCallback, useEffect, useState, useRef } from 'react'
-import Image from 'next/image' // Assuming you're using Next.js' Image component
-import { useRouter } from 'next/navigation' // Hook for navigation
-
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
-import ClipLoader from 'react-spinners/ClipLoader'
-import { showToast } from '../../components/alert/page' // Adjust the import path if necessary
-import { IoBed, IoManSharp } from 'react-icons/io5'
-import { FaCalculator, FaHouseCircleCheck } from 'react-icons/fa6'
-import { FaCalendarAlt } from 'react-icons/fa'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import SEO from './../seo/page'
-import Header from './header'
-import Footer from './footer'
-import MyBot from '../../components/Chatbot/page'
-import SocialMediaFloating from './socialmedia-icons/page'
+import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import ClipLoader from "react-spinners/ClipLoader";
+import { showToast } from "../../components/alert/page"; // Adjust the import path if necessary
+import { IoBed, IoManSharp } from "react-icons/io5";
+import { FaCalculator, FaHouseCircleCheck } from "react-icons/fa6";
+import { FaCalendarAlt } from "react-icons/fa";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import SEO from "./../seo/page";
+import Header from "./header";
+import Footer from "./footer";
+import MyBot from "../../components/Chatbot/page";
+import SocialMediaFloating from "./socialmedia-icons/page";
 
 const containerStyle = {
   width: "100%",
@@ -420,17 +419,17 @@ const AlveoBanner = () => {
   const [hoveredImage, setHoveredImage] = useState(null);
   const [enlargedImage, setEnlargedImage] = useState(null);
   const dashboardClips = [
-    '/assets/dashboard/854325-hd_1280_720_25fps.mp4',
-    '/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4',
-    '/assets/dashboard/3648257-uhd_3840_2160_30fps.mp4',
-    '/assets/dashboard/3773486-hd_1920_1080_30fps.mp4',
-    '/assets/dashboard/3773488-hd_1920_1080_30fps.mp4',
-    '/assets/dashboard/4193140-uhd_2562_1440_24fps.mp4',
-    '/assets/dashboard/8996835-uhd_3840_2160_30fps.mp4',
-    '/assets/dashboard/alveo_cut.mp4'
-  ]
+    "/assets/dashboard/854325-hd_1280_720_25fps.mp4",
+    "/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4",
+    "/assets/dashboard/3648257-uhd_3840_2160_30fps.mp4",
+    "/assets/dashboard/3773486-hd_1920_1080_30fps.mp4",
+    "/assets/dashboard/3773488-hd_1920_1080_30fps.mp4",
+    "/assets/dashboard/4193140-uhd_2562_1440_24fps.mp4",
+    "/assets/dashboard/8996835-uhd_3840_2160_30fps.mp4",
+    "/assets/dashboard/alveo_cut.mp4",
+  ];
 
-  const [currentClip, setCurrentClip] = useState(0)
+  const [currentClip, setCurrentClip] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -856,15 +855,15 @@ const AlveoBanner = () => {
             </div>
           </div>
 
-          <div className='fixed top-20 right-1 z-50 lg:top-13 lg:right-2 flex space-x-2'>
+          <div className="fixed top-20 right-1 z-50 lg:top-13 lg:right-2 flex space-x-2">
             {/* Room Planner Icon */}
-            <div className='flex justify-center items-center'>
-              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
-                <a href='/pages/roomplanner' target='_blank'>
-                  <div className='cursor-pointer relative group'>
+            <div className="flex justify-center items-center">
+              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
+                <a href="/pages/roomplanner" target="_blank">
+                  <div className="cursor-pointer relative group">
                     <IoBed
-                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
-                      onMouseOver={e =>
+                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
+                      onMouseOver={(e) =>
                         (e.currentTarget.style.transform =
                           "scale(1.1) translateY(-5px)")
                       }
@@ -882,13 +881,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Loan Calculator Icon */}
-            <div className='flex justify-center items-center'>
-              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
-                <a href='/pages/loancalculator' passHref>
-                  <div className='relative group'>
+            <div className="flex justify-center items-center">
+              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
+                <a href="/pages/loancalculator" passHref>
+                  <div className="relative group">
                     <FaCalculator
-                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
-                      onMouseOver={e =>
+                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
+                      onMouseOver={(e) =>
                         (e.currentTarget.style.transform =
                           "scale(1.1) translateY(-5px)")
                       }
@@ -906,13 +905,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Set Appointment Icon */}
-            <div className='flex justify-center items-center'>
-              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
-                <a href='/pages/set-appointment' passHref>
-                  <div className='relative group'>
+            <div className="flex justify-center items-center">
+              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
+                <a href="/pages/set-appointment" passHref>
+                  <div className="relative group">
                     <FaCalendarAlt
-                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
-                      onMouseOver={e =>
+                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
+                      onMouseOver={(e) =>
                         (e.currentTarget.style.transform =
                           "scale(1.1) translateY(-5px)")
                       }
@@ -930,13 +929,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Submit Property Icon */}
-            <div className='flex justify-center items-center'>
-              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
-                <a href='/pages/add-property' passHref>
-                  <div className='relative group'>
+            <div className="flex justify-center items-center">
+              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
+                <a href="/pages/add-property" passHref>
+                  <div className="relative group">
                     <FaHouseCircleCheck
-                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
-                      onMouseOver={e =>
+                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
+                      onMouseOver={(e) =>
                         (e.currentTarget.style.transform =
                           "scale(1.1) translateY(-5px)")
                       }
@@ -954,13 +953,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Agent Icon */}
-            <div className='flex justify-center items-center'>
-              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
-                <a href='/pages/agent' passHref>
-                  <div className='relative group'>
+            <div className="flex justify-center items-center">
+              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
+                <a href="/pages/agent" passHref>
+                  <div className="relative group">
                     <IoManSharp
-                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
-                      onMouseOver={e =>
+                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
+                      onMouseOver={(e) =>
                         (e.currentTarget.style.transform =
                           "scale(1.1) translateY(-5px)")
                       }

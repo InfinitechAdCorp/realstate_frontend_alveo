@@ -19,44 +19,106 @@ export default function CardCharts() {
   const [requestViewingData, setRequestViewingData] = useState([]);
   const [propertyInquiryData, setPropertyInquiryData] = useState([]);
   const [submtitedProperty, setSubmittedProperty] = useState([]);
+  const [error, setError] = useState("");
+  // Access the stored values from localStorage
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Check if user is logged in
+
+  // Safely access userInfo from localStorage
+  const userInfo = localStorage.getItem("userInfo");
+
+  let parsedUserInfo = null;
+
+  if (userInfo) {
+    try {
+      // Try parsing the userInfo only if it exists
+      parsedUserInfo = JSON.parse(userInfo);
+    } catch (error) {
+      console.error("Error parsing user info:", error);
+    }
+  }
+  console.log(isLoggedIn);
+  if (isLoggedIn && parsedUserInfo) {
+    console.log("User is logged in");
+    console.log("User Info:", parsedUserInfo); // This will log the user's name
+  } else {
+    console.log("User is not logged in or user info is invalid");
+  }
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-properties-monthly`)
+    // Get the token from localStorage
+    const token = localStorage.getItem("auth_token");
+
+    // Check if token exists
+    if (!token) {
+      console.error("Token not found.");
+      setError("Token not found.");
+      return; // Exit if no token is found
+    }
+
+    // Fetch Submitted Property Data
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-properties-monthly`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((response) => response.json())
       .then((data) => {
-        setSubmittedProperty(data);
-        console.log(data); // This will log the monthly counts
+        setSubmittedProperty(Array.isArray(data) ? data : []); // Ensure data is an array
+        console.log(data); // Log the monthly counts
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError("An error occurred while fetching data.");
       });
 
     // Fetch Request Viewing Data
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-request-viewing`)
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-request-viewing`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
-        setRequestViewingData(data); // Update the state with the response data
+        setRequestViewingData(Array.isArray(data) ? data : []); // Ensure data is an array
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError("An error occurred while fetching data.");
       });
 
     // Fetch Property Inquiry Data
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-property-inquiry`)
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-property-inquiry`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+        "Content-Type": "application/json",
+      },
+    })
       .then((response) => response.json())
       .then((data) => {
-        setPropertyInquiryData(data); // Update the state with the response data
+        setPropertyInquiryData(Array.isArray(data) ? data : []); // Ensure data is an array
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
+        setError("An error occurred while fetching data.");
       });
   }, []);
 
   const getPieChartData = (data) => {
-    return data.map((item) => ({
-      name: item.property,
-      value: item.total,
-    }));
+    // Make sure data is an array before mapping
+    return Array.isArray(data)
+      ? data.map((item) => ({
+          name: item.property,
+          value: item.total,
+        }))
+      : []; // Return an empty array if data is invalid
   };
 
   const getStackedAreaChartData = () => {
