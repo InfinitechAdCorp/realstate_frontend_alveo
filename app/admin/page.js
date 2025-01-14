@@ -108,26 +108,6 @@ export default function Admin({}) {
       onClick: () => console.log("Details Clicked"),
       icon: "/assets/appointment.png",
     },
-    {
-      name: "DEVELOPMENT TYPES", // New item for development types
-      onClick: () => setActiveNav("DEVELOPMENT TYPES"), // Set activeNav to "DEVELOPMENT TYPES"
-      icon: "/assets/development-type.png",
-    },
-    {
-      name: "STATUS", // New item for status
-      onClick: () => setActiveNav("STATUS"), // Set activeNav to "STATUS"
-      icon: "/assets/status.png",
-    },
-    {
-      name: "ARCHITECTURAL THEMES", // New item for architectural themes
-      onClick: () => setActiveNav("ARCHITECTURAL THEMES"), // Set activeNav to "ARCHITECTURAL THEMES"
-      icon: "/assets/architectural-theme.png",
-    },
-    {
-      name: "LOCATIONS", // New item for locations
-      onClick: () => setActiveNav("LOCATIONS"), // Set activeNav to "LOCATIONS"
-      icon: "/assets/location.png",
-    },
   ];
 
   const navItems_2 = [
@@ -144,14 +124,24 @@ export default function Admin({}) {
   ];
   const navItems_FormFiller = [
     {
-      name: "FORM FILLER",
-      onClick: () => console.log("Detailes Clicked"),
-      icon: "/assets/form.png",
+      name: "DEVELOPMENT TYPE", // New item for development types
+      onClick: () => setActiveNav("DEVELOPMENT TYPE"), // Set activeNav to "DEVELOPMENT TYPES"
+      icon: "/assets/turn-right.png",
     },
     {
-      name: "CHATBOT",
-      onClick: () => console.log("Detailes Clicked"),
-      icon: "/assets/robotic.png",
+      name: "STATUS", // New item for status
+      onClick: () => setActiveNav("STATUS"), // Set activeNav to "STATUS"
+      icon: "/assets/turn-right.png",
+    },
+    {
+      name: "ARCHITECTURAL THEME", // New item for architectural themes
+      onClick: () => setActiveNav("ARCHITECTURAL THEME"), // Set activeNav to "ARCHITECTURAL THEMES"
+      icon: "/assets/turn-right.png",
+    },
+    {
+      name: "LOCATION", // New item for locations
+      onClick: () => setActiveNav("LOCATION"), // Set activeNav to "LOCATIONS"
+      icon: "/assets/turn-right.png",
     },
   ];
 
@@ -196,13 +186,16 @@ export default function Admin({}) {
 
     try {
       // Send the request to the backend
-      const response = await fetch("http://localhost:8000/api/admin/add-area", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Ensure content type is set to JSON
-        },
-        body: JSON.stringify(requestData), // Send the data as JSON string
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-area`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // Ensure content type is set to JSON
+          },
+          body: JSON.stringify(requestData), // Send the data as JSON string
+        }
+      );
 
       const data = await response.json(); // Parse the JSON response
 
@@ -243,7 +236,9 @@ export default function Admin({}) {
   // Fetch locations and update state
   const fetchLocations = async (setData) => {
     try {
-      const response = await fetch("http://localhost:8000/api/admin/area");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`
+      );
       const data = await response.json();
       console.log("Fetched Locations:", data);
       setData((prevData) => ({ ...prevData, locations: data }));
@@ -274,22 +269,22 @@ export default function Admin({}) {
 
         // Fetch the data for each category
         const propertiesRes = await fetch(
-          "http://localhost:8000/api/admin/countproperties"
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countproperties`
         );
         const propertiesData = await propertiesRes.json();
 
         const otherBuildingsRes = await fetch(
-          "http://localhost:8000/api/admin/countotherbuildings"
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countotherbuildings`
         );
         const otherBuildingsData = await otherBuildingsRes.json();
 
         const condominiumsRes = await fetch(
-          "http://localhost:8000/api/admin/countcondominiums"
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countcondominiums`
         );
         const condominiumsData = await condominiumsRes.json();
 
         const locationsRes = await fetch(
-          "http://localhost:8000/api/admin/countlocations"
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countlocations`
         );
         const locationsData = await locationsRes.json();
 
@@ -317,13 +312,19 @@ export default function Admin({}) {
 
   useEffect(() => {
     console.log(activeNav);
-    if (activeNav === "FORM FILLER") {
-      fetchFormFiller(); // Fetch other data for "Details"
+    if (activeNav === "STATUS") {
+      fetchFormFiller_status(); // Fetch other data for "Details"
+    } else if (activeNav === "LOCATION") {
+      fetchFormFiller_location(); // Fetch other data for "Details"
+    } else if (activeNav === "DEVELOPMENT TYPE") {
+      fetchFormFiller_developmenttype(); // Fetch other data for "Details"
+    } else if (activeNav === "ARCHITECTURAL THEME") {
+      fetchFormFiller_architecturaltheme(); // Fetch other data for "Details"
     } else if (activeNav === "CHATBOT") {
       const fetchChatbotData = async () => {
         try {
           const response = await fetch(
-            "http://localhost:8000/api/admin/getChatbot"
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/getChatbot`
           );
           const chatbotData = await response.json();
           console.log(chatbotData);
@@ -339,7 +340,9 @@ export default function Admin({}) {
 
       fetchChatbotData();
     } else if (activeNav === "CLIENT PROPERTY") {
-      fetch("http://localhost:8000/api/admin/submitted-properties")
+      fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`
+      )
         .then((response) => response.json())
         .then((data) => {
           setSubmittedProperties(data); // Store the data in the state
@@ -349,17 +352,28 @@ export default function Admin({}) {
         });
     }
   }, [activeNav]);
-
-  const fetchFormFiller = () => {
-    fetch("http://localhost:8000/api/admin/development-types")
+  const fetchFormFiller_status = () => {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status`)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched Status:", data);
+        setData((prevData) => ({ ...prevData, statusOptions: data }));
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+  const fetchFormFiller_developmenttype = () => {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/development-types`)
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Development Types:", data);
         setData((prevData) => ({ ...prevData, developmentTypes: data }));
       })
       .catch((error) => console.error("Error fetching data:", error));
-
-    fetch("http://localhost:8000/api/admin/architectural-themes")
+  };
+  const fetchFormFiller_architecturaltheme = () => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/architectural-themes`
+    )
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Architectural Themes:", data);
@@ -367,16 +381,9 @@ export default function Admin({}) {
       })
 
       .catch((error) => console.error("Error fetching data:", error));
-
-    fetch("http://localhost:8000/api/admin/status")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched Status:", data);
-        setData((prevData) => ({ ...prevData, statusOptions: data }));
-      })
-      .catch((error) => console.error("Error fetching data:", error));
-
-    fetch("http://localhost:8000/api/admin/area")
+  };
+  const fetchFormFiller_location = () => {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`)
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched Locations:", data);
@@ -384,6 +391,7 @@ export default function Admin({}) {
       })
       .catch((error) => console.error("Error fetching data:", error));
   };
+
   const handleAdd = (type, newItem, setData, field) => {
     console.log("Adding item:", newItem); // Log the new item being added
     console.log(type);
@@ -395,8 +403,8 @@ export default function Admin({}) {
       const method = isEditing ? "PUT" : "POST";
       console.log(method);
       const url = isEditing
-        ? `http://localhost:8000/api/admin/chatbot/${newItem.id}`
-        : "http://localhost:8000/api/admin/addChatbot";
+        ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/chatbot/${newItem.id}`
+        : `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addChatbot`;
       console.log(url);
       fetch(url, {
         method: method,
@@ -443,7 +451,7 @@ export default function Admin({}) {
         });
     } else {
       // Existing logic for other types (e.g., developmentTypes, locations)
-      fetch(`http://localhost:8000/api/admin/add-${type}`, {
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-${type}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newItem }),
@@ -503,7 +511,7 @@ export default function Admin({}) {
 
     // Handle deletion of chatbot entries separately
     if (type === "chatbot") {
-      const url = `http://localhost:8000/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
+      const url = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/deleteChatbot/${id}`; // API endpoint for chatbot deletion
       console.log("Deleting from URL:", url);
 
       // Send DELETE request
@@ -546,7 +554,7 @@ export default function Admin({}) {
         });
     } else {
       // Existing logic for deleting other types (e.g., developmentTypes, locations)
-      const url = `http://localhost:8000/api/admin/delete-${type}/${id}`;
+      const url = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/delete-${type}/${id}`;
       console.log("Deleting from URL:", url); // Debugging line to check the URL
 
       fetch(url, {
@@ -612,31 +620,57 @@ export default function Admin({}) {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const fetchCsrfToken = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/csrf-token`,
+      {
+        credentials: "include", // Ensure cookies are sent with the request
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch CSRF token");
+    }
+
+    const { csrf_token } = await response.json();
+    return csrf_token;
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log(formData);
 
-    const response = await fetch("http://localhost:8000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: formData.email,
+    try {
+      const csrfToken = await fetchCsrfToken();
+
+      const loginData = {
+        email: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
         password: formData.password,
-      }),
-    });
+      };
 
-    const data = await response.json(); // Get the JSON response
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/login`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": csrfToken, // Include the CSRF token
+          },
+          body: JSON.stringify(loginData),
+          credentials: "include", // Ensure session cookies are sent
+        }
+      );
 
-    if (response.ok) {
-      // If login is successful, show OTP input
-
-      console.log("Login successful.");
-      setIsVisible(false);
-    } else {
-      setError(data.error || "Invalid email or password."); // Show the error from the backend
-      console.log("Error:", data); // Log the error response
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("auth_token", data.token);
+        console.log("Login successful:", data);
+        setIsVisible(false);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || "Invalid email or password.");
+      }
+    } catch (err) {
+      console.error("Error during login:", err);
+      setError("An unexpected error occurred.");
     }
   };
 
@@ -647,7 +681,7 @@ export default function Admin({}) {
   const fetchCount = async (endpoint, key) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/admin/${endpoint}`
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/${endpoint}`
       );
       const data = await response.json();
 
@@ -663,6 +697,7 @@ export default function Admin({}) {
 
   // Fetch count data after login success
   useEffect(() => {
+    console.log(`${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`);
     if (isLoggedIn) {
       fetchCount("countproperties", "properties");
       fetchCount("countotherbuildings", "otherBuildings");
@@ -689,26 +724,11 @@ export default function Admin({}) {
 
   return (
     <>
-      {/* {isVisible && (
+      {isVisible && (
         <div className="popup-container fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="popup-content bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">
             <h2 className="text-2xl font-semibold text-center mb-4">ACCOUNT</h2>
             <form>
-              <div>
-                <label htmlFor="email" className="block text-lg font-medium">
-                  Email:s
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="h-10 text-xl w-full mt-2 px-4 border border-gray-300 rounded-md"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-              <br />
               <div>
                 <label htmlFor="password" className="block text-lg font-medium">
                   Password:
@@ -736,9 +756,13 @@ export default function Admin({}) {
                 </button>
               </div>
             </form>
+
+            {/* Log the admin email to the console */}
+            {console.log(process.env.NEXT_PUBLIC_ADMIN_EMAIL)}
           </div>
         </div>
-      )} */}
+      )}
+
       <div className="flex fixed w-full">
         <div className="text-xl text-black w-1/6 relative border-r shadow-md bg-white z-50 items-center justify-center">
           <div className="text-center top-1/2 mt-20 ">
@@ -804,8 +828,20 @@ export default function Admin({}) {
                   <li
                     key={item.name}
                     onClick={() => {
-                      setActiveNav(item.name);
-                      item.onClick();
+                      if (item.name === "FORM FILLER") {
+                        // Check if FORM FILLER is already open
+                        if (activeNav === "FORM FILLER") {
+                          // Close FORM FILLER if it is already open
+                          setActiveNav(null);
+                        } else {
+                          // Open FORM FILLER submenu
+                          setActiveNav("FORM FILLER");
+                        }
+                      } else {
+                        // For other items, update the activeNav and trigger their onClick behavior
+                        setActiveNav(item.name);
+                        item.onClick();
+                      }
                     }}
                     className={`group cursor-pointer transition-all duration-300 rounded-lg ${
                       activeNav === item.name
@@ -830,52 +866,49 @@ export default function Admin({}) {
                       {item.name}
                     </div>
 
-                    {/* Conditional rendering for "FORM FILLER" */}
-                    {item.name === "FORM FILLER" && (
-                      <nav className="z-50">
-                        <ul>
-                          {navItems_FormFiller.map((item) => (
-                            <li
-                              key={item.name}
-                              onClick={() => {
-                                setActiveNav(item.name);
-                                item.onClick();
-                              }}
-                              className={`group cursor-pointer transition-all duration-300 rounded-lg ${
-                                activeNav === item.name
-                                  ? "bg-indigo-100"
-                                  : "hover:bg-indigo-100"
-                              }`}
-                            >
-                              <div
-                                className={`flex items-center text-sm p-1 transition-all duration-300 ml-10 ${
-                                  activeNav === item.name
-                                    ? "text-indigo-600"
-                                    : "text-gray-700 group-hover:text-indigo-600"
+                    {/* Conditional rendering for "FORM FILLER" submenu */}
+                    {item.name === "FORM FILLER" &&
+                      (activeNav === "FORM FILLER" ||
+                        navItems_FormFiller.some(
+                          (subItem) => activeNav === subItem.name
+                        )) && (
+                        <nav className="z-50 ml-2">
+                          <ul>
+                            {navItems_FormFiller.map((subItem) => (
+                              <li
+                                key={subItem.name}
+                                onClick={(e) => {
+                                  e.stopPropagation(); // Prevent click event from affecting parent
+                                  setActiveNav(subItem.name); // Update activeNav for submenu item
+                                  subItem.onClick();
+                                }}
+                                className={`group cursor-pointer transition-all duration-300 rounded-lg text-sm ${
+                                  activeNav === subItem.name
+                                    ? "bg-blue-200"
+                                    : "hover:bg-blue-200"
                                 }`}
                               >
-                                {/* Icon */}
-                                <img
-                                  src={item.icon}
-                                  alt={item.name}
-                                  className="w-3 h-3 mr-2" // Adjust size and spacing
-                                />
-                                {/* Name */}
-                                {item.name}
-                              </div>
-
-                              {/* Conditional rendering for "FORM FILLER" */}
-                              {item.name === "FORM FILLER" && (
-                                <div className="additional-div">
-                                  {/* Additional content or logic for FORM FILLER */}
-                                  <span></span>
+                                <div
+                                  className={`flex items-center text-sm p-1 transition-all duration-300 ml-6 ${
+                                    activeNav === subItem.name
+                                      ? "bg-blue-200"
+                                      : "text-gray-700 group-hover:text-indigo-600"
+                                  }`}
+                                >
+                                  {/* Icon */}
+                                  <img
+                                    src={subItem.icon}
+                                    alt={subItem.name}
+                                    className="w-3 h-3 mr-2"
+                                  />
+                                  {/* Name */}
+                                  {subItem.name}
                                 </div>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      </nav>
-                    )}
+                              </li>
+                            ))}
+                          </ul>
+                        </nav>
+                      )}
                   </li>
                 ))}
               </ul>
@@ -1115,7 +1148,7 @@ export default function Admin({}) {
                     {modalImages.map((image, index) => (
                       <img
                         key={index}
-                        src={`http://localhost:8000/${image}`} // Full URL to the image
+                        src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${image}`} // Full URL to the image
                         alt={`Property image ${index + 1}`}
                         className="w-full h-full object-contain" // Make image fill the container
                       />
@@ -1125,7 +1158,7 @@ export default function Admin({}) {
               </div>
             )}
 
-            {activeNav === "DEVELOPMENT TYPES" && (
+            {activeNav === "DEVELOPMENT TYPE" && (
               <div className="h-[600px] overflow-y-auto mt-20">
                 {/* Development Type */}
                 <div className="h-80 overflow-y-auto">
@@ -1187,7 +1220,7 @@ export default function Admin({}) {
               </div>
             )}
 
-            {activeNav === "ARCHITECTURAL THEMES" && (
+            {activeNav === "ARCHITECTURAL THEME" && (
               <div className="h-[600px] overflow-y-auto mt-20">
                 {/* Architectural Theme */}
                 <div className="h-80 overflow-y-auto">
@@ -1305,7 +1338,7 @@ export default function Admin({}) {
               </div>
             )}
 
-            {activeNav === "LOCATIONS" && (
+            {activeNav === "LOCATION" && (
               <div className="h-[600px] overflow-y-auto mt-20">
                 {/* Locations */}
                 <div className="grid grid-cols-1 mb-6">

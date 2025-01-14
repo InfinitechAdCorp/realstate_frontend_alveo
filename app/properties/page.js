@@ -6,8 +6,11 @@ import { useState, useEffect } from "react";
 
 const fetchProperties = async () => {
   // Assuming you have this function defined elsewhere
+
   try {
-    const response = await fetch("http://localhost:8000/api/admin/properties"); // Fetch properties API
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/properties`
+    ); // Fetch properties API
     const data = await response.json();
     return data; // Return fetched properties
   } catch (error) {

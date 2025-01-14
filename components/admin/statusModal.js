@@ -33,7 +33,7 @@ const StatusModal = ({ isOpen, closeModal }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/add-status",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-status`,
         {
           method: "POST",
           body: formData,

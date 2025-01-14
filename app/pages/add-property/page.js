@@ -165,7 +165,7 @@ function App() {
     // Send the data to the API using fetch
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/submit-property",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submit-property`,
         {
           method: "POST",
           headers: {

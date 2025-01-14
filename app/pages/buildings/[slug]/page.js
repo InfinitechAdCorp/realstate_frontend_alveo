@@ -1,4 +1,5 @@
-"use client"; // If you're using client-side components
+"use client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Directory from "../../pathDirectory";
@@ -8,15 +9,15 @@ import SEO from "./../../../seo/page";
 import { showToast } from "@/components/alert/page";
 
 export default function BlogPost({ params }) {
-  const { slug } = params; // Extract slug from params
-  const [property, setProperty] = useState(null); // State to hold property data
-  const [loading, setLoading] = useState(true); // State for loading
+  const { slug } = params;
+  const [property, setProperty] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [facilities, setFacilities] = useState([]);
   const [buildings, setBuildings] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [popupType, setPopupType] = useState("");
   const togglePopup = (type = "") => {
-    setPopupType(type); // Set the popup type when opening
+    setPopupType(type);
     setIsOpen(!isOpen);
   };
   const handleShowSuccessToast = (message) => {
@@ -24,11 +25,11 @@ export default function BlogPost({ params }) {
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, "error"); // Error toast
+    showToast(message, "error");
   };
 
   const handleShowWarningToast = (message) => {
-    showToast(message, "warning"); // Warning toast
+    showToast(message, "warning");
   };
   const [formData, setFormData] = useState({
     name: "",
@@ -51,8 +52,8 @@ export default function BlogPost({ params }) {
     const fetchProperty = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/property/id/${slug}`
-        ); // Use the new endpoint for fetching by ID
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/property/id/${slug}`
+        );
         const data = await res.json();
 
         if (res.ok) {
@@ -73,8 +74,8 @@ export default function BlogPost({ params }) {
     const fetchFacilities = async (propertyId) => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/facilities/id/${propertyId}`
-        ); // Fetch facilities
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/facilities/id/${propertyId}`
+        );
         const data = await res.json();
 
         if (res.ok) {
@@ -90,12 +91,12 @@ export default function BlogPost({ params }) {
     const fetchBuildings = async (propertyId) => {
       try {
         const res = await fetch(
-          `http://localhost:8000/api/buildings/id/${propertyId}`
-        ); // Fetch buildings
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/buildings/id/${propertyId}`
+        );
         const data = await res.json();
 
         if (res.ok) {
-          setBuildings(data); // Ensure you're setting buildings, not facilities
+          setBuildings(data);
         } else {
           console.error(data.message);
         }
@@ -121,22 +122,20 @@ export default function BlogPost({ params }) {
     const formattedDateForDisplay = new Date(
       formData.appointmentDate
     ).toLocaleString("en-US", {
-      month: "2-digit", // Always show two digits for the month (02).
-      day: "2-digit", // Always show two digits for the day (02).
-      year: "numeric", // Full year (2025).
-      hour: "2-digit", // Always show two digits for the hour.
-      minute: "2-digit", // Always show two digits for minutes.
-      hour12: true, // AM/PM format.
+      month: "2-digit",
+      day: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
     });
 
-    // Now we need to send this formatted date to the backend for storage (ISO 8601 format)
     const isoDateForBackend = new Date(formData.appointmentDate).toISOString();
 
-    // Prepare the data to send to the backend
     const formDataToSubmit = {
       ...formData,
       unit: property.name,
-      appointmentDate: isoDateForBackend, // Send the ISO format date to the backend
+      appointmentDate: isoDateForBackend,
     };
 
     console.log(formDataToSubmit);
@@ -144,7 +143,7 @@ export default function BlogPost({ params }) {
       const formDataToSubmit = {
         ...formData,
         unit: property.name,
-        appointmentDate: isoDateForBackend, // Send the ISO format date to the backend
+        appointmentDate: isoDateForBackend,
         reason: popupType,
       };
       submitAppointment(formDataToSubmit);
@@ -153,7 +152,7 @@ export default function BlogPost({ params }) {
       const formDataToSubmit = {
         ...formData,
         unit: property.name,
-        appointmentDate: isoDateForBackend, // Send the ISO format date to the backend
+        appointmentDate: isoDateForBackend,
         reason: popupType,
       };
       submitAppointment(formDataToSubmit);
@@ -162,7 +161,7 @@ export default function BlogPost({ params }) {
   const submitAppointment = (formDataToSubmit) => {
     console.log("Appointment Details to send:", formDataToSubmit);
 
-    fetch("http://localhost:8000/api/appointments", {
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/appointments`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -204,247 +203,257 @@ export default function BlogPost({ params }) {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
         keywords="alveo, real estate, luxury property, property features, building information, property information, building features, condominium features"
-        canonical="http://localhost:3000"
+        canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
       <div className="mb-10">
         <Header />
       </div>
       <div className=" p-4 md:p-8 mt-2 w-full mb-20">
         <h1 className="text-2xl font-bold mb-4 text-center">{property.name}</h1>
-        <div className="grid gap-4 lg:flex justify-center items-center text-center w-full 2xl:w-8/12 mx-auto">
-          <img
-            src={
-              property.path?.startsWith("https://")
-                ? property.path // If it's already a full URL, use it directly
-                : `http://localhost:8000/${property.path}`
-            }
-            alt={property.name}
-            className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
-          />
-
-          <img
-            src={
-              property.view?.startsWith("https://")
-                ? property.view // If it's already a full URL, use it directly
-                : `http://localhost:8000/${property.view}`
-            }
-            alt={property.name}
-            className="w-full max-h-96 h-auto xl:max-h-72 mx-auto mb-4 rounded-lg shadow-md"
-          />
-        </div>
-
-        <div className="property-info mb-4">
-          <div className="flex items-center">
-            <h2 className="text-xl font-semibold mb-2">Details</h2>
-
-            <div className="ml-auto">
-              <button
-                onClick={() => togglePopup("Request Viewing")}
-                className="px-6 py-2 text-md font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
-              >
-                Request Viewing
-              </button>
-              <button
-                onClick={() => togglePopup("Property Inquiry")}
-                className="px-6 py-2 text-md font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
-              >
-                Property Inquiry
-              </button>
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="relative">
+              <div className="grid gap-4">
+                <img
+                  src={
+                    property.path?.startsWith("https://")
+                      ? property.path
+                      : `${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`
+                  }
+                  alt={property.name}
+                  className="w-full h-auto max-h-80 object-cover rounded-lg shadow-md"
+                />
+                {/* <img
+                  src={
+                    property.view?.startsWith("https://")
+                      ? property.view
+                      : `${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.view}`
+                  }
+                  alt={property.name}
+                  className="w-full h-auto max-h-80 object-cover rounded-lg shadow-md"
+                /> */}
+              </div>
             </div>
+            <div className="flex flex-col justify-between">
+              <div className="property-info mb-4">
+                <div className="space-y-3">
+                  <h2 className="text-xl font-semibold">Property Details</h2>
+                  <p>
+                    <strong>Location:</strong> {property.location}
+                  </p>
+                  <p>
+                    <strong>Price Range:</strong> {property.price_range}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {property.status}
+                  </p>
+                  <p>
+                    <strong>Development Type:</strong>{" "}
+                    {property.development_type}
+                  </p>
+                  <p>
+                    <strong>Units:</strong> {property.units}
+                  </p>
+                  <p>
+                    <strong>Specific Location:</strong>{" "}
+                    {property.specific_location}
+                  </p>
+                </div>
 
-            {isOpen && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-2/3 lg:w-2/3 flex flex-col md:flex-row gap-6">
-                  {/* Property Details */}
-                  <div className="w-full md:w-1/2">
-                    <h2 className="text-xl font-semibold mb-4">
-                      Property Details
-                    </h2>
-                    <p>
-                      <strong>Name:</strong> {property.name}
-                    </p>
-                    <p>
-                      <strong>Location:</strong> {property.location}
-                    </p>
-                    <p>
-                      <strong>Price Range:</strong> {property.price_range}
-                    </p>
-                    <p>
-                      <strong>Status:</strong> {property.status}
-                    </p>
-                    <p>
-                      <strong>Development Type:</strong>{" "}
-                      {property.development_type}
-                    </p>
-                    <p>
-                      <strong>Units:</strong> {property.units}
-                    </p>
-                    <p>
-                      <strong>Specific Location:</strong>{" "}
-                      {property.specific_location}
-                    </p>
-                  </div>
-
-                  {/* Form Section */}
-                  <div className="w-full md:w-1/2">
-                    <h2 className="text-xl font-semibold mb-4">
-                      {popupType === "Request Viewing"
-                        ? "Schedule Appointment"
-                        : "Submit Inquiry"}
-                    </h2>
-                    <form
-                      className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        submitForm();
-                      }}
-                    >
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Name
-                        </label>
-                        <input
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Your Name"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Phone Number
-                        </label>
-                        <input
-                          type="tel"
-                          name="phone"
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Your Phone Number"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Your Email"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          {popupType === "Request Viewing"
-                            ? "Appointment Date & Time"
-                            : "Preferred Contact Date & Time"}
-                        </label>
-                        <input
-                          type="datetime-local"
-                          name="appointmentDate"
-                          value={formData.appointmentDate}
-                          onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Message
-                        </label>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Any additional details or message"
-                        />
-                      </div>
-                      <button
-                        type="submit"
-                        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 col-span-2"
-                      >
-                        {popupType === "Request Viewing"
-                          ? "Confirm Appointment"
-                          : "Submit Inquiry"}
-                      </button>
-                    </form>
-                  </div>
-
-                  {/* Close Button */}
+                <div className="mt-7 space-x-4">
                   <button
-                    className="absolute top-52 right-64 px-2 py-0  bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
-                    onClick={togglePopup}
+                    onClick={() => togglePopup("Request Viewing")}
+                    className="px-6 py-2 text-md font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
                   >
-                    &times;
+                    Request Viewing
+                  </button>
+                  <button
+                    onClick={() => togglePopup("Property Inquiry")}
+                    className="px-6 py-2 text-md font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
+                  >
+                    Property Inquiry
                   </button>
                 </div>
               </div>
-            )}
+            </div>
           </div>
 
-          <p>
-            <strong>Location:</strong> {property.location}
-          </p>
-          <p>
-            <strong>Price Range:</strong> {property.price_range}
-          </p>
-          <p>
-            <strong>Status:</strong> {property.status}
-          </p>
-          <p>
-            <strong>Development Type:</strong> {property.development_type}
-          </p>
-          <p>
-            <strong>Units:</strong> {property.units}
-          </p>
-          <p>
-            <strong>Specific Location:</strong> {property.specific_location}
-          </p>
+          {isOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-11/12 sm:w-4/5 md:w-3/5 lg:w-2/3 flex flex-col md:flex-row gap-6 relative">
+                {/* Close Button Inside the Card */}
+                <button
+                  className="absolute top-4 right-4 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-75"
+                  onClick={togglePopup}
+                >
+                  &times;
+                </button>
+
+                {/* Property Details Section */}
+                <div className="w-full md:w-1/2">
+                  <h2 className="text-xl font-semibold mb-4">
+                    Property Details
+                  </h2>
+                  <p>
+                    <strong>Name:</strong> {property.name}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {property.location}
+                  </p>
+                  <p>
+                    <strong>Price Range:</strong> {property.price_range}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {property.status}
+                  </p>
+                  <p>
+                    <strong>Development Type:</strong>{" "}
+                    {property.development_type}
+                  </p>
+                  <p>
+                    <strong>Units:</strong> {property.units}
+                  </p>
+                  <p>
+                    <strong>Specific Location:</strong>{" "}
+                    {property.specific_location}
+                  </p>
+                </div>
+
+                {/* Form Section */}
+                <div className="w-full md:w-1/2">
+                  <h2 className="text-xl font-semibold mb-4">
+                    {popupType === "Request Viewing"
+                      ? "Schedule Appointment"
+                      : "Submit Inquiry"}
+                  </h2>
+                  <form
+                    className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      submitForm();
+                    }}
+                  >
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Your Name"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Your Phone Number"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Your Email"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        {popupType === "Request Viewing"
+                          ? "Appointment Date & Time"
+                          : "Preferred Contact Date & Time"}
+                      </label>
+                      <input
+                        type="datetime-local"
+                        name="appointmentDate"
+                        value={formData.appointmentDate}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Message
+                      </label>
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Any additional details or message"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 col-span-2"
+                    >
+                      {popupType === "Request Viewing"
+                        ? "Confirm Appointment"
+                        : "Submit Inquiry"}
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
+        {/* Features */}
         <div className="features mb-4">
           <h2 className="text-xl font-semibold mb-2">Features</h2>
           {!parsedFeatures || parsedFeatures.length === 0 ? (
             <p>No features available for this property.</p>
           ) : (
-            <div className="grid gap-4 md:grid-cols-3 text-center">
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 text-center">
               {parsedFeatures.map((feature, index) => (
                 <div
                   key={index}
                   className="border rounded-lg shadow-lg p-4 transition-transform transform hover:scale-105 hover:shadow-xl"
                 >
                   <h4>{feature.name}</h4>
-                  <img
-                    src={
-                      feature.image?.startsWith("https://")
-                        ? feature.image // If it's already a full URL, use it directly
-                        : `http://localhost:8000/${feature.image.replace(
-                            /\\/g,
-                            "/"
-                          )}` // Replace backslashes and prepend the base URL
-                    }
-                    alt={feature.name}
-                    className="w-full h-auto"
-                  />
+                  <div className="w-full h-48 overflow-hidden rounded-lg">
+                    <img
+                      src={
+                        feature.image?.startsWith("https://")
+                          ? feature.image
+                          : `${
+                              process.env.NEXT_PUBLIC_SERVER_PORT
+                            }/${feature.image.replace(/\\/g, "/")}`
+                      }
+                      alt={feature.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
+        {/*  Facilities */}
         <div className="facilities mb-4 p-2 bg-gray-100 rounded-lg shadow">
           <h2 className="text-xl font-semibold text-center mb-4">Facilities</h2>
-          <ul className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 text-center justify-center -ml-9">
+          <ul className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 text-center justify-center">
             {facilities.map((facility) => (
               <li
                 key={facility.id}
-                className="bg-white p-4 rounded-lg shadow hover:-translate-y-1 transition "
+                className="bg-white p-4 rounded-lg shadow hover:-translate-y-1 transition"
               >
                 <span className="text-lg text-gray-700">{facility.name}</span>
               </li>
@@ -452,10 +461,9 @@ export default function BlogPost({ params }) {
           </ul>
         </div>
 
-        <h2 className="text-xl font-semibold mt-4 mb-4 text-center justify-center sm:text-4xl">
-          Buildings
-        </h2>
-        <div className="buildings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        {/* building */}
+        <h2 className="text-xl font-semibold text-center mb-4">Buildings</h2>
+        <div className="buildings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 w-full">
           {buildings.length === 0 ? (
             <p>No buildings available for this property.</p>
           ) : (
@@ -472,7 +480,7 @@ export default function BlogPost({ params }) {
                     building.path?.startsWith("https://")
                       ? building.path
                       : building.path
-                      ? `http://localhost:8000/${building.path
+                      ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/${building.path
                           .replace(/^\/+/, "")
                           .replace(/\\/g, "/")}`
                       : ""
