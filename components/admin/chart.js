@@ -20,30 +20,6 @@ export default function CardCharts() {
   const [propertyInquiryData, setPropertyInquiryData] = useState([]);
   const [submtitedProperty, setSubmittedProperty] = useState([]);
   const [error, setError] = useState("");
-  // Access the stored values from localStorage
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true"; // Check if user is logged in
-
-  // Safely access userInfo from localStorage
-  const userInfo = localStorage.getItem("userInfo");
-
-  let parsedUserInfo = null;
-
-  if (userInfo) {
-    try {
-      // Try parsing the userInfo only if it exists
-      parsedUserInfo = JSON.parse(userInfo);
-    } catch (error) {
-      console.error("Error parsing user info:", error);
-    }
-  }
-  console.log(isLoggedIn);
-  if (isLoggedIn && parsedUserInfo) {
-    console.log("User is logged in");
-    console.log("User Info:", parsedUserInfo); // This will log the user's name
-  } else {
-    console.log("User is not logged in or user info is invalid");
-  }
-
   useEffect(() => {
     // Get the token from localStorage
     const token = localStorage.getItem("auth_token");
