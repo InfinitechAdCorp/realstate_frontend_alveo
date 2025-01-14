@@ -18,7 +18,7 @@ const fetchProperties = async () => {
 
 export default function DemoPage() {
   const [data, setData] = useState([]);
-
+   
   useEffect(() => {
     const fetchData = async () => {
       const result = await fetchProperties(); // Fetch data from API
