@@ -31,8 +31,9 @@ export default function Admin({}) {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
   const [currentImages, setCurrentImages] = useState([]);
-
+  const [authToken_final, setAuthToken] = useState([]); // State to store fetched data from API
   const [properties, setProperties] = useState([]); // State to store fetched data from API
+  const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
   const [counts, setCounts] = useState({
     properties: 0,
@@ -312,7 +313,9 @@ export default function Admin({}) {
 
   useEffect(() => {
     console.log(activeNav);
-    if (activeNav === "STATUS") {
+    if (activeNav === "DASHBOARD") {
+      fetchCount(); // Fetch other data for "Details"
+    } else if (activeNav === "STATUS") {
       fetchFormFiller_status(); // Fetch other data for "Details"
     } else if (activeNav === "LOCATION") {
       fetchFormFiller_location(); // Fetch other data for "Details"
@@ -620,56 +623,47 @@ export default function Admin({}) {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const fetchCsrfToken = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/csrf-token`,
-      {
-        credentials: "include", // Ensure cookies are sent with the request
-      }
-    );
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch CSRF token");
-    }
-
-    const { csrf_token } = await response.json();
-    return csrf_token;
-  };
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    const loginData = {
+      email: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
+      password: formData.password,
+    };
+    console.log(loginData);
     try {
-      const csrfToken = await fetchCsrfToken();
-
-      const loginData = {
-        email: process.env.NEXT_PUBLIC_ADMIN_EMAIL,
-        password: formData.password,
-      };
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/login`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken, // Include the CSRF token
           },
           body: JSON.stringify(loginData),
-          credentials: "include", // Ensure session cookies are sent
         }
       );
 
       if (response.ok) {
         const data = await response.json();
-        localStorage.setItem("auth_token", data.token);
         console.log("Login successful:", data);
+
+        // Save the token to localStorage or another storage
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userInfo", JSON.stringify(data.name)); // Assuming you return user data in the response
+
+        // Optional: Set token in a state or context if needed
+        setAuthToken(data.token);
         setIsVisible(false);
+        setisLoggedin(true);
       } else {
         const errorData = await response.json();
-        setError(errorData.error || "Invalid email or password.");
+        console.error("Error during login:", errorData);
+        setError(errorData.error || "Login failed.");
       }
-    } catch (err) {
-      console.error("Error during login:", err);
+    } catch (error) {
+      console.error("Error:", error);
       setError("An unexpected error occurred.");
     }
   };
@@ -677,34 +671,51 @@ export default function Admin({}) {
   const handlePropertiesClick = () => {
     setShowProperties(!showProperties);
   };
-
   const fetchCount = async (endpoint, key) => {
+    const token = localStorage.getItem("auth_token"); // Get the token from localStorage
+
+    // Check if token exists
+    if (!token) {
+      console.error("Token not found.");
+      setError("Token not found.");
+      return; // Exit if no token is found
+    }
+
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/${endpoint}`
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/${endpoint}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+            "Content-Type": "application/json", // Optional: specify the content type if needed
+          },
+        }
       );
+
       const data = await response.json();
 
       if (response.ok) {
         setCounts((prevCounts) => ({ ...prevCounts, [key]: data.count }));
       } else {
         console.error(`Error fetching ${key} count:`, data);
+        setError(data.error || "Error fetching data.");
       }
     } catch (error) {
       console.error(`Fetch error for ${key}:`, error);
+      setError("An unexpected error occurred while fetching data.");
     }
   };
 
-  // Fetch count data after login success
+  // UseEffect to fetch data after successful login
   useEffect(() => {
-    console.log(`${process.env.NEXT_PUBLIC_ADMIN_EMAIL}`);
     if (isLoggedIn) {
       fetchCount("countproperties", "properties");
       fetchCount("countotherbuildings", "otherBuildings");
       fetchCount("countcondominiums", "condominiums");
       fetchCount("countlocations", "locations");
     }
-  }, [isLoggedIn]); // Runs only when isLoggedIn is true
+  }, [isLoggedIn]);
   const openSidebar = () => {
     setSidebarVisible(true);
   };
@@ -758,7 +769,6 @@ export default function Admin({}) {
             </form>
 
             {/* Log the admin email to the console */}
-            {console.log(process.env.NEXT_PUBLIC_ADMIN_EMAIL)}
           </div>
         </div>
       )}
