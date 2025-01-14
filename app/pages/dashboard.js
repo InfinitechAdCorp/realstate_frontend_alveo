@@ -7,7 +7,9 @@ import { useRouter } from 'next/navigation' // Hook for navigation
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import ClipLoader from 'react-spinners/ClipLoader'
 import { showToast } from '../../components/alert/page' // Adjust the import path if necessary
-
+import { IoBed, IoManSharp } from 'react-icons/io5'
+import { FaCalculator, FaHouseCircleCheck } from 'react-icons/fa6'
+import { FaCalendarAlt } from 'react-icons/fa'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -421,7 +423,6 @@ const AlveoBanner = () => {
   ]
 
   const [currentClip, setCurrentClip] = useState(0)
-
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -842,20 +843,17 @@ const AlveoBanner = () => {
                       <ImageSlider />
                     </div>
                   </div> */}
-
             </div>
-          </div> */}
+          </div>
 
-          <div className='fixed top-10 right-3 z-50'>
+          <div className='fixed top-20 right-1 z-50 lg:top-13 lg:right-2 flex space-x-2'>
             {/* Room Planner Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-3 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
                 <a href='/pages/roomplanner' target='_blank'>
                   <div className='cursor-pointer relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 sm:h-9 md:w-7 md:h-7 lg:w-9 lg:h-9 xl:w-7 xl:h-7 transform transition-transform duration-200 ease-in-out'
-                      src='/assets/RoomPlanner/bed.png'
-                      alt='Room Planner'
+                    <IoBed
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
                       onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
@@ -874,14 +872,12 @@ const AlveoBanner = () => {
             </div>
 
             {/* Loan Calculator Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl w-10 h-10 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
                 <a href='/pages/loancalculator' passHref>
                   <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7 transform transition-transform duration-200 ease-in-out'
-                      src='/calculator.png'
-                      alt='Loan Calculator'
+                    <FaCalculator
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
                       onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
@@ -900,14 +896,12 @@ const AlveoBanner = () => {
             </div>
 
             {/* Set Appointment Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-16 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
                 <a href='/pages/set-appointment' passHref>
                   <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7 transform transition-transform duration-200 ease-in-out'
-                      src='assets/schedule.png'
-                      alt='Agent'
+                    <FaCalendarAlt
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
                       onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
@@ -926,14 +920,12 @@ const AlveoBanner = () => {
             </div>
 
             {/* Submit Property Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-28 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
                 <a href='/pages/add-property' passHref>
                   <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7 transform transition-transform duration-200 ease-in-out'
-                      src='assets/add.png'
-                      alt='Agent'
+                    <FaHouseCircleCheck
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
                       onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
@@ -952,14 +944,12 @@ const AlveoBanner = () => {
             </div>
 
             {/* Agent Icon */}
-            <div className='absolute md:top-10 max-sm:-top-4 sm:-top-4 right-40 m-4 mb-10'>
-              <div className='bg-white border-2 rounded-3xl mr-12 w-9 h-9 sm:w-12 sm:h-12 xl:w-11 xl:h-11 lg:w-14 lg:h-14 flex items-center justify-center md:-mt-10 border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
                 <a href='/pages/agent' passHref>
                   <div className='relative group'>
-                    <img
-                      className='w-7 h-7 sm:w-9 md:w-7 md:h-7 sm:h-9 lg:w-9 lg:h-9 xl:w-7 xl:h-7 transform transition-transform duration-200 ease-in-out'
-                      src='assets/boy.png'
-                      alt='Agent'
+                    <IoManSharp
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
                       onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
