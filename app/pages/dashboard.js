@@ -1,4 +1,3 @@
-
 'use client' // Marks this component as client-side
 
 import React, { useCallback, useEffect, useState, useRef } from 'react'
@@ -20,7 +19,7 @@ import Header from './header'
 import Footer from './footer'
 import MyBot from '../../components/Chatbot/page'
 import SocialMediaFloating from './socialmedia-icons/page'
-
+import { usePathname } from 'next/navigation'
 
 const containerStyle = {
   width: '100%',
@@ -127,7 +126,10 @@ const Carousel = () => {
 
   return (
     <div className='w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10'>
-      <h1 className='font-thin items-center text-4xl text-customBlue border-t-2 w-28 border-customBlue pl-4 pb-3 mx-20 whitespace-nowrap'>
+      <h1
+        className='font-thin items-center text-4xl 
+            text-customBlue border-t-2 w-28 border-customBlue mx-20 whitespace-nowrap'
+      >
         FEATURED PROPERTIES
       </h1>
 
@@ -443,17 +445,17 @@ const AlveoBanner = () => {
   const [hoveredImage, setHoveredImage] = useState(null)
   const [enlargedImage, setEnlargedImage] = useState(null)
   const dashboardClips = [
-    "/assets/dashboard/854325-hd_1280_720_25fps.mp4",
-    "/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4",
-    "/assets/dashboard/3648257-uhd_3840_2160_30fps.mp4",
-    "/assets/dashboard/3773486-hd_1920_1080_30fps.mp4",
-    "/assets/dashboard/3773488-hd_1920_1080_30fps.mp4",
-    "/assets/dashboard/4193140-uhd_2562_1440_24fps.mp4",
-    "/assets/dashboard/8996835-uhd_3840_2160_30fps.mp4",
-    "/assets/dashboard/alveo_cut.mp4",
-  ];
+    '/assets/dashboard/854325-hd_1280_720_25fps.mp4',
+    '/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4',
+    '/assets/dashboard/3648257-uhd_3840_2160_30fps.mp4',
+    '/assets/dashboard/3773486-hd_1920_1080_30fps.mp4',
+    '/assets/dashboard/3773488-hd_1920_1080_30fps.mp4',
+    '/assets/dashboard/4193140-uhd_2562_1440_24fps.mp4',
+    '/assets/dashboard/8996835-uhd_3840_2160_30fps.mp4',
+    '/assets/dashboard/alveo_cut.mp4'
+  ]
 
-  const [currentClip, setCurrentClip] = useState(0);
+  const [currentClip, setCurrentClip] = useState(0)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -879,15 +881,15 @@ const AlveoBanner = () => {
             </div>
           </div>
 
-          <div className="fixed top-20 right-1 z-50 lg:top-13 lg:right-2 flex space-x-2">
+          <div className='fixed top-20 right-1 z-50 lg:top-13 lg:right-2 flex space-x-2'>
             {/* Room Planner Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/roomplanner" target="_blank">
-                  <div className="cursor-pointer relative group">
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+                <a href='/pages/roomplanner' target='_blank'>
+                  <div className='cursor-pointer relative group'>
                     <IoBed
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
+                      onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
                       }
@@ -905,13 +907,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Loan Calculator Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/loancalculator" passHref>
-                  <div className="relative group">
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+                <a href='/pages/loancalculator' passHref>
+                  <div className='relative group'>
                     <FaCalculator
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
+                      onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
                       }
@@ -929,13 +931,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Set Appointment Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/set-appointment" passHref>
-                  <div className="relative group">
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+                <a href='/pages/set-appointment' passHref>
+                  <div className='relative group'>
                     <FaCalendarAlt
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
+                      onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
                       }
@@ -950,16 +952,16 @@ const AlveoBanner = () => {
                   </div>
                 </a>
               </div>
-            </div>  
+            </div>
 
             {/* Submit Property Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/add-property" passHref>
-                  <div className="relative group">
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+                <a href='/pages/add-property' passHref>
+                  <div className='relative group'>
                     <FaHouseCircleCheck
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
+                      onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
                       }
@@ -977,13 +979,13 @@ const AlveoBanner = () => {
             </div>
 
             {/* Agent Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/agent" passHref>
-                  <div className="relative group">
+            <div className='flex justify-center items-center'>
+              <div className='bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out'>
+                <a href='/pages/agent' passHref>
+                  <div className='relative group'>
                     <IoManSharp
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
+                      className='w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue'
+                      onMouseOver={e =>
                         (e.currentTarget.style.transform =
                           'scale(1.1) translateY(-5px)')
                       }
@@ -1401,39 +1403,60 @@ const AlveoBanner = () => {
 }
 
 const DashboardComponent = () => {
-  const [selectedLocation, setSelectedLocation] = useState('batangas') // Default location
+  const pathname = usePathname() // Use the usePathname hook to access the current path
+  const [currentLocation, setCurrentLocation] = useState('LOCATION')
+  const [specificLocation, setSpecificLocation] = useState('')
+  const [posts, setPosts] = useState({}) // State to store fetched data
 
-  // Location data (you can expand with more locations)
-  const locations = {
-    batangas: [
-      { src: '/assets/batangas/1.jpg', alt: 'Property 1' },
-      { src: '/assets/batangas/2.jpg', alt: 'Property 2' },
-      { src: '/assets/batangas/3.jpg', alt: 'Property 3' },
-      { src: '/assets/batangas/4.jpg', alt: 'Property 4' },
-      { src: '/assets/batangas/5.jpg', alt: 'Property 5' }
-    ],
-    cagayan: [
-      { src: '/assets/cagayan/1.jpg', alt: 'Property 1' },
-      { src: '/assets/cagayan/2.jpg', alt: 'Property 2' }
-    ],
-    cavite: [
-      { src: '/assets/cavite/1.jpg', alt: 'Property 1' },
-      { src: '/assets/cavite/2.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/3.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/4.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/5.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/6.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/7.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/8.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/9.jpg', alt: 'Property 2' },
-      { src: '/assets/cavite/10.jpg', alt: 'Property 2' }
-    ]
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setCurrentLocation(params.get('currentLocation') || 'LOCATION')
+    setSpecificLocation(params.get('specificLocation') || '')
+    console.log(params)
+  }, [])
+
+  useEffect(() => {
+    // Fetch data from the backend API
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`) // Adjust the API endpoint if necessary
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok')
+        }
+        return response.json()
+      })
+      .then(data => {
+        console.log('Fetched data:', data) // Log the raw data fetched from the API
+
+        const fetchedPosts = {}
+        // Process the data into a key-value object
+        data.forEach(location => {
+          const key = location.area_name // The transformed area_name from the backend
+          fetchedPosts[key] = {
+            location: location.area_name,
+            key: key,
+            path: location.image, // Image path from the API
+            title: location.title,
+            intro: location.description
+          }
+        })
+        setPosts(fetchedPosts) // Set the transformed data to state
+      })
+      .catch(error => {
+        console.error('Error fetching areas:', error)
+      })
+  }, [])
+  const handleToggle = key => {
+    setExpanded(prevExpanded => ({
+      ...prevExpanded,
+      [key]: !prevExpanded[key]
+    }))
   }
 
-  const handleFilterChange = location => {
-    setSelectedLocation(location)
-  }
+  const [expanded, setExpanded] = useState({})
 
+  const toggleReadMore = key => {
+    setExpanded(prev => ({ ...prev, [key]: !prev[key] }))
+  }
   return (
     <>
       <SEO
@@ -1472,66 +1495,51 @@ const DashboardComponent = () => {
 
           {/* Image Gallery Section */}
           <div className='w-full p-4'>
-            <h1 className='font-thin items-center text-4xl text-customBlue border-t-2 w-28 border-customBlue pl-4 pb-3 mx-20 whitespace-nowrap'>
-              OUR LOCATIONS
+            <h1
+              className='font-thin items-center text-4xl 
+            text-customBlue border-t-2 w-28 border-customBlue mx-20 whitespace-nowrap'
+            >
+              RECOMMENDED FOR YOU
             </h1>
-            <div className='flex space-x-4 mb-4 p-2'>
-              <button
-                onClick={() => handleFilterChange('batangas')}
-                className={`px-4 py-2 rounded-lg font-medium focus:outline-none ${
-                  selectedLocation === 'batangas'
-                    ? 'bg-white  text-customBlue shadow-md'
-                    : 'bg-customBlue  text-white hover:bg-white hover:text-customBlue'
-                }`}
-              >
-                Caloocan City
-              </button>
-              <button
-                onClick={() => handleFilterChange('cagayan')}
-                className={`px-4 py-2 rounded-lg font-medium focus:outline-none ${
-                  selectedLocation === 'cagayan'
-                    ? 'bg-white text-customBlue shadow-md'
-                    : 'bg-customBlue text-white hover:bg-white hover:text-customBlue'
-                }`}
-              >
-                Las Pinas
-              </button>
-              <button
-                onClick={() => handleFilterChange('cavite')}
-                className={`px-4 py-2 rounded-lg font-medium focus:outline-none ${
-                  selectedLocation === 'cavite'
-                    ? 'bg-white text-customBlue shadow-md'
-                    : 'bg-customBlue text-white hover:bg-white hover:text-customBlue'
-                }`}
-              >
-                Makati City
-              </button>
-            </div>
-
-            {/* Display images based on selected location */}
-            <div>
-              <div className='grid grid-cols-2 sm:grid-cols-3 gap-4'>
-                {locations[selectedLocation]
-                  ?.slice(0, 6)
-                  .map((location, index) => (
-                    <div key={index} className='overflow-hidden shadow-lg'>
-                      <img
-                        src={location.src}
-                        alt={location.alt}
-                        className='w-full h-60 object-cover transform transition-transform duration-500 hover:scale-110'
-                      />
+            <div className='p-2 mx-auto'>
+              <div className='flex flex-wrap -mx-2'>
+                {Object.values(posts)
+                  .slice(-4) // Limit to the last 4 items
+                  .reverse() // Reverse the order to display the latest first
+                  .map(({ location, key, path, title, intro }) => (
+                    <div
+                      className='w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-8'
+                      key={key}
+                    >
+                      <div className='bg-white shadow-md overflow-hidden flex flex-col h-full'>
+                        <img
+                          src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}${path}`} // Try to load from localhost:3000
+                          onError={e => {
+                            e.target.onerror = null // Prevent infinite loop if image fails
+                            e.target.src = `${process.env.NEXT_PUBLIC_SERVER_PORT}${path}` // Fallback to localhost:8000 if not found
+                          }}
+                          className='w-full object-cover transform transition-transform duration-500 hover:scale-110 h-48 sm:h-56 md:h-64 lg:h-72' // Adjust image height as needed
+                        />
+                        <div className='p-4 flex flex-col justify-between flex-grow'>
+                          <div>
+                            <h5 className='text-lg font-semibold'>{title}</h5>
+                            <p className='text-base'>
+                              {expanded[key]
+                                ? intro
+                                : `${intro.substring(0, 100)}...`}
+                            </p>
+                          </div>
+                          <a
+                            href={`/pages/locations/${key}`} // Standard anchor tag for navigation
+                            className='mt-4 text-customBlue hover:text-customBlue'
+                          >
+                            {expanded[key] ? 'Read Less' : 'Read More'} &rarr;
+                          </a>
+                        </div>
+                      </div>
                     </div>
                   ))}
               </div>
-              <div className='text-center mt-4'>
-                  <Link
-                      href='/pages/locations'
-                      className='text-customBlue flex items-center space-x-2 justify-center no-underline'
-                    >
-                      <span>View More</span>
-                      <FaArrowRight className='cursor-pointer' />
-                    </Link>
-                </div>
             </div>
           </div>
         </div>
