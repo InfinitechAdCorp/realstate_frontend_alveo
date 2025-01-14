@@ -213,6 +213,12 @@ const Header = () => {
                 href='/pages/ContactUs'
                 className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
               >
+                For Sale
+              </Link>
+              <Link
+                href='/pages/ContactUs'
+                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+              >
                 Contact Us
               </Link>
             </div>
@@ -225,7 +231,7 @@ const Header = () => {
                   className='flex items-center text-white hover:opacity-80 transition-opacity duration-300'
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  <FaSearch className='w-5 h-5 lg:w-5 lg:h-5 mt-1 transform rotate-90 cursor-pointer' />
+                  {/* <FaSearch className='w-5 h-5 lg:w-5 lg:h-5 mt-1 transform rotate-90 cursor-pointer' /> */}
                   <p className='ml-2 font-light text-center mt-3 text-lg lg:block hidden'>
                     Explore Properties
                   </p>
