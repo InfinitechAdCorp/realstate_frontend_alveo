@@ -182,7 +182,7 @@ const LocationPage = () => {
       <div className='locations-container text-center mb-0 mt-20'>
         <div className='w-1/2 text-center flex flex-col items-center'>
           <h1 className='font-thin mt-5 text-center text-4xl text-customBlue border-t-2 border-customBlue pl-4 pb-10'>
-            OUR FOUNDATION
+            OUR LOCATION
           </h1>
         </div>
 
