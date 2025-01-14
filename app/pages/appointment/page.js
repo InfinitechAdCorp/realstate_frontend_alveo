@@ -15,7 +15,7 @@ import AreaModal from "@/components/admin/areaModal";
 import Appointments from "@/components/admin/appointments";
 
 export default function Admin({}) {
-  const [isVisible, setIsVisible] = useState(true); // Controls visibility of popup
+  const [isVisible, setIsVisible] = useState(true); 
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,7 +24,7 @@ export default function Admin({}) {
   const [error, setError] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
 
-  const [properties, setProperties] = useState([]); // State to store fetched data from API
+  const [properties, setProperties] = useState([]); 
   const [counts, setCounts] = useState({
     properties: 0,
     otherBuildings: 0,

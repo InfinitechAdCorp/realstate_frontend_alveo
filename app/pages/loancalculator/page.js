@@ -38,24 +38,19 @@ export default function LoanCalculator() {
     let monthlyPayment = 0;
 
     if (totalMonthsValue > 0 && interestRateValue > 0) {
-      // Monthly Interest Rate
       const monthlyInterestRate = interestRateValue / 100 / 12;
 
-      // Amortization Formula for Monthly Payment
       monthlyPayment =
         (totalLoanAmount *
           monthlyInterestRate *
           Math.pow(1 + monthlyInterestRate, totalMonthsValue)) /
         (Math.pow(1 + monthlyInterestRate, totalMonthsValue) - 1);
 
-      // Total Loan Amount (Principal + Interest)
       totalLoanAmount = monthlyPayment * totalMonthsValue;
     }
 
-    // Calculate Total Interest
     const totalInterest = totalLoanAmount - amountValue;
 
-    // Set Loan Details to State
     setLoanDetails({
       selectedYears: yearsValue,
       selectedMonths: monthsValue,
@@ -68,15 +63,13 @@ export default function LoanCalculator() {
     });
   };
   const exportPDF = () => {
-    const margin = 14.2; // Convert 0.5 inches to mm (1 inch = 25.4mm, so 0.5 * 25.4 = 12.7mm, rounded to 14.2mm for consistency)
-    const doc = new jsPDF({ unit: "mm", format: "letter" }); // Set to letter size (8.5" x 11")
+    const margin = 14.2;
+    const doc = new jsPDF({ unit: "mm", format: "letter" });
 
-    // Title Section - Larger font and centered
     doc.setFontSize(22);
-    doc.setFont("times", "bold"); // Change font to Times for title
-    doc.text("Loan Payment Summary", 105, margin + 10, { align: "center" }); // Added padding top for header
+    doc.setFont("times", "bold"); 
+    doc.text("Loan Payment Summary", 105, margin + 10, { align: "center" }); 
 
-    // Define the loan data
     const tableData = [
       [
         "Period",
@@ -105,21 +98,16 @@ export default function LoanCalculator() {
       ],
     ];
 
-    const startX = margin; // Start drawing the table from the margin
-    let startY = margin + 30; // Start below the title (with padding for header)
-    const rowHeight = 15; // Adjusted row height for better readability
-    const columnWidth = (doc.internal.pageSize.width - 2 * margin) / 4; // Ensure the columns fit within the page width
+    const startX = margin;
+    let startY = margin + 30; 
+    const rowHeight = 15; 
+    const columnWidth = (doc.internal.pageSize.width - 2 * margin) / 4; 
 
-    // Apply font style (using Arial for the table content)
-    doc.setFont("helvetica", "normal"); // Use Helvetica font for table content, which supports special characters
+    doc.setFont("helvetica", "normal"); 
 
-    // Enlarge font size for headers only
-    doc.setFontSize(14); // Set a larger font size for headers
+    doc.setFontSize(14);
 
-    // Add padding for header
-    const headerPadding = 5; // Padding for header text
-
-    // Draw the table headers - centralize headers with padding
+    const headerPadding = 5; 
     const headerTexts = tableData.map((row) => row[0]);
     headerTexts.forEach((header, index) => {
       doc.text(
@@ -130,13 +118,10 @@ export default function LoanCalculator() {
       );
     });
 
-    // Set normal font size for table content
     doc.setFontSize(12);
 
-    // Add padding for table values
-    const valuePadding = 5; // Padding for value cells
+    const valuePadding = 5; 
 
-    // Draw the table values below the headers - center values with padding
     const valueTexts = tableData.map((row) => row[1]);
     valueTexts.forEach((value, index) => {
       const valueX = startX + index * columnWidth + columnWidth / 2;
@@ -145,8 +130,7 @@ export default function LoanCalculator() {
       });
     });
 
-    // Add subtle borders to the table for better separation (slightly visible)
-    doc.setLineWidth(0.05); // Reduced line width for subtle visibility
+    doc.setLineWidth(0.05); 
     const tableHeight = rowHeight * 2;
     tableData.forEach((_, index) => {
       doc.rect(
@@ -157,9 +141,8 @@ export default function LoanCalculator() {
       );
     });
 
-    // Add a section for notes - clearer disclaimer, centralized
     doc.setFontSize(10);
-    doc.setFont("helvetica", "normal"); // Ensure the correct font is used for the note
+    doc.setFont("helvetica", "normal"); 
     const noteText =
       "* Please note that the results provided by this calculator are estimates and may vary. The final loan amount, interest rates, and monthly payments will be determined by the bank upon approval.";
     doc.text(noteText, 105, startY + tableHeight + 10, {
@@ -167,9 +150,8 @@ export default function LoanCalculator() {
       maxWidth: doc.internal.pageSize.width - 2 * margin,
     });
 
-    // Footer Section - Centered "Thank you" message
     doc.setFontSize(8);
-    doc.setFont("helvetica", "normal"); // Use Helvetica for footer
+    doc.setFont("helvetica", "normal"); 
     doc.text(
       "Thank you for using our Loan Calculator",
       105,
@@ -177,11 +159,9 @@ export default function LoanCalculator() {
       { align: "center" }
     );
 
-    // Save the PDF
     doc.save("loan_calculator_summary.pdf");
   };
 
-  // Button to trigger the PDF export
 
   return (
     <>
@@ -198,19 +178,17 @@ export default function LoanCalculator() {
         style={{ backgroundImage: "url('/hero.png')" }}
       >
         <section
-          className="relative w-full h-20 mt-10 bg-cover bg-center flex justify-center items-center"
+          className="relative w-full h-20 mt-16 bg-cover bg-center flex justify-center items-center"
           style={{ backgroundImage: "url('/hero.png')" }}
         >
-          {/* <div className='absolute inset-0 bg-black opa city-50'></div> */}
           <h1 className="text-white text-3xl font-bold z-10">
             Loan Calculator
           </h1>
         </section>
 
-        <section className="py-12 bg-gray-100 ">
+        <section className="py-12">
           <div className="max-w-7xl  mx-auto p-8 bg-white rounded-xl shadow-xl">
             <div className="space-y-8 xl:space-y-2">
-              {/* Input Fields - Horizontal Layout */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                   <label
@@ -223,7 +201,7 @@ export default function LoanCalculator() {
                     id="years"
                     value={years}
                     onChange={(e) => setYears(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg text-xl transition duration-300 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg text-md transition duration-300 focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="0">Select Years</option>
                     {[...Array(25)].map((_, i) => (
@@ -245,7 +223,7 @@ export default function LoanCalculator() {
                     id="months"
                     value={months}
                     onChange={(e) => setMonths(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg text-xl transition duration-300 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg text-md transition duration-300 focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="0">Select Months</option>
                     {[...Array(12)].map((_, i) => (
@@ -268,7 +246,7 @@ export default function LoanCalculator() {
                     id="amount"
                     value={amount}
                     onChange={(e) => setAmount(formatNumber(e.target.value))}
-                    className="w-full p-3 border border-gray-300 rounded-lg text-xl transition duration-300 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg text-sm transition duration-300 focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter Amount"
                   />
                 </div>
@@ -285,7 +263,7 @@ export default function LoanCalculator() {
                     id="interest"
                     value={interest}
                     onChange={(e) => setInterest(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg text-xl transition duration-300 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg text-sm transition duration-300 focus:ring-2 focus:ring-blue-500"
                     placeholder="Enter Interest Rate"
                   />
                 </div>
