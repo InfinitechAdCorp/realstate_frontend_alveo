@@ -1,241 +1,147 @@
-import React, { useEffect } from "react";
-import { Chart } from "chart.js";
+import React, { useEffect, useState } from "react";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip as RechartsTooltip,
+  Legend as RechartsLegend,
+} from "recharts";
 
 export default function CardCharts() {
+  const [requestViewingData, setRequestViewingData] = useState([]);
+  const [propertyInquiryData, setPropertyInquiryData] = useState([]);
+  const [submtitedProperty, setSubmittedProperty] = useState([]);
+
   useEffect(() => {
-    // Line Chart Config
-    const lineChartConfig = {
-      type: "line",
-      data: {
-        labels: [
-          "January",
-          "February",
-          "March",
-          "April",
-          "May",
-          "June",
-          "July",
-          "August",
-          "September",
-          "October",
-          "November",
-          "December",
-        ],
-        datasets: [
-          {
-            label: new Date().getFullYear(),
-            backgroundColor: "#3182ce",
-            borderColor: "#3182ce",
-            data: [65, 78, 66, 44, 56, 67, 75],
-            fill: false,
-          },
-          {
-            label: new Date().getFullYear() - 1,
-            fill: false,
-            backgroundColor: "#edf2f7",
-            borderColor: "#edf2f7",
-            data: [40, 68, 86, 74, 56, 60, 87],
-          },
-        ],
-      },
-      options: {
-        maintainAspectRatio: false,
-        responsive: true,
-        title: {
-          display: false,
-          text: "Sales Charts",
-          fontColor: "white",
-        },
-        legend: {
-          labels: {
-            fontColor: "white",
-          },
-          align: "end", // Set the alignment to the end
-          position: "bottom", // Move the legend to the bottom
-        },
-        tooltips: {
-          mode: "index",
-          intersect: false,
-        },
-        hover: {
-          mode: "nearest",
-          intersect: true,
-        },
-        scales: {
-          x: {
-            ticks: {
-              fontColor: "rgba(255,255,255,.7)",
-            },
-            grid: {
-              display: false,
-              borderDash: [2],
-              borderDashOffset: [2],
-              color: "rgba(33, 37, 41, 0.3)",
-            },
-          },
-          y: {
-            ticks: {
-              fontColor: "rgba(255,255,255,.7)",
-            },
-            grid: {
-              borderDash: [3],
-              color: "rgba(255, 255, 255, 0.15)",
-            },
-          },
-        },
-      },
-    };
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-properties-monthly`)
+      .then((response) => response.json())
+      .then((data) => {
+        setSubmittedProperty(data);
+        console.log(data); // This will log the monthly counts
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
 
-    // Pie Chart 1 Config
-    const pieChart1Config = {
-      type: "pie",
-      data: {
-        labels: [
-          "Category 1",
-          "Category 2",
-          "Category 3",
-          "Category 4",
-          "Category 5",
-        ],
-        datasets: [
-          {
-            data: [200, 100, 300, 150, 250],
-            backgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56",
-              "#4BC0C0",
-              "#9966FF",
-            ],
-            hoverBackgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56",
-              "#4BC0C0",
-              "#9966FF",
-            ],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: "bottom", // Aligns the legend to the bottom
-            labels: {
-              fontColor: "white", // Changes the font color of the labels
-            },
-          },
-          tooltip: {
-            backgroundColor: "#333",
-            titleFont: { size: 14 },
-            bodyFont: { size: 12 },
-          },
-        },
-      },
-    };
+    // Fetch Request Viewing Data
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-request-viewing`)
+      .then((response) => response.json())
+      .then((data) => {
+        setRequestViewingData(data); // Update the state with the response data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
 
-    // Pie Chart 2 Config
-    const pieChart2Config = {
-      type: "pie",
-      data: {
-        labels: [
-          "Property 1",
-          "Property 2",
-          "Property 3",
-          "Property 4",
-          "Property 5",
-        ],
-        datasets: [
-          {
-            data: [500, 300, 400, 200, 600],
-            backgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56",
-              "#4BC0C0",
-              "#9966FF",
-            ],
-            hoverBackgroundColor: [
-              "#FF6384",
-              "#36A2EB",
-              "#FFCE56",
-              "#4BC0C0",
-              "#9966FF",
-            ],
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: "bottom", // Aligns the legend to the bottom
-            labels: {
-              fontColor: "white", // Changes the font color of the labels
-            },
-          },
-          tooltip: {
-            backgroundColor: "#333",
-            titleFont: { size: 14 },
-            bodyFont: { size: 12 },
-          },
-        },
-      },
-    };
-
-    // Create Line Chart
-    const lineChartCanvas = document
-      .getElementById("line-chart")
-      .getContext("2d");
-    const lineChart = new Chart(lineChartCanvas, lineChartConfig);
-
-    // Create Pie Chart 1
-    const pieChart1Canvas = document
-      .getElementById("pie-chart1")
-      .getContext("2d");
-    const pieChart1 = new Chart(pieChart1Canvas, pieChart1Config);
-
-    // Create Pie Chart 2
-    const pieChart2Canvas = document
-      .getElementById("pie-chart2")
-      .getContext("2d");
-    const pieChart2 = new Chart(pieChart2Canvas, pieChart2Config);
-
-    return () => {
-      // Cleanup charts when component unmounts
-      if (lineChart) {
-        lineChart.destroy();
-      }
-      if (pieChart1) {
-        pieChart1.destroy();
-      }
-      if (pieChart2) {
-        pieChart2.destroy();
-      }
-    };
+    // Fetch Property Inquiry Data
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-property-inquiry`)
+      .then((response) => response.json())
+      .then((data) => {
+        setPropertyInquiryData(data); // Update the state with the response data
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
 
-  return (
-    <div>
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0">
-        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
-          <div className="flex flex-wrap items-center">
-            <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-                ADDED CLIENTS
-              </h6>
-            </div>
-          </div>
-        </div>
-        <div className="p-4 flex-auto">
-          {/* Line Chart */}
-          <div className="relative h-350-px">
-            <canvas id="line-chart"></canvas>
-          </div>
-        </div>
-      </div>
+  const getPieChartData = (data) => {
+    return data.map((item) => ({
+      name: item.property,
+      value: item.total,
+    }));
+  };
 
+  const getStackedAreaChartData = () => {
+    const currentYear = new Date().getFullYear();
+    const lastYear = currentYear - 1;
+
+    const currentYearData = Array(12).fill(0);
+    const lastYearData = Array(12).fill(0);
+
+    submtitedProperty.forEach((entry) => {
+      const { year, month, total } = entry;
+      if (year === currentYear) {
+        currentYearData[month - 1] = total; // month - 1 for zero-based index
+      }
+      if (year === lastYear) {
+        lastYearData[month - 1] = total;
+      }
+    });
+
+    return [
+      {
+        name: "January",
+        currentYear: currentYearData[0],
+        lastYear: lastYearData[0],
+      },
+      {
+        name: "February",
+        currentYear: currentYearData[1],
+        lastYear: lastYearData[1],
+      },
+      {
+        name: "March",
+        currentYear: currentYearData[2],
+        lastYear: lastYearData[2],
+      },
+      {
+        name: "April",
+        currentYear: currentYearData[3],
+        lastYear: lastYearData[3],
+      },
+      {
+        name: "May",
+        currentYear: currentYearData[4],
+        lastYear: lastYearData[4],
+      },
+      {
+        name: "June",
+        currentYear: currentYearData[5],
+        lastYear: lastYearData[5],
+      },
+      {
+        name: "July",
+        currentYear: currentYearData[6],
+        lastYear: lastYearData[6],
+      },
+      {
+        name: "August",
+        currentYear: currentYearData[7],
+        lastYear: lastYearData[7],
+      },
+      {
+        name: "September",
+        currentYear: currentYearData[8],
+        lastYear: lastYearData[8],
+      },
+      {
+        name: "October",
+        currentYear: currentYearData[9],
+        lastYear: lastYearData[9],
+      },
+      {
+        name: "November",
+        currentYear: currentYearData[10],
+        lastYear: lastYearData[10],
+      },
+      {
+        name: "December",
+        currentYear: currentYearData[11],
+        lastYear: lastYearData[11],
+      },
+    ];
+  };
+
+  return (
+    <div className="mt-20">
       {/* Pie Chart 1 */}
       <div className="flex">
         <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
@@ -248,11 +154,33 @@ export default function CardCharts() {
               </div>
             </div>
           </div>
-          <div className="p-4 flex-auto">
+          <div className="p-4 flex justify-center items-center">
             {/* Pie Chart 1 */}
-            <div className="relative h-350-px">
-              <canvas id="pie-chart1"></canvas>
-            </div>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={getPieChartData(propertyInquiryData)}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                >
+                  {propertyInquiryData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={
+                        ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"][
+                          index % 5
+                        ]
+                      }
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
           </div>
         </div>
 
@@ -267,12 +195,72 @@ export default function CardCharts() {
               </div>
             </div>
           </div>
-          <div className="p-4 flex-auto">
+          <div className="p-4 flex justify-center items-center">
             {/* Pie Chart 2 */}
-            <div className="relative h-350-px">
-              <canvas id="pie-chart2"></canvas>
+            <ResponsiveContainer width="100%" height={200}>
+              <PieChart>
+                <Pie
+                  data={getPieChartData(requestViewingData)}
+                  dataKey="value"
+                  nameKey="name"
+                  innerRadius={60}
+                  outerRadius={80}
+                  fill="#8884d8"
+                >
+                  {requestViewingData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={
+                        ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0", "#9966FF"][
+                          index % 5
+                        ]
+                      }
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0">
+        <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
+          <div className="flex flex-wrap items-center">
+            <div className="relative w-full max-w-full flex-grow flex-1">
+              <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
+                INSERTED CLIENT PROPERTY
+              </h6>
             </div>
           </div>
+        </div>
+        <div className="p-4 flex-auto">
+          {/* Stacked Area Chart */}
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={getStackedAreaChartData()}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <RechartsTooltip />
+              <RechartsLegend />
+              <Area
+                type="monotone"
+                dataKey="currentYear"
+                stackId="1"
+                stroke="#3182ce"
+                fill="#3182ce"
+              />
+              <Area
+                type="monotone"
+                dataKey="lastYear"
+                stackId="1"
+                stroke="#edf2f7"
+                fill="#edf2f7"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </div>
       </div>
     </div>

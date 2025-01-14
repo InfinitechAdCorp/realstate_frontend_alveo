@@ -34,7 +34,7 @@ const ArchitecturalThemeModal = ({ isOpen, closeModal }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/add-architectural-theme",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-architectural-theme`,
         {
           method: "POST",
           body: formData,

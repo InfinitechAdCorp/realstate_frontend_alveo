@@ -85,7 +85,7 @@ const SetAppointment = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/submit-property",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/submit-property`,
         {
           method: "POST",
           body: formData,
@@ -131,7 +131,7 @@ const SetAppointment = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter."
         keywords="alveo, real estate, location, property, building location, property location"
-        canonical="http://localhost:3000/pages/locations"
+        canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/locations"
       />
 
       {/* Header outside the main content */}

@@ -54,7 +54,7 @@ const SetAppointment = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/set-appointment",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/set-appointment`,
         {
           method: "POST",
           body: appointmentData,
@@ -108,7 +108,7 @@ const SetAppointment = () => {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter."
         keywords="alveo, real estate, location, property, building location, property location"
-        canonical="http://localhost:3000/pages/locations"
+        canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/locations"
       />
 
       <div className="mb-16">
@@ -123,22 +123,23 @@ const SetAppointment = () => {
 
       <div className="flex flex-col lg:flex-row mt-4 justify-center items-center w-screen">
         <div className="lg:w-screen flex flex-col items-center w-screen">
-
           {/* Calendar and Form Wrapper */}
           <div className="flex flex-col lg:flex-row w-full gap-4 p-5">
             {/* Calendar */}
             <div className="w-full lg:max-w-lg bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
               {/* Time */}
               <p className="text-sm font-semibold text-gray-700 mt-2 mb-4">
-                Select a date and time for your appointment, and fill out the form
-                below.
+                Select a date and time for your appointment, and fill out the
+                form below.
               </p>
 
               {/* Date and */}
               <p className="text-sm font-medium text-gray-700 flex justify-center">
                 Time and Date:{" "}
                 <span className="text-blue-600">
-                  {time ? `${formattedDate} - ${time}` : "No date and time selected"}
+                  {time
+                    ? `${formattedDate} - ${time}`
+                    : "No date and time selected"}
                 </span>
               </p>
 
@@ -159,10 +160,11 @@ const SetAppointment = () => {
                     <button
                       key={timeSlot}
                       onClick={() => handleTimeSelection(timeSlot)}
-                      className={`px-2 py-1 text-xs m-1 border rounded-lg ${time === timeSlot
-                        ? "bg-blue-600 text-white"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
-                        }`}
+                      className={`px-2 py-1 text-xs m-1 border rounded-lg ${
+                        time === timeSlot
+                          ? "bg-blue-600 text-white"
+                          : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
+                      }`}
                     >
                       {timeSlot}
                     </button>
@@ -186,10 +188,11 @@ const SetAppointment = () => {
               </h2>
               {message && (
                 <div
-                  className={`p-4 mt-4 text-white rounded-lg text-center ${messageType === "success"
-                    ? "text-green-600"
-                    : "text-red-600"
-                    }`}
+                  className={`p-4 mt-4 text-white rounded-lg text-center ${
+                    messageType === "success"
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
                 >
                   {message}
                 </div>
