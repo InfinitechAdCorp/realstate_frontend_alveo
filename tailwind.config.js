@@ -10,7 +10,8 @@ module.exports = {
   	extend: {
   		colors: {
   			background: 'var(--background)',
-  			foreground: 'var(--foreground)'
+  			foreground: 'var(--foreground)',
+			customBlue: '#002B47',
   		},
   		keyframes: {
   			'accordion-down': {
