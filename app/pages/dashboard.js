@@ -1473,7 +1473,7 @@ const DashboardComponent = () => {
             <h1 className='font-thin items-center text-4xl text-customBlue border-t-2 w-28 border-customBlue pl-4 pb-3 mx-20 whitespace-nowrap'>
               OUR LOCATIONS
             </h1>
-            <div className='flex space-x-4 mb-4 bg-gray-100 p-2 shadow-sm'>
+            <div className='flex space-x-4 mb-4 p-2'>
               <button
                 onClick={() => handleFilterChange('batangas')}
                 className={`px-4 py-2 rounded-lg font-medium focus:outline-none ${
