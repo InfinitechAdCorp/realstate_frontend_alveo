@@ -39,6 +39,23 @@ const Header = () => {
     setViewportSize(`Viewport size: ${width}px x ${height}px`)
   }
   useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        // Scroll threshold, adjust as needed
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+  useEffect(() => {
     // Check if the current URL path is '/pages/explore'
     if (typeof window !== 'undefined') {
       setIsExplorePage(window.location.pathname === '/pages/explore')
@@ -133,6 +150,7 @@ const Header = () => {
             >
               Λ L V E O
             </a>
+
 
             {/* Navbar Links */}
             <div className='hidden md:flex justify-center items-center space-x-6'>

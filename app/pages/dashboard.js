@@ -422,6 +422,7 @@ const AlveoBanner = () => {
 
   const [currentClip, setCurrentClip] = useState(0)
 
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentClip(prev => (prev + 1) % dashboardClips.length)
@@ -841,8 +842,9 @@ const AlveoBanner = () => {
                       <ImageSlider />
                     </div>
                   </div> */}
+
             </div>
-          </div>
+          </div> */}
 
           <div className='fixed top-10 right-3 z-50'>
             {/* Room Planner Icon */}
