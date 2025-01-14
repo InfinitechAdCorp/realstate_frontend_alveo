@@ -115,300 +115,272 @@ const SetAppointment = () => {
         <Header />
       </div>
 
-      <div className="text-center mb-2 mt-10">
+      <div className="text-center mb-2 mt-20">
         <h1 className="text-3xl font-bold text-blue-600">
           Schedule Your Appointment
         </h1>
       </div>
 
       <div className="flex flex-col lg:flex-row mt-4 justify-center items-center w-screen">
-        <div className="lg:w-screen flex flex-col items-center w-screen">
-          {/* Calendar and Form Wrapper */}
-          <div className="flex flex-col lg:flex-row w-full gap-4 p-5">
-            {/* Calendar */}
-            <div className="w-full lg:max-w-lg bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
-              {/* Time */}
-              <p className="text-sm font-semibold text-gray-700 mt-2 mb-4">
-                Select a date and time for your appointment, and fill out the
-                form below.
-              </p>
-
-              {/* Date and */}
-              <p className="text-sm font-medium text-gray-700 flex justify-center">
-                Time and Date:{" "}
-                <span className="text-blue-600">
-                  {time
-                    ? `${formattedDate} - ${time}`
-                    : "No date and time selected"}
-                </span>
-              </p>
-
-              <div className="px-2 p-2 items-center">
-                <div className="flex flex-wrap justify-start gap-2">
-                  {[
-                    "08:00 AM",
-                    "09:00 AM",
-                    "10:00 AM",
-                    "11:00 AM",
-                    "01:00 PM",
-                    "02:00 PM",
-                    "03:00 PM",
-                    "04:00 PM",
-                    "05:00 PM",
-                    "06:00 PM",
-                  ].map((timeSlot) => (
-                    <button
-                      key={timeSlot}
-                      onClick={() => handleTimeSelection(timeSlot)}
-                      className={`px-2 py-1 text-xs m-1 border rounded-lg ${
-                        time === timeSlot
-                          ? "bg-blue-600 text-white"
-                          : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
-                      }`}
-                    >
-                      {timeSlot}
-                    </button>
-                  ))}
-                </div>
+        <div className="flex flex-col lg:flex-row w-full gap-4 p-5 justify-center items-center">
+          {/* Appointment Form */}
+          <div className="bg-white p-6 rounded-lg shadow-md w-1/2 mt-4">
+            <h2 className="text-xl font-semibold text-gray-700 mb-4">
+              Appointment Details
+            </h2>
+            {message && (
+              <div
+                className={`p-4 mt-4 text-white rounded-lg text-center ${messageType === "success" ? "text-green-600" : "text-red-600"
+                  }`}
+              >
+                {message}
               </div>
+            )}
+            <Formik
+              initialValues={{
+                fullname: "",
+                email: "",
+                number: "",
+                reason: "",
+                property: "",
+                message: "",
+                datetime: updateDateTime(formattedDate, time),
+              }}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit}
+            >
+              {({
+                values,
+                handleChange,
+                handleSubmit,
+                isSubmitting,
+                errors,
+                touched,
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  {errors.submit && (
+                    <p className="text-red-500 mb-4">{errors.submit}</p>
+                  )}
+                  {/* Date and Time */}
+                  <div className="mb-4">
+                    <label
+                      htmlFor="datetime"
+                      className="block text-sm font-medium text-gray-600"
+                    >
+                      Selected Date and Time
+                    </label>
+                    <input
+                      type="text"
+                      id="datetime"
+                      name="datetime"
+                      value={updateDateTime(formattedDate, time)}
+                      readOnly
+                      className="w-full p-2 border border-gray-300 rounded-lg"
+                    />
+                  </div>
+                  {/* Full Name */}
+                  <div className="mb-4">
+                    <label
+                      htmlFor="fullname"
+                      className="block text-sm font-medium text-gray-600"
+                    >
+                      Full Name
+                    </label>
+                    <Field
+                      type="text"
+                      id="fullname"
+                      name="fullname"
+                      value={values.fullname}
+                      onChange={handleChange}
+                      className="w-full p-2 border border-gray-300 rounded-lg mt-2"
+                      placeholder="e.g. Juan Dela Cruz"
+                    />
+                    {touched.fullname && errors.fullname && (
+                      <div className="text-red-500 text-sm">{errors.fullname}</div>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    {/* Email */}
+                    <div>
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-medium text-gray-600"
+                      >
+                        Email
+                      </label>
+                      <Field
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="e.g. juandelacruz@gmail.com"
+                      />
+                      {touched.email && errors.email && (
+                        <div className="text-red-500 text-sm">{errors.email}</div>
+                      )}
+                    </div>
 
-              <div className="mt-4">
-                <Calendar
-                  onChange={handleDateChange}
-                  value={date}
-                  className="border border-gray-300 rounded-lg shadow-lg w-full p-4 h-auto"
-                />
+                    {/* Phone Number */}
+                    <div>
+                      <label
+                        htmlFor="number"
+                        className="block text-sm font-medium text-gray-600"
+                      >
+                        Number
+                      </label>
+                      <Field
+                        type="tel"
+                        id="number"
+                        name="number"
+                        value={values.number}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="e.g. +63 992 440 1097"
+                      />
+                      {touched.number && errors.number && (
+                        <div className="text-red-500 text-sm">{errors.number}</div>
+                      )}
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label
+                        htmlFor="reason"
+                        className="block text-sm font-medium text-gray-600"
+                      >
+                        Appointment For
+                      </label>
+                      <Field
+                        as="select"
+                        id="reason"
+                        name="reason"
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                      >
+                        <option value="" disabled>
+                          Select an option
+                        </option>
+                        <option value="Property Viewing">Property Viewing</option>
+                        <option value="Online Meeting">Online Meeting</option>
+                      </Field>
+                      {touched.reason && errors.reason && (
+                        <div className="text-red-500 text-sm">{errors.reason}</div>
+                      )}
+                    </div>
+
+                    {/* Property/Unit */}
+                    <div>
+                      <label
+                        htmlFor="property"
+                        className="block text-sm font-medium text-gray-600"
+                      >
+                        Property/Unit
+                      </label>
+                      <Field
+                        type="text"
+                        id="property"
+                        name="property"
+                        value={values.property}
+                        onChange={handleChange}
+                        className="w-full p-2 border border-gray-300 rounded-lg"
+                        placeholder="e.g. Unit 205"
+                      />
+                      {touched.property && errors.property && (
+                        <div className="text-red-500 text-sm">{errors.property}</div>
+                      )}
+                    </div>
+                  </div>
+                  {/* Message */}
+                  <div className="mb-4">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-gray-600"
+                    >
+                      Message
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="message"
+                      name="message"
+                      value={values.message}
+                      onChange={handleChange}
+                      className="w-full p-2 border border-gray-300 rounded-lg"
+                      rows="4"
+                      placeholder="Additional details..."
+                    />
+                    {touched.message && errors.message && (
+                      <div className="text-red-500 text-sm">{errors.message}</div>
+                    )}
+                  </div>
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-1/4 py-2 bg-blue-600 text-white rounded-lg mt-4 "
+                  >
+                    {isSubmitting ? "Submitting..." : "Submit Schedule"}
+                  </button>
+                </Form>
+              )}
+            </Formik>
+          </div>
+          {/* Calendar */}
+          <div className="w-full lg:max-w-lg bg-white border border-gray-300 rounded-lg p-4 shadow-lg">
+            <p className="text-sm font-semibold text-gray-700 mt-2 mb-4">
+              Select a date and time for your appointment, and fill out the
+              form below.
+            </p>
+
+            <p className="text-sm font-medium text-gray-700 flex justify-center">
+              Time and Date:{" "}
+              <span className="text-blue-600">
+                {time ? `${formattedDate} - ${time}` : "No date and time selected"}
+              </span>
+            </p>
+
+            <div className="px-2 p-2 items-center">
+              <div className="flex flex-wrap justify-center gap-2">
+                {[
+                  "08:00 AM",
+                  "09:00 AM",
+                  "10:00 AM",
+                  "11:00 AM",
+                  "01:00 PM",
+                  "02:00 PM",
+                  "03:00 PM",
+                  "04:00 PM",
+                  "05:00 PM",
+                  "06:00 PM",
+                ].map((timeSlot) => (
+                  <button
+                    key={timeSlot}
+                    onClick={() => handleTimeSelection(timeSlot)}
+                    className={`px-2 py-1 text-xs m-1 border rounded-lg ${time === timeSlot
+                      ? "bg-blue-600 text-white"
+                      : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
+                      }`}
+                  >
+                    {timeSlot}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Appointment Form */}
-            <div className="bg-white p-6 rounded-lg shadow-md w-full">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4">
-                Appointment Details
-              </h2>
-              {message && (
-                <div
-                  className={`p-4 mt-4 text-white rounded-lg text-center ${
-                    messageType === "success"
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {message}
-                </div>
-              )}
-              <Formik
-                initialValues={{
-                  fullname: "",
-                  email: "",
-                  number: "",
-                  reason: "",
-                  property: "",
-                  message: "",
-                  datetime: updateDateTime(formattedDate, time),
-                }}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-              >
-                {({
-                  values,
-                  handleChange,
-                  handleSubmit,
-                  isSubmitting,
-                  errors,
-                  touched,
-                }) => (
-                  <Form onSubmit={handleSubmit}>
-                    {errors.submit && (
-                      <p className="text-red-500 mb-4">{errors.submit}</p>
-                    )}
-                    {/* Date and Time */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="datetime"
-                        className="block text-sm font-medium text-gray-600"
-                      >
-                        Selected Date and Time
-                      </label>
-                      <input
-                        type="text"
-                        id="datetime"
-                        name="datetime"
-                        value={updateDateTime(formattedDate, time)}
-                        readOnly
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                      />
-                    </div>
-                    {/* Full Name */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="fullname"
-                        className="block text-sm font-medium text-gray-600"
-                      >
-                        Full Name
-                      </label>
-                      <Field
-                        type="text"
-                        id="fullname"
-                        name="fullname"
-                        value={values.fullname}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 rounded-lg  mt-2"
-                        placeholder="e.g. Juan Dela Cruz"
-                      />
-                      {touched.fullname && errors.fullname && (
-                        <div className="text-red-500 text-sm">
-                          {errors.fullname}
-                        </div>
-                      )}
-                    </div>
-                    {/* Email and Phone Number - Two columns */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                      {/* Email */}
-                      <div>
-                        <label
-                          htmlFor="email"
-                          className="block text-sm font-medium text-gray-600"
-                        >
-                          Email
-                        </label>
-                        <Field
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={values.email}
-                          onChange={handleChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg"
-                          placeholder="e.g. juandelacruz@gmail.com"
-                        />
-                        {touched.email && errors.email && (
-                          <div className="text-red-500 text-sm">
-                            {errors.email}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Phone Number */}
-                      <div>
-                        <label
-                          htmlFor="number"
-                          className="block text-sm font-medium text-gray-600"
-                        >
-                          Number
-                        </label>
-                        <Field
-                          type="tel"
-                          id="number"
-                          name="number"
-                          value={values.number}
-                          onChange={handleChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg"
-                          placeholder="e.g. +63 992 440 1097"
-                        />
-                        {touched.number && errors.number && (
-                          <div className="text-red-500 text-sm">
-                            {errors.number}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    {/* Appointment for and Property/Unit - Two columns */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <label
-                          htmlFor="reason"
-                          className="block text-sm font-medium text-gray-600"
-                        >
-                          Appointment For
-                        </label>
-                        <Field
-                          as="select"
-                          id="reason"
-                          name="reason"
-                          className="w-full p-2 border border-gray-300 rounded-lg"
-                        >
-                          <option value="" disabled>
-                            Select an option
-                          </option>
-                          <option value="Property Viewing">
-                            Property Viewing
-                          </option>
-                          <option value="Online Meeting">Online Meeting</option>
-                        </Field>
-                        {touched.reason && errors.reason && (
-                          <div className="text-red-500 text-sm">
-                            {errors.reason}
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Property/Unit */}
-                      <div>
-                        <label
-                          htmlFor="property"
-                          className="block text-sm font-medium text-gray-600"
-                        >
-                          Property/Unit
-                        </label>
-                        <Field
-                          type="text"
-                          id="property"
-                          name="property"
-                          value={values.property}
-                          onChange={handleChange}
-                          className="w-full p-2 border border-gray-300 rounded-lg"
-                          placeholder="e.g. Unit 205"
-                        />
-                        {touched.property && errors.property && (
-                          <div className="text-red-500 text-sm">
-                            {errors.property}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    {/* Message */}
-                    <div className="mb-4">
-                      <label
-                        htmlFor="message"
-                        className="block text-sm font-medium text-gray-600"
-                      >
-                        Message
-                      </label>
-                      <Field
-                        as="textarea"
-                        id="message"
-                        name="message"
-                        value={values.message}
-                        onChange={handleChange}
-                        className="w-full p-2 border border-gray-300 rounded-lg"
-                        rows="4"
-                        placeholder="Additional details..."
-                      />
-                      {touched.message && errors.message && (
-                        <div className="text-red-500 text-sm">
-                          {errors.message}
-                        </div>
-                      )}
-                    </div>
-                    {/* Submit Button */}
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full py-2 bg-blue-600 text-white rounded-lg mt-4"
-                    >
-                      {isSubmitting ? "Submitting..." : "Submit Schedule"}
-                    </button>
-                  </Form>
-                )}
-              </Formik>
+            <div className="mt-4">
+              <Calendar
+                onChange={handleDateChange}
+                value={date}
+                className="border border-gray-300 rounded-lg shadow-lg w-full p-4 h-auto"
+              />
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Footer outside the main content */}
       <Footer />
-    </div>
+    </div >
   );
 };
 

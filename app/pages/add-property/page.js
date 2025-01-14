@@ -10,7 +10,7 @@ function App() {
   };
 
   const handleShowErrorToast = (message) => {
-    showToast(message, "error"); // Error toast
+    showToast(message, "error"); 
   };
 
   const handleShowWarningToast = (message) => {
@@ -197,7 +197,7 @@ function App() {
       <Header />
       <div className="App flex w-full p-6 bg-gray-50 min-h-screen mb-20">
         {/* Data Privacy Reminder Section */}
-        <div className="w-1/3 p-8 bg-white shadow-lg rounded-lg mr-6">
+        <div className="w-1/3 p-8 bg-white shadow-lg rounded-lg mr-6 mt-20">
           <h2 className="font-semibold text-2xl text-gray-700 mb-6 text-center">
             Data Privacy Reminder
           </h2>
@@ -223,7 +223,7 @@ function App() {
         </div>
 
         {/* Property Submission Form */}
-        <div className="w-full p-6 bg-gray-50 min-h-screen">
+        <div className="w-full p-6 bg-gray-50 min-h-screen mt-14">
           {/* Personal Information (First Row) */}
           <div className="w-full p-6 bg-white shadow-lg rounded-lg mb-6">
             <h1 className="text-2xl font-semibold text-left mb-6 text-gray-800">
@@ -426,7 +426,7 @@ function App() {
                   type="submit"
                   className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300"
                 >
-                  Add Property
+                  Submit Property
                 </button>
               </div>
             </form>
