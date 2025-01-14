@@ -160,19 +160,19 @@ export default function BlogPost({ params }) {
                     e.target.onerror = null; // Prevent infinite loop if image fails
                     e.target.src = `${process.env.NEXT_PUBLIC_SERVER_PORT}${post.path}`; // Fallback to localhost:8000 if not found
                   }}
-                  alt={post.location}
+                  alt={post.location}z
                   width={2000}
                   height={500}
                   className="w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72"
                   priority
                 />
 
-                <div className="left-0 right-0 h-28 lg:h-40 bg-blue-900 flex flex-col justify-center p-2 text-white w-screen">
-                  <div className="-mt-10 left-0 right-0 h-1/5 bg-blue-900 flex flex-col justify-center p-2 text-white">
-                    <p className="mt-6 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-2xl">
+                <div className="left-0 right-0 h-28 lg:h-40 bg-customBlue flex flex-col justify-center p-2 text-white w-screen">
+                  <div className="-mt-10 left-0 right-0 h-1/5 bg-customBlue flex flex-col justify-center p-2 text-white">
+                    <p className="mt-6 text-2xl font-thin ">
                       Premium Lots for Sale in {post.location}
                     </p>
-                    <p className="-mt-4 text-sm font-bold sm:text-lg md:text-2xl lg:text-4xl xl:text-3xl">
+                    <p className="-mt-4 text-lg font-thin ">
                       {post.title}
                     </p>
                   </div>

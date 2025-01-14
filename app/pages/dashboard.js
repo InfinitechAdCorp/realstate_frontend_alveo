@@ -741,9 +741,9 @@ const AlveoBanner = () => {
                 <h4 className='text-xs font-thin sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]'>
                   LIVE WELL ACROSS THE PHILIPPINES
                 </h4>
-                <div className='my-6 h-auto grid grid-cols-1 gap-6 relative'>
+                <div className='my-6 h-auto grid grid-cols-1 gap-6 relative p-2'>
                   {/* Left Column: Search Inputs */}
-                  <div className='space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative'>
+                  <div className='space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative text-sm'>
                     {/* Search Bar */}
                     <div className='flex items-center border border-white rounded-md p-1 w-full max-w-lg'>
                       {/* Dropdown Selection */}

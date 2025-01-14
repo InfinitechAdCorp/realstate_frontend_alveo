@@ -50,7 +50,7 @@ const Footer = () => {
               onClick={handleDownloadClick}
               className='bg-slate-100 text-customBlue text-lg py-1 px-4 rounded-full'
             >
-              Download APK
+              Download App
             </button>
           </div>
         </div>
