@@ -19,7 +19,7 @@ import Slider from "react-slick";
 
 export default function Admin({}) {
   const [showProperties, setShowProperties] = useState(false);
-  const [isVisible, setIsVisible] = useState(false); // Controls visibility of popup
+  const [isVisible, setIsVisible] = useState(true); // Controls visibility of popup
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -262,7 +262,7 @@ export default function Admin({}) {
     }
   };
   useEffect(() => {
-    const authToken = window.localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+    const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
     // Function to fetch data from the backend
     const fetchData = async () => {
@@ -648,14 +648,9 @@ export default function Admin({}) {
         const data = await response.json();
         console.log("Login successful:", data);
 
-        useEffect(() => {
-          if (typeof window !== "undefined" && data) {
-            // Store the authentication details in localStorage
-            window.localStorage.setItem("auth_token", data.token);
-            window.localStorage.setItem("isLoggedIn", "true");
-            window.localStorage.setItem("userInfo", JSON.stringify(data.name));
-          }
-        }, [data]);
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userInfo", JSON.stringify(data.name));
 
         // Optional: Set token in a state or context if needed
         setAuthToken(data.token);
@@ -676,13 +671,9 @@ export default function Admin({}) {
     setShowProperties(!showProperties);
   };
   const fetchCount = async (endpoint, key) => {
-    useEffect(() => {
-      if (typeof window !== "undefined") {
-        // Safely use localStorage inside useEffect
-        const token = window.localStorage.getItem("auth_token"); // Get the token from localStorage
-        console.log("Auth Token:", token);
-      }
-    }, []);
+    // Safely use localStorage inside useEffect
+    const token = localStorage.getItem("auth_token"); // Get the token from localStorage
+    console.log("Auth Token:", token);
 
     if (!token) {
       console.error("Token not found.");
