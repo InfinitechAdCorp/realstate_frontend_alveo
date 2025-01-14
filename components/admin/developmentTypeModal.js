@@ -31,7 +31,7 @@ const DevelopmentTypeModal = ({ isOpen, closeModal }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/add-development-type",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-development-type`,
         {
           method: "POST",
           body: formData, // No need to set headers for formData

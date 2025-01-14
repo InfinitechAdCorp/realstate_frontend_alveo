@@ -12,7 +12,7 @@ const Table = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "http://localhost:8000/api/admin/appointments"
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointments`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -52,7 +52,7 @@ const Table = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/admin/appointment/accept",
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/accept`,
         {
           method: "POST",
           headers: {
@@ -87,7 +87,7 @@ const Table = () => {
     <div className="w-full px-4">
       <div className="overflow-x-auto">
         <div className="text-3xl justify-center text-center my-5">
-          <h1>SCHEDULED APPOINTMENT</h1>
+          <h1>SCHEDULED APPOINTMENTS</h1>
         </div>
         <table
           id="search-table"

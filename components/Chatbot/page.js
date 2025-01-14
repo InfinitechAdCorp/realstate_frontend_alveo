@@ -287,7 +287,9 @@ const MyBot = () => {
 
     // Step 2: Fetch locations from API
     try {
-      const response = await fetch("http://localhost:8000/api/locations");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/locations`
+      );
       const data = await response.json();
 
       // Step 3: Update `location` state with fetched data
@@ -357,7 +359,7 @@ const MyBot = () => {
     // Step 2: Fetch architectural themes from the API
     try {
       const response = await fetch(
-        "http://localhost:8000/api/getArchitectural"
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getArchitectural`
       ); // Adjust URL if needed
       const data = await response.json();
 
@@ -420,7 +422,7 @@ const MyBot = () => {
 
     // Make the API request directly here
     fetch(
-      `http://localhost:8000/api/propertiesChatbot?location=${values.location}&architectural=${values.architectural}&unit=${values.unit}`
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/propertiesChatbot?location=${values.location}&architectural=${values.architectural}&unit=${values.unit}`
     )
       .then((response) => response.json())
       .then((properties) => {

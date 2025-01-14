@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation"; 
+import { useSearchParams } from "next/navigation";
 import Header from "../header";
 import { Suspense } from "react";
 import Footer from "./../footer";
@@ -11,22 +11,47 @@ import SEO from "./../../seo/page";
 
 function ExplorePage() {
   const searchParams = useSearchParams();
-  const specificLocation = searchParams.get("specificLocation"); 
+  const specificLocation = searchParams.get("specificLocation");
 
   const [buildings, setBuildings] = useState([]);
   const [clickedIndex, setClickedIndex] = useState(null);
 
   const images = [
-    { src: "/assets/copy.png", alt: "Copy Icon", value: "all", label: "All Property" },
-    { src: "/assets/skyline.png", alt: "Skyline Icon", value: "condominiums", label: "Condominiums" },
-    { src: "/assets/neighborhood.png", alt: "Neighborhood Icon", value: "residential", label: "Residentials" },
-    { src: "/assets/bag.png", alt: "Bag Icon", value: "commercial", label: "Commercials" },
-    { src: "/assets/location.png", alt: "Location Icon", value: "office", label: "Offices" },
+    {
+      src: "/assets/copy.png",
+      alt: "Copy Icon",
+      value: "all",
+      label: "All Property",
+    },
+    {
+      src: "/assets/skyline.png",
+      alt: "Skyline Icon",
+      value: "condominiums",
+      label: "Condominiums",
+    },
+    {
+      src: "/assets/neighborhood.png",
+      alt: "Neighborhood Icon",
+      value: "residential",
+      label: "Residentials",
+    },
+    {
+      src: "/assets/bag.png",
+      alt: "Bag Icon",
+      value: "commercial",
+      label: "Commercials",
+    },
+    {
+      src: "/assets/location.png",
+      alt: "Location Icon",
+      value: "office",
+      label: "Offices",
+    },
   ];
 
   const fetchBuildings = async (value) => {
     try {
-      const endpoint = "http://localhost:8000/api/getbuildings";
+      const endpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getbuildings`;
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -35,17 +60,23 @@ function ExplorePage() {
 
       let filteredData;
       if (value === "all") {
-        filteredData = data; 
+        filteredData = data;
       } else if (value === "condominiums") {
         filteredData = data.filter(
-          (building) => building.development_type === "High Rise Condominiums" || building.development_type === "Mid Rise Condominiums"
+          (building) =>
+            building.development_type === "High Rise Condominiums" ||
+            building.development_type === "Mid Rise Condominiums"
         );
       } else if (value === "residential") {
-        filteredData = data.filter((building) => building.residential_levels > 0);
+        filteredData = data.filter(
+          (building) => building.residential_levels > 0
+        );
       } else if (value === "commercial") {
         filteredData = data.filter((building) => building.commercial_units > 0);
       } else if (value === "office") {
-        filteredData = data.filter((building) => building.development_type === "Office");
+        filteredData = data.filter(
+          (building) => building.development_type === "Office"
+        );
       } else {
         filteredData = [];
       }
@@ -63,13 +94,15 @@ function ExplorePage() {
 
   const handleBuildingClick = async (buildingId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/property/id/${buildingId}`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/property/id/${buildingId}`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
       const propertyData = await response.json();
-      window.location.href = `http://localhost:3000/pages/buildings/${buildingId}`;
+      window.location.href = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/buildings/${buildingId}`;
     } catch (error) {
       console.error("Error fetching property:", error);
     }
@@ -78,7 +111,7 @@ function ExplorePage() {
   useEffect(() => {
     const locationValue = specificLocation || "all";
     fetchBuildings(locationValue);
-  }, [specificLocation]); 
+  }, [specificLocation]);
 
   return (
     <>
@@ -86,7 +119,7 @@ function ExplorePage() {
         title="REAL ESTATE"
         description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter."
         keywords="alveo, real estate, properties, parkings, building features, property features, property, buildings, building type"
-        canonical="http://localhost:3000/pages/explore"
+        canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/explore"
       />
       <div className="mb-10">
         <Header />
@@ -113,39 +146,58 @@ function ExplorePage() {
           ))}
         </div>
         <div>
-          <h1 className="text-center mt-3 text-2xl lg:text-4xl xl:text-3xl">{buildings.length} PROPERTIES</h1>
+          <h1 className="text-center mt-3 text-2xl lg:text-4xl xl:text-3xl">
+            {buildings.length} PROPERTIES
+          </h1>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 mb-16">
           {buildings.map((building) => (
-            <div key={building.id} className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0">
+            <div
+              key={building.id}
+              className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0"
+            >
               <div className="card rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
                 <img
                   src={
                     building.path &&
-                    building.path.startsWith("http://localhost:8000/")
+                    building.path.startsWith(
+                      `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
+                    )
                       ? building.path
                       : building.path && building.path.startsWith("/property/")
-                      ? `http://localhost:8000${building.path.replace(/\\/g, "/")}`
+                      ? `${
+                          process.env.NEXT_PUBLIC_SERVER_PORT
+                        }${building.path.replace(/\\/g, "/")}`
                       : building.path
-                      ? `http://localhost:8000/assets/Location/${encodeURIComponent(building.path.replace("assets/Location/", ""))}`
+                      ? `${
+                          process.env.NEXT_PUBLIC_SERVER_PORT
+                        }/assets/Location/${encodeURIComponent(
+                          building.path.replace("assets/Location/", "")
+                        )}`
                       : ""
                   }
                   className="w-full h-64 object-cover rounded-t-lg"
                   alt={building.name}
                 />
                 <div className="p-4 bg-white">
-                  <h3 className="text-xl font-semibold text-blue-600">{building.name}</h3>
+                  <h3 className="text-xl font-semibold text-blue-600">
+                    {building.name}
+                  </h3>
                   <p className="text-sm text-gray-700 mt-2">
-                    <strong>Development Type:</strong> {building.development_type}
+                    <strong>Development Type:</strong>{" "}
+                    {building.development_type}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Residential Levels:</strong> {building.residential_levels}
+                    <strong>Residential Levels:</strong>{" "}
+                    {building.residential_levels}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Basement Parking:</strong> {building.basement_parking_levels || "N/A"}
+                    <strong>Basement Parking:</strong>{" "}
+                    {building.basement_parking_levels || "N/A"}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Commercial Units:</strong> {building.commercial_units || "N/A"}
+                    <strong>Commercial Units:</strong>{" "}
+                    {building.commercial_units || "N/A"}
                   </p>
                   <button
                     onClick={(e) => {

@@ -37,10 +37,13 @@ const AreaModal = ({ isOpen, closeModal }) => {
     formData.append("image", values.image);
 
     try {
-      const response = await fetch("http://localhost:8000/api/admin/add-area", {
-        method: "POST",
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-area`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await response.json();
 
