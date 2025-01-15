@@ -9,7 +9,7 @@ import ArchitecturalThemeModal from "@/components/admin/architecturalThemeModal"
 import StatusModal from "@/components/admin/statusModal";
 import Chart from "@/components/admin/chart";
 import { Input } from "@/components/ui/input";
-import jwtDecode from "jwt-decode";
+
 import Demo from "./../properties/page";
 import Header from "../pages/header";
 import AreaModal from "@/components/admin/areaModal";
