@@ -46,59 +46,150 @@ const handleShowWarningToast = (message) => {
   showToast(message, "warning"); // Warning toast
 };
 const fetchProperties = async () => {
-  // Assuming you have this function defined elsewhere
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/properties`
-    ); // Fetch properties API
-    const data = await response.json();
-    return data; // Return fetched properties
-  } catch (error) {
-    console.error("Failed to fetch properties:", error);
-    return []; // Return an empty array in case of an error
-  }
-};
-const fetchBuildings = async () => {
-  try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/buildings`
-    ); // Fetch buildings API
+  const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+  const log = localStorage.getItem("isLoggedIn");
 
-    // Fetch properties API
-    const data = await response.json();
-
-    return data; // Return fetched properties
-  } catch (error) {
-    console.error("Failed to fetch properties:", error);
-    return []; // Return an empty array in case of an error
+  // Check if user is logged in and token is available
+  if (!authToken || log !== "true") {
+    console.error("Token not found or user not logged in.");
+    return []; // Return empty array if not logged in or token is not found
   }
-};
-const fetchFacilities = async () => {
+
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/facilities`
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/properties`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Attach the token in the Authorization header
+          "Content-Type": "application/json",
+        },
+      }
     );
     const data = await response.json();
-
     return data; // Return fetched properties
   } catch (error) {
     console.error("Failed to fetch properties:", error);
     return []; // Return an empty array in case of an error
   }
 };
-const fetchFeatures = async () => {
+
+const fetchBuildings = async () => {
+  const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+  const log = localStorage.getItem("isLoggedIn");
+
+  // Check if user is logged in and token is available
+  if (!authToken || log !== "true") {
+    console.error("Token not found or user not logged in.");
+    return []; // Return empty array if not logged in or token is not found
+  }
+
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/features`
-    ); // Fetch features API
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/buildings`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Attach the token in the Authorization header
+          "Content-Type": "application/json",
+        },
+      }
+    );
     const data = await response.json();
-
-    return data; // Return fetched properties
+    return data; // Return fetched buildings
   } catch (error) {
-    console.error("Failed to fetch properties:", error);
+    console.error("Failed to fetch buildings:", error);
     return []; // Return an empty array in case of an error
   }
 };
+
+const fetchFacilities = async () => {
+  const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+  const log = localStorage.getItem("isLoggedIn");
+
+  // Check if user is logged in and token is available
+  if (!authToken || log !== "true") {
+    console.error("Token not found or user not logged in.");
+    return []; // Return empty array if not logged in or token is not found
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/facilities`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Attach the token in the Authorization header
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return data; // Return fetched facilities
+  } catch (error) {
+    console.error("Failed to fetch facilities:", error);
+    return []; // Return an empty array in case of an error
+  }
+};
+
+const fetchFeatures = async () => {
+  const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+  const log = localStorage.getItem("isLoggedIn");
+
+  // Check if user is logged in and token is available
+  if (!authToken || log !== "true") {
+    console.error("Token not found or user not logged in.");
+    return []; // Return empty array if not logged in or token is not found
+  }
+
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/features`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`, // Attach the token in the Authorization header
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    return data; // Return fetched features
+  } catch (error) {
+    console.error("Failed to fetch features:", error);
+    return []; // Return an empty array in case of an error
+  }
+};
+
+// Function to fetch all data at once
+const fetchAllData = async () => {
+  const log = localStorage.getItem("isLoggedIn");
+
+  // Proceed only if the user is logged in
+  if (log !== "true") {
+    console.error("User is not logged in.");
+    return;
+  }
+
+  try {
+    // Fetch all data in parallel using Promise.all
+    const [properties, buildings, facilities, features] = await Promise.all([
+      fetchProperties(),
+      fetchBuildings(),
+      fetchFacilities(),
+      fetchFeatures(),
+    ]);
+
+    // Handle the fetched data (e.g., update state or process data)
+    console.log("Properties:", properties);
+    console.log("Buildings:", buildings);
+    console.log("Facilities:", facilities);
+    console.log("Features:", features);
+  } catch (error) {
+    console.error("Failed to fetch all data:", error);
+  }
+};
+
 // DataTable Component
 export function DataTable({ columns, data }) {
   const [sorting, setSorting] = React.useState([]);

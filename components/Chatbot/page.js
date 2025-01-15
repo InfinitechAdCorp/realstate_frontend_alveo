@@ -269,6 +269,21 @@ const MyBot = () => {
     setConversationStage("waitingForResponse");
   };
   const handleViewProperty = async () => {
+    // Check if the user is logged in and the token exists
+    const authToken = localStorage.getItem("auth_token");
+
+    if (!authToken) {
+      // If no token found, inform the user and return
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        {
+          sender: "bot",
+          text: "You are not logged in. Please log in to proceed.",
+        },
+      ]);
+      return; // Stop further execution
+    }
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: "bot", text: "In what Location?" },
@@ -276,8 +291,16 @@ const MyBot = () => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/locations`
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/locations`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the token in the Authorization header
+            "Content-Type": "application/json",
+          },
+        }
       );
+
       const data = await response.json();
 
       setLocation(data);
@@ -307,6 +330,7 @@ const MyBot = () => {
       ]);
     }
   };
+
   const handleUnit = async (message) => {
     console.log("Before updating:", message);
 

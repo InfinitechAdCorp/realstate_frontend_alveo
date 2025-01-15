@@ -9,7 +9,7 @@ import ArchitecturalThemeModal from "@/components/admin/architecturalThemeModal"
 import StatusModal from "@/components/admin/statusModal";
 import Chart from "@/components/admin/chart";
 import { Input } from "@/components/ui/input";
-
+import jwtDecode from "jwt-decode";
 import Demo from "./../properties/page";
 import Header from "../pages/header";
 import AreaModal from "@/components/admin/areaModal";
@@ -18,6 +18,8 @@ import SubmittedProperties from "@/components/admin/submittedProperties";
 import Slider from "react-slick";
 
 export default function Admin({}) {
+  const [isOpen, setIsOpen] = useState(false); // State to toggle dropdown visibility
+
   const [showProperties, setShowProperties] = useState(false);
   const [isVisible, setIsVisible] = useState(true); // Controls visibility of popup
   const [formData, setFormData] = useState({
@@ -148,6 +150,17 @@ export default function Admin({}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [success, setSuccess] = useState("");
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleLogout = () => {
+    // Handle the logout logic here, such as clearing localStorage or calling an API
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("isLoggedIn");
+    window.location.reload(); // You can redirect or reload the page after logging out
+  };
+
   const handleAddLoc = async (
     type,
     areaName,
@@ -261,32 +274,66 @@ export default function Admin({}) {
       reader.readAsDataURL(file); // Read the file as Base64 string
     }
   };
+
   useEffect(() => {
     const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+    const log = localStorage.getItem("isLoggedIn"); // Check if user is logged in
+
+    // Check if user is logged in and the token exists
+    if (!authToken || log !== "true") {
+      console.error("User is not logged in or token not found.");
+      return; // Stop execution if not logged in or no token
+    }
 
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
-        // Set loading to true when the fetch starts
-
         // Fetch the data for each category
         const propertiesRes = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countproperties`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countproperties`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         const propertiesData = await propertiesRes.json();
 
         const otherBuildingsRes = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countotherbuildings`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countotherbuildings`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         const otherBuildingsData = await otherBuildingsRes.json();
 
         const condominiumsRes = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countcondominiums`
+          `${process.env.NEXT_PUBLIC.SERVER_PORT}/api/admin/countcondominiums`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         const condominiumsData = await condominiumsRes.json();
 
         const locationsRes = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countlocations`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countlocations`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         const locationsData = await locationsRes.json();
 
@@ -297,6 +344,7 @@ export default function Admin({}) {
           condominiums: condominiumsData.count || 0,
           locations: locationsData.count || 0,
         });
+
         console.log("Updated counts:", {
           properties: propertiesData.count || 0,
           otherBuildings: otherBuildingsData.count || 0,
@@ -632,6 +680,7 @@ export default function Admin({}) {
       password: formData.password,
     };
     console.log(loginData);
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/login`,
@@ -648,6 +697,10 @@ export default function Admin({}) {
         const data = await response.json();
         console.log("Login successful:", data);
 
+        // Clear localStorage first to ensure it's clean before setting new login data
+        localStorage.clear();
+
+        // Store the token and other user data in localStorage
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userInfo", JSON.stringify(data.name));
@@ -656,6 +709,9 @@ export default function Admin({}) {
         setAuthToken(data.token);
         setIsVisible(false);
         setisLoggedin(true);
+
+        // Reload the page to reflect the changes
+        window.location.reload();
       } else {
         const errorData = await response.json();
         console.error("Error during login:", errorData);
@@ -673,8 +729,6 @@ export default function Admin({}) {
   const fetchCount = async (endpoint, key) => {
     // Safely use localStorage inside useEffect
     const token = localStorage.getItem("auth_token"); // Get the token from localStorage
-    console.log("Auth Token:", token);
-
     if (!token) {
       console.error("Token not found.");
       setError("Token not found.");
@@ -709,13 +763,26 @@ export default function Admin({}) {
   // UseEffect to fetch data after successful login
   useEffect(() => {
     const log = localStorage.getItem("isLoggedIn");
-    if (log === "true") {
-      fetchCount("countproperties", "properties");
-      fetchCount("countotherbuildings", "otherBuildings");
-      fetchCount("countcondominiums", "condominiums");
-      fetchCount("countlocations", "locations");
+    const token = localStorage.getItem("auth_token"); // Get the token from localStorage
+
+    if (!token) {
+      console.error("Token not found.");
+      setError("Token not found.");
+      return; // Exit if no token is found
+    } else {
+      if (log === "true") {
+        console.log(token, log);
+        setIsVisible(false);
+        // Call the fetchCount function for each category, passing the appropriate endpoint and state key
+        fetchCount("countproperties", "properties");
+        fetchCount("countotherbuildings", "otherBuildings");
+        fetchCount("countcondominiums", "condominiums");
+        fetchCount("countlocations", "locations");
+      } else {
+        console.error("User is not logged in or token not found.");
+      }
     }
-  });
+  }, []);
   const openSidebar = () => {
     setSidebarVisible(true);
   };
@@ -946,7 +1013,7 @@ export default function Admin({}) {
                   width={20}
                   height={20}
                 />
-                <div className="dp">
+                <div className="dp" onClick={toggleDropdown}>
                   <img
                     src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
                     className="dpicn rounded-full"
@@ -955,6 +1022,18 @@ export default function Admin({}) {
                     height={40}
                   />
                 </div>
+
+                {/* Dropdown Menu */}
+                {isOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
+                    <button
+                      onClick={handleLogout}
+                      className="block px-4 py-2 text-gray-800 w-full text-left hover:bg-gray-100"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </header>
@@ -1315,7 +1394,7 @@ export default function Admin({}) {
                           setData,
                           "statusOptions"
                         );
-                        setData({ ...data, newStatus: "" }); 
+                        setData({ ...data, newStatus: "" });
                       }}
                       className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                     >
