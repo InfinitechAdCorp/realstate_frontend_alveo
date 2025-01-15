@@ -723,7 +723,7 @@ const AlveoBanner = () => {
             {/* Video Background */}
             <video
               className='absolute inset-0 w-full h-full object-cover'
-              src='/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4'
+              src='https://media-hosting.imagekit.io//38b93b6acb734596/2282013-uhd_3840_2024_24fps.mp4?Expires=1831509595&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=KLVgRw2~SphMTJt1oS~bhEjmQwWPjG3FTU~WGzMMBRBYgKoN0UCoOm7o4Zgrnr6ugewVBQ3n56D9bez~IuFNGaoUo22r2LHooVo0HAqmix6zXpj6X4Pny0vJcNitDTIOtddda9sAZDUymTCgg6AoAc0jAaG2yRIZ1QRCQ9RQf4BuB-N2lrl8OSo1eEpA-AV9s6p7FA4p0V6l3po19Ok6sgZgnMdxkgghGsck1ucAAwdrjed9EeDLLJLVW7MrMMBbrDBi90tLyVwNhJ8aoF9nyPt3iOwZNH02PMgo1Q9peMeoTFihab9m8UoDVu31Kil54q~VBlVm6XYo0m~u48YYxw__'
               autoPlay
               loop
               muted
