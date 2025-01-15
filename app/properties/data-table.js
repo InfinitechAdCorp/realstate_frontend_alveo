@@ -411,12 +411,30 @@ export function DataTable({ columns, data }) {
       console.error("Error:", error);
     }
   };
-
   useEffect(() => {
+    // Check if the token exists
+    const token = localStorage.getItem("auth_token");
+    const log = localStorage.getItem("isLoggedIn");
+
+    // Only proceed if the token exists and the user is logged in
+    if (!token || log !== "true") {
+      console.error("User is not logged in or token is missing.");
+      setError("User is not logged in or token is missing.");
+      return;
+    }
+
+    // If token exists, proceed with fetching data
     const fetchDevelopmentTypes = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/development-types`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/development-types`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token in request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (!response.ok) {
           throw new Error("Failed to fetch development types");
@@ -427,55 +445,79 @@ export function DataTable({ columns, data }) {
         console.error("Error fetching development types:", error);
       }
     };
+
     const fetchArchitecturalTheme = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/architectural-themes`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/architectural-themes`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token in request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch");
+          throw new Error("Failed to fetch architectural themes");
         }
         const data = await response.json();
         setArchitecturalTheme(data);
       } catch (error) {
-        console.error("Error fetching", error);
+        console.error("Error fetching architectural themes:", error);
       }
     };
+
     const fetchStatus = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token in request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch");
+          throw new Error("Failed to fetch status");
         }
         const data = await response.json();
         setStatus(data);
       } catch (error) {
-        console.error("Error fetching", error);
+        console.error("Error fetching status:", error);
       }
     };
+
     const fetchArea = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Include token in request headers
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (!response.ok) {
-          throw new Error("Failed to fetch");
+          throw new Error("Failed to fetch area");
         }
         const data = await response.json();
         setArea(data);
       } catch (error) {
-        console.error("Error fetching", error);
+        console.error("Error fetching area:", error);
       }
     };
 
-    fetchArchitecturalTheme();
+    // Call the fetch functions if the user is logged in
     fetchDevelopmentTypes();
+    fetchArchitecturalTheme();
     fetchStatus();
     fetchArea();
   }, []);
-
   return (
     <div className="max-h-20 ">
       {isAddPropertyOpen && (

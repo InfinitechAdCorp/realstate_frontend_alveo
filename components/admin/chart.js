@@ -15,58 +15,62 @@ import {
   Legend as RechartsLegend,
 } from "recharts";
 
-export default function CardCharts() {
+export default function CardCharts(data) {
   const [requestViewingData, setRequestViewingData] = useState([]);
   const [propertyInquiryData, setPropertyInquiryData] = useState([]);
   const [submtitedProperty, setSubmittedProperty] = useState([]);
   const [error, setError] = useState("");
   useEffect(() => {
-    // Get the token and login status from localStorage
-    const token = localStorage.getItem("auth_token");
-    const log = localStorage.getItem("isLoggedIn");
-    console.log(token, log);
-    // Check if the token exists
-    if (!token) {
-      console.error("Token not found.");
-      setError("Token not found.");
-      return; // Exit the effect early if no token is found
-    }
+    console.log("Data received in CardCharts:", data);
 
-    // Function to fetch data from an API
-    const fetchData = async (endpoint, setState) => {
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/${endpoint}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`, // Attach the token
-              "Content-Type": "application/json",
-            },
-          }
-        );
+    if (data.data === true) {
+      const token = localStorage.getItem("auth_token");
+      const log = localStorage.getItem("isLoggedIn");
 
-        const data = await response.json();
+      console.log("Token:", token, "Login status:", log);
 
-        if (response.ok) {
-          setState(Array.isArray(data) ? data : []); // Ensure data is an array
-        } else {
-          console.error(`Error fetching ${endpoint} data:`, data);
-          setError(data.error || "An error occurred while fetching data.");
-        }
-      } catch (error) {
-        console.error(`Error fetching ${endpoint} data:`, error);
-        setError("An error occurred while fetching data.");
+      // Check if the token exists and if the user is logged in
+      if (!token || log !== "true") {
+        console.error("Token not found or user not logged in.");
+        setError("Token not found or user not logged in.");
+        return;
       }
-    };
 
-    // Fetch data only if the user is logged in
-    if (log === "true") {
-      fetchData("count-properties-monthly", setSubmittedProperty);
-      fetchData("count-request-viewing", setRequestViewingData);
-      fetchData("count-property-inquiry", setPropertyInquiryData);
+      const fetchData = async (endpoint, setState) => {
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/${endpoint}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+
+          const data = await response.json();
+
+          if (response.ok) {
+            setState(Array.isArray(data) ? data : []);
+          } else {
+            console.error(`Error fetching ${endpoint} data:`, data);
+            setError(data.error || "An error occurred while fetching data.");
+          }
+        } catch (error) {
+          console.error(`Error fetching ${endpoint} data:`, error);
+          setError("An error occurred while fetching data.");
+        }
+      };
+
+      // Fetch data if user is logged in
+      if (log === "true") {
+        fetchData("count-properties-monthly", setSubmittedProperty);
+        fetchData("count-request-viewing", setRequestViewingData);
+        fetchData("count-property-inquiry", setPropertyInquiryData);
+      }
     }
-  }, []); // Empty dependency array ensures this runs only once
+  }, [data]);
 
   const getPieChartData = (data) => {
     // Make sure data is an array before mapping

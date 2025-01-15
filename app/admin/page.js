@@ -28,12 +28,12 @@ export default function Admin({}) {
   });
   const [error, setError] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false); // To track OTP sent state
-  const [isLoggedIn, setisLoggedin] = useState(false); // To track OTP sent state
+  const [isLoggedIn, setIsLoggedin] = useState(false); // To track OTP sent state
   const [submittedProperties, setSubmittedProperties] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalImages, setModalImages] = useState([]);
   const [currentImages, setCurrentImages] = useState([]);
-  const [authToken_final, setAuthToken] = useState([]); // State to store fetched data from API
+  const [authToken, setAuthToken] = useState([]); // State to store fetched data from API
   const [properties, setProperties] = useState([]); // State to store fetched data from API
 
   const [counts, setCounts] = useState({
@@ -274,18 +274,20 @@ export default function Admin({}) {
       reader.readAsDataURL(file); // Read the file as Base64 string
     }
   };
-
   useEffect(() => {
-    const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
-    const log = localStorage.getItem("isLoggedIn"); // Check if user is logged in
+    // Make sure user is logged in and token is available
+    const storedToken = localStorage.getItem("auth_token");
+    const storedLoginStatus = localStorage.getItem("isLoggedIn");
 
-    // Check if user is logged in and the token exists
-    if (!authToken || log !== "true") {
+    if (!storedToken || storedLoginStatus !== "true") {
       console.error("User is not logged in or token not found.");
-      return; // Stop execution if not logged in or no token
+      return; // Don't proceed if not logged in
     }
 
-    // Function to fetch data from the backend
+    // Update state variables after checking login status
+    setAuthToken(storedToken); // Ensure token is available in the state
+    setIsLoggedin(storedLoginStatus === "true"); // Set login state if necessary
+
     const fetchData = async () => {
       try {
         // Fetch the data for each category
@@ -294,7 +296,7 @@ export default function Admin({}) {
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              Authorization: `Bearer ${storedToken}`, // Use the stored token
               "Content-Type": "application/json",
             },
           }
@@ -306,7 +308,7 @@ export default function Admin({}) {
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              Authorization: `Bearer ${storedToken}`,
               "Content-Type": "application/json",
             },
           }
@@ -314,11 +316,11 @@ export default function Admin({}) {
         const otherBuildingsData = await otherBuildingsRes.json();
 
         const condominiumsRes = await fetch(
-          `${process.env.NEXT_PUBLIC.SERVER_PORT}/api/admin/countcondominiums`,
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/countcondominiums`,
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              Authorization: `Bearer ${storedToken}`,
               "Content-Type": "application/json",
             },
           }
@@ -330,7 +332,7 @@ export default function Admin({}) {
           {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${authToken}`, // Attach token to request headers
+              Authorization: `Bearer ${storedToken}`,
               "Content-Type": "application/json",
             },
           }
@@ -339,7 +341,7 @@ export default function Admin({}) {
 
         // Update the state with the fetched counts
         setCounts({
-          properties: propertiesData.count || 0, // Use 0 if count is not available
+          properties: propertiesData.count || 0,
           otherBuildings: otherBuildingsData.count || 0,
           condominiums: condominiumsData.count || 0,
           locations: locationsData.count || 0,
@@ -356,9 +358,8 @@ export default function Admin({}) {
       }
     };
 
-    // Fetch the data when the component mounts (page loads)
-    fetchData();
-  }, []);
+    fetchData(); // Call fetchData after setting the token
+  }, [isLoggedIn, authToken]); // Depend on isLoggedIn and authToken
 
   useEffect(() => {
     console.log(activeNav);
@@ -705,13 +706,14 @@ export default function Admin({}) {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userInfo", JSON.stringify(data.name));
 
-        // Optional: Set token in a state or context if needed
+        // Update the necessary states
         setAuthToken(data.token);
-        setIsVisible(false);
-        setisLoggedin(true);
+        setIsLoggedin(true); // Ensure isLoggedin is set to true
 
-        // Reload the page to reflect the changes
-        window.location.reload();
+        // Set visibility or other UI-related states if needed
+        setIsVisible(false);
+
+        // No need to reload the page, just trigger any required side effects
       } else {
         const errorData = await response.json();
         console.error("Error during login:", errorData);
@@ -1133,7 +1135,7 @@ export default function Admin({}) {
                   </div>
                 </div>
                 <div className="h-fit relative">
-                  <Chart />
+                  <Chart data={isLoggedIn} />
                 </div>
               </>
             )}
