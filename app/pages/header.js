@@ -1,8 +1,8 @@
 
-'use client' // Add this line at the top
-import { useRouter } from 'next/router' // Import useRouter for navigation
+'use client' 
+import { useRouter } from 'next/router'
 import React, { useEffect, useState, useRef } from 'react'
-import Image from 'next/image' // Assuming you're using Next.js's Image component
+import Image from 'next/image' 
 import { FaSearch, FaBuilding, FaHouseUser } from 'react-icons/fa'
 import { throttle } from 'lodash'
 import { useSession, signIn, signOut } from 'next-auth/react'
@@ -29,8 +29,8 @@ const Header = () => {
     setPopupVisible(!isPopupVisible);
   };
   const [scrolled, setScrolled] = useState(false);
-  const [isSidebarVisible, setSidebarVisible] = useState(false); // State for controlling sidebar visibility
-  const sidebarRef = useRef(null); // Create a ref for the sidebar
+  const [isSidebarVisible, setSidebarVisible] = useState(false); 
+  const sidebarRef = useRef(null);
   const [isExplorePage, setIsExplorePage] = useState(false);
   const [areas, setArea] = useState([]);
   const [viewportSize, setViewportSize] = useState("");
@@ -43,7 +43,6 @@ const Header = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
-        // Scroll threshold, adjust as needed
         setScrolled(true)
       } else {
         setScrolled(false)
@@ -52,32 +51,26 @@ const Header = () => {
 
     window.addEventListener('scroll', handleScroll)
 
-    // Cleanup the event listener on component unmount
     return () => {
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])
   useEffect(() => {
-    // Check if the current URL path is '/pages/explore'
     if (typeof window !== "undefined") {
       setIsExplorePage(window.location.pathname === "/pages/explore");
 
-      // Throttled scroll function to reduce re-rendering
       const handleScroll = throttle(() => {
         setScrolled(window.scrollY > 50);
-      }, 100); // Adjust delay as needed
+      }, 100); 
 
-      // Add scroll listener
       window.addEventListener("scroll", handleScroll);
 
       return () => {
-        // Clean up scroll listener
         window.removeEventListener("scroll", handleScroll);
       };
     }
   }, []);
 
-  // Click outside detection for sidebar
   useEffect(() => {
     if (isSidebarVisible) {
       const handleClickOutside = (event) => {
@@ -86,22 +79,18 @@ const Header = () => {
         }
       };
 
-      // Add event listener only when sidebar is visible
       document.addEventListener("mousedown", handleClickOutside);
 
       return () => {
-        // Cleanup listener when sidebar is closed
         document.removeEventListener("mousedown", handleClickOutside);
       };
     }
   }, [isSidebarVisible]);
 
-  // Function to open the sidebar
   const openSidebar = () => {
     setSidebarVisible(true);
   };
 
-  // Function to close the sidebar
   const closeSidebar = () => {
     setSidebarVisible(false);
   };
@@ -175,7 +164,7 @@ const Header = () => {
                   className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition-colors duration-300 flex items-center gap-2'
 
                 >
-                  Properties
+                  Properties for Sale
                   {/* Dropdown Indicator */}
                   <svg
                     className='text-white h-4 w-4 transition-transform duration-300 group-hover:rotate-180'
@@ -184,9 +173,9 @@ const Header = () => {
                     aria-hidden='true'
                   >
                     <path
-                      fill-rule='evenodd'
+                      fillRule='evenodd'
                       d='M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z'
-                      clip-rule='evenodd'
+                      clipRule='evenodd'
                     />
                   </svg>
                 </Link>
@@ -213,12 +202,6 @@ const Header = () => {
                 href='/pages/ContactUs'
                 className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
               >
-                For Sale
-              </Link>
-              <Link
-                href='/pages/ContactUs'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
-              >
                 Contact Us
               </Link>
             </div>
@@ -231,7 +214,6 @@ const Header = () => {
                   className='flex items-center text-white hover:opacity-80 transition-opacity duration-300'
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  {/* <FaSearch className='w-5 h-5 lg:w-5 lg:h-5 mt-1 transform rotate-90 cursor-pointer' /> */}
                   <p className='ml-2 font-light text-center mt-3 text-lg lg:block hidden'>
                     Explore Properties
                   </p>
@@ -263,7 +245,7 @@ const Header = () => {
     sm:w-72 overflow-y-auto lg:w-2/5 xl:w-2/12 2xl:w-2/12
     ${isSidebarVisible ? "translate-x-0" : "-translate-x-full"}`}
         ref={sidebarRef}
-        tabIndex="-1" // Makes the sidebar focusable
+        tabIndex="-1" 
         onClick={closeSidebar}
         onKeyDown={(e) => e.key === "Escape" && closeSidebar()}
       >

@@ -1314,7 +1314,7 @@ export default function Admin({}) {
                           setData,
                           "statusOptions"
                         );
-                        setData({ ...data, newStatus: "" }); // Clear input after adding
+                        setData({ ...data, newStatus: "" }); 
                       }}
                       className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                     >

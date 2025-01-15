@@ -36,14 +36,15 @@ const MyBot = () => {
 
   const chatContainerRef = useRef(null);
   useEffect(() => {
-    // Whenever values.location changes, you can perform some action
     console.log(values);
-  }, [values]); // This will run when values.location is updated
+  }, [values]);
 
   const toggleChat = () => {
     setIsChatVisible(!isChatVisible);
   };
-
+  const closeChat = () => {
+    setIsChatVisible(false);
+  };
   const showTypingIndicator = () => {
     setIsTyping(true);
     setTimeout(() => {
@@ -74,16 +75,16 @@ const MyBot = () => {
         handleViewProperty(message);
         break;
       case "handleArchitectural":
-        handleArchitectural(message); // Pass the selected location to handleArchitectural
+        handleArchitectural(message);
         break;
       case "handleUnit":
-        handleUnit(message); // Pass the selected location to handleArchitectural
+        handleUnit(message);
         break;
       case "handlePrice":
-        handlePrice(message); // Pass the selected location to handleArchitectural
+        handlePrice(message);
         break;
       case "showProperty":
-        showProperty(message); // Pass the selected location to handleArchitectural
+        showProperty(message);
         break;
       default:
         setMessages((prevMessages) => [
@@ -94,19 +95,15 @@ const MyBot = () => {
     }
   };
   const handleButtonClick = (value) => {
-    // Find the selected unit in the unit options array
     const selectedUnit = unitOptions.find((option) => option.value === value);
     const selectedPrice = priceOptions.find((price) => price.value === value);
 
-    // Find the selected location in the location array
     const selectedLocation = location.find((loc) => loc.location === value);
     console.log(selectedPrice);
-    // Find the selected architectural theme in the architectural array
     const selectedArchitectural = architectural.find(
       (item) => item.architectural_theme === value
     );
 
-    // Update architectural field if a valid architectural theme is found
     if (selectedArchitectural) {
       console.log("Selected Architectural:", selectedArchitectural);
       setValues((prevValues) => ({
@@ -115,7 +112,6 @@ const MyBot = () => {
       }));
     }
 
-    // Update location field if a valid location is found
     if (selectedLocation) {
       console.log("Selected Location:", selectedLocation.location);
       setValues((prevValues) => ({
@@ -124,7 +120,6 @@ const MyBot = () => {
       }));
     }
 
-    // Update unit field if a valid unit is selected
     if (selectedUnit) {
       console.log("Selected Unit:", selectedUnit.value);
       setValues((prevValues) => ({
@@ -133,7 +128,6 @@ const MyBot = () => {
       }));
     }
 
-    // Handle button actions based on the value
     if (value === "viewProperty") {
       setConversationStage("viewProperty");
       handleViewProperty();
@@ -166,7 +160,6 @@ const MyBot = () => {
     console.log(message.value);
     console.log(property);
 
-    // Check if the price range fits
     const checkPriceRange = (messageValue, property) => {
       const messageRange = messageValue.split(" - ");
       const messageStart = parseFloat(
@@ -183,7 +176,6 @@ const MyBot = () => {
           propertyRange[1].replace(/[^0-9.-]+/g, "")
         );
 
-        // Check if message value is within property range or overlaps
         if (
           (messageStart >= propertyStart && messageStart <= propertyEnd) ||
           (messageEnd >= propertyStart && messageEnd <= propertyEnd) ||
@@ -195,7 +187,6 @@ const MyBot = () => {
       return false;
     };
 
-    // Format properties for display with HTML
     const formatPropertyInfo = (property) => {
       return property
         .map((p) => {
@@ -236,7 +227,6 @@ const MyBot = () => {
         .join('<br /><hr style="border-color: #ddd;" /><br />');
     };
 
-    // Check if the price range fits and send the formatted message
     const isWithinPriceRange = checkPriceRange(message.value, property);
 
     if (isWithinPriceRange) {
@@ -279,29 +269,24 @@ const MyBot = () => {
     setConversationStage("waitingForResponse");
   };
   const handleViewProperty = async () => {
-    // Step 1: Set initial bot message
     setMessages((prevMessages) => [
       ...prevMessages,
       { sender: "bot", text: "In what Location?" },
     ]);
 
-    // Step 2: Fetch locations from API
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/locations`
       );
       const data = await response.json();
 
-      // Step 3: Update `location` state with fetched data
       setLocation(data);
 
-      // Step 4: Map over the data to create clickable buttons
       const locationButtons = data.map((loc) => ({
-        label: loc.location, // Button text
-        value: loc.location, // Button value (location name)
+        label: loc.location,
+        value: loc.location,
       }));
 
-      // Step 5: Add buttons to messages
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -310,9 +295,7 @@ const MyBot = () => {
         },
       ]);
 
-      // Step 6: Update conversation stage
       setConversationStage("handleArchitectural");
-      // console.log('Conversation stage updated:', conversationStage);
     } catch (error) {
       console.error("Error fetching locations:", error);
       setMessages((prevMessages) => [
@@ -325,10 +308,8 @@ const MyBot = () => {
     }
   };
   const handleUnit = async (message) => {
-    // Step 1: Inform the user about the selected location
     console.log("Before updating:", message);
 
-    // Setting messages based on updated state
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -347,7 +328,6 @@ const MyBot = () => {
   };
 
   const handleArchitectural = async (selectedLocation) => {
-    // Step 1: Inform the user about the selected location
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -356,23 +336,19 @@ const MyBot = () => {
       },
     ]);
 
-    // Step 2: Fetch architectural themes from the API
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getArchitectural`
-      ); // Adjust URL if needed
+      );
       const data = await response.json();
 
-      // Step 3: Update the architectural state with fetched data
       setArchitectural(data);
 
-      // Step 4: Create buttons for the architectural themes
       const architecturalButtons = data.map((theme) => ({
-        label: theme.architectural_theme, // Assuming `name` is the property for theme names
-        value: theme.architectural_theme, // Use `id` or any unique identifier for the theme
+        label: theme.architectural_theme,
+        value: theme.architectural_theme,
       }));
 
-      // Step 5: Add the buttons to the messages state
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -381,12 +357,10 @@ const MyBot = () => {
         },
       ]);
       console.log(values);
-      // Step 6: Change conversation stage
       setConversationStage("selectArchitectural");
     } catch (error) {
       console.error("Error fetching architectural themes:", error);
 
-      // Inform the user about the error
       setMessages((prevMessages) => [
         ...prevMessages,
         {
@@ -408,7 +382,6 @@ const MyBot = () => {
     setConversationStage("greeting");
   };
   const handlePrice = (value) => {
-    // Update the messages to ask for the price range
     setMessages((prevMessages) => [
       ...prevMessages,
       {
@@ -417,10 +390,8 @@ const MyBot = () => {
       },
     ]);
 
-    // Log the current values to the console
     console.log(values);
 
-    // Make the API request directly here
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/propertiesChatbot?location=${values.location}&architectural=${values.architectural}&unit=${values.unit}`
     )
@@ -429,8 +400,6 @@ const MyBot = () => {
         console.log("Fetched Properties:", properties);
         setProperty(properties);
         console.log(value);
-        // You can also update the state with the fetched properties, if needed
-        // For example: setProperties(properties);
       })
       .catch((error) => {
         console.error("Error fetching properties:", error);
@@ -507,19 +476,30 @@ const MyBot = () => {
         >
           <div
             style={{
-              textAlign: "center",
-              fontWeight: "bold",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
               paddingBottom: "10px",
               borderBottom: "2px solid #ccc",
               marginBottom: "10px",
             }}
           >
-            <Image
-              src="/assets/logo.png"
-              alt="Alveo"
-              width={100}
-              height={100}
-            />
+            <div>
+              <Image
+                src="/assets/logo.png"
+                alt="Alveo"
+                width={100}
+                height={100}
+              />
+            </div>
+            <div
+              style={{
+                textAlign: "right",
+                fontWeight: "bold",
+              }}
+            >
+              <button onClick={closeChat}>Close</button>
+            </div>
           </div>
           <div
             ref={chatContainerRef}
@@ -537,11 +517,11 @@ const MyBot = () => {
                 key={index}
                 style={{
                   display: "flex",
-                  flexDirection: "column", // Stack text and buttons vertically within the container
+                  flexDirection: "column",
                   justifyContent:
                     message.sender === "user" ? "flex-end" : "flex-start",
                   alignItems:
-                    message.sender === "user" ? "flex-end" : "flex-start", // Align text and buttons based on sender
+                    message.sender === "user" ? "flex-end" : "flex-start",
                 }}
               >
                 <div
@@ -557,15 +537,14 @@ const MyBot = () => {
                     wordWrap: "break-word",
                   }}
                 >
-                  {/* Render message text with dangerous HTML injection */}
                   <div dangerouslySetInnerHTML={{ __html: message.text }} />
                   {message.buttons && (
                     <div
                       style={{
                         display: "flex",
-                        flexDirection: "column", // Stack buttons vertically
-                        gap: "5px", // Slight gap between buttons
-                        alignItems: "left", // Center buttons
+                        flexDirection: "column",
+                        gap: "5px",
+                        alignItems: "left",
                       }}
                     >
                       {message.buttons.map((button, i) => (
@@ -582,7 +561,7 @@ const MyBot = () => {
                             fontSize: "14px",
                             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                             transition: "all 0.3s ease",
-                            width: "auto", // Auto width to avoid stretching the button
+                            width: "auto",
                           }}
                           onMouseEnter={(e) => {
                             e.target.style.backgroundColor = "#0056b3";
