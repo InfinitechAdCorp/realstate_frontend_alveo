@@ -23,68 +23,76 @@ export default function CardCharts() {
   useEffect(() => {
     // Get the token from localStorage
     const token = localStorage.getItem("auth_token");
+    const log = localStorage.getItem("isLoggedIn");
 
     // Check if token exists
     if (!token) {
       console.error("Token not found.");
       setError("Token not found.");
-      return; // Exit if no token is found
-    }
+      return;
+    } else {
+      if (log === "true") {
+        fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-properties-monthly`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setSubmittedProperty(Array.isArray(data) ? data : []); // Ensure data is an array
+            console.log(data); // Log the monthly counts
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setError("An error occurred while fetching data.");
+          });
 
-    // Fetch Submitted Property Data
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-properties-monthly`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
-          "Content-Type": "application/json",
-        },
+        // Fetch Request Viewing Data
+        fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-request-viewing`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setRequestViewingData(Array.isArray(data) ? data : []); // Ensure data is an array
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setError("An error occurred while fetching data.");
+          });
+
+        // Fetch Property Inquiry Data
+        fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-property-inquiry`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            setPropertyInquiryData(Array.isArray(data) ? data : []); // Ensure data is an array
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+            setError("An error occurred while fetching data.");
+          });
       }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setSubmittedProperty(Array.isArray(data) ? data : []); // Ensure data is an array
-        console.log(data); // Log the monthly counts
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("An error occurred while fetching data.");
-      });
-
-    // Fetch Request Viewing Data
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-request-viewing`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setRequestViewingData(Array.isArray(data) ? data : []); // Ensure data is an array
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("An error occurred while fetching data.");
-      });
-
-    // Fetch Property Inquiry Data
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/count-property-inquiry`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`, // Attach the token in the Authorization header
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setPropertyInquiryData(Array.isArray(data) ? data : []); // Ensure data is an array
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("An error occurred while fetching data.");
-      });
+    }
   }, []);
 
   const getPieChartData = (data) => {
