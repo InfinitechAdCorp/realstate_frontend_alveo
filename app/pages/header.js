@@ -139,7 +139,7 @@ const Header = () => {
           style={{ backgroundColor: '#002B47' }}
           className='flex items-center h-16 w-full'
         >
-          <div className='container mx-auto flex items-center px-4 sm:px-6 lg:px-8 justify-between'>
+          <div className='container mx-auto flex font-thin items-center px-4 sm:px-6 lg:px-8 justify-between'>
             {/* Menu Icon for Mobile */}
             <div className='block md:hidden me-3 mt-2'>
               <button
@@ -153,7 +153,7 @@ const Header = () => {
             {/* Branding Section */}
             <a
               href='/'
-              className='branding-text text-white text-4xl font-light me-10 tracking-wider'
+              className='branding-text text-white text-4xl font-thin me-10 tracking-wider'
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               Λ L V E O
