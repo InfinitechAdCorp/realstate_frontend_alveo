@@ -8,10 +8,9 @@ function App () {
   const handleShowSuccessToast = message => {
     showToast(message, 'success')
   }
-
-  const handleShowErrorToast = message => {
-    showToast(message, 'error') // Error toast
-  }
+  const handleShowErrorToast = (message) => {
+    showToast(message, "error"); 
+  };
 
   const handleShowWarningToast = message => {
     showToast(message, 'warning') // Warning toast
@@ -422,7 +421,7 @@ function App () {
                   type='submit'
                   className='w-full bg-customBlue text-white font-thin p-3 hover:bg-customBlue transition duration-300'
                 >
-                  Add Property
+                  Submit Property
                 </button>
               </div>
             </form>
