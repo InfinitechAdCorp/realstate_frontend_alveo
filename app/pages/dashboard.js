@@ -9,7 +9,7 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { showToast } from '../../components/alert/page' // Adjust the import path if necessary
 import { IoBed, IoManSharp } from 'react-icons/io5'
 import { FaCalculator, FaHouseCircleCheck } from 'react-icons/fa6'
-import { FaCalendarAlt, FaArrowRight } from 'react-icons/fa'
+import { FaCalendarAlt, FaArrowRight, FaSearch, FaChevronCircleDown } from 'react-icons/fa'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -740,7 +740,7 @@ const AlveoBanner = () => {
             <div className='relative z-10 content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
               <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
                 {/* Title */}
-                <h1 className='mt-2 p-2 text-6xl lg:text-8xl font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
+                <h1 className='mt-2 p-2 text-6xl lg:text-9xl font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
                   Λ L V E O LAND
                 </h1>
 
@@ -750,112 +750,120 @@ const AlveoBanner = () => {
                 </h4>
                 <div className='my-6 h-auto grid grid-cols-1 gap-6 relative p-2'>
                   {/* Left Column: Search Inputs */}
-                  <div className='space-y-4 lg:-mt-3 xl:-ml-40 xl:-mt-4 2xl:-ml-1 relative text-sm'>
+                  <div className='space-y-6 relative text-sm'>
                     {/* Search Bar */}
-                    <div className='flex items-center border border-white rounded-md p-1 w-full max-w-lg'>
+                    <div className='flex items-center border p-3 max-w-4xl bg-transparent'>
                       {/* Dropdown Selection */}
-                      <select
-                        id='locationDropdown'
-                        value={selectedValue}
-                        onChange={handleSelectChange}
-                        className='bg-transparent w-1/2 text-white placeholder-white px-2 focus:outline-none flex-1 appearance-none'
-                        aria-label='Select search category'
-                      >
-                        <option
-                          value=''
-                          disabled
-                          selected
-                          className='bg-[#002B47] text-white'
+                      <div className='relative'>
+                        <select
+                          id='locationDropdown'
+                          value={selectedValue}
+                          onChange={handleSelectChange}
+                          className='bg-transparent w-full text-white placeholder-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 
+                          '
+                          aria-label='Select search category'
                         >
-                          Select
-                        </option>
-                        <option value='all' className='bg-[#002B47] text-white'>
-                          All
-                        </option>
-                        <option
-                          value='name'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Residence Name
-                        </option>
-                        <option
-                          value='location'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Location
-                        </option>
-                        <option
-                          value='status'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Status
-                        </option>
-                        <option
-                          value='specific_location'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Specific Location
-                        </option>
-                        <option
-                          value='price_range'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Price Range
-                        </option>
-                        <option
-                          value='units'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Units
-                        </option>
-                        <option
-                          value='land_area'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Land Area
-                        </option>
-                        <option
-                          value='development_type'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Development Type
-                        </option>
-                        <option
-                          value='architectural_theme'
-                          className='bg-[#002B47] text-white'
-                        >
-                          Architectural Theme
-                        </option>
-                      </select>
+                          <option
+                            value=''
+                            disabled
+                            selected
+                            className='bg-[#002B47] text-white'
+                          >
+                            Filter
+                          </option>
+                          <option
+                            value='all'
+                            className='bg-[#002B47] text-white'
+                          >
+                            All
+                          </option>
+                          <option
+                            value='name'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Residence Name
+                          </option>
+                          <option
+                            value='location'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Location
+                          </option>
+                          <option
+                            value='status'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Status
+                          </option>
+                          <option
+                            value='specific_location'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Specific Location
+                          </option>
+                          <option
+                            value='price_range'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Price Range
+                          </option>
+                          <option
+                            value='units'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Units
+                          </option>
+                          <option
+                            value='land_area'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Land Area
+                          </option>
+                          <option
+                            value='development_type'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Development Type
+                          </option>
+                          <option
+                            value='architectural_theme'
+                            className='bg-[#002B47] text-white'
+                          >
+                            Architectural Theme
+                          </option>
+                        </select>
+                      </div>
 
                       {/* Input Field */}
-                      <input
-                        type='text'
-                        placeholder='Enter your search'
-                        aria-label='Search'
-                        id='searchInput'
-                        className='flex-1 bg-transparent text-white placeholder-white px-2 focus:outline-none'
-                        value={searchInput || ''}
-                        onChange={handleSearchInputChange}
-                      />
+                      <div className='relative flex-1'>
+                        <input
+                          type='text'
+                          placeholder='Enter your search'
+                          aria-label='Search'
+                          id='searchInput'
+                          className='w-full bg-transparent text-white placeholder-white px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-[#1F62B4] focus:border-[#1F62B4]'
+                          value={searchInput || ''}
+                          onChange={handleSearchInputChange}
+                        />
+                      </div>
 
                       {/* Search Button */}
                       <button
                         onClick={arrowFetch}
-                        className='bg-transparent text-white font-semibold px-4 py-1 border-l border-white hover:text-gray-300 focus:outline-none'
+                        className='bg-transparent text-white font-semibold px-4 py-2 border-l border-white hover:text-[#1F62B4] focus:outline-none'
                       >
-                        Search
+                        <FaSearch className='text-xl' />
                       </button>
                     </div>
 
                     {/* Suggestions Dropdown */}
                     {isSuggestionsVisible && searchInput.trim() && (
-                      <div className='absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/5 mx-auto top-full mt-1 z-20 bg-white shadow-md border rounded-md space-y-1'>
+                      <div className='absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/4 mx-auto top-full mt-2 z-20 bg-white shadow-lg rounded-md space-y-1'>
                         {suggestions.length > 0 && selectedValue !== 'All' ? (
                           suggestions.map((item, index) => (
                             <div
                               key={index}
-                              className='cursor-pointer hover:bg-gray-100 p-2 rounded max-h-40'
+                              className='cursor-pointer hover:bg-[#f1f1f1] p-3 rounded-md transition duration-200'
                               onClick={() => {
                                 setSearchInput(item[selectedValue]) // Dynamically set search input
                                 setSuggestions([])
@@ -866,7 +874,7 @@ const AlveoBanner = () => {
                             </div>
                           ))
                         ) : (
-                          <div className='text-gray-500 text-center py-2'>
+                          <div className='text-gray-500 text-center py-3'>
                             No Data Available
                           </div>
                         )}
