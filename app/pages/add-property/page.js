@@ -195,10 +195,10 @@ function App() {
   return (
     <>
       <Header />
-      <div className="App flex w-full p-6 bg-gray-50 min-h-screen mb-20">
+      <div className="App flex w-full p-6 bg-gray-50 min-h-screen mb-20 mt-9">
         {/* Data Privacy Reminder Section */}
-        <div className="w-1/3 p-8 bg-white shadow-lg rounded-lg mr-6">
-          <h2 className="font-semibold text-2xl text-gray-700 mb-6 text-center">
+        <div className="w-1/3 p-8 bg-white border border-customBlue mr-6">
+          <h2 className="font-thin text-2xl text-customBlue mb-6 text-center">
             Data Privacy Reminder
           </h2>
           <p className="text-lg text-gray-600 mb-4 indent-10 text-justify leading-10">
@@ -225,15 +225,15 @@ function App() {
         {/* Property Submission Form */}
         <div className="w-full p-6 bg-gray-50 min-h-screen">
           {/* Personal Information (First Row) */}
-          <div className="w-full p-6 bg-white shadow-lg rounded-lg mb-6">
-            <h1 className="text-2xl font-semibold text-left mb-6 text-gray-800">
+          <div className="w-full p-6 bg-white border border-customBlue mb-6">
+            <h1 className="text-2xl font-semibold text-left mb-6 text-customBlue">
               Personal Information
             </h1>
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-6 text-customBlue">
                 {/* First Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     First Name
                   </label>
                   <input
@@ -242,13 +242,13 @@ function App() {
                     value={personalInfo.firstName}
                     onChange={handlePersonalInfoChange}
                     placeholder="Juan"
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
                 {/* Last Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Last Name
                   </label>
                   <input
@@ -257,13 +257,13 @@ function App() {
                     placeholder="Dela Cruz"
                     value={personalInfo.lastName}
                     onChange={handlePersonalInfoChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
                 {/* Email */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Email
                   </label>
                   <input
@@ -272,13 +272,13 @@ function App() {
                     placeholder="juandelacruz2025@gmail.com"
                     value={personalInfo.email}
                     onChange={handlePersonalInfoChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
                 {/* Phone Number */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Phone Number
                   </label>
                   <input
@@ -287,7 +287,7 @@ function App() {
                     placeholder="+639493246122"
                     value={personalInfo.phone}
                     onChange={handlePersonalInfoChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
@@ -296,15 +296,15 @@ function App() {
           </div>
 
           {/* Property Information (Second Row) */}
-          <div className="w-full p-6 bg-white shadow-lg rounded-lg">
-            <h1 className="text-2xl font-semibold text-left mb-6 text-gray-800">
+          <div className="w-full p-6 bg-white border border-customBlue ">
+            <h1 className="text-2xl font-semibold text-left mb-6 text-customBlue">
               Property Information
             </h1>
             <form onSubmit={handleSubmit}>
               <div className="grid grid-cols-2 gap-6">
                 {/* Property Name */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Property Name
                   </label>
                   <input
@@ -313,13 +313,13 @@ function App() {
                     placeholder="Allegra Garden Place"
                     value={property.name}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
                 {/* Location */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Unit Location
                   </label>
                   <input
@@ -328,13 +328,13 @@ function App() {
                     placeholder="Unit 3A, Tower 5, Azure Urban Residences, Paranaque City, near SM Bicutan"
                     value={property.location}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
                 {/* Price */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Price
                   </label>
                   <input
@@ -343,20 +343,20 @@ function App() {
                     placeholder="₱ 1,500k - 2,000k"
                     value={property.price}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                     required
                   />
                 </div>
                 {/* Status */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium text-customBlue">
                     Status
                   </label>
                   <select
                     name="status"
                     value={property.status}
                     onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                   >
                     <option value="available">New</option>
                     <option value="sold">Ready for Occupancy</option>
@@ -368,21 +368,21 @@ function App() {
 
               {/* Description */}
               <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-customBlue">
                   Description
                 </label>
                 <textarea
                   name="description"
                   value={property.description}
                   onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                   rows="4"
                 />
               </div>
 
               {/* Multiple File/Image Upload */}
               <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm font-medium text-customBlue">
                   Upload Images/Files
                 </label>
                 <input
@@ -390,7 +390,7 @@ function App() {
                   name="files"
                   multiple
                   onChange={handleFileChange}
-                  className="w-full p-3 border border-gray-300 rounded-lg mt-2 focus:ring-2 focus:ring-blue-500"
+                  className="w-full p-3 border border-customBlue  mt-2 focus:ring-2 focus:ring-customBlue"
                   accept="image/*"
                 />
               </div>
@@ -399,19 +399,19 @@ function App() {
               <div className="mt-6">
                 {filePreviews.length > 0 && (
                   <div>
-                    <h2 className="text-sm font-medium text-gray-700">
+                    <h2 className="text-sm font-medium text-customBlue">
                       Image Previews
                     </h2>
                     <div className="grid grid-cols-3 gap-4">
                       {filePreviews.map((imageUrl, index) => (
                         <div
                           key={index}
-                          className="w-full h-32 bg-gray-100 rounded-lg"
+                          className="w-full h-32 bg-gray-100 "
                         >
                           <img
                             src={imageUrl}
                             alt={`Preview ${index + 1}`}
-                            className="w-full h-32 object-cover rounded-lg"
+                            className="w-full h-32 object-cover "
                           />
                         </div>
                       ))}
@@ -424,7 +424,7 @@ function App() {
               <div className="mt-6">
                 <button
                   type="submit"
-                  className="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600 transition duration-300"
+                  className="w-full bg-customBlue text-white font-thin p-3 hover:bg-customBlue transition duration-300"
                 >
                   Add Property
                 </button>
