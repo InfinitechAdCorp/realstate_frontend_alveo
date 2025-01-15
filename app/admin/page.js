@@ -708,13 +708,14 @@ export default function Admin({}) {
   };
   // UseEffect to fetch data after successful login
   useEffect(() => {
-    if (isLoggedIn) {
+    const log = localStorage.getItem("isLoggedIn");
+    if (log === "true") {
       fetchCount("countproperties", "properties");
       fetchCount("countotherbuildings", "otherBuildings");
       fetchCount("countcondominiums", "condominiums");
       fetchCount("countlocations", "locations");
     }
-  }, [isLoggedIn]);
+  });
   const openSidebar = () => {
     setSidebarVisible(true);
   };

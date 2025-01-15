@@ -1,6 +1,13 @@
-'use client' 
-import { useRouter } from 'next/router'
 
+"use client";
+import { useRouter } from "next/router";
+import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image";
+import { FaSearch, FaBuilding, FaHouseUser } from "react-icons/fa";
+import { throttle } from "lodash";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { CiMenuFries } from "react-icons/ci";
 import React, { useEffect, useState, useRef } from 'react'
 import Image from 'next/image' 
 import { FaSearch, FaBuilding, FaHouseUser } from 'react-icons/fa'
@@ -29,7 +36,7 @@ const Header = () => {
     setPopupVisible(!isPopupVisible);
   };
   const [scrolled, setScrolled] = useState(false);
-  const [isSidebarVisible, setSidebarVisible] = useState(false); 
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
   const sidebarRef = useRef(null);
   const [isExplorePage, setIsExplorePage] = useState(false);
   const [areas, setArea] = useState([]);
@@ -44,7 +51,6 @@ const Header = () => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
         setScrolled(true)
-
       } else {
         setScrolled(false);
       }
@@ -59,13 +65,10 @@ const Header = () => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsExplorePage(window.location.pathname === "/pages/explore");
-
-
       const handleScroll = throttle(() => {
 
         setScrolled(window.scrollY > 50);
       }, 100); 
-
       window.addEventListener("scroll", handleScroll);
 
       return () => {
