@@ -1,13 +1,12 @@
-
-'use client' // Add this line at the top
-import { useRouter } from 'next/router' // Import useRouter for navigation
-import React, { useEffect, useState, useRef } from 'react'
-import Image from 'next/image' // Assuming you're using Next.js's Image component
-import { FaSearch, FaBuilding, FaHouseUser } from 'react-icons/fa'
-import { throttle } from 'lodash'
-import { useSession, signIn, signOut } from 'next-auth/react'
-import Link from 'next/link'
-import { CiMenuFries } from 'react-icons/ci'
+"use client"; // Add this line at the top
+import { useRouter } from "next/router"; // Import useRouter for navigation
+import React, { useEffect, useState, useRef } from "react";
+import Image from "next/image"; // Assuming you're using Next.js's Image component
+import { FaSearch, FaBuilding, FaHouseUser } from "react-icons/fa";
+import { throttle } from "lodash";
+import { useSession, signIn, signOut } from "next-auth/react";
+import Link from "next/link";
+import { CiMenuFries } from "react-icons/ci";
 
 const properties = [
   { title: "Condominiums", slug: "condominiums" },
@@ -44,19 +43,19 @@ const Header = () => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
         // Scroll threshold, adjust as needed
-        setScrolled(true)
+        setScrolled(true);
       } else {
-        setScrolled(false)
+        setScrolled(false);
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll);
 
     // Cleanup the event listener on component unmount
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   useEffect(() => {
     // Check if the current URL path is '/pages/explore'
     if (typeof window !== "undefined") {
@@ -128,18 +127,16 @@ const Header = () => {
     <>
       <header
         className={`${
-
-          scrolled ? 'bg-gray-900 shadow-lg' : 'bg-transparent'
+          scrolled ? "bg-gray-900 shadow-lg" : "bg-transparent"
         } fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out`}
-
       >
         <div
           style={{ backgroundColor: "#002B47" }}
           className="flex items-center h-16 w-full"
         >
-          <div className='container mx-auto flex items-center px-4 sm:px-6 lg:px-8 justify-between'>
+          <div className="container mx-auto flex items-center px-4 sm:px-6 lg:px-8 justify-between">
             {/* Menu Icon for Mobile */}
-            <div className='block md:hidden me-3 mt-2'>
+            <div className="block md:hidden me-3 mt-2">
               <button
                 className="text-white text-2xl hover:scale-110 transition-transform"
                 onClick={openSidebar}
@@ -150,9 +147,9 @@ const Header = () => {
 
             {/* Branding Section */}
             <a
-              href='/'
-              className='branding-text text-white text-4xl font-light me-10 tracking-wider'
-              style={{ textDecoration: 'none', color: 'inherit' }}
+              href="/"
+              className="branding-text text-white text-4xl font-light me-10 tracking-wider"
+              style={{ textDecoration: "none", color: "inherit" }}
             >
               Λ L V E O
             </a>
@@ -161,8 +158,8 @@ const Header = () => {
             <div className="hidden md:flex justify-center items-center space-x-6">
               {/* About Link */}
               <Link
-                href='/pages/aboutalveo/aboutalveo'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+                href="/pages/aboutalveo/aboutalveo"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 About
               </Link>
@@ -171,35 +168,34 @@ const Header = () => {
               <div className="relative group">
                 {/* Dropdown Trigger */}
                 <Link
-                  href='#'
-                  className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition-colors duration-300 flex items-center gap-2'
-
+                  href="#"
+                  className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition-colors duration-300 flex items-center gap-2"
                 >
                   Properties
                   {/* Dropdown Indicator */}
                   <svg
-                    className='text-white h-4 w-4 transition-transform duration-300 group-hover:rotate-180'
-                    viewBox='0 0 20 20'
-                    fill='currentColor'
-                    aria-hidden='true'
+                    className="text-white h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path
-                      fill-rule='evenodd'
-                      d='M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z'
-                      clip-rule='evenodd'
+                      fillRule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clip-rule="evenodd"
                     />
                   </svg>
                 </Link>
 
                 {/* Dropdown Menu */}
-                <div className='absolute hidden mt-2 left-0 w-56 origin-top-right divide-y divide-gray-100 bg-gray-100 shadow-lg ring-1 ring-black/5 group-hover:block transition-all duration-300 ease-in-out'>
-                  <div className='py-1'>
+                <div className="absolute hidden mt-2 left-0 w-56 origin-top-right divide-y divide-gray-100 bg-gray-100 shadow-lg ring-1 ring-black/5 group-hover:block transition-all duration-300 ease-in-out">
+                  <div className="py-1">
                     {/* Map properties items */}
                     {properties.map((item, index) => (
                       <a
                         key={index}
                         href={`/pages/explore?specificLocation=${item.slug}`}
-                        className='block px-4 py-2 text-lg font-thin text-gray-700 hover:bg-customBlue hover:text-white no-underline'
+                        className="block px-4 py-2 text-lg font-thin text-gray-700 hover:bg-customBlue hover:text-white no-underline"
                       >
                         {item.title}
                       </a>
@@ -210,14 +206,14 @@ const Header = () => {
 
               {/* Contact Us Link */}
               <Link
-                href='/pages/ContactUs'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+                href="/pages/ContactUs"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 For Sale
               </Link>
               <Link
-                href='/pages/ContactUs'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+                href="/pages/ContactUs"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 Contact Us
               </Link>
@@ -227,12 +223,12 @@ const Header = () => {
             {!isExplorePage && (
               <div className="ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium">
                 <a
-                  href='/pages/explore'
-                  className='flex items-center text-white hover:opacity-80 transition-opacity duration-300'
-                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  href="/pages/explore"
+                  className="flex items-center text-white hover:opacity-80 transition-opacity duration-300"
+                  style={{ textDecoration: "none", color: "inherit" }}
                 >
                   {/* <FaSearch className='w-5 h-5 lg:w-5 lg:h-5 mt-1 transform rotate-90 cursor-pointer' /> */}
-                  <p className='ml-2 font-light text-center mt-3 text-lg lg:block hidden'>
+                  <p className="ml-2 font-light text-center mt-3 text-lg lg:block hidden">
                     Explore Properties
                   </p>
                 </a>
