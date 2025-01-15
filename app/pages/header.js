@@ -7,7 +7,6 @@ import { throttle } from 'lodash'
 import { useSession, signIn, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { CiMenuFries } from 'react-icons/ci'
-
 const properties = [
   { title: 'Condominiums', slug: 'condominiums' },
   { title: 'Lots', slug: 'residential' },
@@ -48,19 +47,19 @@ const Header = () => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
         // Scroll threshold, adjust as needed
-        setScrolled(true)
+        setScrolled(true);
       } else {
-        setScrolled(false)
+        setScrolled(false);
       }
-    }
+    };
 
-    window.addEventListener('scroll', handleScroll)
+    window.addEventListener("scroll", handleScroll);
 
     // Cleanup the event listener on component unmount
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-    }
-  }, [])
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   useEffect(() => {
     // Check if the current URL path is '/pages/explore'
     if (typeof window !== 'undefined') {
@@ -132,16 +131,16 @@ const Header = () => {
     <>
       <header
         className={`${
-          scrolled ? 'bg-gray-900 shadow-lg' : 'bg-transparent'
+          scrolled ? "bg-gray-900 shadow-lg" : "bg-transparent"
         } fixed top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out`}
       >
         <div
           style={{ backgroundColor: '#002B47' }}
           className='flex items-center h-16 w-full'
         >
-          <div className='container mx-auto flex items-center px-4 sm:px-6 lg:px-8 justify-between'>
+          <div className='container mx-auto flex font-thin items-center px-4 sm:px-6 lg:px-8 justify-between'>
             {/* Menu Icon for Mobile */}
-            <div className='block md:hidden me-3 mt-2'>
+            <div className="block md:hidden me-3 mt-2">
               <button
                 className='text-white text-2xl hover:scale-110 transition-transform'
                 onClick={openSidebar}
@@ -153,7 +152,7 @@ const Header = () => {
             {/* Branding Section */}
             <a
               href='/'
-              className='branding-text text-white text-4xl font-light me-10 tracking-wider'
+              className='branding-text text-white text-4xl font-thin me-10 tracking-wider'
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               Λ L V E O
@@ -163,8 +162,8 @@ const Header = () => {
             <div className='hidden md:flex justify-center items-center space-x-6'>
               {/* About Link */}
               <Link
-                href='/pages/aboutalveo/aboutalveo'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+                href="/pages/aboutalveo/aboutalveo"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 About
               </Link>
@@ -215,14 +214,14 @@ const Header = () => {
 
               {/* Contact Us Link */}
               <Link
-                href='/pages/ContactUs'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+                href="/pages/ContactUs"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 For Sale
               </Link>
               <Link
-                href='/pages/ContactUs'
-                className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300'
+                href="/pages/ContactUs"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 Contact Us
               </Link>
@@ -232,12 +231,12 @@ const Header = () => {
             {!isExplorePage && (
               <div className='ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium'>
                 <a
-                  href='/pages/explore'
-                  className='flex items-center text-white hover:opacity-80 transition-opacity duration-300'
-                  style={{ textDecoration: 'none', color: 'inherit' }}
+                  href="/pages/explore"
+                  className="flex items-center text-white hover:opacity-80 transition-opacity duration-300"
+                  style={{ textDecoration: "none", color: "inherit" }}
                 >
                   {/* <FaSearch className='w-5 h-5 lg:w-5 lg:h-5 mt-1 transform rotate-90 cursor-pointer' /> */}
-                  <p className='ml-2 font-light text-center mt-3 text-lg lg:block hidden'>
+                  <p className="ml-2 font-light text-center mt-3 text-lg lg:block hidden">
                     Explore Properties
                   </p>
                 </a>

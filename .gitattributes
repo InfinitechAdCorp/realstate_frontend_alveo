@@ -1,2 +1,1 @@
-*.mp4 filter=lfs diff=lfs merge=lfs -text
 public/assets/dashboard/3648257-uhd_3840_2160_30fps.mp4 filter=lfs diff=lfs merge=lfs -text

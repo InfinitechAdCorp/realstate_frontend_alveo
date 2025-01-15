@@ -33,7 +33,6 @@ export default function Admin({}) {
   const [currentImages, setCurrentImages] = useState([]);
   const [authToken_final, setAuthToken] = useState([]); // State to store fetched data from API
   const [properties, setProperties] = useState([]); // State to store fetched data from API
-  const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
   const [counts, setCounts] = useState({
     properties: 0,
@@ -263,6 +262,8 @@ export default function Admin({}) {
     }
   };
   useEffect(() => {
+    const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
@@ -623,7 +624,6 @@ export default function Admin({}) {
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -648,10 +648,9 @@ export default function Admin({}) {
         const data = await response.json();
         console.log("Login successful:", data);
 
-        // Save the token to localStorage or another storage
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userInfo", JSON.stringify(data.name)); // Assuming you return user data in the response
+        localStorage.setItem("userInfo", JSON.stringify(data.name));
 
         // Optional: Set token in a state or context if needed
         setAuthToken(data.token);
@@ -672,9 +671,10 @@ export default function Admin({}) {
     setShowProperties(!showProperties);
   };
   const fetchCount = async (endpoint, key) => {
+    // Safely use localStorage inside useEffect
     const token = localStorage.getItem("auth_token"); // Get the token from localStorage
+    console.log("Auth Token:", token);
 
-    // Check if token exists
     if (!token) {
       console.error("Token not found.");
       setError("Token not found.");
@@ -706,7 +706,6 @@ export default function Admin({}) {
       setError("An unexpected error occurred while fetching data.");
     }
   };
-
   // UseEffect to fetch data after successful login
   useEffect(() => {
     if (isLoggedIn) {
