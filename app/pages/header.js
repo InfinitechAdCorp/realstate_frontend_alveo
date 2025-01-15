@@ -112,6 +112,8 @@ const Header = () => {
     fetchArea();
   }, []);
 
+  
+
   return (
     <>
       <header
