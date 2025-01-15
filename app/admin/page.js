@@ -17,8 +17,9 @@ import Appointment from "@/components/admin/appointments";
 import SubmittedProperties from "@/components/admin/submittedProperties";
 import Slider from "react-slick";
 
-export default function Admin({}) {
-  const [isOpen, setIsOpen] = useState(false); // State to toggle dropdown visibility
+export default function Admin({ }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isCanvasOpen, setIsCanvasOpen] = useState(false);
 
   const [showProperties, setShowProperties] = useState(false);
   const [isVisible, setIsVisible] = useState(true); // Controls visibility of popup
@@ -126,13 +127,13 @@ export default function Admin({}) {
   ];
   const navItems_FormFiller = [
     {
-      name: "DEVELOPMENT TYPE", // New item for development types
-      onClick: () => setActiveNav("DEVELOPMENT TYPE"), // Set activeNav to "DEVELOPMENT TYPES"
+      name: "DEVELOPMENT TYPE",
+      onClick: () => setActiveNav("DEVELOPMENT TYPE"),
       icon: "/assets/turn-right.png",
     },
     {
-      name: "STATUS", // New item for status
-      onClick: () => setActiveNav("STATUS"), // Set activeNav to "STATUS"
+      name: "STATUS",
+      onClick: () => setActiveNav("STATUS"),
       icon: "/assets/turn-right.png",
     },
     {
@@ -150,8 +151,13 @@ export default function Admin({}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [success, setSuccess] = useState("");
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
+  };
+
+  const toggleDropdownCanvas = () => {
+    setIsCanvasOpen(!isCanvasOpen);
   };
 
   const handleLogout = () => {
@@ -843,24 +849,32 @@ export default function Admin({}) {
       )}
 
       <div className="flex fixed w-full">
-        <div className="text-xl text-black w-1/6 relative border-r shadow-md bg-white z-50 items-center justify-center">
-          <div className="text-center top-1/2 mt-20 ">
-            <h1 className="text-4xl font-bold">
+        {/* Sidebar */}
+        <div
+          className={`fixed top-0 left-0 h-full w-64 bg-black text-white shadow-md transition-transform duration-300 z-40 ${isCanvasOpen ? "translate-x-0" : "-translate-x-full"
+            } md:translate-x-0 md:w-1/6`}
+          style={{
+            backgroundImage: `url('/assets/sidebar.png')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="text-center mt-14">
+            <h1 className="font-bold text-5xl md:text-4xl sm:text-3xl">
               <a href="/">Λ L V E O</a>
             </h1>
-            <p style={{ fontSize: "10px" }}>
-              an <b>AyalaLand </b>company
+            <p className="text-base md:text-sm sm:text-xs mt-2">
+              an <b>AyalaLand</b> company
             </p>
           </div>
 
-          <div className=" border-indigo-950 w-full">
-            <nav className="p-6 z-50">
+          <div className="mt-6">
+            <nav className="p-6">
               <div className="flex items-center w-full">
                 <div className="flex-grow border-t border-gray-400"></div>
-                <h1 className="text-sm px-3 text-gray-700">MENU</h1>
+                <h1 className="text-sm px-3">MENU</h1>
                 <div className="flex-grow border-t border-gray-400"></div>
               </div>
-
               <ul>
                 {navItems_1.map((item) => (
                   <li
@@ -869,118 +883,93 @@ export default function Admin({}) {
                       setActiveNav(item.name);
                       item.onClick();
                     }}
-                    className={`group cursor-pointer transition-all duration-300 rounded-lg ${
-                      activeNav === item.name
-                        ? "bg-indigo-100"
-                        : "hover:bg-indigo-100"
-                    }`}
+                    className={`group cursor-pointer transition-all duration-300 rounded-lg ${activeNav === item.name ? "bg-white" : "hover:bg-gray-100"
+                      }`}
                   >
                     <div
-                      className={`flex items-center text-sm p-1 transition-all duration-300 ${
-                        activeNav === item.name
-                          ? "text-indigo-600"
-                          : "text-gray-700 group-hover:text-indigo-600"
-                      }`}
+                      className={`flex items-center text-sm p-1 ${activeNav === item.name
+                        ? "text-black"
+                        : "text-white group-hover:text-black"
+                        }`}
                     >
-                      {/* Icon */}
                       <img
                         src={item.icon}
                         alt={item.name}
-                        className="w-3 h-3 mr-2" // Adjust size and spacing
+                        className="w-3 h-3 mr-2"
                       />
-                      {/* Name */}
                       {item.name}
                     </div>
                   </li>
                 ))}
               </ul>
             </nav>
-            <nav className="p-6 z-50">
+
+            <nav className="p-6">
               <div className="flex items-center w-full">
                 <div className="flex-grow border-t border-gray-400"></div>
-                <h1 className="text-sm px-3 text-gray-700">MISC</h1>
+                <h1 className="text-sm px-3">MISC</h1>
                 <div className="flex-grow border-t border-gray-400"></div>
               </div>
-
               <ul>
                 {navItems_2.map((item) => (
                   <li
                     key={item.name}
                     onClick={() => {
                       if (item.name === "FORM FILLER") {
-                        // Check if FORM FILLER is already open
-                        if (activeNav === "FORM FILLER") {
-                          // Close FORM FILLER if it is already open
-                          setActiveNav(null);
-                        } else {
-                          // Open FORM FILLER submenu
-                          setActiveNav("FORM FILLER");
-                        }
+                        setActiveNav(
+                          activeNav === "FORM FILLER" ? null : "FORM FILLER"
+                        );
                       } else {
-                        // For other items, update the activeNav and trigger their onClick behavior
                         setActiveNav(item.name);
                         item.onClick();
                       }
                     }}
-                    className={`group cursor-pointer transition-all duration-300 rounded-lg ${
-                      activeNav === item.name
-                        ? "bg-indigo-100"
-                        : "hover:bg-indigo-100"
-                    }`}
+                    className={`group cursor-pointer transition-all duration-300 rounded-lg ${activeNav === item.name ? "bg-white" : "hover:bg-gray-100"
+                      }`}
                   >
                     <div
-                      className={`flex items-center text-sm p-1 transition-all duration-300 ${
-                        activeNav === item.name
-                          ? "text-indigo-600"
-                          : "text-gray-700 group-hover:text-indigo-600"
-                      }`}
+                      className={`flex items-center text-sm p-1 ${activeNav === item.name
+                        ? "text-black"
+                        : "text-white group-hover:text-black"
+                        }`}
                     >
-                      {/* Icon */}
                       <img
                         src={item.icon}
                         alt={item.name}
-                        className="w-3 h-3 mr-2" // Adjust size and spacing
+                        className="w-3 h-3 mr-2"
                       />
-                      {/* Name */}
                       {item.name}
                     </div>
 
-                    {/* Conditional rendering for "FORM FILLER" submenu */}
+                    {/* Submenu for "FORM FILLER" */}
                     {item.name === "FORM FILLER" &&
-                      (activeNav === "FORM FILLER" ||
-                        navItems_FormFiller.some(
-                          (subItem) => activeNav === subItem.name
-                        )) && (
-                        <nav className="z-50 ml-2">
+                      activeNav === "FORM FILLER" && (
+                        <nav className="ml-4">
                           <ul>
                             {navItems_FormFiller.map((subItem) => (
                               <li
                                 key={subItem.name}
                                 onClick={(e) => {
-                                  e.stopPropagation(); // Prevent click event from affecting parent
-                                  setActiveNav(subItem.name); // Update activeNav for submenu item
+                                  e.stopPropagation();
+                                  setActiveNav(subItem.name);
                                   subItem.onClick();
                                 }}
-                                className={`group cursor-pointer transition-all duration-300 rounded-lg text-sm ${
-                                  activeNav === subItem.name
-                                    ? "bg-blue-200"
-                                    : "hover:bg-blue-200"
-                                }`}
+                                className={`group cursor-pointer transition-all duration-300 rounded-lg text-sm ${activeNav === subItem.name
+                                  ? "bg-blue-200"
+                                  : "hover:bg-blue-200"
+                                  }`}
                               >
                                 <div
-                                  className={`flex items-center text-sm p-1 transition-all duration-300 ml-6 ${
-                                    activeNav === subItem.name
-                                      ? "bg-blue-200"
-                                      : "text-gray-700 group-hover:text-indigo-600"
-                                  }`}
+                                  className={`flex items-center text-sm p-1 ${activeNav === subItem.name
+                                    ? "text-black"
+                                    : "text-black group-hover:text-black"
+                                    }`}
                                 >
-                                  {/* Icon */}
                                   <img
                                     src={subItem.icon}
                                     alt={subItem.name}
                                     className="w-3 h-3 mr-2"
                                   />
-                                  {/* Name */}
                                   {subItem.name}
                                 </div>
                               </li>
@@ -995,15 +984,24 @@ export default function Admin({}) {
           </div>
         </div>
 
+        {isCanvasOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+            onClick={() => setIsCanvasOpen(false)}
+          ></div>
+        )}
+        
         <div className=" w-5/6">
           <header className="fixed top-0 left-0 w-full bg-white shadow-lg">
             <div className="flex justify-between items-center p-4">
-              <div className="logosec text-center items-center">
-                <a href="/">
-                  <div className="logo cursor-pointer text-darkblue font-semibold text-lg">
-                    ALVEO LAND
-                  </div>
-                </a>
+              <div className="flex justify-between items-center px-4">
+                <div className="logosec text-center flex-grow">
+                  <a href="/">
+                    <div className="logo cursor-pointer text-darkblue font-semibold text-lg">
+                      ALVEO LAND
+                    </div>
+                  </a>
+                </div>
               </div>
 
               <div className="message flex items-center space-x-4">
@@ -1037,6 +1035,15 @@ export default function Admin({}) {
                   </div>
                 )}
               </div>
+              {/* Hamburger button */}
+              {!isCanvasOpen && (
+                <button
+                  className="md:hidden p-2 bg-blue-600 text-white rounded-md"
+                  onClick={() => setIsCanvasOpen(!isCanvasOpen)}
+                >
+                  ☰
+                </button>
+              )}
             </div>
           </header>
 
@@ -1054,7 +1061,7 @@ export default function Admin({}) {
                     {/* Box 1 */}
                     <div className="box bg-gray-50 p-6 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out">
                       <div className="text text-center flex flex-col items-center">
-                        <div className="flex items-center mb-4">
+                        <div className="flex items-center mb-4 justify-center">
                           <h2 className="topic-heading text-3xl font-semibold">
                             {counts.properties}
                           </h2>
@@ -1075,7 +1082,7 @@ export default function Admin({}) {
                     {/* Box 2 */}
                     <div className="box bg-gray-50 p-6 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out">
                       <div className="text text-center flex flex-col items-center">
-                        <div className="flex items-center mb-4">
+                        <div className="flex items-center mb-4 justify-center">
                           <h2 className="topic-heading text-3xl font-semibold">
                             {counts.otherBuildings}
                           </h2>
@@ -1096,7 +1103,7 @@ export default function Admin({}) {
                     {/* Box 3 */}
                     <div className="box bg-gray-50 p-6 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out">
                       <div className="text text-center flex flex-col items-center">
-                        <div className="flex items-center mb-4">
+                        <div className="flex items-center mb-4 justify-center">
                           <h2 className="topic-heading text-3xl font-semibold">
                             {counts.condominiums}
                           </h2>
@@ -1117,7 +1124,7 @@ export default function Admin({}) {
                     {/* Box 4 */}
                     <div className="box bg-gray-50 p-6 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out">
                       <div className="text text-center flex flex-col items-center">
-                        <div className="flex items-center mb-4">
+                        <div className="flex items-center mb-4 justify-center">
                           <h2 className="topic-heading text-3xl font-semibold">
                             {counts.locations}
                           </h2>
@@ -1133,6 +1140,7 @@ export default function Admin({}) {
                       </div>
                     </div>
                   </div>
+
                 </div>
                 <div className="h-fit relative">
                   <Chart data={isLoggedIn} />
@@ -1608,11 +1616,10 @@ export default function Admin({}) {
 
                   <div className="flex justify-center">
                     <button
-                      className={`w-1/2 mt-10 py-3 text-white rounded-md ${
-                        isEditing
-                          ? "bg-indigo-600 hover:bg-indigo-500"
-                          : "bg-green-600 hover:bg-green-500"
-                      }`}
+                      className={`w-1/2 mt-10 py-3 text-white rounded-md ${isEditing
+                        ? "bg-indigo-600 hover:bg-indigo-500"
+                        : "bg-green-600 hover:bg-green-500"
+                        }`}
                       onClick={() =>
                         handleAdd(
                           "chatbot",
@@ -1646,7 +1653,7 @@ export default function Admin({}) {
             <AreaModal isOpen={isAreaModalOpen} closeModal={closeModal} />
           </div>
         </div>
-      </div>
+      </div >
     </>
   );
 }
