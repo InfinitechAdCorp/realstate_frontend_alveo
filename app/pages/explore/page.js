@@ -81,6 +81,15 @@ function ExplorePage() {
         filteredData = [];
       }
 
+      // Sort ang property from newest to oldest
+      filteredData.sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+        if (isNaN(dateA)) return 1;
+        if (isNaN(dateB)) return -1;
+        return dateB - dateA;
+      });
+
       setBuildings(filteredData);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
@@ -106,6 +115,15 @@ function ExplorePage() {
     } catch (error) {
       console.error("Error fetching property:", error);
     }
+  };
+
+  // Para sa new badge it will display only if the property is added with 3 days interval
+  const isNewProperty = (createdAt) => {
+    const today = new Date();
+    const createdDate = new Date(createdAt);
+    const timeDiff = today - createdDate;
+    const daysDiff = timeDiff / (1000 * 3600 * 24);
+    return daysDiff <= 3;
   };
 
   useEffect(() => {
@@ -156,25 +174,22 @@ function ExplorePage() {
               key={building.id}
               className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0"
             >
-              <div className="card rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out">
+              <div className="card rounded-lg overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 ease-in-out relative">
+                {isNewProperty(building.created_at) && (
+                  <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold py-1 px-2 rounded-full">
+                    NEW
+                  </span>
+                )}
                 <img
-                  src={
-                    building.path &&
-                    building.path.startsWith(
-                      `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
-                    )
-                      ? building.path
-                      : building.path && building.path.startsWith("/property/")
-                      ? `${
-                          process.env.NEXT_PUBLIC_SERVER_PORT
-                        }${building.path.replace(/\\/g, "/")}`
-                      : building.path
-                      ? `${
-                          process.env.NEXT_PUBLIC_SERVER_PORT
-                        }/assets/Location/${encodeURIComponent(
-                          building.path.replace("assets/Location/", "")
-                        )}`
-                      : ""
+                  src={building.path && building.path.startsWith(
+                    `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
+                  )
+                    ? building.path
+                    : building.path && building.path.startsWith("/property/")
+                    ? `${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path.replace(/\\/g, "/")}`
+                    : building.path
+                    ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/assets/Location/${encodeURIComponent(building.path.replace("assets/Location/", ""))}`
+                    : ""
                   }
                   className="w-full h-64 object-cover rounded-t-lg"
                   alt={building.name}
@@ -184,20 +199,16 @@ function ExplorePage() {
                     {building.name}
                   </h3>
                   <p className="text-sm text-gray-700 mt-2">
-                    <strong>Development Type:</strong>{" "}
-                    {building.development_type}
+                    <strong>Development Type:</strong> {building.development_type}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Residential Levels:</strong>{" "}
-                    {building.residential_levels}
+                    <strong>Residential Levels:</strong> {building.residential_levels}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Basement Parking:</strong>{" "}
-                    {building.basement_parking_levels || "N/A"}
+                    <strong>Basement Parking:</strong> {building.basement_parking_levels || "N/A"}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Commercial Units:</strong>{" "}
-                    {building.commercial_units || "N/A"}
+                    <strong>Commercial Units:</strong> {building.commercial_units || "N/A"}
                   </p>
                   <button
                     onClick={(e) => {
