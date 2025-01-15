@@ -740,12 +740,12 @@ const AlveoBanner = () => {
             <div className='relative z-10 content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
               <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
                 {/* Title */}
-                <h1 className='mt-2 text-6xl lg:text-8xl font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
+                <h1 className='mt-2 p-2 text-6xl lg:text-8xl font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
                   Λ L V E O LAND
                 </h1>
 
                 {/* Subtitle */}
-                <h4 className='text-xs font-thin sm:text-3xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]'>
+                <h4 className='text-1xl font-thin sm:text-3xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]'>
                   LIVE WELL ACROSS THE PHILIPPINES
                 </h4>
                 <div className='my-6 h-auto grid grid-cols-1 gap-6 relative p-2'>
@@ -875,12 +875,6 @@ const AlveoBanner = () => {
                   </div>
                 </div>
               </div>
-              {/* Right Column: Image Slider */}
-              {/* <div className='relative flex justify-center items-center w-4/5 max-sm:left-8 sm:left-1/3 sm:top-20 md:left-40 xl:-mt-10 max-sm:h-40 md:w-1/2 md:top-20 md:ml-16 lg:left-1/3 lg:ml-1 lg:w-1/3 xl:w-5/12 xl:left-1/2 xl:ml-10 xl:absolute xl:-translate-y-1/3 xl:flex xl:justify-start xl:items-center'>
-                    <div className='absolute inset-0 w-full flex'>
-                      <ImageSlider />
-                    </div>
-                  </div> */}
             </div>
           </div>
 
