@@ -148,10 +148,10 @@ export default function BlogPost ({ params }) {
     <>
       <div className='w-full h-screen'>
         <SEO
-          title="REAL ESTATE"
-          description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
-          keywords="alveo, real estate, property, lands, investment, loan, buildings,"
-          canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
+          title='REAL ESTATE'
+          description='Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter..'
+          keywords='alveo, real estate, property, lands, investment, loan, buildings,'
+          canonical='${process.env.NEXT_PUBLIC_LOCAL_PORT}'
         />
         <Header />
         <Directory
@@ -163,31 +163,34 @@ export default function BlogPost ({ params }) {
             <div>
               <div className='relative'>
                 <video
-                  src='/assets/dashboard/vi2.mp4'
-                  alt={post.title}
-                  width={800}
-                  height={300}
+                  src='https://media-hosting.imagekit.io//65923e66b0c14f34/vi2.mp4?Expires=1831509873&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=uhnF9H631jYx7R~b9dN1gJ4bAXHsAqU9uVsbU0efep2bz4JSeIMjdXeOu~dcudagaYtrpUtyWy-xwnJLN28Ss-p1fRwcput-RfhByWfHWhxJzo7V65ABdGIjPaiGseuRd8RYB15qkdV9urhBtn3yBC-f6fBDm7hXRA651~VdJvCQlHo6tqjMdxw8luSMAsof6Y74P57ilFtuOBrr-hasWjBrptycOwUazqT9XASgzTATu-GOFXCNxdFCCtx-0K~FjIjUoI2n9bvyOdsAdHGgUPFn-VKLvmitHT5Fq9peGzaEY92Xz446~vVvatD28Kbtk-kB4nuIJ9zx6auohTKTWg__'
                   className='object-cover w-full h-1/2 xl:h-96'
                   autoPlay
                   loop
                   muted
-                />
+                  playsInline
+                >
+                  <p>
+                    Your browser does not support HTML5 video. Here's a
+                    description of the content: {post.title}.
+                  </p>
+                </video>
+
                 <div className='absolute inset-0 bg-gradient-to-b from-transparent to-customBlue'></div>
               </div>
               <div className=' hidden sm:block absolute top-1/3 mt-3 left-5 w-4/5 z-10 text-white text-sm mx-1 sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10'>
                 <div className='flex space-x-4 h-36 lg:mt-48 lg:top-64 lg:ml-10 xl:-mt-16 xl:ml-40'>
                   {headings.map((heading, idx) => (
                     <h1
-                    key={idx}
-                    className={`${
-                      index === idx
-                        ? 'opacity-100 transform translate-y-0 transition-transform duration-1000 ease-out'
-                        : 'opacity-0 transform translate-y-5 font-thin'
-                    } w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl font-thin`}
-                  >
-                    {heading}
-                  </h1>
-                  
+                      key={idx}
+                      className={`${
+                        index === idx
+                          ? 'opacity-100 transform translate-y-0 transition-transform duration-1000 ease-out'
+                          : 'opacity-0 transform translate-y-5 font-thin'
+                      } w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl font-thin`}
+                    >
+                      {heading}
+                    </h1>
                   ))}
                 </div>
               </div>
