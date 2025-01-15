@@ -125,10 +125,10 @@ const Carousel = () => {
   }
 
   return (
-    <div className='w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10'>
+    <div className='w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10 px-4 sm:px-6 lg:px-8'>
       <h1
-        className='font-thin items-center text-4xl 
-            text-customBlue border-t-2 w-28 border-customBlue mx-20 whitespace-nowrap'
+        className='font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
+      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4'
       >
         FEATURED PROPERTIES
       </h1>
@@ -279,8 +279,11 @@ const AboutAlveo = () => {
         {/* Content */}
         <div className='container mx-auto px-4 sm:px-6 lg:px-10 relative z-10'>
           <div className='text-center'>
-            <h1 className='text-4xl font-thin text-white tracking-widest mb-10'>
-              About <span className='ms-3 me-3'>Λ L V E O</span> Land
+            <h1 className='text-4xl font-thin text-white tracking-widest mb-10 flex flex-col sm:flex-row sm:justify-center sm:items-center'>
+              About
+              <span className='ms-3 me-3 sm:ms-0 sm:me-0 sm:mt-0 mt-2'>
+                Λ L V E O
+              </span>
             </h1>
           </div>
 
@@ -723,7 +726,7 @@ const AlveoBanner = () => {
             {/* Video Background */}
             <video
               className='absolute inset-0 w-full h-full object-cover'
-              src='/assets/dashboard/2282013-uhd_3840_2024_24fps.mp4'
+              src='https://media-hosting.imagekit.io//38b93b6acb734596/2282013-uhd_3840_2024_24fps.mp4?Expires=1831509595&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=KLVgRw2~SphMTJt1oS~bhEjmQwWPjG3FTU~WGzMMBRBYgKoN0UCoOm7o4Zgrnr6ugewVBQ3n56D9bez~IuFNGaoUo22r2LHooVo0HAqmix6zXpj6X4Pny0vJcNitDTIOtddda9sAZDUymTCgg6AoAc0jAaG2yRIZ1QRCQ9RQf4BuB-N2lrl8OSo1eEpA-AV9s6p7FA4p0V6l3po19Ok6sgZgnMdxkgghGsck1ucAAwdrjed9EeDLLJLVW7MrMMBbrDBi90tLyVwNhJ8aoF9nyPt3iOwZNH02PMgo1Q9peMeoTFihab9m8UoDVu31Kil54q~VBlVm6XYo0m~u48YYxw__'
               autoPlay
               loop
               muted
@@ -737,12 +740,12 @@ const AlveoBanner = () => {
             <div className='relative z-10 content sm:mt-10 xl:mt-40 2xl:mt-48 flex flex-col items-center xl:items-start justify-center text-center mt-10'>
               <div className='w-full max-w-7xl xl:max-w-full xl:pl-20 xl:text-left'>
                 {/* Title */}
-                <h1 className='mt-2 text-3xl font-medium sm:text-6xl md:text-4xl lg:text-4xl xl:text-5xl 2xl:text-8xl 2xl:font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
+                <h1 className='mt-2 text-6xl lg:text-8xl font-medium text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.8)]'>
                   Λ L V E O LAND
                 </h1>
 
                 {/* Subtitle */}
-                <h4 className='text-xs font-thin sm:text-2xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]'>
+                <h4 className='text-xs font-thin sm:text-3xl md:text-xl lg:text-xl xl:text-3xl 2xl:text-5xl text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.6)]'>
                   LIVE WELL ACROSS THE PHILIPPINES
                 </h4>
                 <div className='my-6 h-auto grid grid-cols-1 gap-6 relative p-2'>
@@ -755,7 +758,7 @@ const AlveoBanner = () => {
                         id='locationDropdown'
                         value={selectedValue}
                         onChange={handleSelectChange}
-                        className='bg-transparent text-white placeholder-white px-2 focus:outline-none flex-1 appearance-none'
+                        className='bg-transparent w-1/2 text-white placeholder-white px-2 focus:outline-none flex-1 appearance-none'
                         aria-label='Select search category'
                       >
                         <option
@@ -764,7 +767,7 @@ const AlveoBanner = () => {
                           selected
                           className='bg-[#002B47] text-white'
                         >
-                          Select Category
+                          Select
                         </option>
                         <option value='all' className='bg-[#002B47] text-white'>
                           All
@@ -841,7 +844,7 @@ const AlveoBanner = () => {
                         onClick={arrowFetch}
                         className='bg-transparent text-white font-semibold px-4 py-1 border-l border-white hover:text-gray-300 focus:outline-none'
                       >
-                        SEARCH →
+                        Search
                       </button>
                     </div>
 
@@ -1494,10 +1497,10 @@ const DashboardComponent = () => {
           </div>  */}
 
           {/* Image Gallery Section */}
-          <div className='w-full p-4'>
+          <div className='w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10 px-4 sm:px-6 lg:px-8'>
             <h1
-              className='font-thin items-center text-4xl 
-            text-customBlue border-t-2 w-28 border-customBlue mx-20 whitespace-nowrap'
+              className='font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
+      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4'
             >
               RECOMMENDED FOR YOU
             </h1>
