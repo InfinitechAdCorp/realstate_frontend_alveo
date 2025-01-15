@@ -12,6 +12,7 @@ module.exports = {
   			background: 'var(--background)',
   			foreground: 'var(--foreground)',
 			customBlue: '#002B47',
+			hoverBlue: '#004366',
   		},
   		keyframes: {
   			'accordion-down': {

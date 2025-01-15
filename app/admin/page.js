@@ -655,7 +655,7 @@ export default function Admin({}) {
         // Optional: Set token in a state or context if needed
         setAuthToken(data.token);
         setIsVisible(false);
-        setIsLoggedIn(true);
+        setisLoggedin(true);
       } else {
         const errorData = await response.json();
         console.error("Error during login:", errorData);
