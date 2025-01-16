@@ -8,14 +8,8 @@ import Header from '../header'
 import { Suspense } from 'react'
 import Footer from './../footer'
 import SEO from './../../seo/page'
-import {
-  FaRegCopy,
-  FaBuilding,
-  FaHome,
-  FaSuitcase,
-  FaMapMarkerAlt
-} from 'react-icons/fa'
-
+import { BsCopy, BsBuildings, BsHouseDoor, BsBuildingCheck, BsBag } from "react-icons/bs";
+import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 function ExplorePage () {
   const searchParams = useSearchParams()
   const specificLocation = searchParams.get('specificLocation')
@@ -29,27 +23,27 @@ function ExplorePage () {
   }
   const images = [
     {
-      icon: <FaRegCopy className='text-4xl' />, // Using the 'copy' icon from React Icons
+      icon: <BsCopy className='text-4xl' />, // Using the 'copy' icon from React Icons
       value: 'all',
       label: 'All Property'
     },
     {
-      icon: <FaBuilding className='text-4xl' />, // Using the 'building' icon for Condominiums
+      icon: <BsBuildings className='text-4xl' />, // Using the 'building' icon for Condominiums
       value: 'condominiums',
       label: 'Condominiums'
     },
     {
-      icon: <FaHome className='text-4xl' />, // Using the 'home' icon for Residentials
+      icon: <BsHouseDoor className='text-4xl' />, // Using the 'home' icon for Residentials
       value: 'residential',
       label: 'Residentials'
     },
     {
-      icon: <FaSuitcase className='text-4xl' />, // Using the 'suitcase' icon for Commercials
+      icon: <BsBag className='text-4xl' />, // Using the 'suitcase' icon for Commercials
       value: 'commercial',
       label: 'Commercials'
     },
     {
-      icon: <FaMapMarkerAlt className='text-4xl' />, // Using the 'location' icon for Offices
+      icon: <HiOutlineBuildingOffice2 className='text-4xl' />, // Using the 'location' icon for Offices
       value: 'office',
       label: 'Offices'
     }
@@ -147,7 +141,7 @@ function ExplorePage () {
         <Header />
       </div>
       <div className='min-h-screen flex flex-col items-center justify-center 2xl:mx-10'>
-        <div className='text-center mt-10 sm:-ml-10 cursor-pointer'>
+        <div className='text-center mt-10 sm:-ml-10 cursor-pointer border-b-2 border-black'>
           {images.map((image, index) => (
             <div
               key={index}

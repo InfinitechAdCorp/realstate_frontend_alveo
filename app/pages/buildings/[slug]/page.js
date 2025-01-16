@@ -215,7 +215,7 @@ export default function BlogPost ({ params }) {
       <div className='mb-10'>
         <Header />
       </div>
-      <div className=' p-4 md:p-8 mt-20 w-full mb-20 text-customBlue'>
+      <div className=' p-4 md:p-8 mt-20 w-full mb-20 '>
         <h1 className='text-2xl font-semibold text-customBlue mb-4 text-center'>
           {property.name}
         </h1>
@@ -224,7 +224,7 @@ export default function BlogPost ({ params }) {
             <div className='relative'>
               <div className='grid gap-4'>
                 {isLoading && (
-                  <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200'>
+                  <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200 w-full h-auto max-h-80 object-cover rounded-sm'>
                     <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
                       Λ L V E O
                     </div>
@@ -423,20 +423,22 @@ export default function BlogPost ({ params }) {
         </div>
 
         {/* Features */}
-        <div className='features mb-4'>
+        <div className='max-w-7xl mx-auto px-4 py-6'>
           <h2 className='text-2xl font-semibold mb-2'>Features</h2>
           {!parsedFeatures || parsedFeatures.length === 0 ? (
             <p>No features available for this property.</p>
           ) : (
-            <div className='grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 text-center'>
+            <div className='grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 text-center'>
               {parsedFeatures.map((feature, index) => (
-                <div key={index} className='border p-4'>
-                  <h5>{feature.name}</h5>
+                <div key={index} className=''>
                   <div className='relative group perspective-1000'>
                     {/* Loader/Placeholder */}
                     {isLoading && (
-                      <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200'>
-                        <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+                      <div
+                        className='absolute inset-0 flex items-center justify-center bg-gray-200 
+               rounded-lg w-full sm:w-80 h-40 sm:h-60 lg:w-96 lg:h-72'
+                      >
+                        <div className='text-xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
                           Λ L V E O
                         </div>
                       </div>
@@ -453,9 +455,10 @@ export default function BlogPost ({ params }) {
                       }
                       alt={feature.name}
                       onLoad={handleImageLoad}
-                      className='w-full h-64 object-cover transition-transform duration-300 ease-in-out transform group-hover:rotate-x-12 group-hover:rotate-y-12 group-hover:scale-105 group-hover:shadow-lg'
+                      className='rounded-lg w-80 h-40 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-110'
                     />
                   </div>
+                  <p className='text-customBlue text-xl'>{feature.name}</p>
                 </div>
               ))}
             </div>
@@ -463,93 +466,129 @@ export default function BlogPost ({ params }) {
         </div>
 
         {/*  Facilities */}
-        <div className='facilities mb-4 p-2 bg-gray-100'>
-          <h2 className='text-2xl font-semibold text-center mb-4'>
-            Facilities
-          </h2>
+        <div className='max-w-7xl mx-auto px-4 py-6 relative bg-cover bg-center'>
+          {/* Content */}
+          <div className='relative z-10'>
+            <h2 className='text-2xl font-semibold text-start mb-6 text-customBlue'>
+              Facilities
+            </h2>
 
-          <ul className='grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 text-center justify-center'>
+            {/* Facilities List */}
             {facilities.length === 0 ? (
-              <div className='col-span-full flex items-center justify-center'>
-                <p className='text-xl'>
+              <div className='flex items-center justify-center'>
+                <p className='text-lg sm:text-xl text-white'>
                   No facilities available for this property.
                 </p>
               </div>
             ) : (
-              facilities.map(facility => (
-                <li
-                  key={facility.id}
-                  className='bg-white p-4 rounded-lg shadow hover:-translate-y-1 transition'
-                >
-                  <span className='text-lg text-gray-700'>{facility.name}</span>
-                </li>
-              ))
+              <div className='text-start'>
+                <p className='text-xl text-gray-700 font-medium'>
+                  {facilities.map((facility, index) => (
+                    <span key={facility.id}>
+                      {facility.name}
+                      {index < facilities.length - 1 ? ', ' : ''}{' '}
+                      {/* Add a comma except for the last item */}
+                    </span>
+                  ))}
+                </p>
+              </div>
             )}
-          </ul>
+          </div>
         </div>
 
         {/* building */}
-        <h2 className='text-2xl font-semibold text-center items-center mb-4'>
-          Buildings
-        </h2>
-        <div className='buildings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 w-full'>
-          {buildings.length === 0 ? (
-            <div className='col-span-full flex items-center justify-center text-center'>
-              <p className='text-xl'>
-                No buildings available for this property.
-              </p>
-            </div>
-          ) : (
-            buildings.map(building => (
-              <div
-                key={building.id}
-                className='flex flex-col items-center p-6 bg-gray-100'
-              >
-                <h3 className='text-xl font-semibold text-center mb-6'>
-                  {building.name}
-                </h3>
-                {isLoading && (
-                  <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200'>
-                    <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
-                      Λ L V E O
+        <div className='max-w-7xl mx-auto px-4 py-6'>
+          <h2 className='text-2xl font-semibold text-start items-center mb-4'>
+            Buildings
+          </h2>
+
+          <div className='buildings grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 w-full'>
+            {buildings.length === 0 ? (
+              <div className='col-span-full flex items-center justify-center text-center'>
+                <p className='text-xl'>
+                  No buildings available for this property.
+                </p>
+              </div>
+            ) : (
+              buildings.map(building => (
+                <div
+                  key={building.id}
+                  className='flex flex-col items-center p-3 border-customBlue border-2 rounded-lg'
+                >
+                  <h3 className='text-xl font-semibold text-customBlue text-center mb-6'>
+                    {building.name}
+                  </h3>
+
+                  <div className='relative group perspective-1000'>
+                    {/* Loader */}
+                    {isLoading && (
+                      <div className='absolute w-full h-60 inset-0 flex items-center justify-center bg-gray-200'>
+                        <div className='text-xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+                          Λ L V E O
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Image */}
+                    <img
+                      src={
+                        building.path?.startsWith('https://')
+                          ? building.path // Use the URL directly if it's absolute
+                          : building.path
+                          ? `${
+                              process.env.NEXT_PUBLIC_SERVER_PORT
+                            }/${building.path
+                              .replace(/^\/+/, '') // Remove leading slashes
+                              .replace(/\\/g, '/')}` // Replace backslashes with forward slashes
+                          : '' // Fallback if `building.path` is null or undefined
+                      }
+                      alt={building.name}
+                      className='w-full h-60 mb-6 object-cover rounded-lg transition-transform duration-300 ease-in-out transform group-hover:scale-105 group-hover:shadow-lg'
+                      onLoad={() => setIsLoading(false)} // Stop showing the loader once the image loads
+                      onError={() => setIsLoading(false)} // Hide the loader even if the image fails to load
+                    />
+                  </div>
+
+                  {/* Building Information */}
+                  <div className='text-start w-full'>
+                    <div className='mb-4'>
+                      <h5 className='mb-0 font-bold text-cyan-700'>
+                        {building.residential_levels}
+                      </h5>
+                      <span className='text-customBlue'>
+                        Residential Levels
+                      </span>
+                    </div>
+
+                    <div className='mb-4'>
+                      <h5 className='mb-0 font-bold text-cyan-700'>
+                        {building.basement_parking_levels || 'N/A'}
+                      </h5>
+                      <span className='text-customBlue'>
+                        Basement Parking Levels
+                      </span>
+                    </div>
+
+                    <div className='mb-4'>
+                      <h5 className='mb-0 font-bold text-cyan-700'>
+                        {building.podium_parking_levels || 'N/A'}
+                      </h5>
+                      <span className='text-customBlue'>
+                        Podium Parking Levels
+                      </span>
+                    </div>
+
+                    <div>
+                      <h5 className='mb-0 font-bold text-cyan-700'>
+                        {building.commercial_units || 'N/A'}
+                      </h5>
+                      <span className='text-customBlue'>Commercial Units</span>
                     </div>
                   </div>
-                )}
-                <img
-                  src={
-                    building.path?.startsWith('https://')
-                      ? building.path
-                      : building.path
-                      ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/${building.path
-                          .replace(/^\/+/, '')
-                          .replace(/\\/g, '/')}`
-                      : ''
-                  }
-                  alt={building.name}
-                  className='w-full h-60 rounded-lg mb-6'
-                />
-
-                <div className='text-base'>
-                  <p>
-                    <strong>Residential Levels:</strong>{' '}
-                    {building.residential_levels}
-                  </p>
-                  <p>
-                    <strong>Basement Parking Levels:</strong>{' '}
-                    {building.basement_parking_levels}
-                  </p>
-                  <p>
-                    <strong>Podium Parking Levels:</strong>{' '}
-                    {building.podium_parking_levels || 'N/A'}
-                  </p>
-                  <p>
-                    <strong>Commercial Units:</strong>{' '}
-                    {building.commercial_units || 'N/A'}
-                  </p>
                 </div>
-              </div>
-            ))
-          )}
+              ))
+            )}
+          </div>
         </div>
       </div>
 
