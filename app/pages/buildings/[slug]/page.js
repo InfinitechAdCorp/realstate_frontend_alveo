@@ -74,7 +74,7 @@ export default function BlogPost({ params }) {
     const fetchFacilities = async (propertyId) => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/facilities/id/${propertyId}`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/facilities_user/id/${propertyId}`
         );
         const data = await res.json();
 
@@ -91,7 +91,7 @@ export default function BlogPost({ params }) {
     const fetchBuildings = async (propertyId) => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/buildings/id/${propertyId}`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/buildings_user/id/${propertyId}`
         );
         const data = await res.json();
 
@@ -289,19 +289,39 @@ export default function BlogPost({ params }) {
                 </button>
 
                 <div className="w-full md:w-1/2">
-                  <h2 className="text-xl font-semibold mb-4">Property Details</h2>
-                  <p><strong>Name:</strong> {property.name}</p>
-                  <p><strong>Location:</strong> {property.location}</p>
-                  <p><strong>Price Range:</strong> {property.price_range}</p>
-                  <p><strong>Status:</strong> {property.status}</p>
-                  <p><strong>Development Type:</strong> {property.development_type}</p>
-                  <p><strong>Units:</strong> {property.units}</p>
-                  <p><strong>Specific Location:</strong> {property.specific_location}</p>
+                  <h2 className="text-xl font-semibold mb-4">
+                    Property Details
+                  </h2>
+                  <p>
+                    <strong>Name:</strong> {property.name}
+                  </p>
+                  <p>
+                    <strong>Location:</strong> {property.location}
+                  </p>
+                  <p>
+                    <strong>Price Range:</strong> {property.price_range}
+                  </p>
+                  <p>
+                    <strong>Status:</strong> {property.status}
+                  </p>
+                  <p>
+                    <strong>Development Type:</strong>{" "}
+                    {property.development_type}
+                  </p>
+                  <p>
+                    <strong>Units:</strong> {property.units}
+                  </p>
+                  <p>
+                    <strong>Specific Location:</strong>{" "}
+                    {property.specific_location}
+                  </p>
                 </div>
 
                 <div className="w-full md:w-1/2">
                   <h2 className="text-xl font-semibold mb-4">
-                    {popupType === "Request Viewing" ? "Schedule Appointment" : "Submit Inquiry"}
+                    {popupType === "Request Viewing"
+                      ? "Schedule Appointment"
+                      : "Submit Inquiry"}
                   </h2>
                   <form
                     className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -311,7 +331,9 @@ export default function BlogPost({ params }) {
                     }}
                   >
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Name</label>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Name
+                      </label>
                       <input
                         type="text"
                         name="name"
@@ -322,7 +344,9 @@ export default function BlogPost({ params }) {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Phone Number
+                      </label>
                       <input
                         type="tel"
                         name="phone"
@@ -333,7 +357,9 @@ export default function BlogPost({ params }) {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700">Email</label>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Email
+                      </label>
                       <input
                         type="email"
                         name="email"
@@ -345,7 +371,9 @@ export default function BlogPost({ params }) {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700">
-                        {popupType === "Request Viewing" ? "Appointment Date & Time" : "Preferred Contact Date & Time"}
+                        {popupType === "Request Viewing"
+                          ? "Appointment Date & Time"
+                          : "Preferred Contact Date & Time"}
                       </label>
                       <input
                         type="datetime-local"
@@ -357,7 +385,9 @@ export default function BlogPost({ params }) {
                     </div>
                     <div className="flex flex-col gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700">Message</label>
+                        <label className="block text-sm font-medium text-gray-700">
+                          Message
+                        </label>
                         <textarea
                           name="message"
                           value={formData.message}
@@ -371,14 +401,14 @@ export default function BlogPost({ params }) {
                         type="submit"
                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
                       >
-                        {popupType === "Request Viewing" ? "Confirm Appointment" : "Submit Inquiry"}
+                        {popupType === "Request Viewing"
+                          ? "Confirm Appointment"
+                          : "Submit Inquiry"}
                       </button>
                     </div>
-
                   </form>
                 </div>
               </div>
-
             </div>
           )}
         </div>
@@ -401,8 +431,9 @@ export default function BlogPost({ params }) {
                       src={
                         feature.image?.startsWith("https://")
                           ? feature.image
-                          : `${process.env.NEXT_PUBLIC_SERVER_PORT
-                          }/${feature.image.replace(/\\/g, "/")}`
+                          : `${
+                              process.env.NEXT_PUBLIC_SERVER_PORT
+                            }/${feature.image.replace(/\\/g, "/")}`
                       }
                       alt={feature.name}
                       className="w-full h-full object-cover"
@@ -448,10 +479,10 @@ export default function BlogPost({ params }) {
                     building.path?.startsWith("https://")
                       ? building.path
                       : building.path
-                        ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/${building.path
+                      ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/${building.path
                           .replace(/^\/+/, "")
                           .replace(/\\/g, "/")}`
-                        : ""
+                      : ""
                   }
                   alt={building.name}
                   className="w-full h-60 rounded-lg mb-6"
