@@ -162,14 +162,14 @@ const Carousel = () => {
       >
         FEATURED PROPERTIES
       </h1>
-
       <Slider ref={sliderRef} {...settings}>
         {locations.map((location, index) => (
-          <a href={`/pages/buildings/${location.id}`} className="no-underline">
-            <div
-              key={index}
-              className="flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative"
-            >
+          <a
+            key={location.id} // Add the key prop here, using a unique identifier
+            href={`/pages/buildings/${location.id}`}
+            className="no-underline"
+          >
+            <div className="flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative">
               <ImageWithLoader src={`/${location.path}`} alt={location.name} />
 
               <div className="text-center h-full">
