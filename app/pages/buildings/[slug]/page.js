@@ -231,11 +231,7 @@ export default function BlogPost ({ params }) {
                   </div>
                 )}
                 <img
-                  src={
-                    property.path?.startsWith('https://')
-                      ? property.path
-                      : `${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`
-                  }
+                  src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`}
                   alt={property.name}
                   className='w-full h-auto max-h-80 object-cover rounded-sm'
                 />
@@ -451,13 +447,7 @@ export default function BlogPost ({ params }) {
 
                     {/* Actual Image */}
                     <img
-                      src={
-                        feature.image?.startsWith('https://')
-                          ? feature.image
-                          : `${
-                              process.env.NEXT_PUBLIC_SERVER_PORT
-                            }/${feature.image.replace(/\\/g, '/')}`
-                      }
+                      src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
                       alt={feature.name}
                       onLoad={handleImageLoad}
                       className='rounded-lg w-80 h-40 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-110'

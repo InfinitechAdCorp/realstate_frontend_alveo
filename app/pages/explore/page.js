@@ -58,20 +58,15 @@ function ExplorePage () {
       }
       const data = await response.json()
 
-      let filteredData
-      if (value === 'all') {
-        filteredData = data
-      } else if (value === 'condominiums') {
-        filteredData = data.filter(
-          building =>
-            building.development_type === 'High Rise Condominiums' ||
-            building.development_type === 'Mid Rise Condominiums'
-        )
-      } else if (value === 'residential') {
-        filteredData = data.filter(building => building.residential_levels > 0)
-      } else if (value === 'commercial') {
-        filteredData = data.filter(building => building.commercial_units > 0)
-      } else if (value === 'office') {
+
+      let filteredData;
+      if (value === "all") {
+        filteredData = data;
+      } else if (value === "condominiums") {
+        filteredData = data.filter((building) =>
+          building.development_type.toLowerCase().includes("condominium")
+        );
+      } else if (value === "residential") {
         filteredData = data.filter(
           building => building.development_type === 'Office'
         )
@@ -227,17 +222,19 @@ function ExplorePage () {
                       `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
                     )
                       ? building.path
-                      : building.path && building.path.startsWith('/property/')
+
+                      : building.path && building.path.startsWith("/property/")
                       ? `${
                           process.env.NEXT_PUBLIC_SERVER_PORT
-                        }${building.path.replace(/\\/g, '/')}`
+                        }${building.path.replace(/\\/g, "/")}`
                       : building.path
                       ? `${
                           process.env.NEXT_PUBLIC_SERVER_PORT
                         }/assets/Location/${encodeURIComponent(
-                          building.path.replace('assets/Location/', '')
+
+                          building.path.replace("assets/Location/", "")
                         )}`
-                      : ''
+                      : ""
                   }
                   alt={building.name}
                   onLoad={handleImageLoad}
@@ -263,6 +260,7 @@ function ExplorePage () {
                   <p className='text-sm text-gray-700'>
                     <strong>Commercial Units:</strong>{' '}
                     {building.commercial_units || 'N/A'}
+
                   </p>
                   <button
                     onClick={e => {

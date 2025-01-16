@@ -654,15 +654,20 @@ export function DataTable({ columns, data, newData }) {
                           id="architectural_theme"
                           name="architectural_theme"
                           value={propertyData["architectural_theme"]}
-                          onChange={(e) =>
+                          onChange={(e) => {
+                            const updatedValue =
+                              e.target.value === "other"
+                                ? "other"
+                                : e.target.value;
                             setPropertyData({
                               ...propertyData,
-                              architectural_theme:
-                                e.target.value === "other"
-                                  ? "other"
-                                  : e.target.value,
-                            })
-                          }
+                              architectural_theme: updatedValue,
+                            });
+                            console.log(
+                              "Updated architectural_theme:",
+                              updatedValue
+                            );
+                          }}
                           className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
                         >
                           <option value="" disabled>
@@ -670,7 +675,7 @@ export function DataTable({ columns, data, newData }) {
                           </option>
 
                           {architecturalTheme.map((type) => (
-                            <option value={type.id} key={type.id}>
+                            <option value={type.name} key={type.name}>
                               {type.name}
                             </option>
                           ))}
@@ -685,12 +690,17 @@ export function DataTable({ columns, data, newData }) {
                             type="text"
                             placeholder="Enter custom architectural theme"
                             value={propertyData["custom_architectural_theme"]}
-                            onChange={(e) =>
+                            onChange={(e) => {
+                              const updatedCustomTheme = e.target.value;
                               setPropertyData({
                                 ...propertyData,
-                                custom_architectural_theme: e.target.value,
-                              })
-                            }
+                                custom_architectural_theme: updatedCustomTheme,
+                              });
+                              console.log(
+                                "Updated custom_architectural_theme:",
+                                updatedCustomTheme
+                              );
+                            }}
                             className="mt-2 rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
                           />
                         )}
@@ -701,11 +711,21 @@ export function DataTable({ columns, data, newData }) {
                         id="architectural_theme"
                         name="architectural_theme"
                         value={propertyData["architectural_theme"]}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          const updatedValue = e.target.value;
+                          setPropertyData({
+                            ...propertyData,
+                            architectural_theme: updatedValue,
+                          });
+                          console.log(
+                            "Updated architectural_theme:",
+                            updatedValue
+                          );
+                        }}
                         className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
                       >
                         {architecturalTheme.map((type) => (
-                          <option value={type.id} key={type.id}>
+                          <option value={type.name} key={type.name}>
                             {type.name}
                           </option>
                         ))}
@@ -747,7 +767,7 @@ export function DataTable({ columns, data, newData }) {
                           </option>
 
                           {status.map((type) => (
-                            <option value={type.name} key={type.id}>
+                            <option value={type.name} key={type.name}>
                               {type.name}
                             </option>
                           ))}
@@ -782,7 +802,7 @@ export function DataTable({ columns, data, newData }) {
                         className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
                       >
                         {status.map((type) => (
-                          <option value={type.name} key={type.id}>
+                          <option value={type.name} key={type.name}>
                             {type.name}
                           </option>
                         ))}
@@ -824,7 +844,7 @@ export function DataTable({ columns, data, newData }) {
                           </option>
 
                           {area.map((type) => (
-                            <option value={type.name} key={type.id}>
+                            <option value={type.area_name} key={type.area_name}>
                               {type.area_name}
                             </option>
                           ))}
@@ -859,7 +879,7 @@ export function DataTable({ columns, data, newData }) {
                         className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
                       >
                         {area.map((type) => (
-                          <option value={type.id} key={type.id}>
+                          <option value={type.area_name} key={type.area_name}>
                             {type.area_name}
                           </option>
                         ))}

@@ -88,16 +88,7 @@ export default function BlogPost ({ params }) {
 
         {/* Image */}
         <Image
-          src={
-            property.path
-              ? property.path.startsWith('http') ||
-                property.path.startsWith('https')
-                ? property.path // If it's a URL, use it directly
-                : `${
-                    process.env.NEXT_PUBLIC_SERVER_PORT
-                  }/${property.path.replace(/\\/g, '/')}` // If it's a local asset, prepend the server URL
-              : '' // Fallback if property.path is null or undefined
-          }
+          src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`}
           alt={property.name}
           width={500} // Adjusted width
           height={800} // Adjusted height
