@@ -1,3 +1,4 @@
+
 "use client"; // Marks this component as client-side
 
 import React, { useCallback, useEffect, useState, useRef } from "react";
@@ -71,8 +72,15 @@ const handleShowWarningToast = (message) => {
   showToast(message, "warning"); // Warning toast
 };
 const Carousel = () => {
-  const [locations, setLocations] = useState([]);
-  const sliderRef = useRef(null); // Create a reference for the Slider component
+  const [locations, setLocations] = useState([])
+  const sliderRef = useRef(null) // Create a reference for the Slider component
+
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Handle when the image has loaded
+  const handleImageLoad = () => {
+    setIsLoading(false)
+  }
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -158,30 +166,24 @@ const Carousel = () => {
 
       <Slider ref={sliderRef} {...settings}>
         {locations.map((location, index) => (
-          <a href={`/pages/buildings/${location.id}`} className="no-underline">
-            <div
-              key={index}
-              className="flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 "
-            >
-              <img
-                src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${location.path}`}
-                alt={location.name}
-                className="w-full h-60 object-cover mb-4 transition-all duration-300 ease-in-out transform hover:scale-105"
-              />
-              <div className="text-center h-full">
-                <h3 className="text-lg font-bold my-1 text-customBlue">
-                  {location.name}
-                </h3>
-                <p className="text-sm text-gray-600 my-1">
-                  {location.development_type}
-                </p>
-                <p className="text-sm text-gray-600 my-1">
-                  {location.location}
-                </p>
-                <p className="text-sm text-gray-600 my-1">
-                  {location.price_range}
-                </p>
-              </div>
+           <a href={`/pages/buildings/${location.id}`} className="no-underline">
+          <div
+            key={index}
+            className='flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative'
+          >
+            <ImageWithLoader src={`/${location.path}`} alt={location.name} />
+
+            <div className='text-center h-full'>
+              <h3 className='text-lg font-bold my-1 text-customBlue'>
+                {location.name}
+              </h3>
+              <p className='text-sm text-gray-600 my-1'>
+                {location.development_type}
+              </p>
+              <p className='text-sm text-gray-600 my-1'>{location.location}</p>
+              <p className='text-sm text-gray-600 my-1'>
+                {location.price_range}
+              </p>
             </div>
           </a>
         ))}
@@ -228,8 +230,38 @@ const Carousel = () => {
         </svg>
       </button>
     </div>
-  );
-};
+  )
+}
+
+const ImageWithLoader = ({ src, alt }) => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleImageLoad = () => {
+    setIsLoading(false) // Image has loaded
+  }
+
+  return (
+    <div className='relative w-full h-60'>
+      {/* Loader */}
+      {isLoading && (
+        <div className='absolute inset-0 flex items-center justify-center bg-gray-200'>
+          <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+            Λ L V E O
+          </div>
+        </div>
+      )}
+
+      {/* Image */}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={handleImageLoad} // Stop showing loader when image has loaded
+        className='w-full h-full object-cover mb-4 transition-all duration-300 ease-in-out transform hover:scale-105'
+      />
+    </div>
+  )
+}
+
 const Map = () => {
   const [locations, setLocations] = useState([]); // State for locations
   const [selectedLocation, setSelectedLocation] = useState(null); // State for the selected location
@@ -1434,7 +1466,8 @@ const DashboardComponent = () => {
   useEffect(() => {
     // Fetch data from the backend API
     fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area_user`) // Adjust the API endpoint if necessary
-      .then((response) => {
+      .then(response => {
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -1515,7 +1548,7 @@ const DashboardComponent = () => {
               className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
       border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4"
             >
-              RECOMMENDED FOR YOU
+              RECOMMENDED LOCATIONS
             </h1>
             <div className="p-2 mx-auto">
               <div className="flex flex-wrap -mx-2">
@@ -1527,14 +1560,11 @@ const DashboardComponent = () => {
                       className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-8"
                       key={key}
                     >
-                      <div className="bg-white shadow-md overflow-hidden flex flex-col h-full">
-                        <img
+                      <div className='bg-white shadow-md overflow-hidden flex flex-col h-full'>
+                        <ImageWithLoader
                           src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}${path}`} // Try to load from localhost:3000
-                          onError={(e) => {
-                            e.target.onerror = null; // Prevent infinite loop if image fails
-                            e.target.src = `${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`; // Fallback to localhost:8000 if not found
-                          }}
-                          className="w-full object-cover transform transition-transform duration-500 hover:scale-110 h-48 sm:h-56 md:h-64 lg:h-72" // Adjust image height as needed
+                          alt={title}
+
                         />
                         <div className="p-4 flex flex-col justify-between flex-grow">
                           <div>
@@ -1557,6 +1587,12 @@ const DashboardComponent = () => {
                   ))}
               </div>
             </div>
+            <a
+              href='/pages/location'
+              className='mt-4 inline-block text-customBlue hover:text-customBlue text-lg font-medium'
+            >
+              View All
+            </a>
           </div>
         </div>
       </div>
