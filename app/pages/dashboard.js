@@ -1542,7 +1542,7 @@ const DashboardComponent = () => {
               className='font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
       border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4'
             >
-              RECOMMENDED FOR YOU
+              RECOMMENDED LOCATIONS
             </h1>
             <div className='p-2 mx-auto'>
               <div className='flex flex-wrap -mx-2'>
@@ -1580,6 +1580,12 @@ const DashboardComponent = () => {
                   ))}
               </div>
             </div>
+            <a
+              href='/pages/location'
+              className='mt-4 inline-block text-customBlue hover:text-customBlue text-lg font-medium'
+            >
+              View All
+            </a>
           </div>
         </div>
       </div>
