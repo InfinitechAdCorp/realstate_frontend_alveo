@@ -166,8 +166,10 @@ export default function BlogPost ({ params }) {
               <div key={post.key} className='relative mt-1 w-full'>
                 <Directory
                   currentLocation='LOCATION'
-                  specificLocation={`${post.location}`} // Pass location here
+                  specificLocation={`${post.location}`}
                 />
+
+                {/* Image */}
                 <img
                   src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}${post.path}`} // Try to load from localhost:3000
                   onError={e => {
@@ -175,15 +177,14 @@ export default function BlogPost ({ params }) {
                     e.target.src = `${process.env.NEXT_PUBLIC_SERVER_PORT}${post.path}` // Fallback to localhost:8000 if not found
                   }}
                   alt={post.location}
-                  z
                   width={2000}
                   height={500}
-                  className='w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72'
+                  className='w-full object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72'
                   priority
                 />
 
-                <div className='left-0 right-0 h-24 sm:h-28 lg:h-40 bg-customBlue flex flex-col justify-center p-4 sm:p-2 text-white w-full'>
-                  {/* Title and Subtitle */}
+                {/* Title and Subtitle */}
+                <div className='bg-customBlue flex flex-col justify-center p-4 sm:p-2 text-white w-full h-24 sm:h-28 lg:h-40'>
                   <div className='flex flex-col justify-center p-2'>
                     <p className='text-lg sm:text-2xl font-thin mt-4 sm:mt-6'>
                       Premium Lots for Sale in {post.location}
@@ -195,26 +196,19 @@ export default function BlogPost ({ params }) {
                 </div>
 
                 {/* Description Section */}
-                <div
-                  className='relative -mt-6 sm:-mt-3 md:-mt-5 border border-black font-thin text-customBlue bg-white 
-  text-justify flex justify-center items-center h-20 sm:h-28 md:h-32 lg:h-48 xl:h-28 
-  mx-4 sm:mx-2 text-sm sm:text-lg md:text-xl lg:text-3xl xl:text-xl p-2 sm:p-4'
-                >
-                  <p className='text-sm sm:text-base md:text-lg lg:text-xl xl:text-lg indent-6 sm:indent-10'>
-                    {post.intro}
-                  </p>
+                <div className='relative border border-black font-thin text-customBlue bg-white text-justify flex justify-center items-center p-4 sm:p-6 mx-4 sm:mx-2 text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-lg'>
+                  <p className='indent-6 sm:indent-10'>{post.intro}</p>
                 </div>
               </div>
             ))}
           </div>
 
+          {/* Properties Section */}
           <div className='relative text-center sm:px-10 md:mx-5 justify-center'>
-            <h1
-              className='font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
-      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4'
-            >
+            <h1 className='font-thin text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4'>
               PROPERTIES
             </h1>
+
             <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 mt-5 w-full mb-20'>
               {propertyData.map(property => (
                 <a
@@ -231,6 +225,7 @@ export default function BlogPost ({ params }) {
             </div>
           </div>
         </div>
+
         <Footer />
       </div>
     </>
