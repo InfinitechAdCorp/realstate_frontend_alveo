@@ -74,16 +74,7 @@ export default function BlogPost({ params }) {
         />
 
         <Image
-          src={
-            property.path
-              ? property.path.startsWith("http") ||
-                property.path.startsWith("https")
-                ? property.path // If it's a URL, use it directly
-                : `${
-                    process.env.NEXT_PUBLIC_SERVER_PORT
-                  }/${property.path.replace(/\\/g, "/")}` // If it's a local asset, prepend the local server URL
-              : "" // Fallback if property.path is null or undefined
-          }
+          src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`}
           alt={property.name}
           width={500} // Adjusted width
           height={800} // Adjusted height
@@ -160,7 +151,8 @@ export default function BlogPost({ params }) {
                     e.target.onerror = null; // Prevent infinite loop if image fails
                     e.target.src = `${process.env.NEXT_PUBLIC_SERVER_PORT}${post.path}`; // Fallback to localhost:8000 if not found
                   }}
-                  alt={post.location}z
+                  alt={post.location}
+                  z
                   width={2000}
                   height={500}
                   className="w-full h-40 object-cover sm:h-60 md:h-80 lg:h-96 xl:h-72"
@@ -172,9 +164,7 @@ export default function BlogPost({ params }) {
                     <p className="mt-6 text-2xl font-thin ">
                       Premium Lots for Sale in {post.location}
                     </p>
-                    <p className="-mt-4 text-lg font-thin ">
-                      {post.title}
-                    </p>
+                    <p className="-mt-4 text-lg font-thin ">{post.title}</p>
                   </div>
                 </div>
                 <div className="sm:-mt-3 md:-mt-5 -mt-10 border-black border-2 lg:h-48 xl:h-28 xl:-mt-10 2xl:h-16 bg-white text-justify text-black flex justify-center left-10 h-28 w-3/3 mx-2 text-lg p-2">

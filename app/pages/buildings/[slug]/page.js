@@ -215,11 +215,7 @@ export default function BlogPost({ params }) {
             <div className="relative">
               <div className="grid gap-4">
                 <img
-                  src={
-                    property.path?.startsWith("https://")
-                      ? property.path
-                      : `${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`
-                  }
+                  src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`}
                   alt={property.name}
                   className="w-full h-auto max-h-80 object-cover rounded-lg shadow-md"
                 />
@@ -428,13 +424,7 @@ export default function BlogPost({ params }) {
                   <h4>{feature.name}</h4>
                   <div className="w-full h-48 overflow-hidden rounded-lg">
                     <img
-                      src={
-                        feature.image?.startsWith("https://")
-                          ? feature.image
-                          : `${
-                              process.env.NEXT_PUBLIC_SERVER_PORT
-                            }/${feature.image.replace(/\\/g, "/")}`
-                      }
+                      src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
                       alt={feature.name}
                       className="w-full h-full object-cover"
                     />

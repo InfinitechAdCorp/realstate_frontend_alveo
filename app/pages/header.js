@@ -24,11 +24,11 @@ const properties = [
 
 const Header = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
   };
@@ -102,7 +102,7 @@ const Header = () => {
     const fetchArea = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area_user`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch");
@@ -116,8 +116,6 @@ const Header = () => {
 
     fetchArea();
   }, []);
-
-  
 
   return (
     <>
@@ -161,40 +159,40 @@ const Header = () => {
               </Link>
 
               {/* Properties Dropdown */}
-              <div className='relative'>
+              <div className="relative">
                 {/* Dropdown Trigger */}
                 <button
                   onClick={toggleDropdown}
-                  className='text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition-colors duration-300 flex items-center gap-2'
+                  className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition-colors duration-300 flex items-center gap-2"
                 >
                   Properties For Sale
                   {/* Dropdown Indicator */}
                   <svg
                     className={`text-white h-4 w-4 transition-transform duration-300 ${
-                      isOpen ? 'rotate-180' : ''
+                      isOpen ? "rotate-180" : ""
                     }`}
-                    viewBox='0 0 20 20'
-                    fill='currentColor'
-                    aria-hidden='true'
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path
-                      fillRule='evenodd'
-                      d='M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z'
-                      clipRule='evenodd'
+                      fillRule="evenodd"
+                      d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </button>
 
                 {/* Dropdown Menu */}
                 {isOpen && (
-                  <div className='absolute left-0 w-56 mt-2 origin-top-right divide-y divide-gray-100 bg-gray-100 shadow-lg ring-1 ring-black/5'>
-                    <div className='py-1'>
+                  <div className="absolute left-0 w-56 mt-2 origin-top-right divide-y divide-gray-100 bg-gray-100 shadow-lg ring-1 ring-black/5">
+                    <div className="py-1">
                       {/* Map properties items */}
                       {properties.map((item, index) => (
                         <a
                           key={index}
                           href={`/pages/explore?specificLocation=${item.slug}`}
-                          className='block px-4 py-2 text-lg font-thin text-gray-700 hover:bg-customBlue hover:text-white no-underline'
+                          className="block px-4 py-2 text-lg font-thin text-gray-700 hover:bg-customBlue hover:text-white no-underline"
                         >
                           {item.title}
                         </a>

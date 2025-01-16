@@ -62,10 +62,8 @@ function ExplorePage() {
       if (value === "all") {
         filteredData = data;
       } else if (value === "condominiums") {
-        filteredData = data.filter(
-          (building) =>
-            building.development_type === "High Rise Condominiums" ||
-            building.development_type === "Mid Rise Condominiums"
+        filteredData = data.filter((building) =>
+          building.development_type.toLowerCase().includes("condominium")
         );
       } else if (value === "residential") {
         filteredData = data.filter(
@@ -181,15 +179,23 @@ function ExplorePage() {
                   </span>
                 )}
                 <img
-                  src={building.path && building.path.startsWith(
-                    `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
-                  )
-                    ? building.path
-                    : building.path && building.path.startsWith("/property/")
-                    ? `${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path.replace(/\\/g, "/")}`
-                    : building.path
-                    ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/assets/Location/${encodeURIComponent(building.path.replace("assets/Location/", ""))}`
-                    : ""
+                  src={
+                    building.path &&
+                    building.path.startsWith(
+                      `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
+                    )
+                      ? building.path
+                      : building.path && building.path.startsWith("/property/")
+                      ? `${
+                          process.env.NEXT_PUBLIC_SERVER_PORT
+                        }${building.path.replace(/\\/g, "/")}`
+                      : building.path
+                      ? `${
+                          process.env.NEXT_PUBLIC_SERVER_PORT
+                        }/assets/Location/${encodeURIComponent(
+                          building.path.replace("assets/Location/", "")
+                        )}`
+                      : ""
                   }
                   className="w-full h-64 object-cover rounded-t-lg"
                   alt={building.name}
@@ -199,16 +205,20 @@ function ExplorePage() {
                     {building.name}
                   </h3>
                   <p className="text-sm text-gray-700 mt-2">
-                    <strong>Development Type:</strong> {building.development_type}
+                    <strong>Development Type:</strong>{" "}
+                    {building.development_type}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Residential Levels:</strong> {building.residential_levels}
+                    <strong>Residential Levels:</strong>{" "}
+                    {building.residential_levels}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Basement Parking:</strong> {building.basement_parking_levels || "N/A"}
+                    <strong>Basement Parking:</strong>{" "}
+                    {building.basement_parking_levels || "N/A"}
                   </p>
                   <p className="text-sm text-gray-700">
-                    <strong>Commercial Units:</strong> {building.commercial_units || "N/A"}
+                    <strong>Commercial Units:</strong>{" "}
+                    {building.commercial_units || "N/A"}
                   </p>
                   <button
                     onClick={(e) => {
