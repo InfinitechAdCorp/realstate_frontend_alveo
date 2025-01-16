@@ -170,7 +170,10 @@ const Carousel = () => {
             className="no-underline"
           >
             <div className="flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative">
-              <ImageWithLoader src={`/${location.path}`} alt={location.name} />
+              <ImageWithLoader
+                src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${location.path}`}
+                alt={location.name}
+              />
 
               <div className="text-center h-full">
                 <h3 className="text-lg font-bold my-1 text-customBlue">
@@ -455,17 +458,10 @@ const ImageSlider = () => {
             passHref
           >
             <Image
-              src={
-                locations[currentIndex].path &&
-                locations[currentIndex].path.startsWith("https://")
-                  ? locations[currentIndex].path // If it's already a full URL, use it directly
-                  : locations[currentIndex].path
-                  ? `${process.env.NEXT_PUBLIC_SERVER_PORT}/${locations[
-                      currentIndex
-                    ].path.replace(/\\/g, "/")}` // If it's a relative path, construct the full URL
-                  : "" // If there's no path, set it to an empty string or fallback image URL
-              }
-              alt={locations[currentIndex].name}
+              src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${locations[
+                currentIndex
+              ]?.path?.replace(/\\/g, "/")}`}
+              alt={locations[currentIndex]?.name}
               layout="responsive"
               width={600}
               height={400}
@@ -1563,7 +1559,7 @@ const DashboardComponent = () => {
                     >
                       <div className="bg-white shadow-md overflow-hidden flex flex-col h-full">
                         <ImageWithLoader
-                          src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}${path}`} // Try to load from localhost:3000
+                          src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`} // Try to load from localhost:3000
                           alt={title}
                         />
                         <div className="p-4 flex flex-col justify-between flex-grow">

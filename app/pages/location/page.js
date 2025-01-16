@@ -1,27 +1,26 @@
-
-'use client' // Ensure this is at the top
-import React, { useState, useEffect } from 'react'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Directory from '../pathDirectory'
-import Header from '../header'
-import Image from 'next/image'
-import { usePathname } from 'next/navigation'
-import Footer from './../footer'
-import SEO from '../../seo/page'
+"use client"; // Ensure this is at the top
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Directory from "../pathDirectory";
+import Header from "../header";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import Footer from "./../footer";
+import SEO from "../../seo/page";
 
 const ImageWithLoader = ({ src, alt }) => {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleImageLoad = () => {
-    setIsLoading(false) // Image has loaded
-  }
+    setIsLoading(false); // Image has loaded
+  };
 
   return (
-    <div className='relative w-full h-60'>
+    <div className="relative w-full h-60">
       {/* Loader */}
       {isLoading && (
-        <div className='absolute inset-0 flex items-center justify-center bg-gray-200'>
-          <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-200">
+          <div className="text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
             Λ L V E O
           </div>
         </div>
@@ -32,11 +31,11 @@ const ImageWithLoader = ({ src, alt }) => {
         src={src}
         alt={alt}
         onLoad={handleImageLoad} // Stop showing loader when image has loaded
-        className='w-full h-full object-cover mb-4 transition-all duration-300 ease-in-out transform hover:scale-105'
+        className="w-full h-full object-cover mb-4 transition-all duration-300 ease-in-out transform hover:scale-105"
       />
     </div>
-  )
-}
+  );
+};
 
 const LocationPage = () => {
   const pathname = usePathname(); // Use the usePathname hook to access the current path
@@ -110,13 +109,12 @@ const LocationPage = () => {
         <Directory currentLocation="LOCATION" specificLocation={``} />
       </div> */}
 
-      <div className='locations-container text-center mb-0 mt-20'>
-        <div className='w-1/2 text-center flex flex-col items-center'>
+      <div className="locations-container text-center mb-0 mt-20">
+        <div className="w-1/2 text-center flex flex-col items-center">
           <h1
-            className='font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
-      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4'
+            className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
+      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4"
           >
-
             OUR LOCATION
           </h1>
         </div>
@@ -125,12 +123,11 @@ const LocationPage = () => {
           <div className="flex flex-wrap -mx-2">
             {Object.values(posts).map(
               ({ location, key, path, title, intro }) => (
-                <div className='w-full md:w-1/3 px-2 mb-8' key={key}>
-                  <div className='bg-white shadow-md  overflow-hidden flex flex-col h-full'>
+                <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
+                  <div className="bg-white shadow-md  overflow-hidden flex flex-col h-full">
                     <ImageWithLoader
-                      src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}${path}`} // Try to load from localhost:3000
+                      src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`} // Try to load from localhost:3000
                       alt={title}
-
                     />
                     <div className="p-4 flex flex-col justify-between flex-grow">
                       <div>
