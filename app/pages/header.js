@@ -102,7 +102,7 @@ const Header = () => {
     const fetchArea = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area_user`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch");

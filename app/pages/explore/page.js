@@ -22,7 +22,11 @@ function ExplorePage () {
 
   const [buildings, setBuildings] = useState([])
   const [clickedIndex, setClickedIndex] = useState(null)
+  const [loading, setLoading] = useState(true)
 
+  const handleImageLoad = () => {
+    setLoading(false) // Set loading to false when the image has loaded
+  }
   const images = [
     {
       icon: <FaRegCopy className='text-4xl' />, // Using the 'copy' icon from React Icons
@@ -190,7 +194,7 @@ function ExplorePage () {
                     NEW
                   </span>
                 )}
-                <img
+                {/* <img
                   src={
                     building.path &&
                     building.path.startsWith(
@@ -211,7 +215,41 @@ function ExplorePage () {
                   }
                   className='w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out '
                   alt={building.name}
+                /> */}
+
+                {loading && (
+                  <div className='absolute w-full h-64 inset-0 flex items-center justify-center bg-gray-200'>
+                    <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+                      Λ L V E O
+                    </div>
+                  </div>
+                )}
+
+                {/* Actual Image */}
+                <img
+                  src={
+                    building.path &&
+                    building.path.startsWith(
+                      `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
+                    )
+                      ? building.path
+                      : building.path && building.path.startsWith('/property/')
+                      ? `${
+                          process.env.NEXT_PUBLIC_SERVER_PORT
+                        }${building.path.replace(/\\/g, '/')}`
+                      : building.path
+                      ? `${
+                          process.env.NEXT_PUBLIC_SERVER_PORT
+                        }/assets/Location/${encodeURIComponent(
+                          building.path.replace('assets/Location/', '')
+                        )}`
+                      : ''
+                  }
+                  alt={building.name}
+                  onLoad={handleImageLoad}
+                  className='w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out'
                 />
+
                 <div className='p-4 bg-white'>
                   <h3 className='text-xl font-semibold text-cyan-700'>
                     {building.name}

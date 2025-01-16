@@ -12,10 +12,17 @@ export default function BlogPost ({ params }) {
   const { slug } = params
   const [property, setProperty] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
   const [facilities, setFacilities] = useState([])
   const [buildings, setBuildings] = useState([])
   const [isOpen, setIsOpen] = useState(false)
   const [popupType, setPopupType] = useState('')
+
+  // Handle when the image has loaded
+  const handleImageLoad = () => {
+    setIsLoading(false)
+  }
+
   const togglePopup = (type = '') => {
     setPopupType(type)
     setIsOpen(!isOpen)
@@ -216,6 +223,13 @@ export default function BlogPost ({ params }) {
           <div className='grid lg:grid-cols-2 gap-8'>
             <div className='relative'>
               <div className='grid gap-4'>
+                {isLoading && (
+                  <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200'>
+                    <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+                      Λ L V E O
+                    </div>
+                  </div>
+                )}
                 <img
                   src={
                     property.path?.startsWith('https://')
@@ -416,12 +430,19 @@ export default function BlogPost ({ params }) {
           ) : (
             <div className='grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 text-center'>
               {parsedFeatures.map((feature, index) => (
-                <div
-                  key={index}
-                  className='border p-4'
-                >
+                <div key={index} className='border p-4'>
                   <h5>{feature.name}</h5>
                   <div className='relative group perspective-1000'>
+                    {/* Loader/Placeholder */}
+                    {isLoading && (
+                      <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200'>
+                        <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+                          Λ L V E O
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Actual Image */}
                     <img
                       src={
                         feature.image?.startsWith('https://')
@@ -431,7 +452,8 @@ export default function BlogPost ({ params }) {
                             }/${feature.image.replace(/\\/g, '/')}`
                       }
                       alt={feature.name}
-                      className='w-full h-full object-cover transition-transform duration-300 ease-in-out transform group-hover:rotate-x-12 group-hover:rotate-y-12 group-hover:scale-105 group-hover:shadow-lg'
+                      onLoad={handleImageLoad}
+                      className='w-full h-64 object-cover transition-transform duration-300 ease-in-out transform group-hover:rotate-x-12 group-hover:rotate-y-12 group-hover:scale-105 group-hover:shadow-lg'
                     />
                   </div>
                 </div>
@@ -486,6 +508,13 @@ export default function BlogPost ({ params }) {
                 <h3 className='text-xl font-semibold text-center mb-6'>
                   {building.name}
                 </h3>
+                {isLoading && (
+                  <div className='absolute w-full h-full inset-0 flex items-center justify-center bg-gray-200'>
+                    <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+                      Λ L V E O
+                    </div>
+                  </div>
+                )}
                 <img
                   src={
                     building.path?.startsWith('https://')

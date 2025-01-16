@@ -9,7 +9,12 @@ import ClipLoader from 'react-spinners/ClipLoader'
 import { showToast } from '../../components/alert/page' // Adjust the import path if necessary
 import { IoBed, IoManSharp } from 'react-icons/io5'
 import { FaCalculator, FaHouseCircleCheck } from 'react-icons/fa6'
-import { FaCalendarAlt, FaArrowRight, FaSearch, FaChevronCircleDown } from 'react-icons/fa'
+import {
+  FaCalendarAlt,
+  FaArrowRight,
+  FaSearch,
+  FaChevronCircleDown
+} from 'react-icons/fa'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
@@ -68,6 +73,13 @@ const handleShowWarningToast = message => {
 const Carousel = () => {
   const [locations, setLocations] = useState([])
   const sliderRef = useRef(null) // Create a reference for the Slider component
+
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Handle when the image has loaded
+  const handleImageLoad = () => {
+    setIsLoading(false)
+  }
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -137,13 +149,10 @@ const Carousel = () => {
         {locations.map((location, index) => (
           <div
             key={index}
-            className='flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 '
+            className='flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative'
           >
-            <img
-              src={`/${location.path}`}
-              alt={location.name}
-              className='w-full h-60 object-cover mb-4 transition-all duration-300 ease-in-out transform hover:scale-105'
-            />
+            <ImageWithLoader src={`/${location.path}`} alt={location.name} />
+
             <div className='text-center h-full'>
               <h3 className='text-lg font-bold my-1 text-customBlue'>
                 {location.name}
@@ -200,6 +209,35 @@ const Carousel = () => {
           />
         </svg>
       </button>
+    </div>
+  )
+}
+
+const ImageWithLoader = ({ src, alt }) => {
+  const [isLoading, setIsLoading] = useState(true)
+
+  const handleImageLoad = () => {
+    setIsLoading(false) // Image has loaded
+  }
+
+  return (
+    <div className='relative w-full h-60'>
+      {/* Loader */}
+      {isLoading && (
+        <div className='absolute inset-0 flex items-center justify-center bg-gray-200'>
+          <div className='text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse'>
+            Λ L V E O
+          </div>
+        </div>
+      )}
+
+      {/* Image */}
+      <img
+        src={src}
+        alt={alt}
+        onLoad={handleImageLoad} // Stop showing loader when image has loaded
+        className='w-full h-full object-cover mb-4 transition-all duration-300 ease-in-out transform hover:scale-105'
+      />
     </div>
   )
 }
@@ -1422,7 +1460,7 @@ const DashboardComponent = () => {
 
   useEffect(() => {
     // Fetch data from the backend API
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`) // Adjust the API endpoint if necessary
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area_user`) // Adjust the API endpoint if necessary
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok')
@@ -1517,13 +1555,9 @@ const DashboardComponent = () => {
                       key={key}
                     >
                       <div className='bg-white shadow-md overflow-hidden flex flex-col h-full'>
-                        <img
+                        <ImageWithLoader
                           src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}${path}`} // Try to load from localhost:3000
-                          onError={e => {
-                            e.target.onerror = null // Prevent infinite loop if image fails
-                            e.target.src = `${process.env.NEXT_PUBLIC_SERVER_PORT}${path}` // Fallback to localhost:8000 if not found
-                          }}
-                          className='w-full object-cover transform transition-transform duration-500 hover:scale-110 h-48 sm:h-56 md:h-64 lg:h-72' // Adjust image height as needed
+                          alt={title}
                         />
                         <div className='p-4 flex flex-col justify-between flex-grow'>
                           <div>
