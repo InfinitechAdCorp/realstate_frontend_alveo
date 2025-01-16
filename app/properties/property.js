@@ -27,6 +27,7 @@ const handleShowErrorToast = (message) => {
 const handleShowWarningToast = (message) => {
   showToast(message, "warning"); // Warning toast
 };
+
 export const columns = [
   // {
   //   id: "select",
@@ -94,62 +95,88 @@ export const columns = [
     cell: ({ row, viewType }) => {
       const payment = row.original;
       const fetchProperties = async () => {
-        // Assuming you have this function defined elsewhere
+        const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/properties`
-          ); // Fetch properties API
-          const data = await response.json();
-
-          return data; // Return fetched properties
-        } catch (error) {
-          console.error("Failed to fetch properties:", error);
-          return []; // Return an empty array in case of an error
-        }
-      };
-      const fetchBuildings = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/buildings`
-          ); // Fetch buildings API
-          // Fetch properties API
-          const data = await response.json();
-
-          return data; // Return fetched properties
-        } catch (error) {
-          console.error("Failed to fetch properties:", error);
-          return []; // Return an empty array in case of an error
-        }
-      };
-      const fetchFacilities = async () => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/facilities`
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/properties`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to the Authorization header
+              },
+            }
           );
           const data = await response.json();
-
           return data; // Return fetched properties
         } catch (error) {
           console.error("Failed to fetch properties:", error);
           return []; // Return an empty array in case of an error
         }
       };
-      const fetchFeatures = async () => {
+
+      const fetchBuildings = async () => {
+        const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/features`
-          ); // Fetch features API
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/buildings`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to the Authorization header
+              },
+            }
+          );
           const data = await response.json();
-
-          return data; // Return fetched properties
+          return data; // Return fetched buildings
         } catch (error) {
-          console.error("Failed to fetch properties:", error);
+          console.error("Failed to fetch buildings:", error);
           return []; // Return an empty array in case of an error
         }
       };
+
+      const fetchFacilities = async () => {
+        const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/facilities`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to the Authorization header
+              },
+            }
+          );
+          const data = await response.json();
+          return data; // Return fetched facilities
+        } catch (error) {
+          console.error("Failed to fetch facilities:", error);
+          return []; // Return an empty array in case of an error
+        }
+      };
+
+      const fetchFeatures = async () => {
+        const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+        try {
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/features`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to the Authorization header
+              },
+            }
+          );
+          const data = await response.json();
+          return data; // Return fetched features
+        } catch (error) {
+          console.error("Failed to fetch features:", error);
+          return []; // Return an empty array in case of an error
+        }
+      };
+
       const handleDelete = async (ids, viewType) => {
         // Log the ids to check if they are in an array format
-
+        const token = localStorage.getItem("auth_token");
         // If ids is a single ID (not an array), wrap it in an array
         const idsToDelete = Array.isArray(ids) ? ids : [ids];
 
@@ -172,6 +199,7 @@ export const columns = [
             method: "DELETE",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ id: idsToDelete }), // Always send an array of IDs
           });
@@ -354,12 +382,16 @@ export const columns = [
         for (const [key, value] of formDataToSend.entries()) {
           console.log(`${key}:`, value);
         }
-
+        const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addBuildings`,
             {
               method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to the Authorization header
+                "Content-Type": "multipart/form-data", // Optional: Ensure Content-Type for FormData (Fetch sets this automatically)
+              },
               body: formDataToSend, // Send the FormData directly
             }
           );
@@ -392,13 +424,16 @@ export const columns = [
 
         // Log the facilities array and the request data
         console.log("Facilities Data:", facilities);
-
+        const token = localStorage.getItem("auth_token");
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addFacilities`,
             {
               method: "POST",
-              headers: { "Content-Type": "application/json" },
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
               body: JSON.stringify(facilities),
             }
           );
@@ -444,17 +479,22 @@ export const columns = [
               );
             }
           });
+          const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
           fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addFeature`, {
             method: "POST",
-            body: data,
+            headers: {
+              Authorization: `Bearer ${token}`, // Add token to the Authorization header
+              "Content-Type": "application/json", // Assuming you're sending JSON data; adjust if needed
+            },
+            body: JSON.stringify(data), // Convert the data to JSON if it's an object
           })
             .then((response) => response.json())
             .then((data) => {
-              handleShowSuccessToast("Success:", data);
+              handleShowSuccessToast("Success:", data); // Show success message
             })
             .catch((error) => {
-              console.error("Error:", error);
+              console.error("Error:", error); // Handle error
             });
         } else {
           console.error("Features or featureData is undefined");
@@ -474,7 +514,7 @@ export const columns = [
             item: updatedValues, // Send the updated values of the property
           },
         ];
-
+        const token = localStorage.getItem("auth_token");
         // Make the API call to update the property
         fetch(
           `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/update-properties`,
@@ -482,6 +522,7 @@ export const columns = [
             method: "POST",
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify(payload), // Send the data as JSON
           }
@@ -573,7 +614,7 @@ export const columns = [
             ), // Convert to number
           },
         };
-
+        const token = localStorage.getItem("auth_token");
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/update-buildings`,
@@ -581,6 +622,7 @@ export const columns = [
               method: "POST", // Change the HTTP method to POST
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
               body: JSON.stringify([updatedBuilding]), // Send it as an array (even if it's just one item)
             }
@@ -602,12 +644,19 @@ export const columns = [
 
       const [facilities, setFacilities] = useState([]);
       const getFacilities = async () => {
+        const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
+
         try {
           // Replace this with the actual property ID dynamically
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/facilities/id/${payment.id}`
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/facilities/id/${payment.id}`,
+            {
+              method: "GET", // Method is GET (by default)
+              headers: {
+                Authorization: `Bearer ${token}`, // Add token to the Authorization header
+              },
+            }
           );
-
           // Check if the response is successful (status 200-299)
           if (!response.ok) {
             throw new Error("Network response was not ok");
@@ -634,7 +683,7 @@ export const columns = [
           name: facility.name, // Add the facility name
           property_id: facility.property_id, // Add the property ID
         }));
-
+        const token = localStorage.getItem("auth_token");
         fetch(
           `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/update-facilities`,
           {
@@ -642,6 +691,7 @@ export const columns = [
             body: JSON.stringify(updatedFacilities), // Send the updated facilities array
             headers: {
               "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
             },
           }
         )
@@ -760,12 +810,15 @@ export const columns = [
           for (let pair of formData.entries()) {
             console.log(pair[0], pair[1]);
           }
-
+          const token = localStorage.getItem("auth_token");
           // Send the request to update the features
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/update-features`,
             {
               method: "POST", // Use POST since you're sending FormData
+              headers: {
+                Authorization: `Bearer ${token}`, // Add the token to the Authorization header
+              },
               body: formData, // FormData automatically sets the correct Content-Type (multipart/form-data)
             }
           );

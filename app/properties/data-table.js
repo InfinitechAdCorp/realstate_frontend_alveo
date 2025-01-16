@@ -48,7 +48,7 @@ const handleShowWarningToast = (message) => {
 const fetchProperties = async () => {
   const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
   const log = localStorage.getItem("isLoggedIn");
-
+  console.log(authToken);
   // Check if user is logged in and token is available
   if (!authToken || log !== "true") {
     console.error("Token not found or user not logged in.");
@@ -191,7 +191,7 @@ const fetchAllData = async () => {
 };
 
 // DataTable Component
-export function DataTable({ columns, data }) {
+export function DataTable({ columns, data, newData }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -379,13 +379,17 @@ export function DataTable({ columns, data }) {
     formData.forEach((value, key) => {
       console.log(`FormData - ${key}:`, value);
     });
+    const authToken = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addproperty`,
         {
           method: "POST",
-          body: formData, // No need to set headers, Fetch will handle it
+          headers: {
+            Authorization: `Bearer ${authToken}`, // Add the Authorization header with Bearer token
+          },
+          body: formData, // Send the formData
         }
       );
 

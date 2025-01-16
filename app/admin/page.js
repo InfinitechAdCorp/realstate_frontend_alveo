@@ -160,12 +160,10 @@ export default function Admin ({}) {
   }
 
   const handleLogout = () => {
-    // Handle the logout logic here, such as clearing localStorage or calling an API
-    localStorage.removeItem('auth_token')
-    localStorage.removeItem('isLoggedIn')
-    window.location.reload() // You can redirect or reload the page after logging out
-  }
-
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("isLoggedIn");
+    window.location.reload(); // You can redirect or reload the page after logging out
+  };
   const handleAddLoc = async (
     type,
     areaName,
@@ -176,61 +174,47 @@ export default function Admin ({}) {
     listType,
     areaId = null
   ) => {
-    setError('') // Clear previous errors
-    setSuccess('') // Clear previous success messages
-
-    // Validate input fields
+    setError("");
+    setSuccess("");
     if (!areaName || !title || !description) {
       setError('All fields are required')
       return
     }
-
-    // Create a new object to send the data, including the Base64 string for the image
-    const requestData = {
-      area_name: areaName,
-      title: title,
-      description: description,
-      image: image || null // Send the Base64 string or null if no image is selected
-    }
+    const formData = new FormData();
+    formData.append("area_name", areaName);
+    formData.append("title", title);
+    formData.append("description", description);
+    if (image) formData.append("image", image);
 
     // Add area ID if it's an update request
-    if (type === 'update' && areaId) {
-      requestData.id = areaId
+    if (type === "update" && areaId) {
+      formData.append("id", areaId);
     }
-
-    // Log the requestData for debugging
-
-    console.log('Request Data:', requestData)
-
+    const token = localStorage.getItem("auth_token");
     try {
-      // Send the request to the backend
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-area`,
         {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json' // Ensure content type is set to JSON
+            Authorization: `Bearer ${token}`, // Add Authorization header with token
           },
-          body: JSON.stringify(requestData) // Send the data as JSON string
+          body: formData, // Send the formData
         }
       )
-
-      const data = await response.json() // Parse the JSON response
-
+      const data = await response.json();
       if (response.ok) {
         handleShowSuccessToast('Location added successfully!')
-
         // Fetch the updated list of locations after adding the new location
-        fetchLocations(setData)
-
-        // Optionally, clear the form fields or reset the state
-        setData(prevData => ({
+        fetchFormFiller_location(setData);
+        // Reset form data
+        setData((prevData) => ({
           ...prevData,
-          newAreaName: '',
-          newTitle: '',
-          newDescription: '',
-          newImage: null // Reset the image
-        }))
+          newAreaName: "",
+          newTitle: "",
+          newDescription: "",
+          newImage: null,
+        }));
       } else {
         console.error('Error:', data.message)
         setError(data.message || 'Something went wrong')
@@ -239,18 +223,19 @@ export default function Admin ({}) {
       console.error('An error occurred:', err)
       setError('An error occurred during submission')
     }
-  }
-  const handleShowSuccessToast = message => {
-    showToast(message, 'success')
-  }
+  };
 
-  const handleShowErrorToast = message => {
-    showToast(message, 'error') // Error toast
-  }
+  const handleShowSuccessToast = (message) => {
+    showToast(message, "success");
+  };
 
-  const handleShowWarningToast = message => {
-    showToast(message, 'warning') // Warning toast
-  }
+  const handleShowErrorToast = (message) => {
+    showToast(message, "error"); // Error toast
+  };
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, "warning"); // Warning toast
+  };
   // Fetch locations and update state
   const fetchLocations = async setData => {
     try {
@@ -264,19 +249,10 @@ export default function Admin ({}) {
       console.error('Error fetching data:', error)
     }
   }
-
-  const handleImageChange = e => {
-    const file = e.target.files[0] // Get the selected file
-
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      // Convert the image file to Base64 string using FileReader
-      const reader = new FileReader()
-      reader.onloadend = () => {
-        // Once conversion is complete, update the state with the Base64 string
-        setData({ ...data, newImage: reader.result })
-        console.log('Selected image (Base64):', reader.result) // Log the Base64 string for debugging
-      }
-      reader.readAsDataURL(file) // Read the file as Base64 string
+      setData({ ...data, newImage: file });
     }
   }
   useEffect(() => {
@@ -367,25 +343,34 @@ export default function Admin ({}) {
   }, [isLoggedIn, authToken]) // Depend on isLoggedIn and authToken
 
   useEffect(() => {
-    console.log(activeNav)
-    if (activeNav === 'DASHBOARD') {
-      fetchCount() // Fetch other data for "Details"
-    } else if (activeNav === 'STATUS') {
-      fetchFormFiller_status() // Fetch other data for "Details"
-    } else if (activeNav === 'LOCATION') {
-      fetchFormFiller_location() // Fetch other data for "Details"
-    } else if (activeNav === 'DEVELOPMENT TYPE') {
-      fetchFormFiller_developmenttype() // Fetch other data for "Details"
-    } else if (activeNav === 'ARCHITECTURAL THEME') {
-      fetchFormFiller_architecturaltheme() // Fetch other data for "Details"
-    } else if (activeNav === 'CHATBOT') {
+    const Token = localStorage.getItem("auth_token");
+    const LoginStatus = localStorage.getItem("isLoggedIn");
+
+    if (activeNav === "DASHBOARD") {
+      fetchCount(); // Fetch other data for "Details"
+    } else if (activeNav === "STATUS") {
+      fetchFormFiller_status(Token); // Fetch other data for "Details"
+    } else if (activeNav === "LOCATION") {
+      fetchFormFiller_location(Token); // Fetch other data for "Details"
+    } else if (activeNav === "DEVELOPMENT TYPE") {
+      fetchFormFiller_developmenttype(Token); // Fetch other data for "Details"
+    } else if (activeNav === "ARCHITECTURAL THEME") {
+      fetchFormFiller_architecturaltheme(Token); // Fetch other data for "Details"
+    } else if (activeNav === "CHATBOT") {
       const fetchChatbotData = async () => {
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/getChatbot`
-          )
-          const chatbotData = await response.json()
-          console.log(chatbotData)
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/getChatbot`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${Token}`, // Apply token here
+              },
+            }
+          );
+          const chatbotData = await response.json();
+          console.log(chatbotData);
           // Update chatbotEntries state
           setData(prevData => ({
             ...prevData,
@@ -399,7 +384,14 @@ export default function Admin ({}) {
       fetchChatbotData()
     } else if (activeNav === 'CLIENT PROPERTY') {
       fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Token}`, // Apply token here
+          },
+        }
       )
         .then(response => response.json())
         .then(data => {
@@ -409,54 +401,80 @@ export default function Admin ({}) {
           console.error('Error fetching submitted properties:', error)
         })
     }
-  }, [activeNav])
-  const fetchFormFiller_status = () => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched Status:', data)
-        setData(prevData => ({ ...prevData, statusOptions: data }))
+  }, [activeNav]);
+  const fetchFormFiller_status = (token) => {
+    console.log(token);
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched Status:", data);
+        setData((prevData) => ({ ...prevData, statusOptions: data }));
       })
-      .catch(error => console.error('Error fetching data:', error))
-  }
-  const fetchFormFiller_developmenttype = () => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/development-types`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched Development Types:', data)
-        setData(prevData => ({ ...prevData, developmentTypes: data }))
-      })
-      .catch(error => console.error('Error fetching data:', error))
-  }
-  const fetchFormFiller_architecturaltheme = () => {
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const fetchFormFiller_developmenttype = (token) => {
     fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/architectural-themes`
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/development-types`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched Development Types:", data);
+        setData((prevData) => ({ ...prevData, developmentTypes: data }));
+      })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
+
+  const fetchFormFiller_architecturaltheme = (token) => {
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/architectural-themes`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     )
       .then(response => response.json())
       .then(data => {
         console.log('Fetched Architectural Themes:', data)
         setData(prevData => ({ ...prevData, architecturalThemes: data }))
       })
+      .catch((error) => console.error("Error fetching data:", error));
+  };
 
-      .catch(error => console.error('Error fetching data:', error))
-  }
   const fetchFormFiller_location = () => {
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`)
-      .then(response => response.json())
-      .then(data => {
-        console.log('Fetched Locations:', data)
-        setData(prevData => ({ ...prevData, locations: data }))
+    const token = localStorage.getItem("auth_token");
+    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched Locations:", data);
+        setData((prevData) => ({
+          ...prevData,
+          locations: data, // Update the locations state
+        }));
       })
       .catch(error => console.error('Error fetching data:', error))
   }
 
   const handleAdd = (type, newItem, setData, field) => {
-    console.log('Adding item:', newItem) // Log the new item being added
-    console.log(type)
-    // Check if we are adding a chatbot entry
-    if (type === 'chatbot') {
-      const { question, answer } = newItem
-
+    console.log("Adding item:", newItem); // Log the new item being added
+    console.log(type);
+    const Token = localStorage.getItem("auth_token"); // Retrieve the token
+    if (type === "chatbot") {
+      const { question, answer } = newItem;
       // If we are editing an existing entry, use PUT instead of POST
       const method = isEditing ? 'PUT' : 'POST'
       console.log(method)
@@ -467,7 +485,8 @@ export default function Admin ({}) {
       fetch(url, {
         method: method,
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token}`, // Include the token
         },
         body: JSON.stringify({ question, answer })
       })
@@ -476,9 +495,9 @@ export default function Admin ({}) {
           // Ensure the response contains success status and new item with id
           if (data.success) {
             handleShowSuccessToast(
-              `${isEditing ? 'Updated' : 'Added'} chatbot entry successfully!`
-            )
-
+              `${isEditing ? "Updated" : "Added"} chatbot entry successfully!`,
+              "success"
+            );
             // If adding a new entry, add the entry with id to the chatbotEntries array
             if (isEditing) {
               setData(prevData => ({
@@ -509,49 +528,54 @@ export default function Admin ({}) {
         })
     } else {
       // Existing logic for other types (e.g., developmentTypes, locations)
-      fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-${type}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newItem })
-      })
-        .then(response => response.json())
-        .then(data => {
-          // Log success and update state
-          if (data.success) {
-            handleShowSuccessToast(`Item added successfully: ${newItem}`)
 
-            // Update the data state by adding the new item to the appropriate field
-            setData(prevData => ({
+      if (!Token) {
+        handleShowErrorToast("Authorization token is missing!");
+        return;
+      }
+
+      fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-${type}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token}`, // Include the token
+        },
+        body: JSON.stringify({ name: newItem }), // Send new item data
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Failed to add ${type}: ${response.statusText}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Add Response:", data);
+
+          // Check if the API returned a success message or equivalent flag
+          if (data?.success || data?.message) {
+            handleShowSuccessToast(
+              `Item added successfully: ${newItem}`,
+              "success"
+            );
+
+            // Update the state to add the new item
+            setData((prevData) => ({
               ...prevData,
               [field]: Array.isArray(prevData[field])
-                ? [...prevData[field], { name: newItem }] // Add new item to array
-                : [{ name: newItem }] // Initialize as an array if it was not an array
-            }))
-
-            // Clear the input after adding the new item
-            if (field === 'developmentTypes') {
-              setData({ ...data, newType: '' })
-            } else if (field === 'architecturalThemes') {
-              setData({ ...data, newTheme: '' })
-            } else if (field === 'statusOptions') {
-              setData({ ...data, newStatus: '' })
-            } else if (field === 'locations') {
-              setData({
-                ...data,
-                newAreaName: '',
-                newTitle: '',
-                newDescription: '',
-                newImage: null
-              })
-            }
+                ? [
+                    ...prevData[field],
+                    { id: data.id || Date.now(), name: newItem },
+                  ] // Use API `id` or fallback to `Date.now`
+                : [{ id: data.id || Date.now(), name: newItem }],
+            }));
           } else {
-            handleShowSuccessToast('Added Successfully')
+            handleShowErrorToast("Failed to add the item. Please try again.");
           }
-
-          // Optionally, you can fetch the updated data
-          fetchData()
         })
-        .catch(error => handleShowErrorToast('Error adding data:', error))
+        .catch((error) => {
+          console.error("Error adding item:", error);
+          handleShowErrorToast("An error occurred while adding the item.");
+        });
     }
   }
   const openModal2 = filesArray => {
@@ -565,20 +589,26 @@ export default function Admin ({}) {
     setModalImages([])
   }
   const handleDelete = (type, id, field) => {
-    console.log(type, id, field) // Debugging log to check the values
+    console.log(type, id, field); // Debugging log to check the values
+    const Token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
+    if (!Token) {
+      handleShowErrorToast("Authorization token is missing!");
+      return;
+    }
     // Handle deletion of chatbot entries separately
     if (type === 'chatbot') {
       const url = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/deleteChatbot/${id}` // API endpoint for chatbot deletion
       console.log('Deleting from URL:', url)
 
-      // Send DELETE request
       fetch(url, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token}`, // Include the token
+        },
       })
-        .then(response => {
-          // Check if the response is successful
+        .then((response) => {
           if (response.ok) {
             handleShowSuccessToast(`Deleted Successfully!`)
           } else {
@@ -588,21 +618,16 @@ export default function Admin ({}) {
         })
         .then(data => {
           console.log('Delete Response:', data)
-
-          // Update state to remove the deleted chatbot entry
-          setData(prevData => {
-            const updatedData = { ...prevData }
-
-            // Ensure the field exists and is an array
+          setData((prevData) => {
+            const updatedData = { ...prevData };
             if (Array.isArray(prevData[field])) {
               updatedData[field] = prevData[field].filter(
                 item => item.id !== id
               )
             }
-
-            return updatedData // Return updated state
-          })
-          handleShowSuccessToast('Chatbot entry deleted successfully.') // Optional: Notify user
+            return updatedData;
+          });
+          handleShowSuccessToast("Chatbot entry deleted successfully."); // Notify user
         })
         .catch(error => {
           console.error('Error deleting chatbot entry:', error)
@@ -611,17 +636,20 @@ export default function Admin ({}) {
           )
         })
     } else {
-      // Existing logic for deleting other types (e.g., developmentTypes, locations)
-      const url = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/delete-${type}/${id}`
-      console.log('Deleting from URL:', url) // Debugging line to check the URL
 
+      // Existing logic for deleting other types
+      const url = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/delete-${type}/${id}`;
+      console.log("Deleting from URL:", url); // Debugging line to check the URL
       fetch(url, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Token}`, // Include the token
+        },
       })
         .then(response => {
           if (response.ok) {
-            handleShowSuccessToast(`Deleted Successfully: ${id}`)
+            handleShowSuccessToast(`Deleted Successfully!`);
           } else {
             handleShowErrorToast(`Deletion Failed: ${id}`)
           }
@@ -629,31 +657,26 @@ export default function Admin ({}) {
         })
         .then(data => {
           console.log(data.message)
-
-          // Update state by filtering out the deleted item from array fields
-          setData(prevData => {
-            const updatedData = { ...prevData }
-
-            if (Array.isArray(prevData[field])) {
+          setData((prevData) => {
+            const updatedData = { ...prevData };
+           if (Array.isArray(prevData[field])) {
               updatedData[field] = prevData[field].filter(
                 item => item.id !== id
               )
             } else {
               updatedData[field] = prevData[field] === id ? '' : prevData[field]
             }
-
-            // Reset the form values after deletion (for each field type)
-            if (field === 'developmentTypes') {
-              updatedData.newType = ''
-            } else if (field === 'architecturalThemes') {
-              updatedData.newTheme = ''
-            } else if (field === 'statusOptions') {
-              updatedData.newStatus = ''
-            } else if (field === 'locations') {
-              updatedData.newAreaName = ''
-              updatedData.newTitle = ''
-              updatedData.newDescription = ''
-              updatedData.newImage = null
+            if (field === "developmentTypes") {
+              updatedData.newType = "";
+            } else if (field === "architecturalThemes") {
+              updatedData.newTheme = "";
+            } else if (field === "statusOptions") {
+              updatedData.newStatus = "";
+            } else if (field === "locations") {
+              updatedData.newAreaName = "";
+              updatedData.newTitle = "";
+              updatedData.newDescription = "";
+              updatedData.newImage = null;
             }
 
             return updatedData
@@ -733,8 +756,8 @@ export default function Admin ({}) {
     setShowProperties(!showProperties)
   }
   const fetchCount = async (endpoint, key) => {
-    // Safely use localStorage inside useEffect
-    const token = localStorage.getItem('auth_token') // Get the token from localStorage
+    console.log(endpoint);
+    const token = localStorage.getItem("auth_token");
     if (!token) {
       console.error('Token not found.')
       setError('Token not found.')
@@ -1153,10 +1176,9 @@ export default function Admin ({}) {
                 </div>
               </>
             )}
-
-            {activeNav === 'PROPERTIES' && (
-              <div className='mt-20'>
-                <Demo />
+            {activeNav === "PROPERTIES" && (
+              <div className="mt-20">
+                <Demo data={isLoggedIn} />
               </div>
             )}
             {activeNav === 'APPOINTMENTS' && (
@@ -1282,21 +1304,22 @@ export default function Admin ({}) {
                 </div>
               </div>
             )}
-
-            {activeNav === 'DEVELOPMENT TYPE' && (
-              <div className='h-[600px] overflow-y-auto mt-20'>
-                {/* Development Type */}
-                <div className='h-80 overflow-y-auto'>
-                  <h2 className='text-xl font-semibold mb-4'>
+            {activeNav === "DEVELOPMENT TYPE" && (
+              <div className="h-[600px] overflow-y-auto mt-20">
+                <div className="h-80 overflow-y-auto">
+                  <h2 className="text-xl font-semibold mb-4">
                     Development Types
                   </h2>
                   <div className='flex gap-2 mb-4'>
                     <input
-                      type='text'
-                      placeholder='New Type Name'
-                      value={data.newType}
-                      onChange={e =>
-                        setData({ ...data, newType: e.target.value })
+                      type="text"
+                      placeholder="New Type Name"
+                      value={data.newType || ""}
+                      onChange={(e) =>
+                        setData((prevData) => ({
+                          ...prevData,
+                          newType: e.target.value,
+                        }))
                       }
                       className='border rounded p-2 w-full'
                     />
@@ -1306,9 +1329,9 @@ export default function Admin ({}) {
                           'development-type',
                           data.newType,
                           setData,
-                          'developmentTypes'
-                        )
-                        setData({ ...data, newType: '' }) // Clear input after adding
+                          "developmentTypes"
+                        );
+                        setData((prevData) => ({ ...prevData, newType: "" })); // Clear input
                       }}
                       className='bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600'
                     >
@@ -1525,10 +1548,7 @@ export default function Admin ({}) {
                       Add
                     </button>
                   </div>
-                  {/* Error and Success Messages */}
-                  {error && <p className='text-red-500 mb-4'>{error}</p>}
-                  {success && <p className='text-green-500 mb-4'>{success}</p>}
-                  {/* Locations List */}
+                  {success && <p className="text-green-500 mb-4">{success}</p>}
                   <ul>
                     {data.locations?.length > 0 ? (
                       data.locations.map(location => (
