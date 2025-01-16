@@ -86,14 +86,14 @@ const Table = () => {
   return (
     <div className="w-full px-4">
       <div className="overflow-x-auto">
-        <div className="text-3xl justify-center text-center my-5">
-          <h1>SCHEDULED APPOINTMENTS</h1>
+        <div className="text-3xl justify-center text-center my-2 mb-3">
+          <h1 className="text-customBlue">SCHEDULED APPOINTMENTS</h1>
         </div>
         <table
           id="search-table"
           className="table-auto border-collapse border border-gray-200 w-full text-sm text-left text-gray-700"
         >
-          <thead className="bg-gray-100">
+          <thead className="">
             <tr>
               <th className="border border-gray-300 px-4 py-2">Full Name</th>
               <th className="border border-gray-300 px-4 py-2">Email</th>
