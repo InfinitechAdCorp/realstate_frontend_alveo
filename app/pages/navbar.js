@@ -17,27 +17,27 @@ const Navbar = () => {
             />
           </div>
           <div className="hidden md:flex space-x-6">
-            <Link href="/" className="hover:text-green-400">
+            <a href="/" className="hover:text-green-400">
               Home
-            </Link>
-            <Link href="/about" className="hover:text-green-400">
+            </a>
+            <a href="/about" className="hover:text-green-400">
               About Us
-            </Link>
-            <Link href="/properties" className="hover:text-green-400">
+            </a>
+            <a href="/properties" className="hover:text-green-400">
               Properties
-            </Link>
-            <Link href="/for-sale" className="hover:text-green-400">
+            </a>
+            <a href="/for-sale" className="hover:text-green-400">
               For Sale
-            </Link>
-            <Link href="/agent" className="hover:text-green-400">
+            </a>
+            <a href="/agent" className="hover:text-green-400">
               Agent
-            </Link>
-            <Link href="/careers" className="hover:text-green-400">
+            </a>
+            <a href="/careers" className="hover:text-green-400">
               Careers
-            </Link>
-            <Link href="/contact" className="hover:text-green-400">
+            </a>
+            <a href="/contact" className="hover:text-green-400">
               Contact Us
-            </Link>
+            </a>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             <button className="hover:text-green-400">Form & Utilities</button>
@@ -79,27 +79,27 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden">
           <div className="space-y-2 px-4 pb-4">
-            <Link href="/" className="block hover:text-green-400">
+            <a href="/" className="block hover:text-green-400">
               Home
-            </Link>
-            <Link href="/about" className="block hover:text-green-400">
+            </a>
+            <a href="/about" className="block hover:text-green-400">
               About Us
-            </Link>
-            <Link href="/properties" className="block hover:text-green-400">
+            </a>
+            <a href="/properties" className="block hover:text-green-400">
               Properties
-            </Link>
-            <Link href="/for-sale" className="block hover:text-green-400">
+            </a>
+            <a href="/for-sale" className="block hover:text-green-400">
               For Sale
-            </Link>
-            <Link href="/agent" className="block hover:text-green-400">
+            </a>
+            <a href="/agent" className="block hover:text-green-400">
               Agent
-            </Link>
-            <Link href="/careers" className="block hover:text-green-400">
+            </a>
+            <a href="/careers" className="block hover:text-green-400">
               Careers
-            </Link>
-            <Link href="/contact" className="block hover:text-green-400">
+            </a>
+            <a href="/contact" className="block hover:text-green-400">
               Contact Us
-            </Link>
+            </a>
             <button className="block w-full text-left hover:text-green-400">
               Form & Utilities
             </button>
