@@ -5,7 +5,7 @@ import { showToast } from '@/components/alert/page'
 import Header from '../header'
 import Footer from '../footer'
 import { FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-icons/fa";
-
+import { FaLocationDot } from "react-icons/fa6";
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     inquiryType: '',
@@ -179,65 +179,46 @@ const ContactForm = () => {
           </form>
         </div>
 
-        <div className='bg-customBlue border border-white p-10 max-w-lg mx-auto rounded-lg shadow-lg'>
-          <h3 className='text-4xl font-thin mb-8 text-white tracking-wide text-center'>
+        <div className='bg-customBlue border border-white p-7 max-w-lg mx-auto'>
+          <h3 className='text-3xl font-thin mb-8 text-gray-200 tracking-wide text-center'>
             Contact Information
           </h3>
           <div className='space-y-8 text-white'>
             {/* Phone Section */}
             <div>
-              <h4 className='text-2xl font-thin mb-4 flex items-center'>
-                <FaPhoneAlt className='text-3xl mr-3 text-white' /> Phone
+              <h4 className='text-xl font-thin mb-4 flex items-center'>
+                <FaLocationDot className='text-xl mr-3 text-white' /> Location
               </h4>
               <ul className='space-y-3'>
-                <li className='text-lg'>Sales: +63 (2) 53248888</li>
-                <li className='text-lg'>Leasing: +63 (2) 84037368</li>
-                <li className='text-lg'>Customer Care: (+63) 918 9183456</li>
+                <li className='text-sm'>ALVEO Corporate Center</li>
+                <li className='text-xs'>728 28th Street, Bonifacio Global City 1634 Taguig City, Metro Manila, Philippines</li>
+              </ul>
+            </div>
+            <div>
+              <h4 className='text-xl font-thin mb-4 flex items-center'>
+                <FaPhoneAlt className='text-xl mr-3 text-white' /> Phone
+              </h4>
+              <ul className='space-y-3'>
+                <li className='text-sm'>Customer Care: tel:(+632) 8848 5000</li>
               </ul>
             </div>
 
             {/* Email Section */}
             <div>
-              <h4 className='text-2xl font-thin mb-4 flex items-center'>
-                <FaEnvelope className='text-3xl mr-3 text-white' /> Email
+              <h4 className='text-xl font-thin mb-4 flex items-center'>
+                <FaEnvelope className='text-xl mr-3 text-white' /> Email
               </h4>
               <ul className='space-y-3'>
-                <li className='text-lg'>
+                <li className='text-sm'>
                   Sales:{' '}
                   <a
                     href='mailto:sales@dmcihomes.com'
                     className='text-blue-300 hover:text-blue-500 font-medium'
                   >
-                    sales@dmcihomes.com
-                  </a>
-                </li>
-                <li className='text-lg'>
-                  Customer Care:{' '}
-                  <a
-                    href='mailto:customercare@dmcihomes.com'
-                    className='text-blue-300 hover:text-blue-500 font-medium'
-                  >
-                    customercare@dmcihomes.com
+                    info@alveoland.com.ph
                   </a>
                 </li>
               </ul>
-            </div>
-
-            {/* Appointment Section */}
-            <div>
-              <h4 className='text-2xl font-thin mb-4 flex items-center'>
-                <FaCalendarAlt className='text-3xl mr-3 text-white' /> Set an
-                Appointment
-              </h4>
-              <p className='text-lg'>
-                Avoid the queues, book a visit at{' '}
-                <a
-                  href='https://book.dmcihomes.com'
-                  className='text-blue-300 underline hover:text-blue-500 font-medium'
-                >
-                  book.dmcihomes.com
-                </a>
-              </p>
             </div>
           </div>
         </div>
