@@ -390,7 +390,6 @@ export const columns = [
               method: "POST",
               headers: {
                 Authorization: `Bearer ${token}`, // Add token to the Authorization header
-                "Content-Type": "multipart/form-data", // Optional: Ensure Content-Type for FormData (Fetch sets this automatically)
               },
               body: formDataToSend, // Send the FormData directly
             }
@@ -452,11 +451,9 @@ export const columns = [
           handleShowErrorToast("Error sending data. Please try again later.");
         }
       };
-
       const handleAddFeature = (e) => {
         e.preventDefault();
 
-        // Log the formData and payment.id to the console to see the submitted values
         if (formData.features && formData.features.featureData) {
           const data = new FormData();
           data.append("propertyId", payment.id);
@@ -479,15 +476,20 @@ export const columns = [
               );
             }
           });
+
+          // Log the data entries
+          for (let pair of data.entries()) {
+            console.log(pair[0] + ": " + pair[1]);
+          }
+
           const token = localStorage.getItem("auth_token"); // Retrieve the token from localStorage
 
           fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addFeature`, {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`, // Add token to the Authorization header
-              "Content-Type": "application/json", // Assuming you're sending JSON data; adjust if needed
             },
-            body: JSON.stringify(data), // Convert the data to JSON if it's an object
+            body: data, // Send the FormData directly
           })
             .then((response) => response.json())
             .then((data) => {
