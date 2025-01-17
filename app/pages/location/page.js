@@ -125,13 +125,26 @@ const LocationPage = () => {
               ({ location, key, path, title, intro }) => (
                 <div className="w-full md:w-1/3 px-2 mb-8" key={key}>
                   <div className="bg-white shadow-md  overflow-hidden flex flex-col h-full">
-                    <ImageWithLoader
-                      src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`} // Try to load from localhost:3000
-                      alt={title}
-                    />
+                    <div className="relative group w-full h-fit">
+                      {/* ImageWithLoader Container */}
+                      <ImageWithLoader
+                        src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`}
+                        alt={title}
+                        className="w-full h-full object-cover"
+                      />
+
+                      {/* Hover Text */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        {location.toUpperCase()}
+                      </div>
+                    </div>
                     <div className="p-4 flex flex-col justify-between flex-grow">
                       <div>
-                        <h5 className="text-lg font-semibold">{title}</h5>
+                        <h5 className="text-lg font-semibold">
+                          {" "}
+                          {`"${title}"`}
+                        </h5>
+
                         <p className="text-base">
                           {expanded[key]
                             ? intro

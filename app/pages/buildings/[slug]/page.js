@@ -245,7 +245,14 @@ export default function BlogPost({ params }) {
                     <strong>Location:</strong> {property.location}
                   </p>
                   <p>
-                    <strong>Price Range:</strong> {property.price_range}
+                    <strong>Price Range:</strong>{" "}
+                    <span className="text-black w-1/2 text-left">
+                      {`PHP ${new Intl.NumberFormat("en-PH").format(
+                        property.price_range.split(" - ")[0]
+                      )} - PHP ${new Intl.NumberFormat("en-PH").format(
+                        property.price_range.split(" - ")[1]
+                      )}`}
+                    </span>
                   </p>
                   <p>
                     <strong>Status:</strong> {property.status}
@@ -563,11 +570,13 @@ export default function BlogPost({ params }) {
                       </span>
                     </div>
 
-                    <div>
+                    <div className="mb-4">
                       <h5 className="mb-0 font-bold text-cyan-700">
-                        {building.commercial_units || "N/A"}
+                        {building.lower_ground_floor_parking_levels || "N/A"}
                       </h5>
-                      <span className="text-customBlue">Commercial Units</span>
+                      <span className="text-customBlue">
+                        Lower Ground Parking
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -887,7 +887,7 @@ export default function Admin({}) {
         >
           <div className="text-center mt-14">
             <h1 className="font-bold text-5xl md:text-4xl sm:text-3xl">
-              <a href="/">Λ L V E O</a>
+              <a href="/admin">Λ L V E O</a>
             </h1>
             <p className="text-base md:text-sm sm:text-xs mt-2">
               an <b>AyalaLand</b> company
@@ -1032,7 +1032,7 @@ export default function Admin({}) {
             <div className="flex justify-between items-center p-4">
               <div className="flex justify-between items-center px-4">
                 <div className="logosec text-center flex-grow">
-                  <a href="/">
+                  <a href="/admin">
                     <div className="logo cursor-pointer text-darkblue font-semibold text-lg">
                       ALVEO LAND
                     </div>
@@ -1041,7 +1041,14 @@ export default function Admin({}) {
               </div>
 
               <div className="message flex items-center space-x-4">
-                <div className="circle w-4 h-4 rounded-full bg-red-500"></div>
+                <div
+                  className={`circle w-4 h-4 rounded-full ${
+                    localStorage.getItem("auth_token")
+                      ? "bg-green-500"
+                      : "bg-red-500"
+                  }`}
+                ></div>
+
                 <img
                   src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
                   className="icn"
