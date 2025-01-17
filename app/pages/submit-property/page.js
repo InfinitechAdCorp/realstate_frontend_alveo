@@ -39,9 +39,12 @@ const SetAppointment = () => {
       .max(9999999999, "Phone number must not exceed 11 digits"),
     property_name: Yup.string().required("Property name is required"),
     unit_type: Yup.string().required("Unit type is required"),
-    price: Yup.number()
+    price: Yup.string()
       .required("Price is required")
-      .min(0, "Price must be at least 0"),
+      .matches(
+        /^[0-9]+-[0-9]+$/, // Allow range format like 10000000-520000000
+        "Price must be a valid range (e.g., 10000000-520000000)"
+      ),
     location: Yup.string().required("Location is required"),
     images: Yup.mixed().test(
       "fileSize",
@@ -259,7 +262,7 @@ const SetAppointment = () => {
               <div>
                 <label className="block text-gray-700">Price</label>
                 <Field
-                  type="number"
+                  type="text" // Change to text for handling range input
                   name="price"
                   className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring focus:ring-blue-300"
                 />
