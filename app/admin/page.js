@@ -260,7 +260,7 @@ export default function Admin({}) {
     // Make sure user is logged in and token is available
     const storedToken = localStorage.getItem("auth_token");
     const storedLoginStatus = localStorage.getItem("isLoggedIn");
-
+    setAuthToken(storedToken);
     if (!storedToken || storedLoginStatus !== "true") {
       console.error("User is not logged in or token not found.");
       return; // Don't proceed if not logged in
@@ -1043,12 +1043,9 @@ export default function Admin({}) {
               <div className="message flex items-center space-x-4">
                 <div
                   className={`circle w-4 h-4 rounded-full ${
-                    localStorage.getItem("auth_token")
-                      ? "bg-green-500"
-                      : "bg-red-500"
+                    authToken ? "bg-green-500" : "bg-red-500"
                   }`}
                 ></div>
-
                 <img
                   src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
                   className="icn"
