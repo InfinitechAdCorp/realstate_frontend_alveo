@@ -477,7 +477,7 @@ const CanvasApp = () => {
 
   // Declare the global variable to store image IDs that have been added to the canvas
   const loadedImageIds = new Set();
-
+  // Function to handle item click and add image with labels to the canvas
   const handleItemClick = (item) => {
     if (!canvas) {
       console.error("Canvas not initialized yet.");
@@ -528,129 +528,11 @@ const CanvasApp = () => {
       }
 
       imgElement.onload = () => {
-        const img = new fabric.Image(imgElement, {
-          left: 0,
-          top: 0,
-          scaleX: width / imgElement.width,
-          scaleY: height / imgElement.height,
-          id: imageId, // Use the dynamically generated image ID
-        });
+        // Create the image and labels, then add them to the canvas
+        const { img, widthLabel, heightLabel, imgIdLabel } =
+          createImageWithLabels(imgElement, imageId, width, height);
 
-        // Mark this image ID as loaded
-        loadedImageIds.add(imageId);
-
-        // Add the image to the canvas
-        canvas.add(img);
-        canvas.centerObject(img);
-        canvas.renderAll();
-
-        const imgIdLabel = new fabric.Textbox("", {
-          fontSize: 22,
-          fill: "#000000",
-
-          width: 300, // Set a fixed width for the textbox
-          editable: true, // Allow the text to be edited
-          textAlign: "center", // Center the text
-          selectable: true, // Allow the text box to be selected
-          id: `${imageId}`,
-          zIndex: "1000",
-        });
-        const widthLabel = new fabric.Textbox("", {
-          editable: true,
-          fontSize: 14,
-          fill: "#000000",
-          selectable: true,
-          id: `${imageId}-widthLabel`,
-        });
-
-        const heightLabel = new fabric.Textbox("", {
-          editable: true,
-          fontSize: 14,
-          fill: "#000000",
-          selectable: true,
-          id: `${imageId}-heightLabel`,
-        });
-
-        const updateLabels = () => {
-          const imgWidth = Math.round(img.width * img.scaleX);
-          const imgHeight = Math.round(img.height * img.scaleY);
-
-          const pixelsPerBox = 50;
-          const metersPerBox = 0.5;
-
-          const widthInMeters = (imgWidth / pixelsPerBox) * metersPerBox;
-          const heightInMeters = (imgHeight / pixelsPerBox) * metersPerBox;
-          const enlargedFontSize = 28;
-          imgIdLabel.set({
-            text: `${imageId}`,
-            left: img.left - 80, // Center horizontally
-            top: img.top - 80, // 30 pixels above the room (adjust this distance if needed)
-          });
-          widthLabel.set({
-            text: `${widthInMeters.toFixed(2)} m`,
-            left: img.left + img.getScaledWidth() / 2,
-            top: img.top + img.getScaledHeight() + 10,
-            fontSize: enlargedFontSize,
-          });
-
-          heightLabel.set({
-            text: `${heightInMeters.toFixed(2)} m`,
-            left: img.left - 30,
-            top: img.top + img.getScaledHeight() / 2,
-            fontSize: enlargedFontSize,
-          });
-
-          canvas.renderAll();
-        };
-
-        // Add the labels to the canvas
-        canvas.add(widthLabel, heightLabel, imgIdLabel);
-        updateLabels(); // Initial call to display dimensions
-
-        // Function to enable label editing
-        const handleTextEditing = (label, isWidthLabel) => {
-          label.on("editing:exited", () => {
-            const newSize = parseFloat(label.text.replace("m", ""));
-            if (!isNaN(newSize)) {
-              const pixelsPerBox = 50;
-              const metersPerBox = 0.5;
-
-              if (isWidthLabel) {
-                img.set({
-                  scaleX:
-                    (newSize * pixelsPerBox) / metersPerBox / imgElement.width,
-                });
-              } else {
-                img.set({
-                  scaleY:
-                    (newSize * pixelsPerBox) / metersPerBox / imgElement.height,
-                });
-              }
-
-              updateLabels();
-            }
-          });
-        };
-
-        // Enable label editing
-        handleTextEditing(widthLabel, true);
-        handleTextEditing(heightLabel, false);
-
-        // Update labels and image size on selected, moving, scaling, or modified
-        img.on("selected", updateLabels);
-        img.on("moving", updateLabels);
-        img.on("scaling", updateLabels);
-        img.on("modified", updateLabels);
-
-        img.on("selected", () => displayDimensions(img));
-        img.on("moving", () => displayDimensions(img));
-        img.on("scaling", () => displayDimensions(img));
-        img.on("modified", () => displayDimensions(img));
-
-        // Store the labels inside the image object
-        img.widthLabel = widthLabel;
-        img.heightLabel = heightLabel;
-        img.imgIdLabel = imgIdLabel;
+        // Store the image details
         setImageDetails((prevDetails) => [
           ...prevDetails,
           { imageId, widthLabel, heightLabel },
@@ -663,6 +545,146 @@ const CanvasApp = () => {
 
       // Return the updated counters to maintain state
       return newCounters;
+    });
+  };
+
+  // Function to create the image and labels
+  const createImageWithLabels = (imgElement, imageId, width, height) => {
+    const img = new fabric.Image(imgElement, {
+      left: 0,
+      top: 0,
+      scaleX: width / imgElement.width,
+      scaleY: height / imgElement.height,
+      id: imageId,
+    });
+
+    // Add image to canvas
+    canvas.add(img);
+    canvas.centerObject(img);
+    canvas.renderAll();
+
+    // Create the labels (imgIdLabel, widthLabel, heightLabel)
+    const imgIdLabel = createLabel(imageId, img.left - 80, img.top - 80, 22);
+    const widthLabel = createLabel(
+      "",
+      img.left + img.getScaledWidth() / 2,
+      img.top + img.getScaledHeight() + 10,
+      14
+    );
+    const heightLabel = createLabel(
+      "",
+      img.left - 30,
+      img.top + img.getScaledHeight() / 2,
+      14
+    );
+
+    // Add the labels to the canvas
+    canvas.add(widthLabel, heightLabel, imgIdLabel);
+
+    // Update the labels with real-time effects
+    updateImgLabels(img, widthLabel, heightLabel, imgIdLabel);
+
+    // Enable text editing for labels
+    handleTextImgEditing(widthLabel, true, img, imgElement);
+    handleTextImgEditing(heightLabel, false, img, imgElement);
+
+    // Update the labels when the image is selected, moved, scaled, or modified
+    img.on("selected", () =>
+      updateImgLabels(img, widthLabel, heightLabel, imgIdLabel)
+    );
+    img.on("moving", () =>
+      updateImgLabels(img, widthLabel, heightLabel, imgIdLabel)
+    );
+    img.on("scaling", () =>
+      updateImgLabels(img, widthLabel, heightLabel, imgIdLabel)
+    );
+    img.on("modified", () =>
+      updateImgLabels(img, widthLabel, heightLabel, imgIdLabel)
+    );
+
+    // Store the labels inside the image object for later reference
+    img.widthLabel = widthLabel;
+    img.heightLabel = heightLabel;
+    img.imgIdLabel = imgIdLabel;
+
+    return { img, widthLabel, heightLabel, imgIdLabel };
+  };
+
+  // Function to create a label (Textbox)
+  const createLabel = (text, left, top, fontSize) => {
+    return new fabric.Textbox(text, {
+      fontSize: fontSize,
+      fill: "#000000",
+      left: left,
+      top: top,
+      width: 300, // Set a fixed width for the textbox
+      editable: true,
+      textAlign: "center",
+      selectable: true,
+      zIndex: "1000",
+    });
+  };
+
+  // Function to update the labels with image dimensions
+  const updateImgLabels = (img, widthLabel, heightLabel, imgIdLabel) => {
+    const imgWidth = Math.round(img.width * img.scaleX);
+    const imgHeight = Math.round(img.height * img.scaleY);
+
+    const pixelsPerBox = 50;
+    const metersPerBox = 0.5;
+
+    const widthInMeters = (imgWidth / pixelsPerBox) * metersPerBox;
+    const heightInMeters = (imgHeight / pixelsPerBox) * metersPerBox;
+    const enlargedFontSize = 28;
+
+    imgIdLabel.set({
+      text: img.id,
+      left: img.left - 80,
+      top: img.top - 80,
+    });
+
+    widthLabel.set({
+      text: `${widthInMeters.toFixed(2)} m`,
+      left: img.left + img.getScaledWidth() / 2,
+      top: img.top + img.getScaledHeight() + 10,
+      fontSize: enlargedFontSize,
+    });
+
+    heightLabel.set({
+      text: `${heightInMeters.toFixed(2)} m`,
+      left: img.left - 30,
+      top: img.top + img.getScaledHeight() / 2,
+      fontSize: enlargedFontSize,
+    });
+
+    canvas.renderAll();
+  };
+
+  // Function to handle label text editing
+  const handleTextImgEditing = (label, isWidthLabel, img, imgElement) => {
+    label.on("editing:exited", () => {
+      const newSize = parseFloat(label.text.replace("m", ""));
+      if (!isNaN(newSize)) {
+        const pixelsPerBox = 50;
+        const metersPerBox = 0.5;
+
+        if (isWidthLabel) {
+          img.set({
+            scaleX: (newSize * pixelsPerBox) / metersPerBox / imgElement.width,
+          });
+        } else {
+          img.set({
+            scaleY: (newSize * pixelsPerBox) / metersPerBox / imgElement.height,
+          });
+        }
+
+        updateImgLabels(
+          img,
+          label,
+          isWidthLabel ? img.widthLabel : img.heightLabel,
+          img.imgIdLabel
+        );
+      }
     });
   };
 

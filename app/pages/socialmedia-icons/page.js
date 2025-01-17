@@ -3,7 +3,7 @@ import React from "react";
 
 const SocialMediaFloating = () => {
   return (
-    <div className="social-media-icons fixed top-1/2 right-4 transform -translate-y-1/2 flex flex-col items-center -space-y-1 z-50">
+    <div className="social-media-icons fixed top-1/2 right-4 transform -translate-y-1/2 flex flex-col items-center -space-y-1 z-50 max-sm:hidden sm:hidden md:flex">
       {/* Facebook */}
       <a href="https://www.facebook.com/AlveoLand/" target="_blank">
         <img

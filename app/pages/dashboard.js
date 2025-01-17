@@ -163,35 +163,63 @@ const Carousel = () => {
         FEATURED PROPERTIES
       </h1>
       <Slider ref={sliderRef} {...settings}>
-        {locations.map((location, index) => (
-          <a
-            key={location.id} // Add the key prop here, using a unique identifier
-            href={`/pages/buildings/${location.id}`}
-            className="no-underline"
-          >
-            <div className="flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative">
-              <ImageWithLoader
-                src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${location.path}`}
-                alt={location.name}
-              />
+        {locations.map((location) => {
+          let statusColor = "";
+          switch (location.status?.toLowerCase()) {
+            case "ready for occupancy":
+              statusColor = "bg-green-500"; // Green for Ready for Occupancy
+              break;
+            case "under construction":
+              statusColor = "bg-red-500"; // Red for Under Construction
+              break;
+            case "new":
+              statusColor = "bg-blue-500"; // Blue for New
+              break;
+            case "pre-selling":
+              statusColor = "bg-yellow-500"; // Yellow for Pre-selling
+              break;
+            default:
+              statusColor = "bg-gray-500"; // Default gray if status is unknown
+              break;
+          }
 
-              <div className="text-center h-full">
-                <h3 className="text-lg font-bold my-1 text-customBlue">
-                  {location.name}
-                </h3>
-                <p className="text-sm text-gray-600 my-1">
-                  {location.development_type}
-                </p>
-                <p className="text-sm text-gray-600 my-1">
-                  {location.location}
-                </p>
-                <p className="text-sm text-gray-600 my-1">
-                  {location.price_range}
-                </p>
+          return (
+            <a
+              key={location.id} // Add the key prop here, using a unique identifier
+              href={`/pages/buildings/${location.id}`}
+              className="no-underline"
+            >
+              <div className="group flex flex-col items-center text-center p-4 border border-blue-950 h-fit mb-2 pb-2 relative transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                <ImageWithLoader
+                  src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${location.path}`}
+                  alt={location.name}
+                />
+                <div className="text-center h-full">
+                  <h3 className="text-lg font-bold my-1 text-customBlue">
+                    {location.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 my-1">
+                    {location.development_type}
+                  </p>
+                  <p className="text-sm text-gray-600 my-1">
+                    {location.location}
+                  </p>
+                  <p className="text-sm text-gray-600 my-1">
+                    {location.price_range}
+                  </p>
+                </div>
+                {/* Status Badge */}
+                {location.status && (
+                  <span
+                    className={`absolute top-2 right-2 text-white text-xs font-semibold py-1 px-2 rounded-md z-10 ${statusColor} group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    {location.status.toUpperCase()}
+                  </span>
+                )}
               </div>
-            </div>
-          </a>
-        ))}
+            </a>
+          );
+        })}
       </Slider>
 
       {/* Navigation buttons at the side of the carousel */}
@@ -366,13 +394,13 @@ const AboutAlveo = () => {
               needs of its discerning market.
             </p>
             <p className="text-end">
-              <Link
+              <a
                 href="/pages/aboutalveo/aboutalveo"
                 className="text-white flex items-center space-x-2 justify-end"
               >
                 <span>READ MORE ABOUT ALVEO</span>
                 <FaArrowRight className="cursor-pointer" />
-              </Link>
+              </a>
             </p>
           </div>
         </div>
@@ -491,6 +519,7 @@ const ImageSlider = () => {
 let dropdownValue;
 let searchValue;
 const AlveoBanner = () => {
+  const [closing, setClosing] = useState(false);
   const [selectedValue, setSelectedValue] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -514,7 +543,13 @@ const AlveoBanner = () => {
     "/assets/dashboard/8996835-uhd_3840_2160_30fps.mp4",
     "/assets/dashboard/alveo_cut.mp4",
   ];
-
+  const handleClosePopup = () => {
+    setClosing(true); // Start the closing animation
+    setTimeout(() => {
+      closePopup(); // Actually close the popup after the animation
+      setClosing(false); // Reset closing state for future openings
+    }, 300); // Match the duration of the animation
+  };
   const [currentClip, setCurrentClip] = useState(0);
 
   useEffect(() => {
@@ -943,7 +978,7 @@ const AlveoBanner = () => {
             </div>
           </div>
 
-          <div className="fixed top-20 right-1 z-50 lg:top-13 lg:right-2 flex space-x-2">
+          <div className="fixed top-20 right-1 z-10 lg:top-13 lg:right-2 flex space-x-2">
             {/* Room Planner Icon */}
             <div className="flex justify-center items-center">
               <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
@@ -1079,21 +1114,17 @@ const AlveoBanner = () => {
           )}
           {isPopupVisible && (
             <div
-              className="popup-container absolute inset-0  flex justify-center
-             items-center h-screen overflow-auto top-1/2 z-50 md:w-1/2 md:left-1/2 lg:right-0 xl:right-0 2xl:ml-36  md:top-0"
+              className={`popup-container absolute inset-0 flex justify-center items-center h-screen overflow-auto top-1/2 z-50 md:w-1/2 md:left-1/2 lg:right-0 xl:right-0 2xl:ml-36 md:top-0 transition-transform duration-500 ${
+                closing ? "translate-x-full" : ""
+              }`}
             >
-              <div
-                className="bg-customBlue p-6  w-full max-w-2xl h-full  
-              overflow-y-auto relative shadow-lg"
-              >
+              <div className="bg-customBlue p-6 w-full max-w-2xl h-full overflow-y-auto relative shadow-lg scrollbar-hidden">
                 <span
-                  className="absolute top-4 right-4 text-2xl cursor-pointer
-                   text-white hover:text-red-600 transition-colors duration-300"
-                  onClick={closePopup}
+                  className="sticky mr-10 top-1/2 transform -translate-y-1/2 text-2xl cursor-pointer text-white hover:text-red-600 transition-colors duration-300"
+                  onClick={handleClosePopup}
                 >
-                  &times;
+                  &rarr; {/* Right Arrow Symbol */}
                 </span>
-
                 {loading ? (
                   <div className="flex justify-center items-center py-16">
                     <ClipLoader color="#ffffff" loading={loading} size={100} />
@@ -1453,6 +1484,23 @@ const AlveoBanner = () => {
                                             {building.podium_parking_levels}
                                           </li>
                                           <li>
+                                            <p className="text-sm text-gray-700">
+                                              <strong>
+                                                Lower Ground Parking:
+                                              </strong>{" "}
+                                              {building.lower_ground_floor_parking_levels ||
+                                                "N/A"}
+                                            </p>
+                                          </li>
+
+                                          <p className="text-sm text-gray-700">
+                                            <strong>
+                                              Lower Ground Parking:
+                                            </strong>{" "}
+                                            {building.lower_ground_floor_parking_levels ||
+                                              "N/A"}
+                                          </p>
+                                          <li>
                                             <strong className="text-gray-800">
                                               Commercial Units:
                                             </strong>{" "}
@@ -1557,7 +1605,7 @@ const DashboardComponent = () => {
           <AboutAlveo />
         </div>
       </div>
-      <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10">
+      <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-5">
         <div className="w-full flex xl:flex-row">
           {/* Map Section */}
           {/* <div className='items-start w-full xl:w-1/2 mb-6 xl:mb-0 me-5 p-3'>
@@ -1591,13 +1639,26 @@ const DashboardComponent = () => {
                       key={key}
                     >
                       <div className="bg-white shadow-md overflow-hidden flex flex-col h-full">
-                        <ImageWithLoader
-                          src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`} // Try to load from localhost:3000
-                          alt={title}
-                        />
+                        <div className="relative group w-full h-fit">
+                          {/* ImageWithLoader Container */}
+                          <ImageWithLoader
+                            src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`}
+                            alt={title}
+                            className="w-full h-full object-cover"
+                          />
+
+                          {/* Hover Text */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {location.toUpperCase()}
+                          </div>
+                        </div>
+
                         <div className="p-4 flex flex-col justify-between flex-grow">
                           <div>
-                            <h5 className="text-lg font-semibold">{title}</h5>
+                            <h5 className="text-lg font-semibold">
+                              {`"${title}"`}
+                            </h5>
+
                             <p className="text-base">
                               {expanded[key]
                                 ? intro

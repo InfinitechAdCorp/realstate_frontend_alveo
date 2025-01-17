@@ -34,7 +34,7 @@ const Footer = () => {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
       <div
-        className="text-center xl:-mt-14 2xl:mt-1 xl:z-50 text-white h-100 gap-12 
+        className="text-center xl:-mt-14 2xl:mt-1 xl:z-50 text-white h-100 gap-5 
         lg:text-2xl xl:text-left xl:flex xl:flex-row xl:items-start pb-10"
         style={{ background: "#002B47" }}
       >
@@ -56,36 +56,42 @@ const Footer = () => {
         </div>
 
         <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20 font-thin mx-10">
-          <h1 className="xl:text-3xl xl:mt-10 text-3xl sm:text-3xl lg:text-5xl text-start font-thin">
+          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
             Contact Us:
           </h1>
-          <p className="text-sm text-start">
+          <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
             Our dedicated teams are ready to assist you with needed information
             on Alveo Land properties, wherever you are.
           </p>
 
-          <h1 className="xl:text-3xl text-2xl sm:text-3xl lg:text-5xl font-thin text-start">
+          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
             Customer Hotline:
           </h1>
-          <p className="xl:text-lg text-sm sm:text-xl lg:text-2xl text-start">
+          <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
             (+632) 8848 5000
           </p>
-          <h1 className="xl:text-3xl text-2xl sm:text-3xl lg:text-5xl font-thin text-start">
+          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
             Email:
           </h1>
-          <p className="xl:text-lg text-sm sm:text-xl lg:text-2xl text-start">
+          <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
             info@alveoland.com.ph
           </p>
         </div>
 
         <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20 font-thin mx-10">
-          <h1 className="xl:text-3xl xl:mt-10 text-2xl sm:text-3xl lg:text-5xl font-thin text-start">
+          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
             Location:
           </h1>
-          <h5 className="xl:text-lg text-sm sm:text-xl lg:text-2xl font-thin text-start">
-            Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
-            Taguig City, Metro Manila Philippines
-          </h5>
+          <a
+            href="https://maps.app.goo.gl/D46bpCPXfhXgdQEcA"
+            target="_blank"
+            className="no-underline text-white hover:text-blue-500"
+          >
+            <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
+              Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
+              Taguig City, Metro Manila Philippines
+            </p>
+          </a>
         </div>
       </div>
     </>

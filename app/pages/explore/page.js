@@ -54,32 +54,60 @@ function ExplorePage() {
       label: "Offices",
     },
   ];
-
   const fetchBuildings = async (value) => {
     try {
-      const endpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getbuildings`;
-      const response = await fetch(endpoint);
-      if (!response.ok) {
+      // Fetch buildings data
+      const buildingsEndpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getbuildings`;
+      const buildingsResponse = await fetch(buildingsEndpoint);
+      if (!buildingsResponse.ok) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json();
+      const buildingsData = await buildingsResponse.json();
+      console.log("Buildings Data:", buildingsData);
 
+      // Fetch properties data
+      const propertiesEndpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/allproperty`;
+      const propertiesResponse = await fetch(propertiesEndpoint);
+      if (!propertiesResponse.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const propertiesData = await propertiesResponse.json();
+      console.log("Properties Data:", propertiesData);
+
+      // Combine the building data with property status
+      const combinedData = buildingsData.map((building) => {
+        // Find the corresponding property by matching the ID
+        const matchingProperty = propertiesData.find(
+          (property) => property.id === building.id
+        );
+
+        // Add the status from property if matched, else default to "Unknown"
+        return {
+          ...building,
+          status: matchingProperty ? matchingProperty.status : "Unknown",
+        };
+      });
+
+      // Log the combined data
+      console.log("Combined Data with Status:", combinedData);
+
+      // Filter buildings based on selected value (all, condominiums, residential)
       let filteredData;
       if (value === "all") {
-        filteredData = data;
+        filteredData = combinedData;
       } else if (value === "condominiums") {
-        filteredData = data.filter((building) =>
+        filteredData = combinedData.filter((building) =>
           building.development_type.toLowerCase().includes("condominium")
         );
       } else if (value === "residential") {
-        filteredData = data.filter(
+        filteredData = combinedData.filter(
           (building) => building.development_type === "Office"
         );
       } else {
         filteredData = [];
       }
 
-      // Sort ang property from newest to oldest
+      // Sort buildings from newest to oldest based on created_at
       filteredData.sort((a, b) => {
         const dateA = new Date(a.created_at);
         const dateB = new Date(b.created_at);
@@ -88,6 +116,7 @@ function ExplorePage() {
         return dateB - dateA;
       });
 
+      // Set the final filtered data in state
       setBuildings(filteredData);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
@@ -99,6 +128,15 @@ function ExplorePage() {
     fetchBuildings(value);
   };
 
+  const fetchProperty = async (value) => {
+    const endpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/allproperty`;
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    console.log(data);
+  };
   const handleBuildingClick = async (buildingId) => {
     try {
       const response = await fetch(
@@ -109,6 +147,7 @@ function ExplorePage() {
       }
 
       const propertyData = await response.json();
+
       window.location.href = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/buildings/${buildingId}`;
     } catch (error) {
       console.error("Error fetching property:", error);
@@ -127,6 +166,7 @@ function ExplorePage() {
   useEffect(() => {
     const locationValue = specificLocation || "all";
     fetchBuildings(locationValue);
+    fetchProperty();
   }, [specificLocation]);
 
   return (
@@ -177,90 +217,101 @@ function ExplorePage() {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 
         xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 mb-16"
         >
-          {buildings.map((building) => (
-            <div
-              key={building.id}
-              className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0"
-            >
-              <div className="card overflow-hidden relative">
-                {isNewProperty(building.created_at) && (
-                  <span className="absolute top-2 right-2 bg-red-500 text-white text-xs font-semibold py-1 px-2 rounded-full z-10">
-                    NEW
-                  </span>
-                )}
-                {/* <img
-                  src={
-                    building.path &&
-                    building.path.startsWith(
-                      `${process.env.NEXT_PUBLIC_SERVER_PORT}/`
-                    )
-                      ? building.path
-                      : building.path && building.path.startsWith('/property/')
-                      ? `${
-                          process.env.NEXT_PUBLIC_SERVER_PORT
-                        }${building.path.replace(/\\/g, '/')}`
-                      : building.path
-                      ? `${
-                          process.env.NEXT_PUBLIC_SERVER_PORT
-                        }/assets/Location/${encodeURIComponent(
-                          building.path.replace('assets/Location/', '')
-                        )}`
-                      : ''
-                  }
-                  className='w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out '
-                  alt={building.name}
-                /> */}
+          {buildings.map((building) => {
+            // Define the background color based on the status
+            let statusColor = "";
+            switch (building.status?.toLowerCase()) {
+              case "ready for occupancy":
+                statusColor = "bg-green-500"; // Green for Ready for Occupancy
+                break;
+              case "under construction":
+                statusColor = "bg-red-500"; // Red for Under Construction
+                break;
+              case "new":
+                statusColor = "bg-blue-500"; // Blue for New
+                break;
+              case "pre-selling":
+                statusColor = "bg-yellow-500"; // Yellow for Pre-selling
+                break;
+              default:
+                statusColor = "bg-gray-500"; // Default gray if status is unknown
+                break;
+            }
 
-                {loading && (
-                  <div className="absolute w-full h-64 inset-0 flex items-center justify-center bg-gray-200">
-                    <div className="text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
-                      Λ L V E O
+            return (
+              <div
+                key={building.id}
+                className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0"
+              >
+                <div className="card overflow-hidden relative">
+                  {/* Render the status with dynamic background color */}
+                  {building.status && (
+                    <span
+                      className={`absolute top-2 right-2 text-white text-xs font-bold py-1 px-2 rounded-full z-10 ${statusColor}`}
+                    >
+                      {building.status.toUpperCase()}
+                    </span>
+                  )}
+
+                  {loading && (
+                    <div className="absolute w-full h-64 inset-0 flex items-center justify-center bg-gray-200">
+                      <div className="text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
+                        Λ L V E O
+                      </div>
                     </div>
+                  )}
+
+                  {/* Actual Image */}
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path}`}
+                    alt={building.name}
+                    onLoad={handleImageLoad}
+                    className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out"
+                  />
+
+                  <div className="p-4 bg-white">
+                    <h3 className="text-xl font-semibold text-cyan-700">
+                      {building.name}
+                    </h3>
+                    <p className="text-sm text-gray-700 mt-2">
+                      <strong>Development Type:</strong>{" "}
+                      {building.development_type}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Residential Levels:</strong>{" "}
+                      {building.residential_levels}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Basement Parking:</strong>{" "}
+                      {building.basement_parking_levels || "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Commercial Units:</strong>{" "}
+                      {building.commercial_units || "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Podium Parking:</strong>{" "}
+                      {building.podium_parking_levels || "N/A"}
+                    </p>
+                    <p className="text-sm text-gray-700">
+                      <strong>Lower Ground Parking:</strong>{" "}
+                      {building.lower_ground_floor_parking_levels || "N/A"}
+                    </p>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleBuildingClick(building.property_id);
+                      }}
+                      className="mt-3 bg-cyan-700 text-white font-medium py-2 px-4 
+            items-end text-end justify-end hover:bg-customBlue transition-colors duration-200"
+                    >
+                      View Details
+                    </button>
                   </div>
-                )}
-
-                {/* Actual Image */}
-                <img
-                  src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path}`}
-                  alt={building.name}
-                  onLoad={handleImageLoad}
-                  className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out"
-                />
-
-                <div className="p-4 bg-white">
-                  <h3 className="text-xl font-semibold text-cyan-700">
-                    {building.name}
-                  </h3>
-                  <p className="text-sm text-gray-700 mt-2">
-                    <strong>Development Type:</strong>{" "}
-                    {building.development_type}
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <strong>Residential Levels:</strong>{" "}
-                    {building.residential_levels}
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <strong>Basement Parking:</strong>{" "}
-                    {building.basement_parking_levels || "N/A"}
-                  </p>
-                  <p className="text-sm text-gray-700">
-                    <strong>Commercial Units:</strong>{" "}
-                    {building.commercial_units || "N/A"}
-                  </p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleBuildingClick(building.property_id);
-                    }}
-                    className="mt-3 bg-cyan-700 text-white font-medium py-2 px-4 
-                    items-end text-end justify-end hover:bg-customBlue transition-colors duration-200"
-                  >
-                    View Details
-                  </button>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       <Footer />
