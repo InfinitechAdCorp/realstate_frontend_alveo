@@ -8,7 +8,7 @@ import Header from "../header";
 import Footer from "../footer";
 import SEO from "../../seo/page";
 import { showToast } from "@/components/alert/page";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 const SetAppointment = () => {
   const [date, setDate] = useState(new Date());
   const [time, setTime] = useState("");
@@ -112,7 +112,7 @@ const SetAppointment = () => {
       />
 
       <div className="mb-16">
-        <Header />
+        <Header /> <Icon />
       </div>
 
       <div className="text-center mb-2 mt-20">
@@ -128,6 +128,58 @@ const SetAppointment = () => {
       <div className="flex flex-col lg:flex-row mt-4 justify-center items-center w-screen">
         <div className="flex flex-col lg:flex-row w-full gap-4 p-5 justify-center items-center">
           {/* Appointment Form */}
+          <div className="w-full lg:max-w-lg bg-white border border-customBlue  p-4 shadow-lg lg:h-[625px] mt-5 md:w-[550px] lg:w-full">
+            <p className="text-sm font-semibold text-gray-700 mt-2 mb-4">
+              Select a date and time for your appointment, and fill out the form
+              below.
+            </p>
+
+            <p className="text-sm font-medium text-gray-700 flex justify-center">
+              Time and Date:{" "}
+              <span className="text-red-900">
+                {time
+                  ? `${formattedDate} - ${time}`
+                  : "No date and time selected"}
+              </span>
+            </p>
+
+            <div className="px-2 p-2 items-center">
+              <div className="flex flex-wrap justify-center gap-2">
+                {[
+                  "08:00 AM",
+                  "09:00 AM",
+                  "10:00 AM",
+                  "11:00 AM",
+                  "01:00 PM",
+                  "02:00 PM",
+                  "03:00 PM",
+                  "04:00 PM",
+                  "05:00 PM",
+                  "06:00 PM",
+                ].map((timeSlot) => (
+                  <button
+                    key={timeSlot}
+                    onClick={() => handleTimeSelection(timeSlot)}
+                    className={`px-2 py-1 text-xs m-1 border rounded-lg ${
+                      time === timeSlot
+                        ? "bg-customBlue text-white"
+                        : "bg-white text-gray-700 border-customBlue hover:bg-blue-100"
+                    }`}
+                  >
+                    {timeSlot}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <Calendar
+                onChange={handleDateChange}
+                value={date}
+                className="border border-customBlue rounded-lg shadow-lg w-full p-4 h-auto text-black"
+              />
+            </div>
+          </div>
           <div className="bg-white p-6 border border-customBlue shadow-md w-full sm:w-4/5 md:w-3/4 lg:w-1/2 mt-4">
             <h2 className="text-xl font-semibold text-customBlue mb-4">
               Appointment Details
@@ -345,58 +397,6 @@ const SetAppointment = () => {
             </Formik>
           </div>
           {/* Calendar */}
-          <div className="w-full lg:max-w-lg bg-white border border-customBlue  p-4 shadow-lg">
-            <p className="text-sm font-semibold text-gray-700 mt-2 mb-4">
-              Select a date and time for your appointment, and fill out the form
-              below.
-            </p>
-
-            <p className="text-sm font-medium text-gray-700 flex justify-center">
-              Time and Date:{" "}
-              <span className="text-red-900">
-                {time
-                  ? `${formattedDate} - ${time}`
-                  : "No date and time selected"}
-              </span>
-            </p>
-
-            <div className="px-2 p-2 items-center">
-              <div className="flex flex-wrap justify-center gap-2">
-                {[
-                  "08:00 AM",
-                  "09:00 AM",
-                  "10:00 AM",
-                  "11:00 AM",
-                  "01:00 PM",
-                  "02:00 PM",
-                  "03:00 PM",
-                  "04:00 PM",
-                  "05:00 PM",
-                  "06:00 PM",
-                ].map((timeSlot) => (
-                  <button
-                    key={timeSlot}
-                    onClick={() => handleTimeSelection(timeSlot)}
-                    className={`px-2 py-1 text-xs m-1 border rounded-lg ${
-                      time === timeSlot
-                        ? "bg-customBlue text-white"
-                        : "bg-white text-gray-700 border-customBlue hover:bg-blue-100"
-                    }`}
-                  >
-                    {timeSlot}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <Calendar
-                onChange={handleDateChange}
-                value={date}
-                className="border border-customBlue rounded-lg shadow-lg w-full p-4 h-auto text-black"
-              />
-            </div>
-          </div>
         </div>
       </div>
       <div className="mt-14">

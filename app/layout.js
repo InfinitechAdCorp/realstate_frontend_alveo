@@ -1,8 +1,7 @@
 import localFont from "next/font/local";
 import "./globals.css";
 import Header from "./pages/header";
-import Head from 'next/head';
-
+import Head from "next/head";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -26,8 +25,9 @@ const RootLayout = ({ children }) => {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden` }>
-    
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} overflow-x-hidden`}
+      >
         {children}
       </body>
     </html>
@@ -35,6 +35,5 @@ const RootLayout = ({ children }) => {
 };
 
 // If you want to use PropTypes for validation:
-
 
 export default RootLayout;

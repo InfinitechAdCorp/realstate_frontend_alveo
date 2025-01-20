@@ -1,46 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./../header";
 import Footer from "./../footer";
 import { FaQuoteLeft } from "react-icons/fa6";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 export default function agent() {
   const [activeSection, setActiveSection] = useState("certificates");
-  const testimonial = [
-    {
-      id: 1,
-      name: "Maria Santos",
-      message:
-        "I had an excellent experience working with ella. She demonstrated extensive knowledge of the real estate market and was attentive to my needs. Her dedication and professionalism made the entire process smooth and enjoyable. Thanks to Ella, I found my dream home without any hassle. I highly recommend her for anyone looking to buy or sell a property!",
-    },
-    {
-      id: 2,
-      name: "James Rodriguez",
-      message:
-        "Working with Ella was an absolute pleasure! Her expertise in the real estate industry is unparalleled, and she guided me through every step of the process. Her responsiveness and attention to detail made me feel supported, and I truly felt she had my best interests at heart. Thanks to Ella, I sold my property quickly and at a great price. I can’t recommend her enough!",
-    },
-    {
-      id: 3,
-      name: "Sarah Thompson",
-      message:
-        "Ella made my home buying experience enjoyable and stress-free. Her attention to detail and proactive approach ensured that I found the perfect home that met all my requirements. I felt supported throughout the entire process. I highly recommend her services to anyone looking for a dedicated and knowledgeable real estate agent!",
-    },
-    {
-      id: 4,
-      name: "David Chen",
-      message:
-        "I was impressed by Ella professionalism and expertise. She took the time to understand my needs and provided excellent advice throughout the selling process. Thanks to her hard work, my property sold above asking price! I couldn’t have done it without her.",
-    },
-    {
-      id: 5,
-      name: "Angela White",
-      message:
-        "Ella dedication to her clients is truly commendable. She helped me navigate the complicated process of buying my first home with ease. Her responsiveness and market knowledge were invaluable. I highly recommend her to anyone in need of a trustworthy real estate agent!",
-    },
-  ];
+  const [testimonialOptions, setTestimonialOptions] = useState([]);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/testimonials_user`
+      );
+      const data = await response.json();
+      setTestimonialOptions(data);
+    };
+
+    fetchTestimonials();
+  }, []);
   return (
     <>
-      <Header />
+      <Header /> <Icon />
       <div
         className="relative bg-cover bg-center h-screen flex justify-center items-center"
         style={{ backgroundImage: "url(/assets/Alveo.png)" }}
@@ -79,7 +60,6 @@ export default function agent() {
           </div>
         </div>
       </div>
-
       <div className="flex justify-center items-center h-36 space-x-6 z-50 max-sm:mt-20">
         <button
           onClick={() => setActiveSection("certificates")}
@@ -106,7 +86,6 @@ export default function agent() {
           Testimonial
         </button>
       </div>
-
       <div className="flex justify-center items-center ">
         <div className="w-full max-w-6xl p-4">
           {/* Certificates Section */}
@@ -182,13 +161,46 @@ export default function agent() {
           )}
           {activeSection === "testimonial" && (
             <div className="text-center mt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {testimonial
-                  .slice(0, testimonial.length - 1)
-                  .map((testimonial, index) => (
+              {testimonialOptions.length > 0 && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {testimonialOptions
+                    .slice(0, testimonialOptions.length - 1)
+                    .map((testimonial) => (
+                      <div
+                        key={testimonial.id}
+                        className="max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6"
+                        style={{
+                          backgroundColor: "#f9f9f9",
+                          borderRadius: "15px",
+                        }}
+                      >
+                        <div className="text-center mb-4">
+                          <FaQuoteLeft className="w-16 h-16 text-customBlue mx-auto" />
+                        </div>
+                        <div
+                          className="text-lg text-gray-700"
+                          style={{
+                            fontStyle: "italic",
+                            marginBottom: "10px",
+                            fontSize: "16px",
+                          }}
+                        >
+                          <p>{testimonial.message}</p>
+                        </div>
+                        <div
+                          className="text-xl font-semibold text-gray-900"
+                          style={{ marginTop: "10px", fontSize: "18px" }}
+                        >
+                          - {testimonial.name}
+                        </div>
+                      </div>
+                    ))}
+
+                  {/* Last testimonial - render this if there's an odd number of testimonials */}
+                  {testimonialOptions.length % 2 !== 0 && (
                     <div
-                      key={testimonial.id}
-                      className="max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6"
+                      key={testimonialOptions[testimonialOptions.length - 1].id}
+                      className="max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6 sm:col-span-2"
                       style={{
                         backgroundColor: "#f9f9f9",
                         borderRadius: "15px",
@@ -205,59 +217,28 @@ export default function agent() {
                           fontSize: "16px",
                         }}
                       >
-                        <p>{testimonial.message}</p>
+                        <p>
+                          {
+                            testimonialOptions[testimonialOptions.length - 1]
+                              .message
+                          }
+                        </p>
                       </div>
                       <div
                         className="text-xl font-semibold text-gray-900"
-                        style={{
-                          marginTop: "10px",
-                          fontSize: "18px",
-                        }}
+                        style={{ marginTop: "10px", fontSize: "18px" }}
                       >
-                        - {testimonial.name}
+                        -{" "}
+                        {testimonialOptions[testimonialOptions.length - 1].name}
                       </div>
                     </div>
-                  ))}
-                {/* Last testimonial - only render this if there's an odd number of testimonials */}
-                {testimonial.length % 2 !== 0 && (
-                  <div
-                    key={testimonial[testimonial.length - 1].id}
-                    className="max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6 sm:col-span-2"
-                    style={{
-                      backgroundColor: "#f9f9f9",
-                      borderRadius: "15px",
-                    }}
-                  >
-                    <div className="text-center mb-4">
-                      <FaQuoteLeft className="w-16 h-16 text-customBlue mx-auto" />
-                    </div>
-                    <div
-                      className="text-lg text-gray-700"
-                      style={{
-                        fontStyle: "italic",
-                        marginBottom: "10px",
-                        fontSize: "16px",
-                      }}
-                    >
-                      <p>{testimonial[testimonial.length - 1].message}</p>
-                    </div>
-                    <div
-                      className="text-xl font-semibold text-gray-900"
-                      style={{
-                        marginTop: "10px",
-                        fontSize: "18px",
-                      }}
-                    >
-                      - {testimonial[testimonial.length - 1].name}
-                    </div>
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
-
       <div className="mt-14">
         <Footer />
       </div>

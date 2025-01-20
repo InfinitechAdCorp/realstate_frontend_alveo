@@ -9,7 +9,7 @@ import Footer from "../footer";
 import SEO from "../../seo/page";
 import { FaImage } from "react-icons/fa";
 import { showToast } from "@/components/alert/page";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 const SetAppointment = () => {
   const [message, setMessage] = useState("");
   const [imagesPreview, setImagesPreview] = useState([]);
@@ -136,7 +136,7 @@ const SetAppointment = () => {
 
       {/* Header outside the main content */}
       <div className="mb-10">
-        <Header />
+        <Header /> <Icon />
       </div>
 
       <div className="text-center mb-2 mt-10">
@@ -344,10 +344,9 @@ const SetAppointment = () => {
           )}
         </Formik>
       </div>
-      <div className="-mt-40">
-        <Footer />
-      </div>
+
       {/* Footer outside the main content */}
+      <Footer />
     </div>
   );
 };

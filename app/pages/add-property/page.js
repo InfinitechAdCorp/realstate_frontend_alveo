@@ -1,9 +1,9 @@
 "use client";
 import React, { useState } from "react";
 import Header from "./../header";
+import Icon from "@/app/pages/socialmedia-icons/page";
 import Footer from "./../footer";
 import { showToast } from "@/components/alert/page";
-
 function App() {
   const handleShowSuccessToast = (message) => {
     showToast(message, "success");
@@ -193,14 +193,10 @@ function App() {
 
   return (
     <>
-      <Header />
-      To ensure the "Data Privacy Reminder" section remains centralized when the
-      layout switches to a two-row, one-column format on medium screens (md
-      breakpoint), you can adjust the flex properties and margin settings.
-      Here's the improved code: jsx Copy Edit
-      <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mt-9">
+      <Header /> <Icon />
+      <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mt-9 gap-5">
         {/* Data Privacy Reminder Section */}
-        <div className="w-full sm:w-3/4 md:w-2/3 lg:w-2/3 p-8 bg-white border border-customBlue mb-6 lg:mb-0 mx-auto">
+        <div className="w-full sm:w-3/4 md:w-2/3 lg:w-2/3 p-8 bg-white border border-customBlue  lg:mb-0 my-6 mx-auto">
           <h2 className="font-thin text-2xl text-customBlue mb-6 text-center">
             Data Privacy Reminder
           </h2>
@@ -226,7 +222,7 @@ function App() {
         </div>
 
         {/* Property Submission Form */}
-        <div className="w-full p-6 bg-gray-50">
+        <div className="w-full my-6 bg-gray-50 ">
           {/* Personal Information (First Row) */}
           <div className="w-full p-6 bg-white border border-customBlue mb-6">
             <h1 className="text-2xl font-semibold text-left mb-6 text-customBlue">

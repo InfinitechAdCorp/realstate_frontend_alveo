@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { showToast } from "@/components/alert/page";
 import Header from "../header";
+import Icon from "@/app/pages/socialmedia-icons/page";
 import Footer from "../footer";
 import { FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-icons/fa";
-
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     inquiryType: "",
@@ -65,7 +65,7 @@ const ContactForm = () => {
 
   return (
     <div>
-      <Header />
+      <Header /> <Icon />
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 rounded-lg mt-24 text-customBlue bg-white">
         <div>
           <h2 className="text-3xl font-thin mb-6 text-customBlue">

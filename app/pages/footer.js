@@ -35,9 +35,10 @@ const Footer = () => {
       />
       <div
         className="text-center xl:-mt-14 2xl:mt-1 xl:z-50 text-white h-100 gap-5 
-        lg:text-2xl xl:text-left xl:flex xl:flex-row xl:items-start pb-10"
+    lg:text-2xl xl:text-left xl:flex xl:flex-row xl:items-start pb-10"
         style={{ background: "#002B47" }}
       >
+        {/* First Column: Logo & Download Button */}
         <div className="xl:w-1/3 max-sm:-mt-3 sm:mt-5 flex flex-col items-center justify-center">
           <div className="flex flex-col items-center text-center max-sm:mt-5 sm:pt-10">
             <h1 className="font-thin text-5xl">Λ L V E O</h1>
@@ -55,44 +56,94 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20 font-thin mx-10">
-          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
-            Contact Us:
-          </h1>
-          <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
-            Our dedicated teams are ready to assist you with needed information
-            on Alveo Land properties, wherever you are.
-          </p>
-
-          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
-            Customer Hotline:
-          </h1>
-          <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
-            (+632) 8848 5000
-          </p>
-          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
-            Email:
-          </h1>
-          <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
-            info@alveoland.com.ph
-          </p>
-        </div>
-
-        <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20 font-thin mx-10">
-          <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
-            Location:
-          </h1>
-          <a
-            href="https://maps.app.goo.gl/D46bpCPXfhXgdQEcA"
-            target="_blank"
-            className="no-underline text-white hover:text-blue-500"
-          >
+        {/* Second Column: Contact Us and Customer Hotline */}
+        <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20 font-thin mx-10 flex flex-col gap-5">
+          {/* Contact Us */}
+          <div>
+            <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
+              Contact Us:
+            </h1>
             <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
-              Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634
-              Taguig City, Metro Manila Philippines
+              Our dedicated teams are ready to assist you with needed
+              information on Alveo Land properties, wherever you are.
             </p>
-          </a>
+          </div>
+
+          {/* Customer Hotline */}
+          <div>
+            <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
+              Customer Hotline:
+            </h1>
+            <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start text-white no-underline">
+              <a
+                href="tel:+63288485000"
+                className="text-white hover:text-blue-600 hover:underline no-underline"
+              >
+                (+632) 8848 5000
+              </a>
+            </p>
+          </div>
         </div>
+
+        {/* Third Column: Email and Location */}
+        <div className="xl:w-1/3 xl:pl-8 xl:text-left xl:-ml-20 font-thin mx-10 flex flex-col gap-5">
+          {/* Email */}
+          <div>
+            <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
+              Email:
+            </h1>
+            <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
+              <a
+                href="mailto:info@alveoland.com.ph"
+                className="text-white hover:text-blue-600 hover:underline no-underline"
+              >
+                info@alveoland.com.ph
+              </a>
+            </p>
+          </div>
+
+          {/* Location */}
+          <div>
+            <h1 className="xl:text-2xl xl:mt-10 text-3xl sm:text-3xl lg:text-2xl text-start font-thin">
+              Location:
+            </h1>
+            <a
+              href="https://maps.app.goo.gl/D46bpCPXfhXgdQEcA"
+              target="_blank"
+              className="no-underline text-white hover:text-blue-500"
+            >
+              <p className="xl:text-sm text-sm sm:text-sm lg:text-sm text-start">
+                Alveo Corporate Center 728 28th Street, Bonifacio Global City
+                1634 Taguig City, Metro Manila Philippines
+              </p>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Horizontal Line */}
+      <hr
+        style={{
+          width: "80%",
+          margin: "0",
+          borderColor: "white",
+        }}
+      />
+      {/* Footer Section */}
+      <div
+        className="text-center text-white py-1"
+        style={{ background: "#002B47" }}
+      >
+        <p className="text-sm">
+          Copyright © 2024 All Rights Reserved by Infinitech Advertising
+          Corporation |
+          <a
+            href="/privacy-policy"
+            className="text-white hover:text-blue-600 hover:underline"
+          >
+            Privacy Policy
+          </a>
+        </p>
       </div>
     </>
   );

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "../header";
 import SEO from "./../../seo/page";
 import { jsPDF } from "jspdf";
+import Icon from "@/app/pages/socialmedia-icons/page";
 export default function LoanCalculator() {
   const [years, setYears] = useState(0);
   const [months, setMonths] = useState(0);
@@ -66,10 +67,58 @@ export default function LoanCalculator() {
     const margin = 14.2;
     const doc = new jsPDF({ unit: "mm", format: "letter" });
 
-    doc.setFontSize(22);
-    doc.setFont("times", "bold");
-    doc.text("Loan Payment Summary", 105, margin + 10, { align: "center" });
+    // Set the colors
+    const topColor = [0, 43, 71]; // RGB for #002B47 (dark blue)
+    const blackColor = [0, 0, 0]; // RGB for black
 
+    // Page dimensions
+    const pageHeight = doc.internal.pageSize.height;
+    const pageWidth = doc.internal.pageSize.width;
+    const topHalfHeight = pageHeight / 2; // Define the top half height
+
+    // Set the page height to the top half
+    doc.internal.pageSize.height = topHalfHeight; // Adjust page size to use only top half
+
+    // Draw a thin black border around the top half of the page
+    const borderThickness = 1;
+    doc.setLineWidth(borderThickness);
+    doc.setDrawColor(...blackColor);
+    doc.rect(0, 0, pageWidth, topHalfHeight); // Draw border only on the top half of the page
+
+    // Fill the top half with #002B47 (dark blue)
+    doc.setFillColor(...topColor); // Set fill color to #002B47
+    doc.rect(0, 0, pageWidth, topHalfHeight, "F"); // Fill the top half with color
+
+    // Set text color to white to ensure visibility on dark background
+    doc.setTextColor(255, 255, 255);
+
+    // Image Path (Ensure logo is in the public folder)
+    const imgPath = "/logo.png"; // Make sure this is the correct path
+    const imgWidth = 40; // Width of the image
+    const imgHeight = 10; // Height of the image
+
+    // Add the logo image to the PDF (Position logo on the left)
+    try {
+      doc.addImage(
+        imgPath,
+        "PNG",
+        margin, // Position logo to the left
+        margin + 0, // Elevate the logo slightly higher
+        imgWidth,
+        imgHeight
+      );
+    } catch (error) {
+      console.error("Error adding image to PDF:", error);
+    }
+
+    // Add the Loan Payment Summary title next to the logo
+    doc.setFontSize(26);
+    doc.setFont("times", "bold");
+    doc.text("| Loan Payment Summary", margin + imgWidth + 5, margin + 8, {
+      align: "left", // Align to the left of the logo
+    });
+
+    // Table Data
     const tableData = [
       [
         "Period",
@@ -99,14 +148,14 @@ export default function LoanCalculator() {
     ];
 
     const startX = margin;
-    let startY = margin + 30;
+    let startY = margin + 25; // Adjust startY to accommodate the new top content and logo
     const rowHeight = 15;
-    const columnWidth = (doc.internal.pageSize.width - 2 * margin) / 4;
+    const columnWidth = (pageWidth - 2 * margin) / 4;
 
     doc.setFont("helvetica", "normal");
-
     doc.setFontSize(14);
 
+    // Add Table Headers
     const headerPadding = 5;
     const headerTexts = tableData.map((row) => row[0]);
     headerTexts.forEach((header, index) => {
@@ -118,8 +167,8 @@ export default function LoanCalculator() {
       );
     });
 
+    // Add Table Values
     doc.setFontSize(12);
-
     const valuePadding = 5;
 
     const valueTexts = tableData.map((row) => row[1]);
@@ -130,6 +179,7 @@ export default function LoanCalculator() {
       });
     });
 
+    // Add Table Borders
     doc.setLineWidth(0.05);
     const tableHeight = rowHeight * 2;
     tableData.forEach((_, index) => {
@@ -141,15 +191,17 @@ export default function LoanCalculator() {
       );
     });
 
+    // Add Notes
     doc.setFontSize(10);
     doc.setFont("helvetica", "normal");
     const noteText =
       "* Please note that the results provided by this calculator are estimates and may vary. The final loan amount, interest rates, and monthly payments will be determined by the bank upon approval.";
     doc.text(noteText, 105, startY + tableHeight + 10, {
       align: "center",
-      maxWidth: doc.internal.pageSize.width - 2 * margin,
+      maxWidth: pageWidth - 2 * margin,
     });
 
+    // Add Thank You Note
     doc.setFontSize(8);
     doc.setFont("helvetica", "normal");
     doc.text(
@@ -159,6 +211,31 @@ export default function LoanCalculator() {
       { align: "center" }
     );
 
+    // Add Contact Information
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "normal");
+    const contactInfo = [
+      "Email: info@alveoland.com.ph",
+      "Customer Hotline: (+632) 8848 5000",
+      "Location: Alveo Corporate Center 728 28th Street, Bonifacio Global City",
+      "1634 Taguig City, Metro Manila Philippines",
+    ];
+    contactInfo.forEach((line, index) => {
+      doc.text(line, 105, startY + tableHeight + 35 + index * 5, {
+        align: "center",
+        maxWidth: pageWidth - 2 * margin,
+      });
+    });
+
+    // Add Copyright Notice
+    doc.setFontSize(8);
+    const copyrightText =
+      "Copyright © 2024 All Rights Reserved by Infinitech Advertising Corporation";
+    doc.text(copyrightText, 105, startY + tableHeight + 65, {
+      align: "center",
+    });
+
+    // Save the PDF
     doc.save("loan_calculator_summary.pdf");
   };
 
@@ -170,8 +247,7 @@ export default function LoanCalculator() {
         keywords="alveo, real estate, property sale, property investment, property price, property loan, building price, condiminium loan"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/loancalculator"
       />
-
-      <Header />
+      <Header /> <Icon />
       <main
         className="min-h-screen bg-cover bg-center "
         style={{ backgroundImage: "url('/assets/Alveo.png')" }}

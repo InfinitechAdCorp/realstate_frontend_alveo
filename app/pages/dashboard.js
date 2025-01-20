@@ -25,7 +25,7 @@ import Footer from "./footer";
 import MyBot from "../../components/Chatbot/page";
 import SocialMediaFloating from "./socialmedia-icons/page";
 import { usePathname } from "next/navigation";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 const containerStyle = {
   width: "100%",
   height: "200px",
@@ -1615,7 +1615,7 @@ const DashboardComponent = () => {
       />
 
       <div className="mb-10">
-        <Header />
+        <Header /> <Icon />
       </div>
 
       <AlveoBanner />

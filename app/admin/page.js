@@ -16,7 +16,7 @@ import AreaModal from "@/components/admin/areaModal";
 import Appointment from "@/components/admin/appointments";
 import SubmittedProperties from "@/components/admin/submittedProperties";
 import Slider from "react-slick";
-
+import Testimonial from "@/app/pages/testimonial/page";
 export default function Admin({}) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCanvasOpen, setIsCanvasOpen] = useState(false);
@@ -110,6 +110,11 @@ export default function Admin({}) {
       name: "APPOINTMENTS",
       onClick: () => console.log("Details Clicked"),
       icon: "/assets/appointment.png",
+    },
+    {
+      name: "TESTIMONIALS",
+      onClick: () => setActiveNav("TESTIMONIAL"),
+      icon: "/assets/review.png",
     },
   ];
 
@@ -360,6 +365,8 @@ export default function Admin({}) {
       fetchFormFiller_developmenttype(Token); // Fetch other data for "Details"
     } else if (activeNav === "ARCHITECTURAL THEME") {
       fetchFormFiller_architecturaltheme(Token); // Fetch other data for "Details"
+    } else if (activeNav === "TESTIMONIAL") {
+      console.log(true);
     } else if (activeNav === "CHATBOT") {
       const fetchChatbotData = async () => {
         try {
@@ -1183,6 +1190,11 @@ export default function Admin({}) {
                   <Chart data={isLoggedIn} />
                 </div>
               </>
+            )}
+            {activeNav === "TESTIMONIAL" && (
+              <div className="mt-20">
+                <Testimonial />
+              </div>
             )}
             {activeNav === "PROPERTIES" && (
               <div className="mt-20">

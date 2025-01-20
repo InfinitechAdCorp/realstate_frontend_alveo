@@ -102,7 +102,7 @@ const LocationPage = () => {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/location"
       />
       <div className="mb-10">
-        <Header />
+        <Header /> <Icon />
       </div>
 
       {/* <div className="xl:ml-64 mt-20">

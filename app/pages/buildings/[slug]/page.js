@@ -7,7 +7,6 @@ import Header from "../../header";
 import Footer from "./../../footer";
 import SEO from "./../../../seo/page";
 import { showToast } from "@/components/alert/page";
-
 export default function BlogPost({ params }) {
   const { slug } = params;
   const [property, setProperty] = useState(null);
@@ -213,7 +212,7 @@ export default function BlogPost({ params }) {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
       <div className="mb-10">
-        <Header />
+        <Header /> <Icon />
       </div>
       <div className=" p-4 md:p-8 mt-20 w-full mb-20 ">
         <h1 className="text-2xl font-semibold text-customBlue mb-4 text-center">
@@ -270,18 +269,20 @@ export default function BlogPost({ params }) {
                   </p>
                 </div>
 
-                <div className="mt-7 space-x-4">
+                <div className="mt-7 flex flex-wrap justify-center gap-2">
                   <button
                     onClick={() => togglePopup("Request Viewing")}
                     className="px-6 py-2 text-md font-semibold text-white bg-cyan-700 
-                    shadow-md hover:bg-cyan-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
+    shadow-md hover:bg-cyan-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out 
+    sm:px-4 sm:py-2 sm:text-sm w-full sm:w-auto"
                   >
                     Request Viewing
                   </button>
                   <button
                     onClick={() => togglePopup("Property Inquiry")}
                     className="px-6 py-2 text-md font-semibold text-white bg-cyan-700 
-                    shadow-md hover:bg-cyan-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out"
+    shadow-md hover:bg-cyan-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75 transition duration-300 ease-in-out 
+    sm:px-4 sm:py-2 sm:text-sm w-full sm:w-auto"
                   >
                     Property Inquiry
                   </button>
@@ -292,7 +293,7 @@ export default function BlogPost({ params }) {
 
           {isOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-customBlue bg-opacity-60 z-50">
-              <div className="bg-white p-6 shadow-lg w-11/12 sm:w-4/5 md:w-3/4 lg:w-1/2 flex flex-col md:flex-row gap-6 relative">
+              <div className="bg-white p-6 shadow-lg w-11/12 sm:w-4/5 md:w-3/4 lg:w-1/2 flex flex-col md:flex-row gap-6 relative max-h-screen overflow-y-auto mt-10">
                 <button
                   className="absolute top-0 right-4 p-2 text-2xl text-black rounded-full
                   "
@@ -330,7 +331,7 @@ export default function BlogPost({ params }) {
                   </p>
                 </div>
 
-                <div className="w-full md:w-1/2 mt-2">
+                <div className="w-full md:w-1/2 mt-2 max-sm:max-h-screen">
                   <h2 className="text-2xl font-semibold text-customBlue mb-4">
                     {popupType === "Request Viewing"
                       ? "Schedule Appointment"
@@ -384,18 +385,20 @@ export default function BlogPost({ params }) {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-customBlue">
-                          {popupType === "Request Viewing"
-                            ? "Appointment Date & Time"
-                            : "Preferred Contact Date & Time"}
-                        </label>
-                        <input
-                          type="datetime-local"
-                          name="appointmentDate"
-                          value={formData.appointmentDate}
-                          onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
-                        />
+                        {popupType === "Request Viewing" && (
+                          <>
+                            <label className="block text-sm font-medium text-customBlue">
+                              Appointment Date & Time
+                            </label>
+                            <input
+                              type="datetime-local"
+                              name="appointmentDate"
+                              value={formData.appointmentDate}
+                              onChange={handleInputChange}
+                              className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
+                            />
+                          </>
+                        )}
                       </div>
                     </div>
                     <div>

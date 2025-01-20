@@ -9,10 +9,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 import Header from "../../header";
 import Footer from "./../../footer";
-
 export default function BlogPost({ params }) {
   const { slug } = params; // Extract slug from params
   const headings = [
@@ -132,7 +131,7 @@ export default function BlogPost({ params }) {
           keywords="alveo, real estate, property, lands, investment, loan, buildings,"
           canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
         />
-        <Header />
+        <Header /> <Icon />
         <Directory
           currentLocation={post.currentLocation}
           specificLocation={post.specificLocation}
@@ -157,8 +156,8 @@ export default function BlogPost({ params }) {
 
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customBlue"></div>
               </div>
-              <div className=" hidden sm:block absolute top-1/3 mt-3 left-5 w-4/5 z-10 text-white text-sm mx-1 sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10">
-                <div className="flex space-x-4 h-36 lg:mt-48 lg:top-64 lg:ml-10 xl:-mt-16 xl:ml-40">
+              <div className="absolute top-1/3 mt-3 left-5 w-4/5 z-10 text-white text-sm mx-1  sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10">
+                <div className="flex space-x-4 h-36 lg:mt-10 lg:top-64 lg:ml-10 xl:-mt-16 xl:ml-40 max-sm:-mt-32 md:-mt-20 ">
                   {headings.map((heading, idx) => (
                     <h1
                       key={idx}
@@ -284,6 +283,9 @@ export default function BlogPost({ params }) {
                   </Accordion>
                 </div>
               </div>
+            </div>
+            <div className="mt-20">
+              <Footer />
             </div>
           </div>
         )}

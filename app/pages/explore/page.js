@@ -12,21 +12,23 @@ import {
   BsCopy,
   BsBuildings,
   BsHouseDoor,
-  BsBuildingCheck,
   BsBag,
+  BsBuildingCheck,
 } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
+import Icon from "@/app/pages/socialmedia-icons/page";
 function ExplorePage() {
   const searchParams = useSearchParams();
   const specificLocation = searchParams.get("specificLocation");
-
-  const [buildings, setBuildings] = useState([]);
-  const [clickedIndex, setClickedIndex] = useState(null);
+  const [value, setValue] = useState("all");
+  const [allBuildings, setAllBuildings] = useState([]); // Store all buildings data here
+  const [filteredBuildings, setFilteredBuildings] = useState([]); // Store the filtered buildings based on selected category
   const [loading, setLoading] = useState(true);
 
   const handleImageLoad = () => {
     setLoading(false); // Set loading to false when the image has loaded
   };
+
   const images = [
     {
       icon: <BsCopy className="text-4xl" />, // Using the 'copy' icon from React Icons
@@ -54,9 +56,10 @@ function ExplorePage() {
       label: "Offices",
     },
   ];
-  const fetchBuildings = async (value) => {
+
+  const fetchBuildings = async () => {
     try {
-      // Fetch buildings data
+      // Fetch buildings data once
       const buildingsEndpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getbuildings`;
       const buildingsResponse = await fetch(buildingsEndpoint);
       if (!buildingsResponse.ok) {
@@ -88,55 +91,58 @@ function ExplorePage() {
         };
       });
 
-      // Log the combined data
-      console.log("Combined Data with Status:", combinedData);
-
-      // Filter buildings based on selected value (all, condominiums, residential)
-      let filteredData;
-      if (value === "all") {
-        filteredData = combinedData;
-      } else if (value === "condominiums") {
-        filteredData = combinedData.filter((building) =>
-          building.development_type.toLowerCase().includes("condominium")
-        );
-      } else if (value === "residential") {
-        filteredData = combinedData.filter(
-          (building) => building.development_type === "Office"
-        );
-      } else {
-        filteredData = [];
-      }
-
-      // Sort buildings from newest to oldest based on created_at
-      filteredData.sort((a, b) => {
-        const dateA = new Date(a.created_at);
-        const dateB = new Date(b.created_at);
-        if (isNaN(dateA)) return 1;
-        if (isNaN(dateB)) return -1;
-        return dateB - dateA;
-      });
-
-      // Set the final filtered data in state
-      setBuildings(filteredData);
+      // Set the combined data in state
+      setAllBuildings(combinedData);
+      setFilteredBuildings(combinedData); // Initially, display all buildings
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
 
-  const handleImageClick = (index, value) => {
-    setClickedIndex(index);
-    fetchBuildings(value);
+  const filterBuildings = (category) => {
+    let filteredData;
+
+    // Filter buildings based on the selected category (all, condominiums, residential)
+    if (category === "all") {
+      filteredData = allBuildings; // Show all buildings
+    } else if (category === "condominiums") {
+      filteredData = allBuildings.filter((building) =>
+        building.development_type.toLowerCase().includes("condominium")
+      );
+    } else if (category === "residential") {
+      filteredData = allBuildings.filter(
+        (building) => building.residential_levels > 0
+      );
+    } else if (category === "commercial") {
+      filteredData = allBuildings.filter(
+        (building) => building.commercial_units > 0
+      );
+    } else if (category === "office") {
+      filteredData = allBuildings.filter((building) =>
+        building.development_type.toLowerCase().includes("office")
+      );
+    } else {
+      filteredData = [];
+    }
+
+    // Sort buildings from newest to oldest based on created_at
+    filteredData.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      if (isNaN(dateA)) return 1;
+      if (isNaN(dateB)) return -1;
+      return dateB - dateA;
+    });
+
+    // Set filtered data to the state
+    setFilteredBuildings(filteredData);
   };
 
-  const fetchProperty = async (value) => {
-    const endpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/allproperty`;
-    const response = await fetch(endpoint);
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    console.log(data);
+  const handleImageClick = (index, category) => {
+    setValue(category);
+    filterBuildings(category); // Filter the buildings when a category is selected
   };
+
   const handleBuildingClick = async (buildingId) => {
     try {
       const response = await fetch(
@@ -154,7 +160,7 @@ function ExplorePage() {
     }
   };
 
-  // Para sa new badge it will display only if the property is added with 3 days interval
+  // To check if a property is new
   const isNewProperty = (createdAt) => {
     const today = new Date();
     const createdDate = new Date(createdAt);
@@ -164,10 +170,8 @@ function ExplorePage() {
   };
 
   useEffect(() => {
-    const locationValue = specificLocation || "all";
-    fetchBuildings(locationValue);
-    fetchProperty();
-  }, [specificLocation]);
+    fetchBuildings(); // Fetch buildings data only once when the component mounts
+  }, []);
 
   return (
     <>
@@ -178,46 +182,43 @@ function ExplorePage() {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/explore"
       />
       <div className="mb-10">
-        <Header />
+        <Header /> <Icon />
       </div>
       <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10">
         <div className="text-center mt-10 sm:-ml-10 cursor-pointer border-b-2 border-black">
           {images.map((image, index) => (
             <div
               key={index}
-              className={`relative inline-block ml-5 sm:ml-8 justify-center lg:mt-5 ${
-                clickedIndex === index
-                  ? " p-2 text-cyan-700 text-center text-5xl"
-                  : ""
-              }`}
+              className="relative inline-block ml-5 sm:ml-8 justify-center lg:mt-5"
               onClick={() => handleImageClick(index, image.value)}
             >
-              <div
-                className="flex justify-center items-center transition-transform transform duration-200 ease-in-out
-             hover:scale-110 hover:opacity-80"
-              >
+              <div className="flex justify-center items-center transition-transform duration-200 ease-in-out hover:scale-110 hover:opacity-80">
                 {image.icon}
               </div>
               <div
-                className="absolute -bottom-3/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-              bg-black bg-opacity-70 text-white text-center py-1 px-2 rounded-md opacity-0 
-              transition-opacity duration-300 ease-in-out hover:opacity-100 text-sm text-nowrap"
+                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-10
+        bg-black bg-opacity-70 text-white text-center py-1 px-2 rounded-md opacity-0
+        transition-all duration-200 ease-in-out hover:opacity-100 hover:translate-y-0
+        hover:bg-opacity-90 hover:scale-105"
               >
                 {image.label}
               </div>
             </div>
           ))}
         </div>
+
         <div>
           <h1 className="text-center mt-3 text-2xl lg:text-4xl xl:text-3xl">
-            {buildings.length} PROPERTIES
+            {filteredBuildings.length} {value.toUpperCase()}{" "}
+            {/* Access the selected category */}
           </h1>
         </div>
+
         <div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 
         xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 mb-16"
         >
-          {buildings.map((building) => {
+          {filteredBuildings.map((building) => {
             // Define the background color based on the status
             let statusColor = "";
             switch (building.status?.toLowerCase()) {
@@ -261,7 +262,7 @@ function ExplorePage() {
                     </div>
                   )}
 
-                  {/* Actual Image */}
+                  {/* Actual image of the property */}
                   <img
                     src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path}`}
                     alt={building.name}
@@ -314,15 +315,11 @@ function ExplorePage() {
           })}
         </div>
       </div>
-      <Footer />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Footer />
+      </Suspense>
     </>
   );
 }
 
-export default function ExploreWrapper() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <ExplorePage />
-    </Suspense>
-  );
-}
+export default ExplorePage;

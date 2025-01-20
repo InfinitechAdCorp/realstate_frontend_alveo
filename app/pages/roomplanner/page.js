@@ -317,7 +317,9 @@ const CanvasApp = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/roomplanner");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/roomplanner`
+      );
       const data = await response.json();
       const grouped = data.data.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -495,9 +497,11 @@ const CanvasApp = () => {
     const width = (item.dataset.width * 37.8) / scaling;
     const height = (item.dataset.height * 37.8) / scaling;
 
-    const imageURL = `http://localhost:3000/assets/RoomPlanner/${encodeURIComponent(
-      category
-    )}/${encodeURIComponent(picture)}`;
+    const imageURL = `${
+      process.env.NEXT_PUBLIC_LOCAL_PORT
+    }/assets/RoomPlanner/${encodeURIComponent(category)}/${encodeURIComponent(
+      picture
+    )}`;
 
     const altText = item.getAttribute("alt");
     const imgElement = new window.Image(); // Using window.Image to avoid Next.js conflict
