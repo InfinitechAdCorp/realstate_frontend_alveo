@@ -950,26 +950,33 @@ const AlveoBanner = () => {
 
                     {/* Suggestions Dropdown */}
                     {isSuggestionsVisible && searchInput.trim() && (
-                      <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/4 mx-auto top-full mt-2 z-20 bg-white shadow-lg rounded-md space-y-1">
-                        {suggestions.length > 0 && selectedValue !== "All" ? (
-                          suggestions.map((item, index) => (
-                            <div
-                              key={index}
-                              className="cursor-pointer hover:bg-[#f1f1f1] p-3 rounded-md transition duration-200"
-                              onClick={() => {
-                                setSearchInput(item[selectedValue]); // Dynamically set search input
-                                setSuggestions([]);
-                                setIsSuggestionsVisible(false);
-                              }}
-                            >
-                              {item[selectedValue]}
-                            </div>
-                          ))
-                        ) : (
-                          <div className="text-gray-500 text-center py-3">
-                            No Data Available
-                          </div>
-                        )}
+                      <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/4 mx-auto top-full mt-2 z-20 md:left-1/3 bg-white shadow-lg rounded-md space-y-1 text-lg">
+                        {suggestions.length > 0 &&
+                        selectedValue !== "All" &&
+                        selectedValue !== "all" &&
+                        selectedValue !== "ALL" &&
+                        selectedValue !== ""
+                          ? suggestions.map((item, index) => (
+                              <div
+                                key={index}
+                                className="cursor-pointer hover:bg-[#f1f1f1] p-3 rounded-md transition duration-200"
+                                onClick={() => {
+                                  setSearchInput(item[selectedValue]); // Dynamically set search input
+                                  setSuggestions([]);
+                                  setIsSuggestionsVisible(false);
+                                }}
+                              >
+                                {item[selectedValue]}
+                              </div>
+                            ))
+                          : selectedValue !== "All" &&
+                            selectedValue !== "all" &&
+                            selectedValue !== "ALL" &&
+                            selectedValue !== "" && (
+                              <div className="text-black text-center py-3">
+                                No Data Available
+                              </div>
+                            )}
                       </div>
                     )}
                   </div>
@@ -1420,29 +1427,13 @@ const AlveoBanner = () => {
 
                                         <div className="relative">
                                           <img
-                                            src={
-                                              building.path
-                                                ? /^https?:\/\//.test(
-                                                    building.path
-                                                  ) // Check if the path starts with "http" or "https"
-                                                  ? building.path
-                                                  : /^\/property\//.test(
-                                                      building.path
-                                                    ) // Check if the path starts with "/property/"
-                                                  ? `${
-                                                      process.env
-                                                        .NEXT_PUBLIC_SERVER_PORT
-                                                    }${building.path.replace(
-                                                      /\\/g,
-                                                      "/"
-                                                    )}`
-                                                  : `${building.path.replace(
-                                                      /\\/g,
-                                                      "/"
-                                                    )}` // Default to handling relative paths
-                                                : ""
-                                            }
-                                            alt={building.name}
+                                            src={`${
+                                              process.env
+                                                .NEXT_PUBLIC_SERVER_PORT
+                                            }${building.path || ""}`} // Full URL to the image
+                                            alt={
+                                              building.name || "Property Image"
+                                            } // Provide a default alt text
                                             onMouseEnter={() =>
                                               setHoveredImage(building.path)
                                             }
@@ -1452,9 +1443,7 @@ const AlveoBanner = () => {
                                             onClick={() =>
                                               handleImageClick(building.path)
                                             }
-                                            className="w-full h-64 object-cover 
-    transition-all duration-300 transform 
-    hover:scale-105"
+                                            className="w-full h-64 object-cover transition-all duration-300 transform hover:scale-105"
                                           />
                                         </div>
 

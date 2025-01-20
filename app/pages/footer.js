@@ -45,7 +45,7 @@ const Footer = () => {
               an AyalaLand Company
             </p>
           </div>
-          <div className="mb-10">
+          <div className="mb-10 my-10">
             <button
               onClick={handleDownloadClick}
               className="bg-slate-100 text-customBlue text-lg py-1 px-4 rounded-full"
