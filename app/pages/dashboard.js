@@ -551,7 +551,22 @@ const AlveoBanner = () => {
     }, 300); // Match the duration of the animation
   };
   const [currentClip, setCurrentClip] = useState(0);
+  const [isAccessible, setIsAccessible] = useState(true);
 
+  useEffect(() => {
+    const checkScreenSize = () => {
+      if (window.innerWidth < 1366) {
+        setIsAccessible(false);
+      } else {
+        setIsAccessible(true);
+      }
+    };
+
+    checkScreenSize(); // Check initially
+    window.addEventListener("resize", checkScreenSize);
+
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentClip((prev) => (prev + 1) % dashboardClips.length);
@@ -844,14 +859,14 @@ const AlveoBanner = () => {
                   {/* Left Column: Search Inputs */}
                   <div className="space-y-6 relative text-sm">
                     {/* Search Bar */}
-                    <div className="flex items-center border p-3 max-w-4xl bg-transparent">
+                    <div className="flex items-center border p-2 max-w-  bg-transparent">
                       {/* Dropdown Selection */}
                       <div className="relative">
                         <select
                           id="locationDropdown"
                           value={selectedValue}
                           onChange={handleSelectChange}
-                          className="bg-transparent w-full text-white placeholder-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 
+                          className="bg-transparent w-32 text-white placeholder-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 
                           "
                           aria-label="Select search category"
                         >
@@ -933,7 +948,8 @@ const AlveoBanner = () => {
                           placeholder="Enter your search"
                           aria-label="Search"
                           id="searchInput"
-                          className="w-full bg-transparent text-white placeholder-white px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-[#1F62B4] focus:border-[#1F62B4]"
+                          className="w-24 bg-transparent text-white placeholder-white px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-[#1F62B4] focus:border-[#1F62B4] 
+               sm:text-sm md:text-base lg:text-lg sm:px-6 md:px-8 lg:px-10 sm:py-3 md:py-4"
                           value={searchInput || ""}
                           onChange={handleSearchInputChange}
                         />
@@ -989,24 +1005,41 @@ const AlveoBanner = () => {
             {/* Room Planner Icon */}
             <div className="flex justify-center items-center">
               <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/roomplanner" target="_blank">
-                  <div className="cursor-pointer relative group">
-                    <IoBed
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1.1) translateY(-5px)")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1) translateY(0)")
-                      }
-                    />
-                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      Room Planner
+                {isAccessible ? (
+                  <a href="/pages/roomplanner" target="_blank">
+                    <div className="cursor-pointer relative group">
+                      <IoBed
+                        className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
+                        onMouseOver={(e) =>
+                          (e.currentTarget.style.transform =
+                            "scale(1.1) translateY(-5px)")
+                        }
+                        onMouseOut={(e) =>
+                          (e.currentTarget.style.transform =
+                            "scale(1) translateY(0)")
+                        }
+                      />
+                      <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        Room Planner
+                      </span>
+                    </div>
+                  </a>
+                ) : (
+                  <div
+                    className="cursor-not-allowed opacity-50"
+                    onClick={() =>
+                      handleShowWarningToast(
+                        "Room Planner is not available on smaller screens.",
+                        "warning"
+                      )
+                    }
+                  >
+                    <IoBed className="w-8 h-8 text-gray-400" />
+                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-gray-500 bg-gray-200 rounded px-2 py-1">
+                      Not available on smaller screens
                     </span>
                   </div>
-                </a>
+                )}
               </div>
             </div>
 

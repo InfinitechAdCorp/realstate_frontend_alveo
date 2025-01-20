@@ -994,7 +994,7 @@ const CanvasApp = () => {
         >
           <canvas
             id="canvas"
-            className="border-black w-screen h-32 xl:h-screen lg:h-auto bg-white"
+            className="border-black w-screen h-32 xl:h-screen lg:h-auto"
           ></canvas>
 
           <div
