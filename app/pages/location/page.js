@@ -7,7 +7,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Footer from "./../footer";
 import SEO from "../../seo/page";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 const ImageWithLoader = ({ src, alt }) => {
   const [isLoading, setIsLoading] = useState(true);
 

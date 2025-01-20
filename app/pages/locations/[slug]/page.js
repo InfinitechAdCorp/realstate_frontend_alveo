@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"; // Hook for navigation
 import Header from "../../header";
 import Footer from "./../../footer";
 import SEO from "./../../../seo/page";
-
+import Icon from "@/app/pages/socialmedia-icons/page";
 export default function BlogPost({ params }) {
   const router = useRouter(); // Correct usage inside a component
   const { slug } = params; // Extract slug from params

@@ -7,6 +7,7 @@ import Header from "../../header";
 import Footer from "./../../footer";
 import SEO from "./../../../seo/page";
 import { showToast } from "@/components/alert/page";
+import Icon from "@/app/pages/socialmedia-icons/page";
 export default function BlogPost({ params }) {
   const { slug } = params;
   const [property, setProperty] = useState(null);

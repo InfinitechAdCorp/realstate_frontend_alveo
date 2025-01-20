@@ -18,8 +18,6 @@ import {
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import Icon from "@/app/pages/socialmedia-icons/page";
 function ExplorePage() {
-  const searchParams = useSearchParams();
-  const specificLocation = searchParams.get("specificLocation");
   const [value, setValue] = useState("all");
   const [allBuildings, setAllBuildings] = useState([]); // Store all buildings data here
   const [filteredBuildings, setFilteredBuildings] = useState([]); // Store the filtered buildings based on selected category
