@@ -859,14 +859,14 @@ const AlveoBanner = () => {
                   {/* Left Column: Search Inputs */}
                   <div className="space-y-6 relative text-sm">
                     {/* Search Bar */}
-                    <div className="flex items-center border p-2 max-w-  bg-transparent">
+                    <div className="flex items-center border p-3 max-w-4xl bg-transparent">
                       {/* Dropdown Selection */}
                       <div className="relative">
                         <select
                           id="locationDropdown"
                           value={selectedValue}
                           onChange={handleSelectChange}
-                          className="bg-transparent w-32 text-white placeholder-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 
+                          className="bg-transparent w-full text-white placeholder-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 
                           "
                           aria-label="Select search category"
                         >
@@ -948,8 +948,7 @@ const AlveoBanner = () => {
                           placeholder="Enter your search"
                           aria-label="Search"
                           id="searchInput"
-                          className="w-24 bg-transparent text-white placeholder-white px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-[#1F62B4] focus:border-[#1F62B4] 
-               sm:text-sm md:text-base lg:text-lg sm:px-6 md:px-8 lg:px-10 sm:py-3 md:py-4"
+                          className="w-28 lg:w-full bg-transparent text-white placeholder-white px-4 py-2 border focus:outline-none focus:ring-2 focus:ring-[#1F62B4] focus:border-[#1F62B4]"
                           value={searchInput || ""}
                           onChange={handleSearchInputChange}
                         />
