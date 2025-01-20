@@ -194,9 +194,13 @@ function App() {
   return (
     <>
       <Header />
-      <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mb-20 mt-9">
+      To ensure the "Data Privacy Reminder" section remains centralized when the
+      layout switches to a two-row, one-column format on medium screens (md
+      breakpoint), you can adjust the flex properties and margin settings.
+      Here's the improved code: jsx Copy Edit
+      <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mt-9">
         {/* Data Privacy Reminder Section */}
-        <div className="w-full sm:w-1/2 lg:w-1/3 p-8 bg-white border border-customBlue mb-6 lg:mb-0">
+        <div className="w-full sm:w-3/4 md:w-2/3 lg:w-2/3 p-8 bg-white border border-customBlue mb-6 lg:mb-0 mx-auto">
           <h2 className="font-thin text-2xl text-customBlue mb-6 text-center">
             Data Privacy Reminder
           </h2>
@@ -428,8 +432,9 @@ function App() {
           </div>
         </div>
       </div>
-
-      <Footer />
+      <div className="mt-14">
+        <Footer />
+      </div>
     </>
   );
 }

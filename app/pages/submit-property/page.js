@@ -125,7 +125,7 @@ const SetAppointment = () => {
   };
 
   return (
-    <div className="">
+    <div className="bg-white">
       {/* SEO setup */}
       <SEO
         title="REAL ESTATE"
@@ -144,7 +144,7 @@ const SetAppointment = () => {
       </div>
 
       {/* Main content layout */}
-      <div className="flex-col lg:flex-row mt-4 mb-4 m-4 justify-center items-center">
+      <div className="flex-col lg:flex-row mt-4 m-4 justify-center items-center">
         {message && (
           <div
             className={`p-4 mt-4 text-white rounded-lg text-center ${
@@ -344,9 +344,10 @@ const SetAppointment = () => {
           )}
         </Formik>
       </div>
-
+      <div className="-mt-40">
+        <Footer />
+      </div>
       {/* Footer outside the main content */}
-      <Footer />
     </div>
   );
 };

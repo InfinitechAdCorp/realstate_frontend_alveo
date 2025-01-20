@@ -176,11 +176,11 @@ export default function LoanCalculator() {
         className="min-h-screen bg-cover bg-center "
         style={{ backgroundImage: "url('/assets/Alveo.png')" }}
       >
-        <div className="absolute inset-0 bg-customBlue opacity-80 z-0"></div>
+        <div className="absolute inset-0 bg-customBlue opacity-80 z-0 max-sm:h-[225%] sm:h-[145%] md:h-[140%] lg:h-[130%]"></div>
 
         <section className="relative z-20 py-10 p-2 text-customBlue ">
           <h1
-            className="mt-20 mb-5 font-semibold items-center text-3xl text-white 
+            className="mt-10 mb-5 font-semibold items-center text-3xl text-white 
       border-t-2 w-fit mx-auto border-white whitespace-nowrap"
           >
             LOAN CALCULATOR

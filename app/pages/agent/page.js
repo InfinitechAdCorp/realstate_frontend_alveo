@@ -49,10 +49,10 @@ export default function agent() {
         <div className="absolute inset-0 bg-customBlue opacity-80 z-0"></div>
 
         {/* Content Container */}
-        <div className="relative  w-full max-w-4xl bg-opacity-80 p-8 z-0">
-          <div className="flex w-full max-w-4xl bg-opacity-80 p-8">
+        <div className="relative w-full max-w-4xl bg-opacity-80 p-8 z-0">
+          <div className="flex flex-col md:flex-row w-full max-w-4xl bg-opacity-80 p-8">
             {/* Left Column: Image */}
-            <div className="flex-1 pr-5">
+            <div className="flex-1 pr-0 md:pr-5 mb-6 md:mb-0">
               <img
                 src="/assets/agent/ella.jpg"
                 alt="Ella Carmela Sarmiento"
@@ -61,14 +61,14 @@ export default function agent() {
             </div>
 
             {/* Right Column: Text */}
-            <div className="flex-1 flex flex-col justify-center items-center text-center ">
-              <h2 className="text-5xl font-bold text-white mb-4 leading-tight">
+            <div className="flex-1 flex flex-col justify-center items-center text-center">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4 leading-tight">
                 Ella Carmela Sarmiento
               </h2>
-              <p className="text-2xl font-semibold text-white uppercase tracking-wide">
+              <p className="text-xl md:text-2xl font-semibold text-white uppercase tracking-wide">
                 Property Specialist
               </p>
-              <p className="text-lg text-white leading-relaxed font-light max-w-3xl mx-auto opacity-80">
+              <p className="text-base md:text-lg text-white leading-relaxed font-light max-w-3xl mx-auto opacity-80">
                 As a dedicated property seller with extensive experience in the
                 real estate market, I take pride in being recognized as one of
                 DMCI Homes’ Top 5 Property Consultants in the JB Division. My
@@ -258,7 +258,7 @@ export default function agent() {
         </div>
       </div>
 
-      <div className="">
+      <div className="mt-14">
         <Footer />
       </div>
     </>

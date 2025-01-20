@@ -949,7 +949,7 @@ const CanvasApp = () => {
           <Accordion type="single" collapsible>
             {Object.keys(groupedData).map((category, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-lg xl:text-xl w-full p-4 flex justify-between items-center">
+                <AccordionTrigger className="text-lg xl:text-xl w-full p-4 flex justify-between items-center text-black">
                   {category}
                 </AccordionTrigger>
                 <AccordionContent>
@@ -957,7 +957,7 @@ const CanvasApp = () => {
                     {groupedData[category].map((item, itemIndex) => (
                       <div
                         key={itemIndex}
-                        className={`text-center w-4/5 ${
+                        className={`text-center w-4/5 text-black ${
                           itemIndex % 2 === 0 &&
                           itemIndex === groupedData[category].length - 1
                             ? "col-span-2"
@@ -994,8 +994,9 @@ const CanvasApp = () => {
         >
           <canvas
             id="canvas"
-            className="border-black w-screen h-32 xl:h-screen lg:h-auto  "
+            className="border-black w-screen h-32 xl:h-screen lg:h-auto bg-white"
           ></canvas>
+
           <div
             id="dimensionDisplay"
             className="text-lg w-auto fixed top-10 left-5 bg-white text-black p-2 border-2 border-black rounded z-50 xl:left-1/4 xl:top-20 mt-2"
