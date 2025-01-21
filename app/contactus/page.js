@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { showToast } from "@/components/alert/page";
-import Header from "../header";
+import Header from "@/app/pages/header";
 import Icon from "@/app/pages/socialmedia-icons/page";
-import Footer from "../footer";
+import Footer from "@/app/pages/footer";
 import { FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-icons/fa";
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -168,7 +168,7 @@ const ContactForm = () => {
               />
             </div>
 
-            <div class="flex justify-center">
+            <div className="flex justify-center">
               <button
                 type="submit"
                 className="w-1/2 py-3 bg-customBlue text-white font-thin  hover:bg-customBlue focus:outline-none focus:ring-2 focus:customBlue "

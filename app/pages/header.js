@@ -201,7 +201,7 @@ const Header = () => {
 
               {/* Contact Us Link */}
               <a
-                href="/pages/contactus"
+                href="/contactus"
                 className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 Contact Us
@@ -285,7 +285,7 @@ const Header = () => {
           </ul>
 
           <a
-            href="/pages/contactus"
+            href="/contactus"
             className="block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg"
           >
             CONTACT US
