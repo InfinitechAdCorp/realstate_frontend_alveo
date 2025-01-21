@@ -1760,7 +1760,7 @@ const DashboardComponent = () => {
         <MyBot />
         <Footer />
       </div>
-      <div className="fixed right-24 top-[95%] transform -translate-y-1/2 flex justify-center items-center bg-blue-500 rounded-full w-[60px] h-[60px] z-50 group">
+      <div className="fixed right-24 top-[93%] 2xl:top-[95%] transform -translate-y-1/2 flex justify-center items-center bg-blue-500 rounded-full w-[60px] h-[60px] z-50 group">
         <img
           src="/assets/review.png"
           className="w-10 h-10"
