@@ -1030,7 +1030,7 @@ export default function Admin({}) {
         )}
 
         <div
-          className={`w-full p-4 h-screen overflow-y-auto ${
+          className={`w-[90%] p-4 h-screen   ${
             isCanvasOpen ? "ml-64" : "ml-0"
           } md:ml-64`}
         >
@@ -1335,8 +1335,8 @@ export default function Admin({}) {
               </div>
             )}
             {activeNav === "DEVELOPMENT TYPE" && (
-              <div className="h-[600px] overflow-y-auto mt-20">
-                <div className="h-80 overflow-y-auto">
+              <div className=" overflow-y-auto mt-20">
+                <div className=" overflow-y-auto">
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Development Types</h2>
                     <button
@@ -1346,7 +1346,7 @@ export default function Admin({}) {
                       Add Development Type
                     </button>
                   </div>
-                  <ul>
+                  <ul className="h-[700px] overflow-y-auto">
                     {data.developmentTypes?.length > 0 ? (
                       data.developmentTypes.map((type) => (
                         <li
@@ -1423,8 +1423,8 @@ export default function Admin({}) {
             )}
 
             {activeNav === "ARCHITECTURAL THEME" && (
-              <div className="h-[600px] overflow-y-auto mt-20">
-                <div className="h-80 overflow-y-auto">
+              <div className="max-h-[80%] overflow-y-auto mt-20">
+                <div className="">
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">
                       Architectural Themes
@@ -1436,7 +1436,8 @@ export default function Admin({}) {
                       Add Theme
                     </button>
                   </div>
-                  <ul>
+
+                  <ul className="h-[700px] overflow-y-auto">
                     {data.architecturalThemes?.length > 0 ? (
                       data.architecturalThemes.map((theme) => (
                         <li
@@ -1509,8 +1510,8 @@ export default function Admin({}) {
               </div>
             )}
             {activeNav === "STATUS" && (
-              <div className="h-[600px] overflow-y-auto mt-20">
-                <div className="h-80 overflow-y-auto">
+              <div className="overflow-y-auto mt-20">
+                <div className="overflow-y-auto">
                   <div className="flex justify-between items-center mb-4">
                     <h2 className="text-xl font-semibold">Status</h2>
                     <button
@@ -1520,7 +1521,7 @@ export default function Admin({}) {
                       Add Status
                     </button>
                   </div>
-                  <ul>
+                  <ul className="h-[700px] overflow-y-auto">
                     {data.statusOptions?.length > 0 ? (
                       data.statusOptions.map((status) => (
                         <li
@@ -1599,7 +1600,7 @@ export default function Admin({}) {
                     Add Location
                   </button>
                 </div>
-                <ul>
+                <ul className="h-[700px] overflow-y-auto">
                   {data.locations?.length > 0 ? (
                     data.locations.map((location) => (
                       <li
@@ -1722,7 +1723,7 @@ export default function Admin({}) {
                       Add Chatbot Entry
                     </button>
                   </div>
-                  <ul>
+                  <ul className="h-[700px] overflow-y-auto">
                     {data.chatbotEntries?.length > 0 ? (
                       data.chatbotEntries.map((item) => (
                         <li

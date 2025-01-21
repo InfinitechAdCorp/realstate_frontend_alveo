@@ -124,7 +124,7 @@ const Testimonial = () => {
       </div>
 
       {/* Testimonial List */}
-      <ul className="border rounded-md shadow-md">
+      <ul className="border rounded-md shadow-md max-h-[70%] overflow-y-auto">
         {testimonialOptions.length > 0 ? (
           testimonialOptions.map((testimonial) => (
             <li
