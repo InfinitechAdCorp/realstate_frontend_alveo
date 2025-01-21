@@ -227,8 +227,10 @@ const Header = () => {
             {isExplorePage && (
               <div className="ml-auto flex items-center text-white">
                 <IoCall className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white" />
-                <a href="tel:+63288485000">
-                  <p className="mt-3 ms-2">CALL (632) 88485000</p>
+                <a href="tel:+63288485000" className="no-underline text-white">
+                  <p className="mt-3 ms-2 no-underline text-black">
+                    CALL (632) 88485000
+                  </p>
                 </a>
               </div>
             )}
