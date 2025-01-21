@@ -1314,26 +1314,27 @@ export default function Admin({}) {
             {/* Modal for displaying images */}
             {modalIsOpen && (
               <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-                <div className="bg-white p-4 rounded-lg w-1/3 h-auto overflow-x-auto flex items-center justify-center">
+                <div className="bg-white p-4 rounded-lg w-full max-w-3xl h-auto overflow-hidden flex items-center justify-center relative">
                   <button
                     onClick={closeModal2}
-                    className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-600 rounded p-2"
+                    className="absolute top-4 right-4 text-white bg-red-500 hover:bg-red-600 rounded-full p-2"
                   >
                     X
                   </button>
-                  <div className="flex justify-center items-center w-full h-full">
+                  <div className="flex justify-center items-center w-full h-full overflow-x-auto">
                     {modalImages.map((image, index) => (
                       <img
                         key={index}
                         src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${image}`} // Full URL to the image
                         alt={`Property image ${index + 1}`}
-                        className="w-full h-full object-contain" // Make image fill the container
+                        className="w-full h-full object-contain max-h-[80vh]" // Maintain aspect ratio and scale with max height
                       />
                     ))}
                   </div>
                 </div>
               </div>
             )}
+
             {activeNav === "DEVELOPMENT TYPE" && (
               <div className=" overflow-y-auto mt-20">
                 <div className=" overflow-y-auto">
