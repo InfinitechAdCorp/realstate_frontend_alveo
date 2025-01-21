@@ -74,11 +74,11 @@ export default function Admin({}) {
       <div className=" w-full">
         <header className="fixed top-0 left-0 w-full bg-white shadow-lg z-50">
           <div className="flex justify-between items-center p-4">
-            <div class="menu-container">
+            <div className="menu-container">
               <img
                 src="/assets/menu.png"
                 alt="Menu"
-                class="cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6"
+                className="cursor-pointer transform rotate-180 hover:opacity-80 w-5 h-5 sm:w-5 sm:h-5 lg:w-6 lg:h-6"
                 style={{ width: "25px", height: "25px" }}
                 onClick={openSidebar}
               />

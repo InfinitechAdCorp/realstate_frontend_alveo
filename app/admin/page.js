@@ -18,8 +18,12 @@ import SubmittedProperties from "@/components/admin/submittedProperties";
 import Slider from "react-slick";
 import Testimonial from "@/app/pages/testimonial/page";
 export default function Admin({}) {
+  const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isCanvasOpen, setIsCanvasOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
 
   const [showProperties, setShowProperties] = useState(false);
   const [isVisible, setIsVisible] = useState(true); // Controls visibility of popup
@@ -55,14 +59,14 @@ export default function Admin({}) {
     useState(false);
   const [isArchitecturalThemeModalOpen, setArchitecturalThemeModalOpen] =
     useState(false);
-  const [isStatusModalOpen, setStatusModalOpen] = useState(false);
+  const [locationModalOpen, setLocationModalOpen] = useState(false);
   const [isAreaModalOpen, setAreaModalOpen] = useState(false);
 
   // Functions to open the respective modals
   const openDevelopmentTypeModal = () => setDevelopmentTypeModalOpen(true);
   const openArchitecturalThemeModal = () =>
     setArchitecturalThemeModalOpen(true);
-  const openStatusModal = () => setStatusModalOpen(true);
+
   const openAreaModal = () => setAreaModalOpen(true);
   const [activeNav, setActiveNav] = useState("DASHBOARD"); // Default active nav
   const [data, setData] = useState({
@@ -82,6 +86,7 @@ export default function Admin({}) {
     newImage: null,
     locations: [],
   });
+  const [themeModalOpen, setThemeModalOpen] = useState(false); // Modal state for Architectural Theme
 
   const [chatbotData, setChatbotData] = useState([]);
   const [chatbotFormData, setChatbotFormData] = useState({
@@ -620,11 +625,8 @@ export default function Admin({}) {
         },
       })
         .then((response) => {
-          if (response.ok) {
-            handleShowSuccessToast(`Deleted Successfully!`);
-          } else {
-            handleShowErrorToast(`Deletion Failed!`);
-          }
+          handleShowSuccessToast(`Deleted Successfully!`);
+
           return response.json(); // Parse the JSON response
         })
         .then((data) => {
@@ -658,11 +660,8 @@ export default function Admin({}) {
         },
       })
         .then((response) => {
-          if (response.ok) {
-            handleShowSuccessToast(`Deleted Successfully!`);
-          } else {
-            handleShowErrorToast(`Deletion Failed: ${id}`);
-          }
+          handleShowSuccessToast(`Deleted Successfully!`);
+
           return response.json();
         })
         .then((data) => {
@@ -836,7 +835,7 @@ export default function Admin({}) {
   const closeModal = () => {
     setDevelopmentTypeModalOpen(false);
     setArchitecturalThemeModalOpen(false);
-    setStatusModalOpen(false);
+
     setAreaModalOpen(false);
   };
 
@@ -1060,7 +1059,15 @@ export default function Admin({}) {
                   width={20}
                   height={20}
                 />
-                <div className="dp" onClick={toggleDropdown}>
+                <div
+                  className="message flex items-center space-x-4 relative"
+                  onMouseEnter={() => setIsOpen(true)}
+                  onMouseLeave={() => {
+                    setTimeout(() => {
+                      setIsOpen(false);
+                    }, 1500); // 5-second delay before closing
+                  }}
+                >
                   <img
                     src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
                     className="dpicn rounded-full"
@@ -1068,19 +1075,22 @@ export default function Admin({}) {
                     width={40}
                     height={40}
                   />
-                </div>
 
-                {/* Dropdown Menu */}
-                {isOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg">
-                    <button
-                      onClick={handleLogout}
-                      className="block px-4 py-2 text-gray-800 w-full text-left hover:bg-gray-100"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
+                  {/* Dropdown Menu */}
+                  {isOpen && (
+                    <div className="absolute  -right-2 mt-32 w-40 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
+                      {/* Arrow above the dropdown */}
+                      <div className="absolute top-[-8px] right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-white"></div>
+
+                      <button
+                        onClick={handleLogout}
+                        className="block px-4 py-2 text-gray-800 w-full text-left rounded-lg hover:bg-gray-100"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
               </div>
               {/* Hamburger button */}
               {!isCanvasOpen && (
@@ -1327,35 +1337,13 @@ export default function Admin({}) {
             {activeNav === "DEVELOPMENT TYPE" && (
               <div className="h-[600px] overflow-y-auto mt-20">
                 <div className="h-80 overflow-y-auto">
-                  <h2 className="text-xl font-semibold mb-4">
-                    Development Types
-                  </h2>
-                  <div className="flex gap-2 mb-4">
-                    <input
-                      type="text"
-                      placeholder="New Type Name"
-                      value={data.newType || ""}
-                      onChange={(e) =>
-                        setData((prevData) => ({
-                          ...prevData,
-                          newType: e.target.value,
-                        }))
-                      }
-                      className="border rounded p-2 w-full"
-                    />
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">Development Types</h2>
                     <button
-                      onClick={() => {
-                        handleAdd(
-                          "development-type",
-                          data.newType,
-                          setData,
-                          "developmentTypes"
-                        );
-                        setData((prevData) => ({ ...prevData, newType: "" })); // Clear input
-                      }}
+                      onClick={() => setIsModalOpen(true)}
                       className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                     >
-                      Add
+                      Add Development Type
                     </button>
                   </div>
                   <ul>
@@ -1388,36 +1376,64 @@ export default function Admin({}) {
               </div>
             )}
 
-            {activeNav === "ARCHITECTURAL THEME" && (
-              <div className="h-[600px] overflow-y-auto mt-20">
-                {/* Architectural Theme */}
-                <div className="h-80 overflow-y-auto">
+            {/* Modal for Adding Development Type */}
+            {isModalOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
                   <h2 className="text-xl font-semibold mb-4">
-                    Architectural Themes
+                    Add Development Type
                   </h2>
-                  <div className="flex gap-2 mb-4">
-                    <input
-                      type="text"
-                      placeholder="New Theme Name"
-                      value={data.newTheme}
-                      onChange={(e) =>
-                        setData({ ...data, newTheme: e.target.value })
-                      }
-                      className="border rounded p-2 w-full"
-                    />
+                  <input
+                    type="text"
+                    placeholder="New Type Name"
+                    value={data.newType || ""}
+                    onChange={(e) =>
+                      setData((prevData) => ({
+                        ...prevData,
+                        newType: e.target.value,
+                      }))
+                    }
+                    className="border rounded p-2 w-full mb-4"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => setIsModalOpen(false)}
+                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
                     <button
                       onClick={() => {
                         handleAdd(
-                          "architectural-theme",
-                          data.newTheme,
+                          "development-type",
+                          data.newType,
                           setData,
-                          "architecturalThemes"
+                          "developmentTypes"
                         );
-                        setData({ ...data, newTheme: "" }); // Clear input after adding
+                        setData((prevData) => ({ ...prevData, newType: "" })); // Clear input
+                        setIsModalOpen(false);
                       }}
                       className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                     >
                       Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {activeNav === "ARCHITECTURAL THEME" && (
+              <div className="h-[600px] overflow-y-auto mt-20">
+                <div className="h-80 overflow-y-auto">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">
+                      Architectural Themes
+                    </h2>
+                    <button
+                      onClick={() => setThemeModalOpen(true)} // Open modal when clicked
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                    >
+                      Add Theme
                     </button>
                   </div>
                   <ul>
@@ -1450,34 +1466,58 @@ export default function Admin({}) {
               </div>
             )}
 
-            {activeNav === "STATUS" && (
-              <div className="h-[600px] overflow-y-auto mt-20">
-                {/* Status */}
-                <div className="h-80 overflow-y-auto">
-                  <h2 className="text-xl font-semibold mb-4">Status</h2>
-                  <div className="flex gap-2 mb-4">
-                    <input
-                      type="text"
-                      placeholder="New Status"
-                      value={data.newStatus}
-                      onChange={(e) =>
-                        setData({ ...data, newStatus: e.target.value })
-                      }
-                      className="border rounded p-2 w-full"
-                    />
+            {/* Modal for Adding Architectural Theme */}
+            {themeModalOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+                  <h2 className="text-xl font-semibold mb-4">
+                    Add New Architectural Theme
+                  </h2>
+                  <input
+                    type="text"
+                    placeholder="New Theme Name"
+                    value={data.newTheme || ""}
+                    onChange={(e) =>
+                      setData({ ...data, newTheme: e.target.value })
+                    }
+                    className="border rounded p-2 w-full mb-4"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => setThemeModalOpen(false)} // Close modal
+                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
                     <button
                       onClick={() => {
                         handleAdd(
-                          "status",
-                          data.newStatus,
+                          "architectural-theme",
+                          data.newTheme,
                           setData,
-                          "statusOptions"
+                          "architecturalThemes"
                         );
-                        setData({ ...data, newStatus: "" });
+                        setData({ ...data, newTheme: "" });
+                        setThemeModalOpen(false); // Close modal after adding
                       }}
                       className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                     >
                       Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            {activeNav === "STATUS" && (
+              <div className="h-[600px] overflow-y-auto mt-20">
+                <div className="h-80 overflow-y-auto">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">Status</h2>
+                    <button
+                      onClick={() => setIsStatusModalOpen(true)}
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                    >
+                      Add Status
                     </button>
                   </div>
                   <ul>
@@ -1506,14 +1546,94 @@ export default function Admin({}) {
               </div>
             )}
 
+            {/* Modal for Adding Status */}
+            {isStatusModalOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+                  <h2 className="text-xl font-semibold mb-4">Add New Status</h2>
+                  <input
+                    type="text"
+                    placeholder="New Status"
+                    value={data.newStatus || ""}
+                    onChange={(e) =>
+                      setData({ ...data, newStatus: e.target.value })
+                    }
+                    className="border rounded p-2 w-full mb-4"
+                  />
+                  <div className="flex justify-end gap-2">
+                    <button
+                      onClick={() => setIsStatusModalOpen(false)}
+                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleAdd(
+                          "status",
+                          data.newStatus,
+                          setData,
+                          "statusOptions"
+                        );
+                        setData({ ...data, newStatus: "" });
+                        setIsStatusModalOpen(false);
+                      }}
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
             {activeNav === "LOCATION" && (
               <div className="h-[600px] overflow-y-auto mt-20 px-4 sm:px-8">
-                {/* Locations */}
-                <div className="grid grid-cols-1 mb-6">
+                <div className="flex justify-between items-center mb-4">
                   <h2 className="text-lg sm:text-xl font-semibold mb-4">
                     Locations
                   </h2>
-                  <div className="flex flex-col sm:flex-row gap-2 mb-4">
+                  <button
+                    onClick={() => setLocationModalOpen(true)} // Open modal when clicked
+                    className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                  >
+                    Add Location
+                  </button>
+                </div>
+                <ul>
+                  {data.locations?.length > 0 ? (
+                    data.locations.map((location) => (
+                      <li
+                        key={location.id}
+                        className="flex flex-col sm:flex-row justify-between p-2 border-b hover:bg-gray-100"
+                      >
+                        <span className="text-sm sm:text-base">
+                          {location.area_name} - {location.title}
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleDelete("location", location.id, "locations")
+                          }
+                          className="text-red-500 hover:text-red-700 mt-2 sm:mt-0"
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="text-sm sm:text-base">No Locations Found</li>
+                  )}
+                </ul>
+              </div>
+            )}
+
+            {/* Modal for Adding Location */}
+            {locationModalOpen && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+                  <h2 className="text-xl font-semibold mb-4">
+                    Add New Location
+                  </h2>
+                  <div className="flex flex-col gap-4">
                     {/* Area Name */}
                     <input
                       type="text"
@@ -1550,175 +1670,147 @@ export default function Admin({}) {
                       onChange={handleImageChange}
                       className="border rounded p-2 w-full"
                     />
-                    {/* Add Button */}
+                    <div className="flex justify-end gap-2">
+                      {/* Cancel Button */}
+                      <button
+                        onClick={() => setLocationModalOpen(false)} // Close modal
+                        className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                      >
+                        Cancel
+                      </button>
+                      {/* Add Button */}
+                      <button
+                        onClick={() => {
+                          handleAddLoc(
+                            "location",
+                            data.newAreaName,
+                            data.newTitle,
+                            data.newDescription,
+                            data.newImage,
+                            setData,
+                            "locations"
+                          );
+                          setData({
+                            ...data,
+                            newAreaName: "",
+                            newTitle: "",
+                            newDescription: "",
+                            newImage: null,
+                          });
+                          setLocationModalOpen(false); // Close modal after adding
+                        }}
+                        className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                      >
+                        Add
+                      </button>
+                    </div>
+                  </div>
+                  {success && <p className="text-green-500 mt-4">{success}</p>}
+                </div>
+              </div>
+            )}
+            {activeNav === "CHATBOT" && (
+              <div className="h-[600px] overflow-y-auto mt-20">
+                {/* Chatbot Entries */}
+                <div className="h-80 overflow-y-auto">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-semibold">Chatbot Entries</h2>
                     <button
-                      onClick={() =>
-                        handleAddLoc(
-                          "location",
-                          data.newAreaName,
-                          data.newTitle,
-                          data.newDescription,
-                          data.newImage,
-                          setData,
-                          "locations"
-                        )
-                      }
-                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
+                      onClick={() => setIsChatbotModalOpen(true)}
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                     >
-                      Add
+                      Add Chatbot Entry
                     </button>
                   </div>
-                  {success && <p className="text-green-500 mb-4">{success}</p>}
                   <ul>
-                    {data.locations?.length > 0 ? (
-                      data.locations.map((location) => (
+                    {data.chatbotEntries?.length > 0 ? (
+                      data.chatbotEntries.map((item) => (
                         <li
-                          key={location.id}
-                          className="flex flex-col sm:flex-row justify-between p-2 border-b hover:bg-gray-100"
+                          key={item.id}
+                          className="flex justify-between p-2 border-b hover:bg-gray-100"
                         >
-                          <span className="text-sm sm:text-base">
-                            {location.area_name} - {location.title}
-                          </span>
+                          <div>
+                            <h5 className="font-semibold">{item.question}</h5>
+                            <p className="text-sm text-gray-600">
+                              {item.answer}
+                            </p>
+                          </div>
                           <button
                             onClick={() =>
-                              handleDelete("location", location.id, "locations")
+                              handleDelete("chatbot", item.id, "chatbotEntries")
                             }
-                            className="text-red-500 hover:text-red-700 mt-2 sm:mt-0"
+                            className="text-red-500 hover:text-red-700"
                           >
                             Delete
                           </button>
                         </li>
                       ))
                     ) : (
-                      <li className="text-sm sm:text-base">
-                        No Locations Found
-                      </li>
+                      <li>No Chatbot Entries Found</li>
                     )}
                   </ul>
                 </div>
-              </div>
-            )}
 
-            {activeNav === "CHATBOT" && (
-              <div className="p-6 w-full bg-white rounded-lg shadow-md">
-                <h3 className="text-2xl font-semibold text-center text-gray-800 mb-6">
-                  Chatbot Table
-                </h3>
-
-                <table className="w-full table-auto mb-8 border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600">
-                        ID
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600">
-                        Question
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600">
-                        Answer
-                      </th>
-                      <th className="px-4 py-2 text-left text-sm font-semibold text-white bg-indigo-600">
-                        Actions
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.chatbotEntries && data.chatbotEntries.length > 0 ? (
-                      data.chatbotEntries.map((item) => (
-                        <tr
-                          key={item.id || `${item.question}-${item.answer}`}
-                          className="hover:bg-gray-100"
+                {/* Modal for Adding/Editing Chatbot Entry */}
+                {isChatbotModalOpen && (
+                  <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+                      <h2 className="text-xl font-semibold mb-4">
+                        {isEditing ? "Edit" : "Add"} Chatbot Entry
+                      </h2>
+                      <div className="space-y-4">
+                        {/* Question Input */}
+                        <input
+                          type="text"
+                          name="question"
+                          value={chatbotFormData.question}
+                          onChange={handleInputChange_chatbot}
+                          placeholder="Enter question"
+                          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                        {/* Answer Input */}
+                        <input
+                          type="text"
+                          name="answer"
+                          value={chatbotFormData.answer}
+                          onChange={handleInputChange_chatbot}
+                          placeholder="Enter answer"
+                          className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        />
+                      </div>
+                      {/* Add/Update Button */}
+                      <div className="flex justify-end gap-2 mt-6">
+                        <button
+                          onClick={() => setIsChatbotModalOpen(false)}
+                          className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
                         >
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            {item.id}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            {item.question}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            {item.answer}
-                          </td>
-                          <td className="px-4 py-2 text-sm text-gray-800">
-                            <button
-                              className="bg-red-600 text-white py-1 px-3 rounded hover:bg-red-500"
-                              onClick={() =>
-                                handleDelete(
-                                  "chatbot",
-                                  item.id,
-                                  "chatbotEntries"
-                                )
-                              }
-                            >
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan="4"
-                          className="px-4 py-2 text-center text-sm text-gray-500"
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleAdd(
+                              "chatbot",
+                              {
+                                question: chatbotFormData.question,
+                                answer: chatbotFormData.answer,
+                              },
+                              setData,
+                              "chatbotEntries"
+                            )
+                          }
+                          className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
                         >
-                          No data available
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-
-                <div className="bg-gray-50 p-6 rounded-lg shadow-sm">
-                  <h4 className="text-xl font-semibold text-gray-800 mb-4">
-                    {isEditing ? "Edit" : "Add"} Chatbot Entry
-                  </h4>
-
-                  <div className="space-y-4">
-                    <input
-                      type="text"
-                      name="question"
-                      value={chatbotFormData.question}
-                      onChange={handleInputChange_chatbot}
-                      placeholder="Enter question"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-                    <input
-                      type="text"
-                      name="answer"
-                      value={chatbotFormData.answer}
-                      onChange={handleInputChange_chatbot}
-                      placeholder="Enter answer"
-                      className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
+                          {isEditing ? "Update" : "Add"}
+                        </button>
+                      </div>
+                    </div>
                   </div>
-
-                  <div className="flex justify-center">
-                    <button
-                      className={`w-1/2 mt-10 py-3 text-white rounded-md ${
-                        isEditing
-                          ? "bg-indigo-600 hover:bg-indigo-500"
-                          : "bg-green-600 hover:bg-green-500"
-                      }`}
-                      onClick={() =>
-                        handleAdd(
-                          "chatbot",
-                          {
-                            question: chatbotFormData.question,
-                            answer: chatbotFormData.answer,
-                          },
-                          setData,
-                          "chatbotEntries"
-                        )
-                      }
-                    >
-                      {isEditing ? "Update" : "Add"}
-                    </button>
-                  </div>
-                </div>
+                )}
               </div>
             )}
           </div>
 
-          <div>
+          {/* <div>
             <DevelopmentTypeModal
               isOpen={isDevelopmentTypeModalOpen}
               closeModal={closeModal}
@@ -1729,7 +1821,7 @@ export default function Admin({}) {
             />
             <StatusModal isOpen={isStatusModalOpen} closeModal={closeModal} />
             <AreaModal isOpen={isAreaModalOpen} closeModal={closeModal} />
-          </div>
+          </div> */}
         </div>
       </div>
     </>
