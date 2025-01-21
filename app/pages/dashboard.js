@@ -1549,12 +1549,16 @@ const AlveoBanner = () => {
     </>
   );
 };
-
 const DashboardComponent = () => {
   const pathname = usePathname(); // Use the usePathname hook to access the current path
   const [currentLocation, setCurrentLocation] = useState("LOCATION");
   const [specificLocation, setSpecificLocation] = useState("");
   const [posts, setPosts] = useState({}); // State to store fetched data
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [testimonialName, setTestimonialName] = useState(""); // State for testimonial name
+  const [testimonialMessage, setTestimonialMessage] = useState(""); // State for testimonial message
+  const [testimonialOptions, setTestimonialOptions] = useState([]); // State to store added testimonials
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -1593,18 +1597,44 @@ const DashboardComponent = () => {
         console.error("Error fetching areas:", error);
       });
   }, []);
-  const handleToggle = (key) => {
-    setExpanded((prevExpanded) => ({
-      ...prevExpanded,
-      [key]: !prevExpanded[key],
-    }));
+
+  const handleAdd = async () => {
+    if (testimonialName.trim() !== "" && testimonialMessage.trim() !== "") {
+      const newTestimonialItem = {
+        name: testimonialName,
+        message: testimonialMessage,
+      };
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/testimonials_user`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newTestimonialItem),
+          }
+        );
+
+        const addedTestimonial = await response.json();
+        setTestimonialOptions([...testimonialOptions, addedTestimonial]);
+        setTestimonialName(""); // Reset name field
+        setTestimonialMessage(""); // Reset message field
+
+        handleShowSuccessToast("Testimonial added successfully!");
+        setIsModalOpen(false); // Close modal after submission
+      } catch (err) {
+        setError("Failed to add testimonial.");
+      }
+    }
   };
 
   const [expanded, setExpanded] = useState({});
-
   const toggleReadMore = (key) => {
     setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+
   return (
     <>
       <SEO
@@ -1613,13 +1643,11 @@ const DashboardComponent = () => {
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
-
       <div className="mb-10">
-        <Header /> <Icon />
+        <Header />
+        <Icon />
       </div>
-
       <AlveoBanner />
-
       <Carousel />
       <div className="flex flex-col xl:flex-row w-screen">
         <div className="w-full">
@@ -1628,20 +1656,6 @@ const DashboardComponent = () => {
       </div>
       <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-5">
         <div className="w-full flex xl:flex-row">
-          {/* Map Section */}
-          {/* <div className='items-start w-full xl:w-1/2 mb-6 xl:mb-0 me-5 p-3'>
-            <h1 className='font-thin items-center text-4xl text-customBlue border-t-2 w-28 border-customBlue pl-4 pb-3 mx-20 whitespace-nowrap'>
-              OUR LOCATIONS
-            </h1>
-            {/* <Map/> */}
-          {/* <img
-              src='/assets/Location/Address-cuate.svg'
-              alt='Our Locations'
-              className='w-full h-80 mx-auto hidden sm:block'
-            />
-          </div>  */}
-
-          {/* Image Gallery Section */}
           <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10 px-4 sm:px-6 lg:px-8">
             <h1
               className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
@@ -1652,8 +1666,8 @@ const DashboardComponent = () => {
             <div className="p-2 mx-auto">
               <div className="flex flex-wrap -mx-2">
                 {Object.values(posts)
-                  .slice(-4) // Limit to the last 4 items
-                  .reverse() // Reverse the order to display the latest first
+                  .slice(-4)
+                  .reverse()
                   .map(({ location, key, path, title, intro }) => (
                     <div
                       className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-8"
@@ -1661,14 +1675,11 @@ const DashboardComponent = () => {
                     >
                       <div className="bg-white shadow-md overflow-hidden flex flex-col h-full">
                         <div className="relative group w-full h-fit">
-                          {/* ImageWithLoader Container */}
                           <ImageWithLoader
                             src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${path}`}
                             alt={title}
                             className="w-full h-full object-cover"
                           />
-
-                          {/* Hover Text */}
                           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white text-lg font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             {location.toUpperCase()}
                           </div>
@@ -1687,7 +1698,7 @@ const DashboardComponent = () => {
                             </p>
                           </div>
                           <a
-                            href={`/pages/locations/${key}`} // Standard anchor tag for navigation
+                            href={`/pages/locations/${key}`}
                             className="mt-4 text-customBlue hover:text-customBlue"
                           >
                             {expanded[key] ? "Read Less" : "Read More"} &rarr;
@@ -1708,17 +1719,58 @@ const DashboardComponent = () => {
         </div>
       </div>
 
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 className="text-lg font-semibold mb-4">Add Testimonial</h3>
+
+            <input
+              type="text"
+              placeholder="Name"
+              value={testimonialName}
+              onChange={(e) => setTestimonialName(e.target.value)}
+              className="border rounded p-2 w-full mb-3"
+            />
+            <textarea
+              placeholder="Message"
+              value={testimonialMessage}
+              onChange={(e) => setTestimonialMessage(e.target.value)}
+              className="border rounded p-2 w-full h-24 mb-3"
+            />
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={handleAdd}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+              >
+                Add
+              </button>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-sm:mt-32 sm:mt-32 xl:mt-0 xl:z-50">
         <SocialMediaFloating />
         <MyBot />
         <Footer />
       </div>
-
-      {/**    
-        
-      */}
-
-      <div></div>
+      <div className="fixed right-24 top-[95%] transform -translate-y-1/2 flex justify-center items-center bg-blue-500 rounded-full w-[60px] h-[60px] z-50 group">
+        <img
+          src="/assets/review.png"
+          className="w-10 h-10"
+          alt="Review"
+          onClick={() => setIsModalOpen(true)}
+        />
+        <div className="absolute bottom-full mb-2 bg-blue-500 text-white text-sm rounded-full px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          Add Testimonial
+        </div>
+      </div>
     </>
   );
 };
