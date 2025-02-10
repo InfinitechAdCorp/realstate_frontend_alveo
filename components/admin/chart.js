@@ -170,7 +170,7 @@ export default function CardCharts(data) {
   };
 
   return (
-    <div className="mt-20">
+    <div className="">
       {/* Pie Chart 1 */}
       <div className="flex">
         <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
@@ -191,8 +191,8 @@ export default function CardCharts(data) {
                   data={getPieChartData(propertyInquiryData)}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={50}
+                  outerRadius={70}
                   fill="#8884d8"
                 >
                   {propertyInquiryData.map((entry, index) => (
