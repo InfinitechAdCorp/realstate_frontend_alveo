@@ -937,7 +937,7 @@ export function DataTable({ columns, data, newData }) {
 
       <div className="flex mb-5 ">
         <Input
-          placeholder="Filter emails..."
+          placeholder="Search Building Name"
           value={table.getColumn("name")?.getFilterValue() ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)

@@ -17,6 +17,9 @@ import Appointment from "@/components/admin/appointments";
 import SubmittedProperties from "@/components/admin/submittedProperties";
 import Slider from "react-slick";
 import Testimonial from "@/app/pages/testimonial/page";
+import { jsPDF } from "jspdf";
+import * as Yup from "yup";
+import { Formik, Field, Form, ErrorMessage } from "formik";
 export default function Admin({}) {
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +43,40 @@ export default function Admin({}) {
   const [currentImages, setCurrentImages] = useState([]);
   const [authToken, setAuthToken] = useState([]); // State to store fetched data from API
   const [properties, setProperties] = useState([]); // State to store fetched data from API
+  // For newType form
+  const typeValidationSchema = Yup.object({
+    newType: Yup.string()
+      .required("Type name is required")
+      .min(3, "Type name must be at least 3 characters")
+      .max(50, "Type name can't be longer than 50 characters"),
+  });
+  const themeValidationSchema = Yup.object({
+    newTheme: Yup.string()
+      .required("Theme name is required") // Ensure the theme name is provided
+      .min(3, "Theme name must be at least 3 characters") // Optional: Validate length
+      .max(50, "Theme name must be at most 50 characters"), // Optional: Validate max length
+  });
+  // For newStatus form
+  const statusValidationSchema = Yup.object({
+    newStatus: Yup.string()
+      .required("Status name is required")
+      .min(3, "Status name must be at least 3 characters")
+      .max(50, "Status name can't be longer than 50 characters"),
+  });
+  const locationValidationSchema = Yup.object({
+    newAreaName: Yup.string()
+      .required("Area name is required")
+      .min(3, "Area name must be at least 3 characters")
+      .max(50, "Area name can't be longer than 50 characters"),
+    newTitle: Yup.string()
+      .required("Title is required")
+      .min(3, "Title must be at least 3 characters")
+      .max(50, "Title can't be longer than 50 characters"),
+    newDescription: Yup.string()
+      .required("Description is required")
+      .min(10, "Description must be at least 10 characters")
+      .max(200, "Description can't be longer than 200 characters"),
+  });
 
   const [counts, setCounts] = useState({
     properties: 0,
@@ -353,6 +390,63 @@ export default function Admin({}) {
     fetchData(); // Call fetchData after setting the token
   }, [isLoggedIn, authToken]); // Depend on isLoggedIn and authToken
 
+  const exportData = () => {
+    const doc = new jsPDF();
+    let y = 20; // Starting y value for the first line
+
+    // Title of the PDF
+    doc.setFontSize(18);
+    doc.text("CLIENT PROPERTIES", 14, y);
+    y += 15; // Increase y for spacing below the title
+
+    // Table headers
+    doc.setFontSize(12);
+    doc.text("First Name", 14, y);
+    doc.text("Last Name", 40, y);
+    doc.text("Email", 70, y);
+    doc.text("Phone", 120, y);
+    doc.text("Property Name", 150, y);
+    doc.text("Location", 190, y);
+    doc.text("Price", 230, y);
+    doc.text("Status", 260, y);
+    doc.text("Description", 290, y);
+    doc.text("Files", 340, y);
+    y += 10; // Space after the header row
+
+    // Table content
+    submittedProperties.forEach((property) => {
+      doc.setFontSize(10);
+
+      // Print each data point in the corresponding column
+      doc.text(property.first_name, 14, y);
+      doc.text(property.last_name, 40, y);
+      doc.text(property.email, 70, y);
+      doc.text(property.phone, 120, y);
+      doc.text(property.property_name, 150, y);
+      doc.text(property.location, 190, y);
+      doc.text(property.price, 230, y);
+      doc.text(property.status, 260, y);
+      doc.text(property.description, 290, y);
+      const filesArray = JSON.parse(property.files);
+      doc.text(
+        filesArray.length > 0 ? filesArray.join(", ") : "No files",
+        340,
+        y
+      );
+
+      y += 10; // Space between rows
+
+      // Add a new page if content exceeds page height
+      if (y > 270) {
+        doc.addPage();
+        y = 20; // Reset y for new page
+      }
+    });
+
+    // Save the PDF
+    doc.save("client_properties.pdf");
+  };
+
   useEffect(() => {
     const Token = localStorage.getItem("auth_token");
     const LoginStatus = localStorage.getItem("isLoggedIn");
@@ -567,10 +661,9 @@ export default function Admin({}) {
         .then((data) => {
           console.log("Add Response:", data);
 
-          // Check if the API returned a success message or equivalent flag
           if (data?.success || data?.message) {
             handleShowSuccessToast(
-              `Item added successfully: ${newItem}`,
+              `${type.toUpperCase()} added successfully!`,
               "success"
             );
 
@@ -1221,6 +1314,14 @@ export default function Admin({}) {
                 <div className="justify-center text-center text-3xl my-2 mb-3">
                   <h1 className="text-customBlue">CLIENT PROPERTIES</h1>
                 </div>
+                <div className="text-center mb-4">
+                  <button
+                    onClick={exportData}
+                    className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Export Data
+                  </button>
+                </div>
                 <div className="overflow-x-auto">
                   <table className="table-auto border-collapse border border-gray-200 w-full text-sm text-left text-gray-700">
                     <thead>
@@ -1384,41 +1485,53 @@ export default function Admin({}) {
                   <h2 className="text-xl font-semibold mb-4">
                     Add Development Type
                   </h2>
-                  <input
-                    type="text"
-                    placeholder="New Type Name"
-                    value={data.newType || ""}
-                    onChange={(e) =>
-                      setData((prevData) => ({
-                        ...prevData,
-                        newType: e.target.value,
-                      }))
-                    }
-                    className="border rounded p-2 w-full mb-4"
-                  />
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => setIsModalOpen(false)}
-                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleAdd(
-                          "development-type",
-                          data.newType,
-                          setData,
-                          "developmentTypes"
-                        );
-                        setData((prevData) => ({ ...prevData, newType: "" })); // Clear input
-                        setIsModalOpen(false);
-                      }}
-                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
-                    >
-                      Add
-                    </button>
-                  </div>
+                  <Formik
+                    initialValues={{ newType: data.newType }}
+                    validationSchema={typeValidationSchema}
+                    onSubmit={(values, { setSubmitting }) => {
+                      handleAdd(
+                        "development-type",
+                        values.newType,
+                        setData,
+                        "developmentTypes"
+                      );
+                      setData({ newType: "" }); // Clear input
+                      setIsModalOpen(false);
+                      setSubmitting(false);
+                    }}
+                  >
+                    {({ isSubmitting }) => (
+                      <Form>
+                        <Field
+                          type="text"
+                          name="newType"
+                          placeholder="New Type Name"
+                          className="border rounded p-2 w-full mb-4"
+                        />
+                        <ErrorMessage
+                          name="newType"
+                          component="div"
+                          className="text-red-500 text-sm mb-2"
+                        />
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsModalOpen(false)}
+                            className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                          >
+                            {isSubmitting ? "Adding..." : "Add"}
+                          </button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
                 </div>
               </div>
             )}
@@ -1469,47 +1582,75 @@ export default function Admin({}) {
             )}
 
             {/* Modal for Adding Architectural Theme */}
+            {/* Modal for Adding New Architectural Theme */}
             {themeModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
                   <h2 className="text-xl font-semibold mb-4">
                     Add New Architectural Theme
                   </h2>
-                  <input
-                    type="text"
-                    placeholder="New Theme Name"
-                    value={data.newTheme || ""}
-                    onChange={(e) =>
-                      setData({ ...data, newTheme: e.target.value })
-                    }
-                    className="border rounded p-2 w-full mb-4"
-                  />
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => setThemeModalOpen(false)} // Close modal
-                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleAdd(
-                          "architectural-theme",
-                          data.newTheme,
-                          setData,
-                          "architecturalThemes"
-                        );
-                        setData({ ...data, newTheme: "" });
-                        setThemeModalOpen(false); // Close modal after adding
-                      }}
-                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
-                    >
-                      Add
-                    </button>
-                  </div>
+                  <Formik
+                    initialValues={{
+                      newTheme: data.newTheme || "",
+                    }}
+                    validationSchema={themeValidationSchema} // Exclude validation for the file or image fields if applicable
+                    onSubmit={(values, { setSubmitting }) => {
+                      handleAdd(
+                        "architectural-theme",
+                        values.newTheme, // Only send the theme name
+                        setData,
+                        "architecturalThemes"
+                      );
+                      setData({ ...data, newTheme: "" });
+                      setThemeModalOpen(false); // Close modal after adding
+                      setSubmitting(false);
+                    }}
+                  >
+                    {({ values, handleChange, handleBlur, isSubmitting }) => (
+                      <Form>
+                        {/* Theme Name */}
+                        <Field
+                          type="text"
+                          name="newTheme"
+                          placeholder="New Theme Name"
+                          value={values.newTheme}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="border rounded p-2 w-full mb-4"
+                        />
+                        <ErrorMessage
+                          name="newTheme"
+                          component="div"
+                          className="text-red-500 text-sm mb-2"
+                        />
+
+                        <div className="flex justify-end gap-2">
+                          {/* Cancel Button */}
+                          <button
+                            type="button"
+                            onClick={() => setThemeModalOpen(false)} // Close modal
+                            className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                          >
+                            Cancel
+                          </button>
+                          {/* Add Button */}
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                          >
+                            {isSubmitting ? "Adding..." : "Add"}
+                          </button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+
+                  {success && <p className="text-green-500 mt-4">{success}</p>}
                 </div>
               </div>
             )}
+
             {activeNav === "STATUS" && (
               <div className="overflow-y-auto mt-20">
                 <div className="overflow-y-auto">
@@ -1549,42 +1690,58 @@ export default function Admin({}) {
             )}
 
             {/* Modal for Adding Status */}
+
             {isStatusModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
                   <h2 className="text-xl font-semibold mb-4">Add New Status</h2>
-                  <input
-                    type="text"
-                    placeholder="New Status"
-                    value={data.newStatus || ""}
-                    onChange={(e) =>
-                      setData({ ...data, newStatus: e.target.value })
-                    }
-                    className="border rounded p-2 w-full mb-4"
-                  />
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => setIsStatusModalOpen(false)}
-                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => {
-                        handleAdd(
-                          "status",
-                          data.newStatus,
-                          setData,
-                          "statusOptions"
-                        );
-                        setData({ ...data, newStatus: "" });
-                        setIsStatusModalOpen(false);
-                      }}
-                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
-                    >
-                      Add
-                    </button>
-                  </div>
+                  <Formik
+                    initialValues={{ newStatus: data.newStatus || "" }}
+                    validationSchema={statusValidationSchema} // Updated schema here
+                    onSubmit={(values, { setSubmitting }) => {
+                      handleAdd(
+                        "status",
+                        values.newStatus,
+                        setData,
+                        "statusOptions"
+                      );
+                      setData({ newStatus: "" }); // Clear input
+                      setIsStatusModalOpen(false);
+                      setSubmitting(false);
+                    }}
+                  >
+                    {({ isSubmitting }) => (
+                      <Form>
+                        <Field
+                          type="text"
+                          name="newStatus"
+                          placeholder="New Status"
+                          className="border rounded p-2 w-full mb-4"
+                        />
+                        <ErrorMessage
+                          name="newStatus"
+                          component="div"
+                          className="text-red-500 text-sm mb-2"
+                        />
+                        <div className="flex justify-end gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setIsStatusModalOpen(false)}
+                            className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                          >
+                            {isSubmitting ? "Adding..." : "Add"}
+                          </button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
                 </div>
               </div>
             )}
@@ -1629,88 +1786,125 @@ export default function Admin({}) {
             )}
 
             {/* Modal for Adding Location */}
+            {/* Modal for Adding Location */}
             {locationModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
                 <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
                   <h2 className="text-xl font-semibold mb-4">
                     Add New Location
                   </h2>
-                  <div className="flex flex-col gap-4">
-                    {/* Area Name */}
-                    <input
-                      type="text"
-                      placeholder="Area Name"
-                      value={data.newAreaName || ""}
-                      onChange={(e) =>
-                        setData({ ...data, newAreaName: e.target.value })
-                      }
-                      className="border rounded p-2 w-full"
-                    />
-                    {/* Title */}
-                    <input
-                      type="text"
-                      placeholder="Title"
-                      value={data.newTitle || ""}
-                      onChange={(e) =>
-                        setData({ ...data, newTitle: e.target.value })
-                      }
-                      className="border rounded p-2 w-full"
-                    />
-                    {/* Description */}
-                    <input
-                      type="text"
-                      placeholder="Description"
-                      value={data.newDescription || ""}
-                      onChange={(e) =>
-                        setData({ ...data, newDescription: e.target.value })
-                      }
-                      className="border rounded p-2 w-full"
-                    />
-                    {/* File Upload */}
-                    <input
-                      type="file"
-                      onChange={handleImageChange}
-                      className="border rounded p-2 w-full"
-                    />
-                    <div className="flex justify-end gap-2">
-                      {/* Cancel Button */}
-                      <button
-                        onClick={() => setLocationModalOpen(false)} // Close modal
-                        className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                      >
-                        Cancel
-                      </button>
-                      {/* Add Button */}
-                      <button
-                        onClick={() => {
-                          handleAddLoc(
-                            "location",
-                            data.newAreaName,
-                            data.newTitle,
-                            data.newDescription,
-                            data.newImage,
-                            setData,
-                            "locations"
-                          );
-                          setData({
-                            ...data,
-                            newAreaName: "",
-                            newTitle: "",
-                            newDescription: "",
-                            newImage: null,
-                          });
-                          setLocationModalOpen(false); // Close modal after adding
-                        }}
-                        className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
-                      >
-                        Add
-                      </button>
-                    </div>
-                  </div>
+                  <Formik
+                    initialValues={{
+                      newAreaName: data.newAreaName || "",
+                      newTitle: data.newTitle || "",
+                      newDescription: data.newDescription || "",
+                    }}
+                    validationSchema={locationValidationSchema} // Excludes file field from validation
+                    onSubmit={(values, { setSubmitting }) => {
+                      handleAddLoc(
+                        "location",
+                        values.newAreaName,
+                        values.newTitle,
+                        values.newDescription,
+                        data.newImage, // Handle image separately
+                        setData,
+                        "locations"
+                      );
+                      setData({
+                        ...data,
+                        newAreaName: "",
+                        newTitle: "",
+                        newDescription: "",
+                        newImage: null,
+                      });
+                      setLocationModalOpen(false); // Close modal after adding
+                      setSubmitting(false);
+                    }}
+                  >
+                    {({ values, handleChange, handleBlur, isSubmitting }) => (
+                      <Form>
+                        {/* Area Name */}
+                        <Field
+                          type="text"
+                          name="newAreaName"
+                          placeholder="Area Name"
+                          value={values.newAreaName}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="border rounded p-2 w-full mb-4"
+                        />
+                        <ErrorMessage
+                          name="newAreaName"
+                          component="div"
+                          className="text-red-500 text-sm mb-2"
+                        />
+
+                        {/* Title */}
+                        <Field
+                          type="text"
+                          name="newTitle"
+                          placeholder="Title"
+                          value={values.newTitle}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="border rounded p-2 w-full mb-4"
+                        />
+                        <ErrorMessage
+                          name="newTitle"
+                          component="div"
+                          className="text-red-500 text-sm mb-2"
+                        />
+
+                        {/* Description */}
+                        <Field
+                          type="text"
+                          name="newDescription"
+                          placeholder="Description"
+                          value={values.newDescription}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className="border rounded p-2 w-full mb-4"
+                        />
+                        <ErrorMessage
+                          name="newDescription"
+                          component="div"
+                          className="text-red-500 text-sm mb-2"
+                        />
+
+                        {/* File Upload (no validation) */}
+                        <input
+                          type="file"
+                          onChange={(e) => handleImageChange(e)} // handle image change
+                          className="border rounded p-2 w-full mb-4"
+                        />
+
+                        <div className="flex justify-end gap-2">
+                          {/* Cancel Button */}
+                          <button
+                            type="button"
+                            onClick={() => setLocationModalOpen(false)} // Close modal
+                            className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                          >
+                            Cancel
+                          </button>
+                          {/* Add Button */}
+                          <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                          >
+                            {isSubmitting ? "Adding..." : "Add"}
+                          </button>
+                        </div>
+                      </Form>
+                    )}
+                  </Formik>
+
                   {success && <p className="text-green-500 mt-4">{success}</p>}
                 </div>
               </div>
             )}
+
             {activeNav === "CHATBOT" && (
               <div className="h-[600px] overflow-y-auto mt-20">
                 {/* Chatbot Entries */}

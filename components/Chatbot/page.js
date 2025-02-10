@@ -1,67 +1,67 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { createBot } from 'botui'
-import Image from 'next/image'
+import React, { useState, useEffect, useRef } from "react";
+import { createBot } from "botui";
+import Image from "next/image";
 import { MdMoreHoriz } from "react-icons/md";
 
 const MyBot = () => {
-  const [isChatVisible, setIsChatVisible] = useState(false)
-  const [isTyping, setIsTyping] = useState(false)
-  const [messages, setMessages] = useState([])
-  const [property, setProperty] = useState([])
-  const [location, setLocation] = useState([])
+  const [isChatVisible, setIsChatVisible] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [property, setProperty] = useState([]);
+  const [location, setLocation] = useState([]);
   const [values, setValues] = useState({
-    location: '',
-    architectural: '',
-    price: '',
-    unit: ''
-  })
+    location: "",
+    architectural: "",
+    price: "",
+    unit: "",
+  });
   const [unitOptions, setUnitOptions] = useState([
-    { label: '1BR', value: '1BR' },
-    { label: '2BR', value: '2BR' },
-    { label: '3BR', value: '3BR' },
-    { label: 'Studio', value: 'Studio' }
-  ])
+    { label: "1BR", value: "1BR" },
+    { label: "2BR", value: "2BR" },
+    { label: "3BR", value: "3BR" },
+    { label: "Studio", value: "Studio" },
+  ]);
   const [priceOptions, setPriceOptions] = useState([
-    { label: '1M-3M', value: '1,000,000 - 3,000,000' },
-    { label: '3M-5M', value: '3,000,000 - 5,000,000' },
-    { label: '5M-8M', value: '5,000,000 - 8,000,000' },
-    { label: '8M-15M', value: '8,000,000 - 15,000,000' },
-    { label: '15M-30M', value: '15,000,000 - 30,000,000' },
-    { label: '30M-50M', value: '30,000,000 - 50,000,000' },
-    { label: '50M +', value: '50,000,000' }
-  ])
-  const [architectural, setArchitectural] = useState([])
-  const [userMessage, setUserMessage] = useState('')
-  const [conversationStage, setConversationStage] = useState('greeting')
-  const myBot = createBot()
+    { label: "1M-3M", value: "1,000,000 - 3,000,000" },
+    { label: "3M-5M", value: "3,000,000 - 5,000,000" },
+    { label: "5M-8M", value: "5,000,000 - 8,000,000" },
+    { label: "8M-15M", value: "8,000,000 - 15,000,000" },
+    { label: "15M-30M", value: "15,000,000 - 30,000,000" },
+    { label: "30M-50M", value: "30,000,000 - 50,000,000" },
+    { label: "50M +", value: "50,000,000" },
+  ]);
+  const [architectural, setArchitectural] = useState([]);
+  const [userMessage, setUserMessage] = useState("");
+  const [conversationStage, setConversationStage] = useState("greeting");
+  const myBot = createBot();
 
-  const chatContainerRef = useRef(null)
+  const chatContainerRef = useRef(null);
   useEffect(() => {
     // Whenever values.location changes, you can perform some action
-    console.log(values)
-  }, [values]) // This will run when values.location is updated
+    console.log(values);
+  }, [values]); // This will run when values.location is updated
 
   const toggleChat = () => {
-    setIsChatVisible(!isChatVisible)
-  }
+    setIsChatVisible(!isChatVisible);
+  };
 
   const showTypingIndicator = () => {
-    setIsTyping(true)
+    setIsTyping(true);
     setTimeout(() => {
-      setIsTyping(false)
-    }, 2000)
-  }
+      setIsTyping(false);
+    }, 2000);
+  };
 
   const handleUserInput = () => {
-    if (userMessage.trim() !== '') {
-      setMessages([...messages, { sender: 'user', text: userMessage }])
-      setUserMessage('')
-      showTypingIndicator()
+    if (userMessage.trim() !== "") {
+      setMessages([...messages, { sender: "user", text: userMessage }]);
+      setUserMessage("");
+      showTypingIndicator();
       setTimeout(() => {
-        processUserResponse(userMessage)
-      }, 2000)
+        processUserResponse(userMessage);
+      }, 2000);
     }
-  }
+  };
 
   // const processUserResponse = message => {
   //   console.log(
@@ -95,177 +95,246 @@ const MyBot = () => {
   //   }
   // }
 
-  const processUserResponse = async message => {
+  const processUserResponse = async (message) => {
     console.log(
       `processUserResponse called with message: ${message}, Stage: ${conversationStage}`
-    )
+    );
 
     setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'bot', text: '', typing: true }, 
+      { sender: "bot", text: "", typing: true },
     ]);
 
     switch (conversationStage) {
-      case 'greeting':
-        handleGreeting(message)
-        break
+      case "greeting":
+        handleGreeting(message);
+        break;
 
-      case 'viewProperty':
-        handleViewProperty(message)
-        break
+      case "viewProperty":
+        handleViewProperty(message);
+        break;
 
-      case 'handleArchitectural':
-        handleArchitectural(message)
-        break
+      case "handleArchitectural":
+        handleArchitectural(message);
+        break;
 
-      case 'handleUnit':
-        handleUnit(message)
-        break
+      case "handleUnit":
+        handleUnit(message);
+        break;
 
-      case 'handlePrice':
-        handlePrice(message)
-        break
+      case "handlePrice":
+        handlePrice(message);
+        break;
 
-      case 'showProperty':
-        showProperty(message)
-        break
+      case "showProperty":
+        showProperty(message);
+        break;
 
       default:
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/chatbot/get-answer`,
             {
-              method: 'POST',
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
               },
-              body: JSON.stringify({ message })
+              body: JSON.stringify({ message }),
             }
-          )
+          );
 
-          const data = await response.json()
+          const data = await response.json();
 
           // Remove the "typing" message and replace with the actual answer
-          setMessages(prevMessages => {
+          setMessages((prevMessages) => {
             // Remove the last typing message
-            const updatedMessages = prevMessages.filter(msg => !msg.typing)
+            const updatedMessages = prevMessages.filter((msg) => !msg.typing);
             // Add the bot's answer
             return [
               ...updatedMessages,
               {
-                sender: 'bot',
+                sender: "bot",
                 text:
-                  data.status === 'success'
+                  data.status === "success"
                     ? data.answer
-                    : 'I didn’t understand that.'
-              }
-            ]
-          })
+                    : "I didn’t understand that.",
+              },
+            ];
+          });
         } catch (error) {
-          console.error('Error fetching chatbot response:', error)
-          setMessages(prevMessages => {
+          console.error("Error fetching chatbot response:", error);
+          setMessages((prevMessages) => {
             // Remove the last typing message and add an error message
-            const updatedMessages = prevMessages.filter(msg => !msg.typing)
+            const updatedMessages = prevMessages.filter((msg) => !msg.typing);
             return [
               ...updatedMessages,
               {
-                sender: 'bot',
-                text: 'Something went wrong. Please try again later.'
-              }
-            ]
-          })
+                sender: "bot",
+                text: "Something went wrong. Please try again later.",
+              },
+            ];
+          });
         }
-        break
+        break;
     }
-  }
+  };
 
-  const handleButtonClick = value => {
+  const handleButtonClick = (value) => {
     // Find the selected unit in the unit options array
-    const selectedUnit = unitOptions.find(option => option.value === value)
-    const selectedPrice = priceOptions.find(price => price.value === value)
+    const selectedUnit = unitOptions.find((option) => option.value === value);
+    const selectedPrice = priceOptions.find((price) => price.value === value);
 
     // Find the selected location in the location array
-    const selectedLocation = location.find(loc => loc.location === value)
-    console.log(selectedPrice)
+    const selectedLocation = location.find((loc) => loc.location === value);
+    console.log(selectedPrice);
     // Find the selected architectural theme in the architectural array
     const selectedArchitectural = architectural.find(
-      item => item.architectural_theme === value
-    )
+      (item) => item.architectural_theme === value
+    );
 
     // Update architectural field if a valid architectural theme is found
     if (selectedArchitectural) {
-      console.log('Selected Architectural:', selectedArchitectural)
-      setValues(prevValues => ({
+      console.log("Selected Architectural:", selectedArchitectural);
+      setValues((prevValues) => ({
         ...prevValues,
-        architectural: selectedArchitectural.architectural_theme
-      }))
+        architectural: selectedArchitectural.architectural_theme,
+      }));
     }
 
     // Update location field if a valid location is found
     if (selectedLocation) {
-      console.log('Selected Location:', selectedLocation.location)
-      setValues(prevValues => ({
+      console.log("Selected Location:", selectedLocation.location);
+      setValues((prevValues) => ({
         ...prevValues,
-        location: selectedLocation.location
-      }))
+        location: selectedLocation.location,
+      }));
     }
 
     // Update unit field if a valid unit is selected
     if (selectedUnit) {
-      console.log('Selected Unit:', selectedUnit.value)
-      setValues(prevValues => ({
+      console.log("Selected Unit:", selectedUnit.value);
+      setValues((prevValues) => ({
         ...prevValues,
-        unit: selectedUnit.value
-      }))
+        unit: selectedUnit.value,
+      }));
     }
 
     // Handle button actions based on the value
-    if (value === 'viewProperty') {
-      setConversationStage('viewProperty')
-      handleViewProperty()
-    } else if (value === 'otherServices') {
-      setConversationStage('otherServices')
-      setMessages(prevMessages => [
+    if (value === "viewProperty") {
+      setConversationStage("viewProperty");
+      handleViewProperty();
+    } else if (value === "otherServices") {
+      setConversationStage("otherServices");
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          text: 'Our team is here to assist with any other services you may need! But it is currently unavailable.'
-        }
-      ])
+          sender: "bot",
+          text: "Our team is here to assist with any other services you may need! But it is currently unavailable.",
+        },
+      ]);
     } else if (selectedLocation) {
-      setConversationStage('handleArchitectural')
-      handleArchitectural(selectedLocation.location)
+      setConversationStage("handleArchitectural");
+      handleArchitectural(selectedLocation.location);
     } else if (selectedArchitectural) {
-      setConversationStage('handleUnit')
-      handleUnit(selectedArchitectural)
+      setConversationStage("handleUnit");
+      handleUnit(selectedArchitectural);
     } else if (selectedUnit) {
-      setConversationStage('handlePrice')
-      handlePrice(selectedUnit)
+      setConversationStage("handlePrice");
+      handlePrice(selectedUnit);
     } else if (selectedPrice) {
-      setConversationStage('showProperty')
-      showProperty(selectedPrice)
+      setConversationStage("showProperty");
+      showProperty(selectedPrice);
     } else {
-      console.error('Invalid selection or no matching location found.')
+      console.error("Invalid selection or no matching location found.");
     }
-  }
-  const showProperty = message => {
-    console.log(message.value)
-    console.log(property)
+  };
+  const formatPropertyInfo = (property) => {
+    return property.map((p) => (
+      <div
+        key={p.id}
+        style={{
+          border: "1px solid #ddd",
+          padding: "20px",
+          borderRadius: "8px",
+          backgroundColor: "#f9f9f9",
+        }}
+      >
+        <div
+          style={{
+            fontSize: "18px",
+            fontWeight: "bold",
+            color: "#007bff",
+            textAlign: "center",
+          }}
+        >
+          <a
+            href={`/pages/buildings/${p.id}`}
+            style={{
+              color: "#007bff",
+              textDecoration: "none",
+              fontWeight: "bold",
+            }}
+          >
+            Click here to view the full property details
+          </a>
+        </div>
+
+        <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
+          <strong style={{ fontWeight: "bold" }}>Property Name:</strong>{" "}
+          {p.name}
+        </div>
+
+        <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
+          <strong style={{ fontWeight: "bold" }}>Location:</strong> {p.location}
+        </div>
+
+        <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
+          <strong style={{ fontWeight: "bold" }}>Specific Location:</strong>{" "}
+          {p.specific_location}
+        </div>
+
+        <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
+          <strong style={{ fontWeight: "bold" }}>Land Area:</strong>{" "}
+          {p.land_area}
+        </div>
+
+        <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
+          <strong style={{ fontWeight: "bold" }}>Price Range:</strong>{" "}
+          <span style={{ color: "#28a745", fontWeight: "bold" }}>
+            {p.price_range}
+          </span>
+        </div>
+
+        <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
+          <strong style={{ fontWeight: "bold" }}>Units Available:</strong>{" "}
+          <span style={{ color: "#ffc107", fontWeight: "bold" }}>
+            {p.units}
+          </span>
+        </div>
+      </div>
+    ));
+  };
+
+  const showProperty = (message) => {
+    console.log(message.value);
+    console.log(property);
 
     // Check if the price range fits
     const checkPriceRange = (messageValue, property) => {
-      const messageRange = messageValue.split(' - ')
-      const messageStart = parseFloat(messageRange[0].replace(/[^0-9.-]+/g, ''))
-      const messageEnd = parseFloat(messageRange[1].replace(/[^0-9.-]+/g, ''))
+      const messageRange = messageValue.split(" - ");
+      const messageStart = parseFloat(
+        messageRange[0].replace(/[^0-9.-]+/g, "")
+      );
+      const messageEnd = parseFloat(messageRange[1].replace(/[^0-9.-]+/g, ""));
 
       for (let i = 0; i < property.length; i++) {
-        const propertyRange = property[i].price_range.split(' - ')
+        const propertyRange = property[i].price_range.split(" - ");
         const propertyStart = parseFloat(
-          propertyRange[0].replace(/[^0-9.-]+/g, '')
-        )
+          propertyRange[0].replace(/[^0-9.-]+/g, "")
+        );
         const propertyEnd = parseFloat(
-          propertyRange[1].replace(/[^0-9.-]+/g, '')
-        )
+          propertyRange[1].replace(/[^0-9.-]+/g, "")
+        );
 
         // Check if message value is within property range or overlaps
         if (
@@ -273,333 +342,318 @@ const MyBot = () => {
           (messageEnd >= propertyStart && messageEnd <= propertyEnd) ||
           (messageStart <= propertyStart && messageEnd >= propertyEnd)
         ) {
-          return true
+          return true;
         }
       }
-      return false
-    }
-
-    // Format properties for display with HTML
-    const formatPropertyInfo = property => {
-      return property
-        .map(p => {
-          return `
-      <div style="border: 1px solid #ddd; padding: 20px; border-radius: 8px; background-color: #f9f9f9;">
-        <div style="font-size: 18px; font-weight: bold; color: #007bff; text-align: center; ">
-          <a href='/pages/buildings/${p.id}' style="color: #007bff; text-decoration: none; font-weight: bold;">Click here to view the full property details</a>
-        </div>
-
-        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
-          <strong style="font-weight: bold;">Property Name:</strong> ${p.name}
-        </div>
-        
-        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
-          <strong style="font-weight: bold;">Location:</strong> ${p.location}
-        </div>
-
-        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
-          <strong style="font-weight: bold;">Specific Location:</strong> ${p.specific_location}
-        </div>
-
-        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
-          <strong style="font-weight: bold;">Land Area:</strong> ${p.land_area}
-        </div>
-
-        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
-          <strong style="font-weight: bold;">Price Range:</strong> 
-          <span style="color: #28a745; font-weight: bold;">${p.price_range}</span>
-        </div>
-
-        <div style="font-size: 16px; color: #333; margin-bottom: 12px;">
-          <strong style="font-weight: bold;">Units Available:</strong> 
-          <span style="color: #ffc107; font-weight: bold;">${p.units}</span>
-        </div>
-      </div>
-    `
-        })
-        .join('<br /><hr style="border-color: #ddd;" /><br />')
-    }
+      return false;
+    };
 
     // Check if the price range fits and send the formatted message
-    const isWithinPriceRange = checkPriceRange(message.value, property)
+    const isWithinPriceRange = checkPriceRange(message.value, property);
 
     if (isWithinPriceRange) {
-      setMessages(prevMessages => [
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          text: `We found properties that fit your price range: ${message.value}. Here's more information about the property:`
+          sender: "bot",
+          text: `We found properties that fit your price range: ${message.value}. Here's more information about the property:`,
         },
-        { sender: 'bot', text: formatPropertyInfo(property) }
-      ])
+        { sender: "bot", text: formatPropertyInfo(property) },
+      ]);
     } else {
-      setMessages(prevMessages => [
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          text: `Sorry, no properties found that match your price range: ${message.value}.`
-        }
-      ])
+          sender: "bot",
+          text: `Sorry, no properties found that match your price range: ${message.value}.`,
+        },
+      ]);
     }
-  }
+  };
 
-  const handleGreeting = message => {
-    setMessages(prevMessages => [
+  const handleGreeting = (message) => {
+    setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'bot', text: 'Welcome to ALVEO! How can I assist you today?' }
-    ])
+      { sender: "bot", text: "Welcome to ALVEO! How can I assist you today?" },
+    ]);
 
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
+        sender: "bot",
         buttons: [
-          { label: 'View Property', value: 'viewProperty' },
-          { label: 'Other Services', value: 'otherServices' }
-        ]
-      }
-    ])
+          { label: "View Property", value: "viewProperty" },
+          { label: "Other Services", value: "otherServices" },
+        ],
+      },
+    ]);
 
-    setConversationStage('waitingForResponse')
-  }
+    setConversationStage("waitingForResponse");
+  };
   const handleViewProperty = async () => {
     // Step 1: Set initial bot message
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
-      { sender: 'bot', text: 'In what Location?' }
-    ])
+      { sender: "bot", text: "In what Location?" },
+    ]);
 
     // Step 2: Fetch locations from API
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/locations`
-      )
-      const data = await response.json()
+      );
+      const data = await response.json();
 
       // Step 3: Update `location` state with fetched data
-      setLocation(data)
+      setLocation(data);
 
       // Step 4: Map over the data to create clickable buttons
-      const locationButtons = data.map(loc => ({
+      const locationButtons = data.map((loc) => ({
         label: loc.location, // Button text
-        value: loc.location // Button value (location name)
-      }))
+        value: loc.location, // Button value (location name)
+      }));
 
       // Step 5: Add buttons to messages
-      setMessages(prevMessages => [
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          buttons: locationButtons
-        }
-      ])
+          sender: "bot",
+          buttons: locationButtons,
+        },
+      ]);
 
       // Step 6: Update conversation stage
-      setConversationStage('handleArchitectural')
+      setConversationStage("handleArchitectural");
       // console.log('Conversation stage updated:', conversationStage);
     } catch (error) {
-      console.error('Error fetching locations:', error)
-      setMessages(prevMessages => [
+      console.error("Error fetching locations:", error);
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          text: 'Sorry, there was an issue fetching the locations.'
-        }
-      ])
+          sender: "bot",
+          text: "Sorry, there was an issue fetching the locations.",
+        },
+      ]);
     }
-  }
-  const handleUnit = async message => {
+  };
+  const handleUnit = async (message) => {
     // Step 1: Inform the user about the selected location
-    console.log('Before updating:', message)
+    console.log("Before updating:", message);
 
     // Setting messages based on updated state
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
-        text: `You selected ${message.architectural_theme} in ${values.location}. What kind of unit do you prefer?`
-      }
-    ])
+        sender: "bot",
+        text: `You selected ${message.architectural_theme} in ${values.location}. What kind of unit do you prefer?`,
+      },
+    ]);
 
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
-        buttons: unitOptions
-      }
-    ])
-  }
+        sender: "bot",
+        buttons: unitOptions,
+      },
+    ]);
+  };
 
-  const handleArchitectural = async selectedLocation => {
+  const handleArchitectural = async (selectedLocation) => {
     // Step 1: Inform the user about the selected location
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
-        text: `You selected ${selectedLocation}. Do you have an architectural theme you prefer?`
-      }
-    ])
+        sender: "bot",
+        text: `You selected ${selectedLocation}. Do you have an architectural theme you prefer?`,
+      },
+    ]);
 
     // Step 2: Fetch architectural themes from the API
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/getArchitectural`
-      ) // Adjust URL if needed
-      const data = await response.json()
+      ); // Adjust URL if needed
+      const data = await response.json();
 
       // Step 3: Update the architectural state with fetched data
-      setArchitectural(data)
+      setArchitectural(data);
 
       // Step 4: Create buttons for the architectural themes
-      const architecturalButtons = data.map(theme => ({
+      const architecturalButtons = data.map((theme) => ({
         label: theme.architectural_theme, // Assuming `name` is the property for theme names
-        value: theme.architectural_theme // Use `id` or any unique identifier for the theme
-      }))
+        value: theme.architectural_theme, // Use `id` or any unique identifier for the theme
+      }));
 
       // Step 5: Add the buttons to the messages state
-      setMessages(prevMessages => [
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          buttons: architecturalButtons
-        }
-      ])
-      console.log(values)
+          sender: "bot",
+          buttons: architecturalButtons,
+        },
+      ]);
+      console.log(values);
       // Step 6: Change conversation stage
-      setConversationStage('selectArchitectural')
+      setConversationStage("selectArchitectural");
     } catch (error) {
-      console.error('Error fetching architectural themes:', error)
+      console.error("Error fetching architectural themes:", error);
 
       // Inform the user about the error
-      setMessages(prevMessages => [
+      setMessages((prevMessages) => [
         ...prevMessages,
         {
-          sender: 'bot',
-          text: 'Sorry, there was an issue fetching the architectural themes. Please try again later.'
-        }
-      ])
+          sender: "bot",
+          text: "Sorry, there was an issue fetching the architectural themes. Please try again later.",
+        },
+      ]);
     }
-  }
+  };
 
-  const handlePropertyDetails = message => {
-    setMessages(prevMessages => [
+  const handlePropertyDetails = (message) => {
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
-        text: 'Thank you for showing interest in our properties! 😊 Unfortunately, we couldn’t find any matches at the moment. To assist you further, feel free to contact us directly, and our team will be happy to help. Let me know how you’d like to proceed, and we’ll make sure to find the perfect fit for you!'
-      }
-    ])
-    setConversationStage('greeting')
-  }
-  const handlePrice = value => {
+        sender: "bot",
+        text: "Thank you for showing interest in our properties! 😊 Unfortunately, we couldn’t find any matches at the moment. To assist you further, feel free to contact us directly, and our team will be happy to help. Let me know how you’d like to proceed, and we’ll make sure to find the perfect fit for you!",
+      },
+    ]);
+    setConversationStage("greeting");
+  };
+  const handlePrice = (value) => {
     // Update the messages to ask for the price range
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
-        text: `What price range are you looking for your ${value.label} ${values.architectural} in ${values.location}?`
-      }
-    ])
+        sender: "bot",
+        text: `What price range are you looking for your ${value.label} ${values.architectural} in ${values.location}?`,
+      },
+    ]);
 
     // Log the current values to the console
-    console.log(values)
+    console.log(values);
 
     // Make the API request directly here
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/propertiesChatbot?location=${values.location}&architectural=${values.architectural}&unit=${values.unit}`
     )
-      .then(response => response.json())
-      .then(properties => {
-        console.log('Fetched Properties:', properties)
-        setProperty(properties)
-        console.log(value)
+      .then((response) => response.json())
+      .then((properties) => {
+        console.log("Fetched Properties:", properties);
+        setProperty(properties);
+        console.log(value);
         // You can also update the state with the fetched properties, if needed
         // For example: setProperties(properties);
       })
-      .catch(error => {
-        console.error('Error fetching properties:', error)
-        setMessages(prevMessages => [
+      .catch((error) => {
+        console.error("Error fetching properties:", error);
+        setMessages((prevMessages) => [
           ...prevMessages,
           {
-            sender: 'bot',
-            text: 'Sorry, there was an issue fetching the properties. Please try again later.'
-          }
-        ])
-      })
+            sender: "bot",
+            text: "Sorry, there was an issue fetching the properties. Please try again later.",
+          },
+        ]);
+      });
 
-    setMessages(prevMessages => [
+    setMessages((prevMessages) => [
       ...prevMessages,
       {
-        sender: 'bot',
-        buttons: priceOptions
-      }
-    ])
-  }
+        sender: "bot",
+        buttons: priceOptions,
+      },
+    ]);
+  };
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
-  }, [messages])
+  }, [messages]);
 
   useEffect(() => {
     if (isChatVisible) {
-      handleGreeting()
+      handleGreeting();
     }
-  }, [isChatVisible])
+  }, [isChatVisible]);
 
   return (
     <div>
       <div
         onClick={toggleChat}
         style={{
-          position: 'fixed',
-          bottom: '20px',
-          right: '20px',
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          backgroundColor: '#007bff',
-          color: 'white',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          zIndex: 9999
+          position: "fixed",
+          bottom: "20px",
+          right: "20px",
+          width: "50px",
+          height: "50px",
+          borderRadius: "50%", // Make it circular
+          backgroundColor: "white",
+          border: "3px solid blue", // Blue border
+          color: "white",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          cursor: "pointer",
+          zIndex: 9999,
         }}
       >
-        <span style={{ fontSize: '30px' }}>💬</span>
+        <span style={{ fontSize: "24px" }}>
+          <img
+            src="/assets/socialmedia/support.png" // Path to the image in the public folder
+            alt="Support"
+            className="w-8 h-8"
+          />
+        </span>
       </div>
 
       {isChatVisible && (
         <div
           style={{
-            position: 'fixed',
-            bottom: '100px',
-            right: '20px',
-            width: 'auto',
-            height: '400px',
-            backgroundColor: 'white',
-            boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
-            borderRadius: '10px',
-            padding: '10px',
+            position: "fixed",
+            bottom: "100px",
+            right: "20px",
+            width: "auto",
+            height: "400px",
+            backgroundColor: "white",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+            borderRadius: "10px",
+            padding: "10px",
             zIndex: 9999,
-            display: 'flex',
-            flexDirection: 'column'
+            display: "flex",
+            flexDirection: "column",
           }}
         >
+          {/* Close button */}
+          <button
+            onClick={toggleChat}
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              backgroundColor: "transparent",
+              border: "none",
+              color: "#007bff",
+              fontSize: "20px",
+              cursor: "pointer",
+              zIndex: 10000,
+            }}
+          >
+            ❌
+          </button>
+
           <div
             style={{
-              textAlign: 'center',
-              fontWeight: 'bold',
-              paddingBottom: '10px',
-              borderBottom: '2px solid #ccc',
-              marginBottom: '10px'
+              textAlign: "center",
+              fontWeight: "bold",
+              paddingBottom: "10px",
+              borderBottom: "2px solid #ccc",
+              marginBottom: "10px",
             }}
           >
             <Image
-              src='/assets/logo.png'
-              alt='Alveo'
+              src="/assets/logo.png"
+              alt="Alveo"
               width={100}
               height={100}
             />
@@ -608,43 +662,44 @@ const MyBot = () => {
             ref={chatContainerRef}
             style={{
               flex: 1,
-              overflowY: 'auto',
-              padding: '10px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
+              overflowY: "auto",
+              padding: "10px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
             }}
           >
             {messages.map((message, index) => (
               <div key={index} className="message">
-              <div
-                style={{
-                  maxWidth: '90%',
-                  backgroundColor: message.sender === 'user' ? '#007bff' : '#f1f1f1',
-                  color: message.sender === 'user' ? 'white' : 'black',
-                  padding: '10px',
-                  borderRadius: '10px',
-                  fontSize: '14px',
-                  wordWrap: 'break-word',
-                  display: 'inline-block',
-                  whiteSpace: 'pre-wrap', 
-                }}
-                className={`${message.typing ? 'animate-pulse' : ''}`} 
-              >
-                {message.typing ? (
-                  <div className="flex items-center space-x-2">
-                    <MdMoreHoriz className="text-gray-500 animate-pulse text-xl" /> 
-                  </div>
-                ) : (
-                  <span>{message.text}</span> 
-                )}
+                <div
+                  style={{
+                    maxWidth: "90%",
+                    backgroundColor:
+                      message.sender === "user" ? "#007bff" : "#f1f1f1",
+                    color: message.sender === "user" ? "white" : "black",
+                    padding: "10px",
+                    borderRadius: "10px",
+                    fontSize: "14px",
+                    wordWrap: "break-word",
+                    display: "inline-block",
+                    whiteSpace: "pre-wrap",
+                  }}
+                  className={`${message.typing ? "animate-pulse" : ""}`}
+                >
+                  {message.typing ? (
+                    <div className="flex items-center space-x-2">
+                      <MdMoreHoriz className="text-gray-500 animate-pulse text-xl" />
+                    </div>
+                  ) : (
+                    <span>{message.text}</span>
+                  )}
                   {message.buttons && (
                     <div
                       style={{
-                        display: 'flex',
-                        flexDirection: 'column', // Stack buttons vertically
-                        gap: '5px', // Slight gap between buttons
-                        alignItems: 'left' // Center buttons
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "5px",
+                        alignItems: "left",
                       }}
                     >
                       {message.buttons.map((button, i) => (
@@ -652,24 +707,24 @@ const MyBot = () => {
                           key={i}
                           onClick={() => handleButtonClick(button.value)}
                           style={{
-                            backgroundColor: '#007bff',
-                            color: 'white',
-                            border: 'none',
-                            padding: '6px 14px',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            fontSize: '14px',
-                            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                            transition: 'all 0.3s ease',
-                            width: 'auto' // Auto width to avoid stretching the button
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            padding: "6px 14px",
+                            borderRadius: "8px",
+                            cursor: "pointer",
+                            fontSize: "14px",
+                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                            transition: "all 0.3s ease",
+                            width: "auto",
                           }}
-                          onMouseEnter={e => {
-                            e.target.style.backgroundColor = '#0056b3'
-                            e.target.style.transform = 'scale(1.05)'
+                          onMouseEnter={(e) => {
+                            e.target.style.backgroundColor = "#0056b3";
+                            e.target.style.transform = "scale(1.05)";
                           }}
-                          onMouseLeave={e => {
-                            e.target.style.backgroundColor = '#007bff'
-                            e.target.style.transform = 'scale(1)'
+                          onMouseLeave={(e) => {
+                            e.target.style.backgroundColor = "#007bff";
+                            e.target.style.transform = "scale(1)";
                           }}
                         >
                           {button.label}
@@ -684,34 +739,34 @@ const MyBot = () => {
 
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              paddingTop: '10px'
+              display: "flex",
+              alignItems: "center",
+              paddingTop: "10px",
             }}
           >
             <input
-              type='text'
+              type="text"
               value={userMessage}
-              onChange={e => setUserMessage(e.target.value)}
-              onKeyPress={e => e.key === 'Enter' && handleUserInput()}
+              onChange={(e) => setUserMessage(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleUserInput()}
               style={{
                 flex: 1,
-                padding: '6px',
-                borderRadius: '20px',
-                border: '1px solid #ccc',
-                marginRight: '10px'
+                padding: "6px",
+                borderRadius: "20px",
+                border: "1px solid #ccc",
+                marginRight: "10px",
               }}
-              placeholder='Type a message...'
+              placeholder="Type a message..."
             />
             <button
               onClick={handleUserInput}
               style={{
-                backgroundColor: '#007bff',
-                color: 'white',
-                border: 'none',
-                padding: '5px 12px',
-                borderRadius: '25px',
-                cursor: 'pointer'
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                padding: "5px 12px",
+                borderRadius: "25px",
+                cursor: "pointer",
               }}
             >
               Send
@@ -734,7 +789,7 @@ const MyBot = () => {
         }
       `}</style>
     </div>
-  )
-}
+  );
+};
 
-export default MyBot
+export default MyBot;

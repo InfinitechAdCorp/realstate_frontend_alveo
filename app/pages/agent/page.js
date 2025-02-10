@@ -7,6 +7,9 @@ import Icon from "@/app/pages/socialmedia-icons/page";
 export default function agent() {
   const [activeSection, setActiveSection] = useState("certificates");
   const [testimonialOptions, setTestimonialOptions] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [testimonialName, setTestimonialName] = useState(""); // State for testimonial name
+  const [testimonialMessage, setTestimonialMessage] = useState(""); // State for testimonial message
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -19,6 +22,37 @@ export default function agent() {
 
     fetchTestimonials();
   }, []);
+  const handleAdd = async () => {
+    if (testimonialName.trim() !== "" && testimonialMessage.trim() !== "") {
+      const newTestimonialItem = {
+        name: testimonialName,
+        message: testimonialMessage,
+      };
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/testimonials_user`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newTestimonialItem),
+          }
+        );
+
+        const addedTestimonial = await response.json();
+        setTestimonialOptions([...testimonialOptions, addedTestimonial]);
+        setTestimonialName(""); // Reset name field
+        setTestimonialMessage(""); // Reset message field
+
+        handleShowSuccessToast("Testimonial added successfully!");
+        setIsModalOpen(false); // Close modal after submission
+      } catch (err) {
+        setError("Failed to add testimonial.");
+      }
+    }
+  };
   return (
     <>
       <Header /> <Icon />
@@ -26,9 +60,46 @@ export default function agent() {
         className="relative bg-cover bg-center h-screen flex justify-center items-center"
         style={{ backgroundImage: "url(/assets/Alveo.png)" }}
       >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-customBlue opacity-80 z-0"></div>
+        {isModalOpen && (
+          <div className="fixed inset-0 flex justify-center items-center p-6 z-50 bg-gray-900 bg-opacity-50">
+            <div className="bg-white p-10 w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 border-2 border-black rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold mb-4 border-b pb-2">
+                Add Testimonial
+              </h3>
 
+              <input
+                type="text"
+                placeholder="Name"
+                value={testimonialName}
+                onChange={(e) => setTestimonialName(e.target.value)}
+                className="border border-gray-400 rounded-lg p-2 w-full mb-3 focus:ring-2 focus:ring-indigo-500"
+              />
+              <textarea
+                placeholder="Message"
+                value={testimonialMessage}
+                onChange={(e) => setTestimonialMessage(e.target.value)}
+                className="border border-gray-400 rounded-lg p-2 w-full h-32 mb-3 focus:ring-2 focus:ring-indigo-500"
+              />
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  onClick={handleAdd}
+                  className="bg-indigo-700 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="absolute inset-0 bg-customBlue opacity-80 z-0"></div>
         {/* Content Container */}
         <div className="relative w-full max-w-4xl bg-opacity-80 p-8 z-0">
           <div className="flex flex-col md:flex-row w-full max-w-4xl bg-opacity-80 p-8">
@@ -160,7 +231,14 @@ export default function agent() {
             </div>
           )}
           {activeSection === "testimonial" && (
-            <div className="text-center mt-6">
+            <div className="text-center ">
+              <div
+                onClick={() => setIsModalOpen(true)}
+                className="cursor-pointer bg-indigo-700 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition w-40 mx-auto my-5"
+              >
+                Add Testimonial
+              </div>
+
               {testimonialOptions.length > 0 && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {testimonialOptions

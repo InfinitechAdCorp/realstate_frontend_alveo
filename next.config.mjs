@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-// next.config.mjs
-export default {
+const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: [
@@ -14,4 +11,15 @@ export default {
   typescript: {
     ignoreBuildErrors: true, // Disables type checking errors
   },
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.watchOptions = {
+        poll: 1000, // Check for changes every second
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  },
 };
+
+export default nextConfig;

@@ -8,6 +8,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { CiMenuFries } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
+import MyBot from "../../components/Chatbot/page";
+
 const properties = [
   { title: "Condominiums", slug: "condominiums" },
   { title: "Lots", slug: "residential" },
@@ -116,6 +118,7 @@ const Header = () => {
   }, []);
   return (
     <>
+      <MyBot />
       <header
         className={`${
           scrolled ? "bg-gray-900 shadow-lg" : "bg-transparent"
@@ -223,17 +226,6 @@ const Header = () => {
               </div>
             )}
 
-            {/* Call Section */}
-            {isExplorePage && (
-              <div className="ml-auto flex items-center text-white">
-                <IoCall className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-white" />
-                <a href="tel:+63288485000" className="no-underline text-white">
-                  <p className="mt-3 ms-2 no-underline text-black">
-                    CALL (632) 88485000
-                  </p>
-                </a>
-              </div>
-            )}
           </div>
         </div>
       </header>
