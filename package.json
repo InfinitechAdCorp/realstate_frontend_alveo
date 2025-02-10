@@ -34,6 +34,7 @@
     "datatables.net-dt": "^2.1.8",
     "fabric": "^6.4.3",
     "formik": "^2.4.6",
+    "framer-motion": "^12.4.1",
     "jspdf": "^2.5.2",
     "jwt-decode": "^4.0.0",
     "konva": "^9.3.16",

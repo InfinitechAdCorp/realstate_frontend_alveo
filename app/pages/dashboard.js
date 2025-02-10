@@ -1554,10 +1554,7 @@ const DashboardComponent = () => {
   const [currentLocation, setCurrentLocation] = useState("LOCATION");
   const [specificLocation, setSpecificLocation] = useState("");
   const [posts, setPosts] = useState({}); // State to store fetched data
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
-  const [testimonialName, setTestimonialName] = useState(""); // State for testimonial name
-  const [testimonialMessage, setTestimonialMessage] = useState(""); // State for testimonial message
-  const [testimonialOptions, setTestimonialOptions] = useState([]); // State to store added testimonials
+
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -1597,38 +1594,6 @@ const DashboardComponent = () => {
         console.error("Error fetching areas:", error);
       });
   }, []);
-
-  const handleAdd = async () => {
-    if (testimonialName.trim() !== "" && testimonialMessage.trim() !== "") {
-      const newTestimonialItem = {
-        name: testimonialName,
-        message: testimonialMessage,
-      };
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/testimonials_user`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newTestimonialItem),
-          }
-        );
-
-        const addedTestimonial = await response.json();
-        setTestimonialOptions([...testimonialOptions, addedTestimonial]);
-        setTestimonialName(""); // Reset name field
-        setTestimonialMessage(""); // Reset message field
-
-        handleShowSuccessToast("Testimonial added successfully!");
-        setIsModalOpen(false); // Close modal after submission
-      } catch (err) {
-        setError("Failed to add testimonial.");
-      }
-    }
-  };
 
   const [expanded, setExpanded] = useState({});
   const toggleReadMore = (key) => {
@@ -1719,57 +1684,10 @@ const DashboardComponent = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-4">Add Testimonial</h3>
-
-            <input
-              type="text"
-              placeholder="Name"
-              value={testimonialName}
-              onChange={(e) => setTestimonialName(e.target.value)}
-              className="border rounded p-2 w-full mb-3"
-            />
-            <textarea
-              placeholder="Message"
-              value={testimonialMessage}
-              onChange={(e) => setTestimonialMessage(e.target.value)}
-              className="border rounded p-2 w-full h-24 mb-3"
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={handleAdd}
-                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
-              >
-                Add
-              </button>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       <div className="max-sm:mt-32 sm:mt-32 xl:mt-0 xl:z-50">
         <SocialMediaFloating />
         <MyBot />
         <Footer />
-      </div>
-      <div className="fixed right-24 top-[93%] 2xl:top-[95%] transform -translate-y-1/2 flex justify-center items-center bg-blue-500 rounded-full w-[60px] h-[60px] z-50 group">
-        <img
-          src="/assets/review.png"
-          className="w-10 h-10"
-          alt="Review"
-          onClick={() => setIsModalOpen(true)}
-        />
-        <div className="absolute bottom-full mb-2 bg-blue-500 text-white text-sm rounded-full px-3 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          Add Testimonial
-        </div>
       </div>
     </>
   );

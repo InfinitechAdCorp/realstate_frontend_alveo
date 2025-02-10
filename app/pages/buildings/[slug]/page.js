@@ -8,6 +8,8 @@ import Footer from "./../../footer";
 import SEO from "./../../../seo/page";
 import { showToast } from "@/components/alert/page";
 import Icon from "@/app/pages/socialmedia-icons/page";
+import * as Yup from "yup";
+
 export default function BlogPost({ params }) {
   const { slug } = params;
   const [property, setProperty] = useState(null);
@@ -17,7 +19,53 @@ export default function BlogPost({ params }) {
   const [buildings, setBuildings] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [popupType, setPopupType] = useState("");
+  const [errors, setErrors] = useState({});
+  const [isImageVisible, setIsImageVisible] = useState(null);
 
+  const handleImageClick = (index) => {
+    setIsImageVisible(index); // Show the clicked image
+  };
+
+  const handleImageHover = (index) => {
+    setIsImageVisible(index); // Show the image when hovered
+  };
+
+  const handleImageLeave = () => {
+    setIsImageVisible(null); // Hide the image when mouse leaves
+  };
+
+  const validationSchema = Yup.object({
+    name: Yup.string()
+      .required("Name is required")
+      .min(4, "Name must be at least 4 characters"), // Minimum length of 4 characters
+    phone: Yup.string()
+      .required("Phone number is required")
+      .matches(/^[0-9]+$/, "Phone number must be numeric") // Ensures only digits
+      .min(11, "Phone number must be 11 or 12 digits")
+      .max(12, "Phone number must be 11 or 12 digits"),
+    email: Yup.string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    message: Yup.string().required("Message is required"),
+    appointmentDate: Yup.string().when("popupType", {
+      is: "Request Viewing",
+      then: Yup.string().required("Appointment date and time is required"),
+    }),
+  });
+  const validateForm = async () => {
+    try {
+      await validationSchema.validate(formData, { abortEarly: false }); // Ensure all fields are validated
+      setErrors({}); // Clear previous errors if validation passes
+      return true;
+    } catch (err) {
+      const newErrors = err.inner.reduce((acc, currentError) => {
+        acc[currentError.path] = currentError.message; // Capture field-specific errors
+        return acc;
+      }, {});
+      setErrors(newErrors); // Update the error state with the validation errors
+      return false;
+    }
+  };
   // Handle when the image has loaded
   const handleImageLoad = () => {
     setIsLoading(false);
@@ -122,47 +170,56 @@ export default function BlogPost({ params }) {
       return [];
     }
   };
-  const submitForm = () => {
-    console.log(popupType);
+  const submitForm = async () => {
+    const isValid = await validateForm(); // Await validation result
+    console.log(isValid); // This will now show the resolved value (true/false)
+    if (isValid) {
+      console.log("Form is valid, submitting...");
 
-    const formdata = { ...formData, propertyId: property.id };
-    const formattedDateForDisplay = new Date(
-      formData.appointmentDate
-    ).toLocaleString("en-US", {
-      month: "2-digit",
-      day: "2-digit",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
+      const formdata = { ...formData, propertyId: property.id };
+      const formattedDateForDisplay = new Date(
+        formData.appointmentDate
+      ).toLocaleString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
 
-    const isoDateForBackend = new Date(formData.appointmentDate).toISOString();
+      const isoDateForBackend = new Date(
+        formData.appointmentDate
+      ).toISOString();
 
-    const formDataToSubmit = {
-      ...formData,
-      unit: property.name,
-      appointmentDate: isoDateForBackend,
-    };
-
-    console.log(formDataToSubmit);
-    if (popupType === "Request Viewing") {
       const formDataToSubmit = {
         ...formData,
         unit: property.name,
         appointmentDate: isoDateForBackend,
-        reason: popupType,
       };
-      submitAppointment(formDataToSubmit);
-      console.log("Submitting Viewing Request:", formDataToSubmit);
-    } else if (popupType === "Property Inquiry") {
-      const formDataToSubmit = {
-        ...formData,
-        unit: property.name,
-        appointmentDate: isoDateForBackend,
-        reason: popupType,
-      };
-      submitAppointment(formDataToSubmit);
+
+      console.log(formDataToSubmit);
+      if (popupType === "Request Viewing") {
+        const formDataToSubmit = {
+          ...formData,
+          unit: property.name,
+          appointmentDate: isoDateForBackend,
+          reason: popupType,
+        };
+        submitAppointment(formDataToSubmit);
+        console.log("Submitting Viewing Request:", formDataToSubmit);
+      } else if (popupType === "Property Inquiry") {
+        const formDataToSubmit = {
+          ...formData,
+          unit: property.name,
+          appointmentDate: isoDateForBackend,
+          reason: popupType,
+        };
+        submitAppointment(formDataToSubmit);
+      }
+    } else {
+      // Handle invalid form (e.g., show error messages)
+      handleShowErrorToast("Error Input Format");
     }
   };
   const submitAppointment = (formDataToSubmit) => {
@@ -358,6 +415,9 @@ export default function BlogPost({ params }) {
                           className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-blue-500 focus:border-blue-500"
                           placeholder="Your Name"
                         />
+                        {errors.name && (
+                          <p className="text-red-500 text-sm">{errors.name}</p> // Display error for Name
+                        )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-customBlue">
@@ -371,6 +431,9 @@ export default function BlogPost({ params }) {
                           className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
                           placeholder="Your Phone Number"
                         />
+                        {errors.phone && (
+                          <p className="text-red-500 text-sm">{errors.phone}</p> // Display error for Phone
+                        )}
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-customBlue">
@@ -384,6 +447,9 @@ export default function BlogPost({ params }) {
                           className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
                           placeholder="Your Email"
                         />
+                        {errors.email && (
+                          <p className="text-red-500 text-sm">{errors.email}</p> // Display error for Email
+                        )}
                       </div>
                       <div>
                         {popupType === "Request Viewing" && (
@@ -398,35 +464,41 @@ export default function BlogPost({ params }) {
                               onChange={handleInputChange}
                               className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
                             />
+                            {errors.appointmentDate && (
+                              <p className="text-red-500 text-sm">
+                                {errors.appointmentDate}
+                              </p> // Display error for Appointment Date
+                            )}
                           </>
                         )}
                       </div>
                     </div>
-                    <div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700">
-                          Message
-                        </label>
-                        <textarea
-                          name="message"
-                          value={formData.message}
-                          onChange={handleInputChange}
-                          className="mt-1 p-1 border border-gray-300 rounded-md shadow-sm 
-                          focus:ring-blue-500 focus:border-blue-500 resize-none h-20 w-full"
-                          placeholder="Type your message here"
-                        />
-                      </div>
 
-                      <button
-                        type="submit"
-                        className="px-4 py-2 bg-customBlue text-white 
-                        hover:bg-cyan-700 items-center"
-                      >
-                        {popupType === "Request Viewing"
-                          ? "Confirm Appointment"
-                          : "Submit Inquiry"}
-                      </button>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700">
+                        Message
+                      </label>
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        className="mt-1 p-1 border border-gray-300 rounded-md shadow-sm 
+        focus:ring-blue-500 focus:border-blue-500 resize-none h-20 w-full"
+                        placeholder="Type your message here"
+                      />
+                      {errors.message && (
+                        <p className="text-red-500 text-sm">{errors.message}</p> // Display error for Message
+                      )}
                     </div>
+
+                    <button
+                      type="submit"
+                      className="px-4 py-2 bg-customBlue text-white hover:bg-cyan-700 items-center"
+                    >
+                      {popupType === "Request Viewing"
+                        ? "Confirm Appointment"
+                        : "Submit Inquiry"}
+                    </button>
                   </form>
                 </div>
               </div>
@@ -442,31 +514,49 @@ export default function BlogPost({ params }) {
           ) : (
             <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 text-center">
               {parsedFeatures.map((feature, index) => (
-                <div key={index} className="">
-                  <div className="relative group perspective-1000">
-                    {/* Loader/Placeholder */}
-                    {isLoading && (
-                      <div
-                        className="absolute inset-0 flex items-center justify-center bg-gray-200 
-               rounded-lg w-full sm:w-80 h-40 sm:h-60 lg:w-96 lg:h-72"
-                      >
-                        <div className="text-xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
-                          Λ L V E O
-                        </div>
+                <div key={index} className="relative">
+                  {/* Loader/Placeholder */}
+                  {isLoading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg w-full sm:w-80 h-40 sm:h-60 lg:w-96 lg:h-72">
+                      <div className="text-xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
+                        Λ L V E O
                       </div>
-                    )}
+                    </div>
+                  )}
 
-                    {/* Actual Image */}
-                    <img
-                      src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
-                      alt={feature.name}
-                      onLoad={handleImageLoad}
-                      className="rounded-lg w-80 h-40 object-cover transform transition-transform duration-300 ease-in-out group-hover:scale-110"
-                    />
-                  </div>
-                  <p className="text-customBlue text-xl">{feature.name}</p>
+                  {/* Image */}
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
+                    alt={feature.name}
+                    className="rounded-lg w-80 h-40 object-cover transform transition-transform duration-300 ease-in-out"
+                    onClick={() => handleImageClick(index)} // Click to enlarge
+                  />
+
+                  <p className="text-customBlue text-xl mt-2">{feature.name}</p>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Enlarged Image Modal */}
+          {isImageVisible !== null && (
+            <div
+              className="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
+              onClick={() => setIsImageVisible(null)} // Close the modal when clicked outside
+            >
+              <div className="relative">
+                <img
+                  src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${parsedFeatures[isImageVisible].image}`}
+                  alt={parsedFeatures[isImageVisible].name}
+                  className="max-w-[80vw] max-h-[80vh] object-contain rounded-lg shadow-lg" // object-contain to avoid stretching
+                />
+                <button
+                  onClick={() => setIsImageVisible(null)} // Close button
+                  className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full"
+                >
+                  X
+                </button>
+              </div>
             </div>
           )}
         </div>

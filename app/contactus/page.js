@@ -6,6 +6,8 @@ import Header from "@/app/pages/header";
 import Icon from "@/app/pages/socialmedia-icons/page";
 import Footer from "@/app/pages/footer";
 import { FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-icons/fa";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     inquiryType: "",
@@ -15,6 +17,24 @@ const ContactForm = () => {
     phone: "",
     location: "",
     message: "",
+  });
+  const validationSchema = Yup.object({
+    inquiryType: Yup.string().required("Please select an inquiry type."),
+    firstName: Yup.string()
+      .min(4, "First name must be at least 4 characters.")
+      .required("First name is required."),
+    lastName: Yup.string()
+      .min(4, "Last name must be at least 4 characters.")
+      .required("Last name is required."),
+    email: Yup.string()
+      .email("Invalid email format.")
+      .required("Email is required."),
+    phone: Yup.string()
+      .matches(/^[0-9]+$/, "Phone number must contain only numbers.")
+      .min(11, "Phone number must be at least 11 digits.")
+      .max(13, "Phone number can be at most 13 digits.")
+      .required("Phone number is required."),
+    message: Yup.string().required("Message is required."),
   });
 
   const handleShowSuccessToast = (message) => {
@@ -32,9 +52,9 @@ const ContactForm = () => {
       [name]: value,
     });
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values) => {
+    // Log the values that are passed from Formik (the actual form data)
+    console.log(values); // This will show the correct form data
 
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/contact`,
@@ -43,19 +63,19 @@ const ContactForm = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(values), // Use values directly here
       }
     );
 
     if (res.ok) {
       handleShowSuccessToast("Message sent successfully!");
+      // Reset the form values after success
       setFormData({
         inquiryType: "",
         firstName: "",
         lastName: "",
         email: "",
         phone: "",
-        location: "",
         message: "",
       });
     } else {
@@ -71,112 +91,158 @@ const ContactForm = () => {
           <h2 className="text-3xl font-thin mb-6 text-customBlue">
             Get in Touch
           </h2>
-          <form onSubmit={handleSubmit} className="space-y-6 text-customBlue">
-            <div>
-              <label className="block  font-medium mb-2" htmlFor="inquiryType">
-                What can we help you with?
-              </label>
-              <select
-                id="inquiryType"
-                name="inquiryType"
-                value={formData.inquiryType}
-                onChange={handleChange}
-                required
-                className="w-full p-3 border border-customBlue  focus:outline-none focus:ring-2 focus:ring-customBlue"
-              >
-                <option value="">Select an option</option>
-                <option value="Sales Inquiry">Sales Inquiry</option>
-                <option value="Customer Care">Customer Care</option>
-                <option value="Leasing Inquiry">Leasing Inquiry</option>
-                <option value="Other Concern">Other Concern</option>
-              </select>
-            </div>
+          <Formik
+            initialValues={formData}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit} // Formik will handle the form submission
+          >
+            {({ handleChange, values, errors, touched }) => (
+              <Form className="space-y-6 text-customBlue">
+                <div>
+                  <label
+                    className="block font-medium mb-2"
+                    htmlFor="inquiryType"
+                  >
+                    What can we help you with?
+                  </label>
+                  <Field
+                    as="select"
+                    id="inquiryType"
+                    name="inquiryType"
+                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                  >
+                    <option value="">Select an option</option>
+                    <option value="Sales Inquiry">Sales Inquiry</option>
+                    <option value="Customer Care">Customer Care</option>
+                    <option value="Leasing Inquiry">Leasing Inquiry</option>
+                    <option value="Other Concern">Other Concern</option>
+                  </Field>
+                  {errors.inquiryType && touched.inquiryType && (
+                    <div className="text-red-500 text-xs">
+                      {errors.inquiryType}
+                    </div>
+                  )}
+                </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block  font-medium mb-2" htmlFor="firstName">
-                  First Name
-                </label>
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-3 border border-customBlue  focus:outline-none focus:ring-2 focus:ring-customBlue "
-                />
-              </div>
-              <div>
-                <label className="block  font-medium mb-2" htmlFor="lastName">
-                  Last Name
-                </label>
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-3 border border-customBlue  focus:outline-none focus:ring-2 focus:customBlue "
-                />
-              </div>
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label
+                      className="block font-medium mb-2"
+                      htmlFor="firstName"
+                    >
+                      First Name
+                    </label>
+                    <Field
+                      type="text"
+                      id="firstName"
+                      name="firstName"
+                      value={values.firstName}
+                      onChange={handleChange}
+                      required
+                      className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                    />
+                    <ErrorMessage
+                      name="firstName"
+                      component="div"
+                      className="text-red-500 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      className="block font-medium mb-2"
+                      htmlFor="lastName"
+                    >
+                      Last Name
+                    </label>
+                    <Field
+                      type="text"
+                      id="lastName"
+                      name="lastName"
+                      value={values.lastName}
+                      onChange={handleChange}
+                      required
+                      className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                    />
+                    <ErrorMessage
+                      name="lastName"
+                      component="div"
+                      className="text-red-500 text-xs"
+                    />
+                  </div>
+                </div>
 
-            <div>
-              <label className="block  font-medium mb-2" htmlFor="email">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full p-3 border border-customBlue  focus:outline-none focus:ring-2 focus:customBlue "
-              />
-            </div>
+                <div>
+                  <label className="block font-medium mb-2" htmlFor="email">
+                    Email
+                  </label>
+                  <Field
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={values.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                  />
+                  <ErrorMessage
+                    name="email"
+                    component="div"
+                    className="text-red-500 text-xs"
+                  />
+                </div>
 
-            <div>
-              <label className="block  font-medium mb-2" htmlFor="phone">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full p-3 border border-customBlue  focus:outline-none focus:ring-2 focus:customBlue "
-              />
-            </div>
+                <div>
+                  <label className="block font-medium mb-2" htmlFor="phone">
+                    Phone Number
+                  </label>
+                  <Field
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={values.phone}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                  />
+                  <ErrorMessage
+                    name="phone"
+                    component="div"
+                    className="text-red-500 text-xs"
+                  />
+                </div>
 
-            <div>
-              <label className="block  font-medium mb-2" htmlFor="message">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                rows="4"
-                required
-                className="w-full p-3 border border-customBlue  focus:outline-none focus:ring-2 focus:customBlue "
-              />
-            </div>
+                <div>
+                  <label className="block font-medium mb-2" htmlFor="message">
+                    Message
+                  </label>
+                  <Field
+                    as="textarea"
+                    id="message"
+                    name="message"
+                    rows="4"
+                    value={values.message}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                  />
+                  <ErrorMessage
+                    name="message"
+                    component="div"
+                    className="text-red-500 text-xs"
+                  />
+                </div>
 
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                className="w-1/2 py-3 bg-customBlue text-white font-thin  hover:bg-customBlue focus:outline-none focus:ring-2 focus:customBlue "
-              >
-                Submit Inquiry
-              </button>
-            </div>
-          </form>
+                <div className="flex justify-center">
+                  <button
+                    type="submit"
+                    className="w-1/2 py-3 bg-customBlue text-white font-thin hover:bg-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                  >
+                    Submit Inquiry
+                  </button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
 
         <div className="bg-customBlue border border-white p-10 max-w-lg mx-auto rounded-lg shadow-lg">
@@ -230,13 +296,14 @@ const ContactForm = () => {
                 Appointment
               </h4>
               <p className="text-lg">
-                Avoid the queues, book a visit at{" "}
+                Avoid the queues, book a visit at our{" "}
                 <a
-                  href="https://book.dmcihomes.com"
+                  href="/pages/set-appointment"
                   className="text-blue-300 underline hover:text-blue-500 font-medium"
                 >
-                  book.dmcihomes.com
+                  Alveo Property
                 </a>
+                .
               </p>
             </div>
           </div>

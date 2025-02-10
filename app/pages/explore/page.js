@@ -189,18 +189,13 @@ function ExplorePage() {
               key={index}
               className="relative inline-block ml-5 sm:ml-8 justify-center lg:mt-5"
               onClick={() => handleImageClick(index, image.value)}
+              onMouseEnter={() => console.log(`Mouse entered: ${image.label}`)} // Mouse enter event
+              onTouchStart={() => console.log(`Touched: ${image.label}`)} // Touch event
             >
-              <div className="flex justify-center items-center transition-transform duration-200 ease-in-out hover:scale-110 hover:opacity-80">
+              <div className="flex justify-center items-center transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80">
                 {image.icon}
               </div>
-              <div
-                className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-10
-        bg-black bg-opacity-70 text-white text-center py-1 px-2 rounded-md opacity-0
-        transition-all duration-200 ease-in-out hover:opacity-100 hover:translate-y-0
-        hover:bg-opacity-90 hover:scale-105"
-              >
-                {image.label}
-              </div>
+              <div className="">{image.label}</div>
             </div>
           ))}
         </div>
@@ -208,109 +203,122 @@ function ExplorePage() {
         <div>
           <h1 className="text-center mt-3 text-2xl lg:text-4xl xl:text-3xl">
             {filteredBuildings.length} {value.toUpperCase()}{" "}
-            {/* Access the selected category */}
           </h1>
         </div>
 
         <div
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 
-        xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 mb-16"
+    xl:grid-cols-3 2xl:grid-cols-4 lg:max-w-fit gap-4 mt-4 lg:mx-36 mb-16"
         >
-          {filteredBuildings.map((building) => {
-            // Define the background color based on the status
-            let statusColor = "";
-            switch (building.status?.toLowerCase()) {
-              case "ready for occupancy":
-                statusColor = "bg-green-500"; // Green for Ready for Occupancy
-                break;
-              case "under construction":
-                statusColor = "bg-red-500"; // Red for Under Construction
-                break;
-              case "new":
-                statusColor = "bg-blue-500"; // Blue for New
-                break;
-              case "pre-selling":
-                statusColor = "bg-yellow-500"; // Yellow for Pre-selling
-                break;
-              default:
-                statusColor = "bg-gray-500"; // Default gray if status is unknown
-                break;
-            }
+          {filteredBuildings
+            .sort((a, b) => {
+              const statusOrder = {
+                "ready for occupancy": 1,
+                new: 2,
+                "pre-selling": 3,
+                "under construction": 4,
+              };
 
-            return (
-              <div
-                key={building.id}
-                className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0"
-              >
-                <div className="card overflow-hidden relative">
-                  {/* Render the status with dynamic background color */}
-                  {building.status && (
-                    <span
-                      className={`absolute top-2 right-2 text-white text-xs font-bold py-1 px-2 rounded-full z-10 ${statusColor}`}
-                    >
-                      {building.status.toUpperCase()}
-                    </span>
-                  )}
+              const statusA = a.status?.toLowerCase() || "";
+              const statusB = b.status?.toLowerCase() || "";
 
-                  {loading && (
-                    <div className="absolute w-full h-64 inset-0 flex items-center justify-center bg-gray-200">
-                      <div className="text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
-                        Λ L V E O
+              return (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
+            })
+            .map((building) => {
+              // Define the background color based on the status
+              let statusColor = "";
+              switch (building.status?.toLowerCase()) {
+                case "ready for occupancy":
+                  statusColor = "bg-green-500"; // Green for Ready for Occupancy
+                  break;
+                case "under construction":
+                  statusColor = "bg-red-500"; // Red for Under Construction
+                  break;
+                case "new":
+                  statusColor = "bg-blue-500"; // Blue for New
+                  break;
+                case "pre-selling":
+                  statusColor = "bg-yellow-500"; // Yellow for Pre-selling
+                  break;
+                default:
+                  statusColor = "bg-gray-500"; // Default gray if status is unknown
+                  break;
+              }
+
+              return (
+                <div
+                  key={building.id}
+                  className="max-w-80 mx-10 sm:max-w-96 sm:mx-1 lg:max-w-96 lg:mx-0"
+                >
+                  <div className="card overflow-hidden relative">
+                    {/* Render the status with dynamic background color */}
+                    {building.status && (
+                      <span
+                        className={`absolute top-2 right-2 text-white text-xs font-bold py-1 px-2 rounded-full z-10 ${statusColor}`}
+                      >
+                        {building.status.toUpperCase()}
+                      </span>
+                    )}
+
+                    {loading && (
+                      <div className="absolute w-full h-64 inset-0 flex items-center justify-center bg-gray-200">
+                        <div className="text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
+                          Λ L V E O
+                        </div>
                       </div>
+                    )}
+
+                    {/* Actual image of the property */}
+                    <img
+                      src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path}`}
+                      alt={building.name}
+                      onLoad={handleImageLoad}
+                      className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out"
+                    />
+
+                    <div className="p-4 bg-white">
+                      <h3 className="text-xl font-semibold text-cyan-700">
+                        {building.name}
+                      </h3>
+                      <p className="text-sm text-gray-700 mt-2">
+                        <strong>Development Type:</strong>{" "}
+                        {building.development_type}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <strong>Residential Levels:</strong>{" "}
+                        {building.residential_levels}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <strong>Basement Parking:</strong>{" "}
+                        {building.basement_parking_levels || "N/A"}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <strong>Commercial Units:</strong>{" "}
+                        {building.commercial_units || "N/A"}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <strong>Podium Parking:</strong>{" "}
+                        {building.podium_parking_levels || "N/A"}
+                      </p>
+                      <p className="text-sm text-gray-700">
+                        <strong>Lower Ground Parking:</strong>{" "}
+                        {building.lower_ground_floor_parking_levels || "N/A"}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleBuildingClick(building.property_id);
+                        }}
+                        className="mt-3 bg-cyan-700 text-white font-medium py-2 px-4 
+                items-end text-end justify-end hover:bg-customBlue transition-colors duration-200"
+                      >
+                        View Details
+                      </button>
                     </div>
-                  )}
-
-                  {/* Actual image of the property */}
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path}`}
-                    alt={building.name}
-                    onLoad={handleImageLoad}
-                    className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out"
-                  />
-
-                  <div className="p-4 bg-white">
-                    <h3 className="text-xl font-semibold text-cyan-700">
-                      {building.name}
-                    </h3>
-                    <p className="text-sm text-gray-700 mt-2">
-                      <strong>Development Type:</strong>{" "}
-                      {building.development_type}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Residential Levels:</strong>{" "}
-                      {building.residential_levels}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Basement Parking:</strong>{" "}
-                      {building.basement_parking_levels || "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Commercial Units:</strong>{" "}
-                      {building.commercial_units || "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Podium Parking:</strong>{" "}
-                      {building.podium_parking_levels || "N/A"}
-                    </p>
-                    <p className="text-sm text-gray-700">
-                      <strong>Lower Ground Parking:</strong>{" "}
-                      {building.lower_ground_floor_parking_levels || "N/A"}
-                    </p>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleBuildingClick(building.property_id);
-                      }}
-                      className="mt-3 bg-cyan-700 text-white font-medium py-2 px-4 
-            items-end text-end justify-end hover:bg-customBlue transition-colors duration-200"
-                    >
-                      View Details
-                    </button>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       </div>
       <Suspense fallback={<div>Loading...</div>}>

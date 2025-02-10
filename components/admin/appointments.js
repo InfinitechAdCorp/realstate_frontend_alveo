@@ -1,7 +1,18 @@
-"use client";
 import { useEffect, useState } from "react";
 import "simple-datatables/dist/style.css";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { showToast } from "@/components/alert/page";
+export const handleShowSuccessToast = (message) => {
+  showToast(message, "success");
+};
+
+export const handleShowErrorToast = (message) => {
+  showToast(message, "error");
+};
+
+export const handleShowWarningToast = (message) => {
+  showToast(message, "warning");
+};
 
 const Table = () => {
   const [appointments, setAppointments] = useState([]);
@@ -29,57 +40,57 @@ const Table = () => {
     fetchAppointments();
   }, []);
 
-  useEffect(() => {
-    if (appointments.length > 0 && typeof window !== "undefined") {
-      const { DataTable } = require("simple-datatables");
-
-      const table = document.getElementById("search-table");
-      if (table) {
-        new DataTable(table, {
-          searchable: true,
-          sortable: true,
-          labels: {
-            placeholder: "Search appointments...",
-            perPage: "records per page",
-          },
-        });
-      }
-    }
-  }, [appointments]);
-
-  const handleUpdateStatus = async (id, status) => {
-    console.log("Updating status for ID:", id, "with status:", status);
-
+  // Function to handle accepting the appointment
+  const handleAccept = async (id) => {
+    console.log("Accept button clicked for ID:", id);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/accept`,
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/accept/${id}`,
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id, status }),
+          method: "POST", // Assuming the API requires POST for accepting
         }
       );
-
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response from server:", errorData); // Log the response error data
-        throw new Error(
-          `Failed to update status: ${errorData.message || "Unknown error"}`
-        );
+        throw new Error("Failed to accept appointment");
       }
-
-      setAppointments((prev) =>
-        prev.map((appointment) =>
-          appointment.id === id ? { ...appointment, status } : appointment
+      // Update the appointment status locally after successful acceptance
+      setAppointments((prevAppointments) =>
+        prevAppointments.map((appointment) =>
+          appointment.id === id
+            ? { ...appointment, status: "Accepted" }
+            : appointment
         )
       );
+      handleShowSuccessToast(`Appointment accepted`);
     } catch (error) {
-      console.error("Error updating status:", error.message); // Log the specific error message
-      if (error.response) {
-        console.error("Full error details:", error.response); // Log the full error details if available
+      console.error("Error accepting appointment:", error);
+    }
+  };
+
+  // Function to handle declining the appointment
+  const handleDecline = async (id) => {
+    console.log("Decline button clicked for ID:", id);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/decline/${id}`,
+        {
+          method: "POST", // Assuming the API requires POST for declining
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Failed to decline appointment");
       }
+      // Update the appointment status locally after successful decline
+      setAppointments((prevAppointments) =>
+        prevAppointments.map((appointment) =>
+          appointment.id === id
+            ? { ...appointment, status: "Declined" }
+            : appointment
+        )
+      );
+      handleShowSuccessToast(`Appointment declined`);
+    } catch (error) {
+      console.error("Error declining appointment:", error);
     }
   };
 
@@ -93,7 +104,7 @@ const Table = () => {
           id="search-table"
           className="table-auto border-collapse border border-gray-200 w-full text-sm text-left text-gray-700"
         >
-          <thead className="">
+          <thead>
             <tr>
               <th className="border border-gray-300 px-4 py-2">Full Name</th>
               <th className="border border-gray-300 px-4 py-2">Email</th>
@@ -131,28 +142,18 @@ const Table = () => {
                   {appointment.message}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
-                  {appointment.status}
+                  {appointment.status.toUpperCase()}
                 </td>
                 <td className="border border-gray-300 px-4 py-2">
                   <div>
                     <button
-                      onClick={() => {
-                        console.log(
-                          `Accepting appointment with ID: ${appointment.id}`
-                        ); // Log the ID
-                        handleAccept(appointment.id); // Call the handleAccept function
-                      }}
+                      onClick={() => handleAccept(appointment.id)}
                       className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
                     >
                       <FaCheckCircle />
                     </button>
                     <button
-                      onClick={() => {
-                        console.log(
-                          `Declining appointment with ID: ${appointment.id}`
-                        ); // Log the ID
-                        handleDecline(appointment.id); // Call the handleDecline function
-                      }}
+                      onClick={() => handleDecline(appointment.id)}
                       className="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
                     >
                       <FaTimesCircle />

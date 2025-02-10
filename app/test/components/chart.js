@@ -25,56 +25,51 @@ export default function CardCharts(data) {
   useEffect(() => {
     console.log("Data received in CardCharts:", data);
 
-    if (data.data === true) {
-      const token = localStorage.getItem("auth_token");
-      const log = localStorage.getItem("isLoggedIn");
+    const token = localStorage.getItem("auth_token");
+    const log = localStorage.getItem("isLoggedIn");
 
-      console.log("Token:", token, "Login status:", log);
+    console.log("Token:", token, "Login status:", log);
 
-      // Check if the token exists and if the user is logged in
-      if (!token || log !== "true") {
-        console.error("Token not found or user not logged in.");
-        setError("Token not found or user not logged in.");
-        return;
-      }
+    if (!token || log !== "true") {
+      console.error("Token not found or user not logged in.");
+      setError("Token not found or user not logged in.");
+      return;
+    }
+    if (fetched) return;
 
-      // Check if data is already fetched, if so, skip fetching
-      if (fetched) return; // `fetched` is a state variable to track fetching status
-
-      const fetchData = async (endpoint, setState) => {
-        try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/${endpoint}`,
-            {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          const data = await response.json();
-
-          if (response.ok) {
-            setState(Array.isArray(data) ? data : []);
-          } else {
-            console.error(`Error fetching ${endpoint} data:`, data);
-            setError(data.error || "An error occurred while fetching data.");
+    const fetchData = async (endpoint, setState) => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/${endpoint}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           }
-        } catch (error) {
-          console.error(`Error fetching ${endpoint} data:`, error);
-          setError("An error occurred while fetching data.");
-        }
-      };
+        );
 
-      // Fetch data if user is logged in
-      if (log === "true") {
-        setFetched(true); // Set `fetched` to true to prevent re-fetching
-        fetchData("count-properties-monthly", setSubmittedProperty);
-        fetchData("count-request-viewing", setRequestViewingData);
-        fetchData("count-property-inquiry", setPropertyInquiryData);
+        const data = await response.json();
+
+        if (response.ok) {
+          setState(Array.isArray(data) ? data : []);
+        } else {
+          console.error(`Error fetching ${endpoint} data:`, data);
+          setError(data.error || "An error occurred while fetching data.");
+        }
+      } catch (error) {
+        console.error(`Error fetching ${endpoint} data:`, error);
+        setError("An error occurred while fetching data.");
       }
+    };
+
+    // Fetch data if user is logged in
+    if (log === "true") {
+      setFetched(true); // Set `fetched` to true to prevent re-fetching
+      fetchData("count-properties-monthly", setSubmittedProperty);
+      fetchData("count-request-viewing", setRequestViewingData);
+      fetchData("count-property-inquiry", setPropertyInquiryData);
     }
   }, [data, fetched]); // Add `fetched` as a dependency to prevent multiple fetches
 
@@ -170,7 +165,7 @@ export default function CardCharts(data) {
   };
 
   return (
-    <div className="mt-20">
+    <div className="mt-4 h-fit">
       {/* Pie Chart 1 */}
       <div className="flex">
         <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
