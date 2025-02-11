@@ -130,6 +130,11 @@ const MyBot = () => {
         showProperty(message);
         break;
 
+      case "waitingForResponse":
+        // If the conversation is in a waiting state, you can do something special here
+        // For example, you could log something, or check for further user input
+        break;
+
       default:
         try {
           const response = await fetch(
@@ -178,6 +183,69 @@ const MyBot = () => {
         break;
     }
   };
+  const handleOtherServicesClick = () => {
+    // Inform the user that other services are currently unavailable
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "bot",
+        text: "Our team is here to assist with any other services you may need! But it is currently unavailable.",
+      },
+    ]);
+
+    // Update the conversation stage to reflect that the bot is in a waiting state after informing the user
+    setConversationStage("waitingForResponse");
+
+    // Show additional buttons for Vision & Mission, About Us, and Contacts
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "bot",
+        buttons: [
+          { label: "Vision & Mission", value: "visionMission" },
+          { label: "About Us", value: "aboutUs" },
+          { label: "Contacts", value: "contacts" },
+        ],
+      },
+    ]);
+  };
+  const handleVisionMissionClick = () => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "bot",
+        text: "Our Vision is to be a leading provider of innovative real estate solutions, and our Mission is to offer exceptional service and value to our customers.",
+      },
+    ]);
+
+    setConversationStage("waitingForResponse");
+  };
+
+  const handleAboutUsClick = () => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "bot",
+        text: `As Ayala Land's upscale residential arm, Alveo offers a vibrant portfolio of groundbreaking real estate developments that provide upscale living and working spaces within various thriving and emerging growth centers around the country.
+
+Armed with sharper foresight, unparalleled excellence, and total commitment, the company is dedicated to providing thoughtfully designed and master-planned living environments for the unique needs of its discerning market.`,
+      },
+    ]);
+
+    setConversationStage("waitingForResponse");
+  };
+
+  const handleContactsClick = () => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        sender: "bot",
+        text: "You can reach us through the following contacts:\nEmail: info@alveoland.com.ph\nPhone: (+632) 8848 5000\nLocation: Alveo Corporate Center 728 28th Street, Bonifacio Global City 1634 Taguig City, Metro Manila Philippines",
+      },
+    ]);
+
+    setConversationStage("waitingForResponse");
+  };
 
   const handleButtonClick = (value) => {
     // Find the selected unit in the unit options array
@@ -224,14 +292,7 @@ const MyBot = () => {
       setConversationStage("viewProperty");
       handleViewProperty();
     } else if (value === "otherServices") {
-      setConversationStage("otherServices");
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          sender: "bot",
-          text: "Our team is here to assist with any other services you may need! But it is currently unavailable.",
-        },
-      ]);
+      handleOtherServicesClick(); // Call the function to handle the "Other Services" option
     } else if (selectedLocation) {
       setConversationStage("handleArchitectural");
       handleArchitectural(selectedLocation.location);
@@ -244,10 +305,17 @@ const MyBot = () => {
     } else if (selectedPrice) {
       setConversationStage("showProperty");
       showProperty(selectedPrice);
+    } else if (value === "visionMission") {
+      handleVisionMissionClick(); // Trigger Vision & Mission section
+    } else if (value === "aboutUs") {
+      handleAboutUsClick(); // Trigger About Us section
+    } else if (value === "contacts") {
+      handleContactsClick(); // Trigger Contacts section
     } else {
       console.error("Invalid selection or no matching location found.");
     }
   };
+
   const formatPropertyInfo = (property) => {
     return property.map((p) => (
       <div
@@ -613,7 +681,7 @@ const MyBot = () => {
             position: "fixed",
             bottom: "100px",
             right: "20px",
-            width: "auto",
+            width: "500px",
             height: "400px",
             backgroundColor: "white",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
@@ -658,6 +726,7 @@ const MyBot = () => {
               height={100}
             />
           </div>
+
           <div
             ref={chatContainerRef}
             style={{
@@ -670,7 +739,7 @@ const MyBot = () => {
             }}
           >
             {messages.map((message, index) => (
-              <div key={index} className="message">
+              <div key={index} className="message" style={{ display: "flex" }}>
                 <div
                   style={{
                     maxWidth: "90%",
@@ -681,8 +750,12 @@ const MyBot = () => {
                     borderRadius: "10px",
                     fontSize: "14px",
                     wordWrap: "break-word",
-                    display: "inline-block",
                     whiteSpace: "pre-wrap",
+                    display: "inline-block",
+                    alignSelf:
+                      message.sender === "user" ? "flex-end" : "flex-start",
+                    marginLeft: message.sender === "user" ? "auto" : "0",
+                    marginRight: message.sender === "user" ? "0" : "auto", // Ensure the message floats in the correct direction
                   }}
                   className={`${message.typing ? "animate-pulse" : ""}`}
                 >

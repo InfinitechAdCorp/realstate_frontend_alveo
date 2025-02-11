@@ -12,8 +12,15 @@ import {
 import Icon from "@/app/pages/socialmedia-icons/page";
 import Header from "../../header";
 import Footer from "./../../footer";
+import { showToast } from "@/components/alert/page";
+import FloatingFeatures from "@/app/pages/floatingfeatures/page";
 export default function BlogPost({ params }) {
   const { slug } = params; // Extract slug from params
+  const [isAccessible, setIsAccessible] = useState(true);
+
+  const handleShowWarningToast = (message) => {
+    showToast(message, "warning"); // Warning toast
+  };
   const headings = [
     "ALL ACROSS THE PHILIPPINES",
     "MASTERPLANNED DEVELOPMENTS",
@@ -135,6 +142,10 @@ export default function BlogPost({ params }) {
         <Directory
           currentLocation={post.currentLocation}
           specificLocation={post.specificLocation}
+        />{" "}
+        <FloatingFeatures
+          isAccessible={isAccessible}
+          handleShowWarningToast={handleShowWarningToast}
         />
         {slug === "aboutalveo" && post.path && (
           <div className="directory-wrapper lg:h-3/4 xl:h-/4 ">
