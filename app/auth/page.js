@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
+import Cookies from "js-cookie";
 const AuthPopup = () => {
   const [formData, setFormData] = useState({ password: "" });
   const [error, setError] = useState(null);
@@ -46,8 +46,11 @@ const AuthPopup = () => {
 
         // Clear localStorage first to ensure it's clean before setting new login data
         localStorage.clear();
-
-        // Store the token and other user data in localStorage
+        Cookies.set("auth_token", data.token, {
+          expires: 7,
+          secure: true,
+          sameSite: "Strict",
+        });
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userInfo", JSON.stringify(data.name));
