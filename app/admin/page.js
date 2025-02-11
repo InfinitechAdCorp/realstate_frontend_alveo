@@ -201,22 +201,32 @@ export default function Admin({}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [success, setSuccess] = useState("");
+  const router = useRouter();
+
   useEffect(() => {
-    const checkLoginStatus = () => {
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const isLoggedIn = localStorage.getItem("auth_token");
 
-      if (!isLoggedIn && window.location.pathname === "/admin") {
-        window.location.replace("/auth");
-      }
+    // If no auth_token is found in localStorage, redirect to login
+    if (!isLoggedIn) {
+      router.push("/auth");
+    }
+  }, [router]);
+  // useEffect(() => {
+  //   const checkLoginStatus = () => {
+  //     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
 
-      setLoading(false); // After the check, set loading to false
-    };
+  //     if (!isLoggedIn && window.location.pathname === "/admin") {
+  //       window.location.replace("/auth");
+  //     }
 
-    // Perform the login status check immediately
-    checkLoginStatus();
-  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+  //     setLoading(false); // After the check, set loading to false
+  //   };
 
-  // Display loading state while checking the login status
+  //   // Perform the login status check immediately
+  //   checkLoginStatus();
+  // }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+
+  // // Display loading state while checking the login status
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
