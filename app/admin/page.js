@@ -20,6 +20,7 @@ import Testimonial from "@/app/pages/testimonial/page";
 import { jsPDF } from "jspdf";
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
+
 export default function Admin({}) {
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +35,8 @@ export default function Admin({}) {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(true); // Set loading state to true initially
+
   const [error, setError] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false); // To track OTP sent state
   const [isLoggedIn, setIsLoggedin] = useState(false); // To track OTP sent state
@@ -43,7 +46,7 @@ export default function Admin({}) {
   const [currentImages, setCurrentImages] = useState([]);
   const [authToken, setAuthToken] = useState([]); // State to store fetched data from API
   const [properties, setProperties] = useState([]); // State to store fetched data from API
-  // For newType form
+
   const typeValidationSchema = Yup.object({
     newType: Yup.string()
       .required("Type name is required")
@@ -198,6 +201,22 @@ export default function Admin({}) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [success, setSuccess] = useState("");
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+
+      if (!isLoggedIn && window.location.pathname === "/admin") {
+        window.location.replace("/auth");
+      }
+
+      setLoading(false); // After the check, set loading to false
+    };
+
+    // Perform the login status check immediately
+    checkLoginStatus();
+  }, []); // Empty dependency array ensures this effect runs only once when the component mounts
+
+  // Display loading state while checking the login status
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -931,10 +950,16 @@ export default function Admin({}) {
 
     setAreaModalOpen(false);
   };
-
+  if (loading) {
+    return (
+      <div className="loading-screen">
+        <p></p>
+      </div>
+    );
+  }
   return (
     <>
-      {isVisible && (
+      {/* {isVisible && (
         <div className="popup-container fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
           <div className="popup-content bg-white p-8 rounded-lg shadow-xl w-full max-w-lg">
             <h2 className="text-2xl font-semibold text-center mb-4">ACCOUNT</h2>
@@ -966,11 +991,9 @@ export default function Admin({}) {
                 </button>
               </div>
             </form>
-
-            {/* Log the admin email to the console */}
           </div>
         </div>
-      )}
+      )} */}
 
       <div className="flex fixed w-full">
         {/* Sidebar */}

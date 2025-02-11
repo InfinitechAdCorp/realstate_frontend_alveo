@@ -1,5 +1,6 @@
 "use client";
-import { useRouter } from "next/router";
+import { useRouter, usePathname } from "next/navigation";
+
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { FaSearch, FaBuilding, FaHouseUser } from "react-icons/fa";
@@ -27,6 +28,8 @@ const properties = [
 const Header = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -210,10 +213,8 @@ const Header = () => {
                 Contact Us
               </a>
             </div>
-
-            {/* Explore Properties Section */}
-            {!isExplorePage && (
-              <div className="ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium">
+            <div className="ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium">
+              {!isExplorePage && pathname !== "/contactus" ? (
                 <a
                   href="/pages/explore"
                   className="flex items-center text-white hover:opacity-80 transition-opacity duration-300"
@@ -223,8 +224,10 @@ const Header = () => {
                     Explore Properties
                   </p>
                 </a>
-              </div>
-            )}
+              ) : (
+                <div className="w-[200px]"></div> // This keeps space even when hidden
+              )}
+            </div>
 
           </div>
         </div>

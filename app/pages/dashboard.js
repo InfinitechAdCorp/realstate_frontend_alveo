@@ -26,6 +26,7 @@ import MyBot from "../../components/Chatbot/page";
 import SocialMediaFloating from "./socialmedia-icons/page";
 import { usePathname } from "next/navigation";
 import Icon from "@/app/pages/socialmedia-icons/page";
+import FloatingFeatures from "@/app/pages/floatingfeatures/page";
 const containerStyle = {
   width: "100%",
   height: "200px",
@@ -1000,144 +1001,10 @@ const AlveoBanner = () => {
             </div>
           </div>
 
-          <div className="fixed top-20 right-1 z-10 lg:top-13 lg:right-2 flex space-x-2">
-            {/* Room Planner Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                {isAccessible ? (
-                  <a href="/pages/roomplanner" target="_blank">
-                    <div className="cursor-pointer relative group">
-                      <IoBed
-                        className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                        onMouseOver={(e) =>
-                          (e.currentTarget.style.transform =
-                            "scale(1.1) translateY(-5px)")
-                        }
-                        onMouseOut={(e) =>
-                          (e.currentTarget.style.transform =
-                            "scale(1) translateY(0)")
-                        }
-                      />
-                      <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        Room Planner
-                      </span>
-                    </div>
-                  </a>
-                ) : (
-                  <div
-                    className="cursor-not-allowed opacity-50"
-                    onClick={() =>
-                      handleShowWarningToast(
-                        "Room Planner is not available on smaller screens.",
-                        "warning"
-                      )
-                    }
-                  >
-                    <IoBed className="w-8 h-8 text-gray-400" />
-                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-gray-500 bg-gray-200 rounded px-2 py-1">
-                      Not available on smaller screens
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Loan Calculator Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/loancalculator" passHref>
-                  <div className="relative group">
-                    <FaCalculator
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1.1) translateY(-5px)")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1) translateY(0)")
-                      }
-                    />
-                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      Loan Calculator
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            {/* Set Appointment Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/set-appointment" passHref>
-                  <div className="relative group">
-                    <FaCalendarAlt
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1.1) translateY(-5px)")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1) translateY(0)")
-                      }
-                    />
-                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      Set Appointment
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            {/* Submit Property Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/add-property" passHref>
-                  <div className="relative group">
-                    <FaHouseCircleCheck
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1.1) translateY(-5px)")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1) translateY(0)")
-                      }
-                    />
-                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      Submit Property
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            {/* Agent Icon */}
-            <div className="flex justify-center items-center">
-              <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
-                <a href="/pages/agent" passHref>
-                  <div className="relative group">
-                    <IoManSharp
-                      className="w-8 h-8 transform transition-transform duration-200 ease-in-out text-customBlue"
-                      onMouseOver={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1.1) translateY(-5px)")
-                      }
-                      onMouseOut={(e) =>
-                        (e.currentTarget.style.transform =
-                          "scale(1) translateY(0)")
-                      }
-                    />
-                    <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                      Agent
-                    </span>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
+          <FloatingFeatures
+            isAccessible={isAccessible}
+            handleShowWarningToast={handleShowWarningToast}
+          />
 
           {enlargedImage && (
             <div
