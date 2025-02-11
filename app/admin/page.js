@@ -20,7 +20,7 @@ import Testimonial from "@/app/pages/testimonial/page";
 import { jsPDF } from "jspdf";
 import * as Yup from "yup";
 import { Formik, Field, Form, ErrorMessage } from "formik";
-
+import Cookies from "js-cookie";
 export default function Admin({}) {
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -960,6 +960,20 @@ export default function Admin({}) {
 
     setAreaModalOpen(false);
   };
+  useEffect(() => {
+    // Check login status from cookies or localStorage
+    const token = Cookies.get("auth_token");
+    const loginStatus = token ? true : false;
+
+    if (loginStatus) {
+      setIsLoggedin(true);
+      setLoading(false); // Hide loading screen if the user is logged in
+    } else {
+      setIsLoggedin(false);
+      setLoading(false); // Still set loading to false if not logged in, to stop loading screen
+    }
+  }, []);
+
   if (loading) {
     return (
       <div className="loading-screen">
@@ -967,6 +981,7 @@ export default function Admin({}) {
       </div>
     );
   }
+
   return (
     <>
       {/* {isVisible && (
