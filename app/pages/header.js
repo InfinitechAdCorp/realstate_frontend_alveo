@@ -228,6 +228,7 @@ const Header = () => {
                 <div className="w-[200px]"></div> // This keeps space even when hidden
               )}
             </div>
+
           </div>
         </div>
       </header>
