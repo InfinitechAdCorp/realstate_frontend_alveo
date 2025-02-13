@@ -32,66 +32,83 @@ const Footer = () => {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
       <div
-        className="bg-customBlue text-white py-2 px-4 xl:px-12"
+        className="bg-customBlue text-white px-4 xl:px-12"
         style={{ background: "#002B47" }}
       >
-        <div className="max-w-[90%] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  gap-8 text-center lg:text-left ">
-          {/* Contact Us Section */}
-          <div className="flex flex-col lg:items-start py-4">
-            <h2 className="text-2xl xl:text-3xl font-thin">Contact Us:</h2>
-            <p className="text-xs xl:text-sm mt-2 text-start">
-              Our dedicated teams are ready to assist you with information on
-              Alveo Land properties.
-            </p>
-          </div>
-
-          {/* Customer Hotline Section */}
-          <div className="flex flex-col items-center lg:items-start py-4">
-            <h2 className="text-2xl xl:text-3xl font-thin">
-              Customer Hotline:
-            </h2>
-            <p className="text-xs xl:text-sm mt-2">
-              <a
-                href="tel:+63288485000"
-                className="text-white hover:text-blue-600 hover:underline"
-              >
-                (+632) 8848 5000
-              </a>
-            </p>
-          </div>
-
-          {/* Email Section */}
-          <div className="flex flex-col items-center lg:items-start py-4">
-            <h2 className="text-2xl xl:text-3xl font-thin">Email:</h2>
-            <p className="text-xs xl:text-sm mt-2">
-              <a
-                href="mailto:info@alveoland.com.ph"
-                className="text-white hover:text-blue-600 hover:underline"
-              >
-                info@alveoland.com.ph
-              </a>
-            </p>
-          </div>
-
-          {/* Location Section */}
-          <div className="flex flex-col items-center lg:items-start py-4">
-            <h2 className="text-2xl xl:text-3xl font-thin">Location:</h2>
-            <a
-              href="https://maps.app.goo.gl/dQRKwnAkHXiwc7hq8"
-              target="_blank"
-              className="no-underline text-white hover:text-blue-500"
-            >
-              <p className="text-xs xl:text-sm mt-2 text-start">
-                Alveo Corporate Center 728 28th Street, Bonifacio Global City
-                1634 Taguig City, Metro Manila Philippines
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 ">
+          <div className="col-span-1 h-auto flex justify-center lg:justify-end md:justify-center md:mx-auto md:ml-48 md:w-full">
+            <div className="flex flex-col justify-center items-center py-4 lg:ml-40 md:mx-auto">
+              <h2 className="text-5xl sm:text-7xl md:text-5xl xl:text-6xl font-bold text-center">
+                Λ L V E O
+              </h2>
+              <p className="text-lg sm:text-sm mt-2 text-center opacity-80">
+                An AyalaLand Company
               </p>
-            </a>
+              <button
+                onClick={handleDownloadClick}
+                className="bg-slate-100 text-customBlue text-sm xl:text-base p-3 rounded-lg mt-4"
+              >
+                Download App
+              </button>
+            </div>
+          </div>
+
+          <div className="col-span-1 sm:col-span-2 lg:col-span-2 h-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 p-4">
+              <div className="flex flex-col text-start">
+                <h2 className="text-2xl xl:text-3xl font-thin">Contact Us:</h2>
+                <p className="text-xs xl:text-sm mt-2">
+                  Our dedicated teams are ready to assist you with information
+                  on Alveo Land properties.
+                </p>
+              </div>
+
+              <div className="flex flex-col">
+                <h2 className="text-2xl xl:text-3xl font-thin">Email:</h2>
+                <p className="text-xs xl:text-sm mt-2">
+                  <a
+                    href="mailto:info@alveoland.com.ph"
+                    className="text-white hover:text-blue-600 hover:underline"
+                  >
+                    info@alveoland.com.ph
+                  </a>
+                </p>
+              </div>
+
+              <div className="flex flex-col">
+                <h2 className="text-2xl xl:text-3xl font-thin">
+                  Customer Hotline:
+                </h2>
+                <p className="text-xs xl:text-sm mt-2">
+                  <a
+                    href="tel:+63288485000"
+                    className="text-white hover:text-blue-600 hover:underline"
+                  >
+                    (+632) 8848 5000
+                  </a>
+                </p>
+              </div>
+
+              <div className="flex flex-col">
+                <h2 className="text-2xl xl:text-3xl font-thin">Location:</h2>
+                <a
+                  href="https://maps.app.goo.gl/dQRKwnAkHXiwc7hq8"
+                  target="_blank"
+                  className="no-underline text-white hover:text-blue-500"
+                >
+                  <p className="text-xs xl:text-sm mt-2">
+                    Alveo Corporate Center 728 28th Street, Bonifacio Global
+                    City 1634 Taguig City, Metro Manila Philippines
+                  </p>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
-        <hr className="my-1 border-t-2 border-white w-4/5 mx-auto" />
+        <hr className="my-2 border-t-2 border-white w-4/5 mx-auto" />
 
-        <div className="text-center text-white py-4">
+        <div className="text-center text-white py-2">
           <p className="text-xs xl:text-sm">
             Copyright © 2024 All Rights Reserved by
             <a
@@ -110,15 +127,6 @@ const Footer = () => {
               Privacy Policy
             </a>
           </p>
-
-          <div className="flex justify-center items-center space-x-4 mt-4">
-            <button
-              onClick={handleDownloadClick}
-              className="bg-slate-100 text-customBlue text-sm xl:text-base py-2 px-6 rounded-full"
-            >
-              Download App
-            </button>
-          </div>
         </div>
       </div>
     </>

@@ -13,7 +13,7 @@ import Icon from "@/app/pages/socialmedia-icons/page";
 import Header from "../../header";
 import Footer from "./../../footer";
 import { showToast } from "@/components/alert/page";
-import FloatingFeatures from "@/app/pages/floatingfeatures/page";
+
 export default function BlogPost({ params }) {
   const { slug } = params; // Extract slug from params
   const [isAccessible, setIsAccessible] = useState(true);
@@ -143,10 +143,6 @@ export default function BlogPost({ params }) {
           currentLocation={post.currentLocation}
           specificLocation={post.specificLocation}
         />{" "}
-        <FloatingFeatures
-          isAccessible={isAccessible}
-          handleShowWarningToast={handleShowWarningToast}
-        />
         {slug === "aboutalveo" && post.path && (
           <div className="directory-wrapper lg:h-3/4 xl:h-/4 ">
             <div>
@@ -167,7 +163,7 @@ export default function BlogPost({ params }) {
 
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customBlue"></div>
               </div>
-              <div className="absolute top-1/3 mt-3 left-5 w-4/5 z-10 text-white text-sm mx-1  sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10">
+              <div className="absolute top-1/3 mt-3 left-5 w-4/5  text-white text-sm mx-1  sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10">
                 <div className="flex space-x-4 h-36 lg:mt-10 lg:top-64 lg:ml-10 xl:-mt-16 xl:ml-40 max-sm:-mt-32 md:-mt-20 ">
                   {headings.map((heading, idx) => (
                     <h1
@@ -184,30 +180,33 @@ export default function BlogPost({ params }) {
                 </div>
               </div>
             </div>
-
-            <div className="relative mt-5 h-auto sm:h-32 p-2 text-black lg:mt-20 xl:mt-12 pb-3">
-              <table className="w-full sm:w-11/12 mx-auto xl:mx-28">
-                <tbody>
-                  <tr>
-                    <td className="font-thin text-xl bg-customBlue border border-white text-white py-2 px-4 md:text-4xl lg:text-3xl">
-                      LIVE WELL WITH ALVEO
-                    </td>
-                    <td className="font-thin text-customBlue py-2 px-4 border-none text-justify indent-5 md:text-2xl lg:text-md">
-                      Carrying the legacy of Ayala Land, the largest and most
-                      experienced real estate developer in the Philippines,
-                      Alveo offers a remarkable portfolio of prime real estate
-                      developments within thriving and emerging growth centers
-                      around the country.
-                      <p className="mt-3">
-                        Armed with sharper foresight, unparalleled excellence,
-                        and total commitment, the company provides
-                        thoughtfully-designed, master planned environments for
-                        living and working well in the Philippines.
-                      </p>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="relative mt-8 h-auto p-4 text-black lg:mt-20 xl:mt-12">
+              <div className="bg-white rounded-lg overflow-hidden shadow-sm">
+                <table className="w-full sm:w-11/12 mx-auto xl:mx-28">
+                  <tbody>
+                    <tr>
+                      {/* Header Section */}
+                      <td className="font-semibold text-lg sm:text-xl bg-customBlue text-white py-4 px-6 text-center">
+                        LIVE WELL WITH ALVEO
+                      </td>
+                    </tr>
+                    <tr>
+                      {/* Content Section */}
+                      <td className="font-light text-customBlue py-4 px-6 sm:text-lg lg:text-md text-justify leading-relaxed indent-14">
+                        Carrying the legacy of Ayala Land, the largest and most
+                        experienced real estate developer in the Philippines,
+                        Alveo offers a remarkable portfolio of prime real estate
+                        developments within thriving and emerging growth centers
+                        around the country. Armed with sharper foresight,
+                        unparalleled excellence, and total commitment, the
+                        company provides thoughtfully-designed, master-planned
+                        environments for living and working well in the
+                        Philippines.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
             <div
@@ -216,7 +215,7 @@ export default function BlogPost({ params }) {
             >
               <div className="absolute inset-0 bg-customBlue bg-opacity-90"></div>
 
-              <div className="container mx-auto mb-10 px-4 sm:px-6 lg:px-10 relative z-10">
+              <div className="container mx-auto mb-10 px-4 sm:px-6 lg:px-10 relative">
                 <div className="flex flex-col sm:flex-row justify-between gap-x-32 ">
                   {/* Left Column */}
                   <div className="w-full sm:w-1/2 pt-10">

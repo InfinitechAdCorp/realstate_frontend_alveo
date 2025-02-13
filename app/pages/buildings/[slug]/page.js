@@ -21,7 +21,10 @@ export default function BlogPost({ params }) {
   const [popupType, setPopupType] = useState("");
   const [errors, setErrors] = useState({});
   const [isImageVisible, setIsImageVisible] = useState(null);
-
+  const [isImageVisibleMain, setIsImageVisibleMain] = useState(null);
+  const handleImageClickMain = (index) => {
+    setIsImageVisibleMain(index); // Show the clicked image in a larger container
+  };
   const handleImageClick = (index) => {
     setIsImageVisible(index); // Show the clicked image
   };
@@ -40,6 +43,7 @@ export default function BlogPost({ params }) {
       .min(4, "Name must be at least 4 characters"), // Minimum length of 4 characters
     phone: Yup.string()
       .required("Phone number is required")
+      .matches(/^\d*$/, "Phone number must be numeric")
       .matches(/^[0-9]+$/, "Phone number must be numeric") // Ensures only digits
       .min(11, "Phone number must be 11 or 12 digits")
       .max(12, "Phone number must be 11 or 12 digits"),
@@ -272,14 +276,14 @@ export default function BlogPost({ params }) {
       <div className="mb-10">
         <Header /> <Icon />
       </div>
-      <div className=" p-4 md:p-8 mt-20 w-full mb-20 ">
+      <div className=" p-2 md:p-8 mt-20 w-full mb-20 ">
         <h1 className="text-2xl font-semibold text-customBlue mb-4 text-center">
           {property.name}
         </h1>
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="grid lg:grid-cols-2 gap-8">
             <div className="relative">
-              <div className="grid gap-4">
+              <div className="grid gap-2">
                 {isLoading && (
                   <div className="absolute  inset-0 flex items-center justify-center bg-gray-200 w-full h-auto max-h-80 object-cover rounded-sm">
                     <div className="text-5xl font-thin text-opacity-40 text-cyan-700 animate-pulse">
@@ -291,7 +295,28 @@ export default function BlogPost({ params }) {
                   src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`}
                   alt={property.name}
                   className="w-full h-auto max-h-80 object-cover rounded-sm"
+                  onClick={() => handleImageClickMain(property.index)}
                 />
+                {isImageVisibleMain !== null && (
+                  <div
+                    className="fixed inset-0 bg-black/70 flex justify-center items-center z-50"
+                    onClick={() => setIsImageVisibleMain(null)} // Close the modal when clicked outside
+                  >
+                    <div className="relative">
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`} // Assuming 'property' is defined elsewhere
+                        alt={property.name}
+                        className="max-w-[80vw] max-h-[80vh] object-contain rounded-lg shadow-lg"
+                      />
+                      <button
+                        onClick={() => setIsImageVisibleMain(null)} // Close button
+                        className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full"
+                      >
+                        X
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex flex-col justify-between">
@@ -302,15 +327,20 @@ export default function BlogPost({ params }) {
                     <strong>Location:</strong> {property.location}
                   </p>
                   <p>
+                    <strong>Specific Location:</strong>{" "}
+                    {property.specific_location}
+                  </p>
+                  <p>
                     <strong>Price Range:</strong>{" "}
                     <span className="text-black w-1/2 text-left">
-                      {`PHP ${new Intl.NumberFormat("en-PH").format(
+                      {`₱${new Intl.NumberFormat("en-PH").format(
                         property.price_range.split(" - ")[0]
-                      )} - PHP ${new Intl.NumberFormat("en-PH").format(
+                      )} - ₱${new Intl.NumberFormat("en-PH").format(
                         property.price_range.split(" - ")[1]
                       )}`}
                     </span>
                   </p>
+
                   <p>
                     <strong>Status:</strong> {property.status}
                   </p>
@@ -320,10 +350,6 @@ export default function BlogPost({ params }) {
                   </p>
                   <p>
                     <strong>Units:</strong> {property.units}
-                  </p>
-                  <p>
-                    <strong>Specific Location:</strong>{" "}
-                    {property.specific_location}
                   </p>
                 </div>
 
@@ -351,10 +377,9 @@ export default function BlogPost({ params }) {
 
           {isOpen && (
             <div className="fixed inset-0 flex items-center justify-center bg-customBlue bg-opacity-60 z-50">
-              <div className="bg-white p-6 shadow-lg w-11/12 sm:w-4/5 md:w-3/4 lg:w-1/2 flex flex-col md:flex-row gap-6 relative max-h-screen overflow-y-auto mt-10">
+              <div className="bg-white p-8 shadow-lg w-11/12 sm:w-4/5 md:w-3/4 lg:w-2/3 xl:w-3/5 flex flex-col md:flex-row gap-8 relative max-h-screen overflow-y-auto mt-10">
                 <button
-                  className="absolute top-0 right-4 p-2 text-2xl text-black rounded-full
-                  "
+                  className="absolute top-2 right-4 p-2 text-2xl text-black rounded-full"
                   onClick={togglePopup}
                 >
                   &times;
@@ -364,6 +389,12 @@ export default function BlogPost({ params }) {
                   <h2 className="text-xl font-semibold mb-4">
                     Property Details
                   </h2>
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${property.path}`}
+                    alt={property.name}
+                    className="w-full h-72 object-cover rounded-lg mb-4"
+                  />
+
                   <p>
                     <strong>Name:</strong> {property.name}
                   </p>
@@ -371,8 +402,17 @@ export default function BlogPost({ params }) {
                     <strong>Location:</strong> {property.location}
                   </p>
                   <p>
-                    <strong>Price Range:</strong> {property.price_range}
+                    <strong>Specific Location:</strong>{" "}
+                    {property.specific_location}
                   </p>
+                  <p>
+                    <strong>Price Range:</strong>{" "}
+                    {`₱${property.price_range
+                      .split(" - ")
+                      .map((price) => parseInt(price).toLocaleString("en-PH"))
+                      .join(" - ₱")}`}
+                  </p>
+
                   <p>
                     <strong>Status:</strong> {property.status}
                   </p>
@@ -383,27 +423,23 @@ export default function BlogPost({ params }) {
                   <p>
                     <strong>Units:</strong> {property.units}
                   </p>
-                  <p>
-                    <strong>Specific Location:</strong>{" "}
-                    {property.specific_location}
-                  </p>
                 </div>
 
-                <div className="w-full md:w-1/2 mt-2 max-sm:max-h-screen">
-                  <h2 className="text-2xl font-semibold text-customBlue mb-4">
+                <div className="w-full md:w-1/2">
+                  <h2 className="text-3xl font-semibold text-customBlue mb-6 text-center">
                     {popupType === "Request Viewing"
                       ? "Schedule Appointment"
                       : "Submit Inquiry"}
                   </h2>
                   <form
-                    className="grid gap-4"
+                    className="grid gap-6 w-full"
                     onSubmit={(e) => {
                       e.preventDefault();
                       submitForm();
                     }}
                   >
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="w-full">
                         <label className="block text-sm font-medium text-customBlue">
                           Name
                         </label>
@@ -412,14 +448,14 @@ export default function BlogPost({ params }) {
                           name="name"
                           value={formData.name}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-blue-500 focus:border-blue-500"
+                          className="mt-1 block w-full p-2 border border-cyan-700 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-sm"
                           placeholder="Your Name"
                         />
                         {errors.name && (
-                          <p className="text-red-500 text-sm">{errors.name}</p> // Display error for Name
+                          <p className="text-red-500 text-sm">{errors.name}</p>
                         )}
                       </div>
-                      <div>
+                      <div className="w-full">
                         <label className="block text-sm font-medium text-customBlue">
                           Phone Number
                         </label>
@@ -428,14 +464,35 @@ export default function BlogPost({ params }) {
                           name="phone"
                           value={formData.phone}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
+                          onInput={(e) => {
+                            const prevValue = e.target.value;
+                            const newValue = prevValue.replace(/\D/g, ""); // Remove non-numeric input
+
+                            if (prevValue !== newValue) {
+                              setErrors({
+                                ...errors,
+                                phone: "Only numeric values are allowed",
+                              });
+                            } else {
+                              const updatedErrors = { ...errors };
+                              delete updatedErrors.phone;
+                              setErrors(updatedErrors);
+                            }
+
+                            e.target.value = newValue; // Update input field with valid numbers only
+                          }}
+                          className="mt-1 block w-full p-2 border border-cyan-700 rounded-lg focus:ring-customBlue focus:border-blue-500 text-sm"
                           placeholder="Your Phone Number"
                         />
+
                         {errors.phone && (
-                          <p className="text-red-500 text-sm">{errors.phone}</p> // Display error for Phone
+                          <p className="text-red-500 text-sm">{errors.phone}</p>
                         )}
                       </div>
-                      <div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                      <div className="w-full">
                         <label className="block text-sm font-medium text-customBlue">
                           Email
                         </label>
@@ -444,37 +501,35 @@ export default function BlogPost({ params }) {
                           name="email"
                           value={formData.email}
                           onChange={handleInputChange}
-                          className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
+                          className="mt-1 block w-full p-2 border border-cyan-700 rounded-lg focus:ring-customBlue focus:border-blue-500 text-sm"
                           placeholder="Your Email"
                         />
                         {errors.email && (
-                          <p className="text-red-500 text-sm">{errors.email}</p> // Display error for Email
+                          <p className="text-red-500 text-sm">{errors.email}</p>
                         )}
                       </div>
-                      <div>
-                        {popupType === "Request Viewing" && (
-                          <>
-                            <label className="block text-sm font-medium text-customBlue">
-                              Appointment Date & Time
-                            </label>
-                            <input
-                              type="datetime-local"
-                              name="appointmentDate"
-                              value={formData.appointmentDate}
-                              onChange={handleInputChange}
-                              className="mt-1 block w-full p-2 border border-cyan-700 focus:ring-customBlue focus:border-blue-500"
-                            />
-                            {errors.appointmentDate && (
-                              <p className="text-red-500 text-sm">
-                                {errors.appointmentDate}
-                              </p> // Display error for Appointment Date
-                            )}
-                          </>
-                        )}
-                      </div>
+                      {popupType === "Request Viewing" && (
+                        <div className="w-full">
+                          <label className="block text-sm font-medium text-customBlue">
+                            Appointment Date & Time
+                          </label>
+                          <input
+                            type="datetime-local"
+                            name="appointmentDate"
+                            value={formData.appointmentDate}
+                            onChange={handleInputChange}
+                            className="mt-1 block w-full p-2 border border-cyan-700 rounded-lg focus:ring-customBlue focus:border-blue-500 text-sm"
+                          />
+                          {errors.appointmentDate && (
+                            <p className="text-red-500 text-sm">
+                              {errors.appointmentDate}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
 
-                    <div>
+                    <div className="w-full">
                       <label className="block text-sm font-medium text-gray-700">
                         Message
                       </label>
@@ -482,18 +537,17 @@ export default function BlogPost({ params }) {
                         name="message"
                         value={formData.message}
                         onChange={handleInputChange}
-                        className="mt-1 p-1 border border-gray-300 rounded-md shadow-sm 
-        focus:ring-blue-500 focus:border-blue-500 resize-none h-20 w-full"
+                        className="mt-1 p-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none h-32 w-full text-sm"
                         placeholder="Type your message here"
                       />
                       {errors.message && (
-                        <p className="text-red-500 text-sm">{errors.message}</p> // Display error for Message
+                        <p className="text-red-500 text-sm">{errors.message}</p>
                       )}
                     </div>
 
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-customBlue text-white hover:bg-cyan-700 items-center"
+                      className="w-full px-6 py-4 bg-customBlue text-white rounded-lg text-sm font-semibold hover:bg-cyan-700"
                     >
                       {popupType === "Request Viewing"
                         ? "Confirm Appointment"
@@ -572,7 +626,7 @@ export default function BlogPost({ params }) {
             {/* Facilities List */}
             {facilities.length === 0 ? (
               <div className="flex items-center justify-center">
-                <p className="text-lg sm:text-xl text-white">
+                <p className="text-sm sm:text-xl text-white">
                   No facilities available for this property.
                 </p>
               </div>

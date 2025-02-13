@@ -214,7 +214,6 @@ export default function BlogPost({ params }) {
                 <a
                   key={property.id}
                   href={`/pages/buildings/${property.id}`}
-                  passHref
                   className="no-underline"
                 >
                   <div className="w-full">

@@ -26,7 +26,7 @@ import MyBot from "../../components/Chatbot/page";
 import SocialMediaFloating from "./socialmedia-icons/page";
 import { usePathname } from "next/navigation";
 import Icon from "@/app/pages/socialmedia-icons/page";
-import FloatingFeatures from "@/app/pages/floatingfeatures/page";
+
 const containerStyle = {
   width: "100%",
   height: "200px",
@@ -370,7 +370,7 @@ const AboutAlveo = () => {
         <div className="absolute inset-0 bg-customBlue bg-opacity-90"></div>
 
         {/* Content */}
-        <div className="container mx-auto px-4 sm:px-6 lg:px-10 relative z-10">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-10 relative ">
           <div className="text-center">
             <h1 className="text-4xl font-thin text-white tracking-widest mb-10 flex flex-col sm:flex-row sm:justify-center sm:items-center">
               About
@@ -484,7 +484,6 @@ const ImageSlider = () => {
             href={`/pages/buildings/${encodeURIComponent(
               locations[currentIndex].id
             )}`}
-            passHref
           >
             <Image
               src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${locations[
@@ -1000,12 +999,7 @@ const AlveoBanner = () => {
               </div>
             </div>
           </div>
-
-          <FloatingFeatures
-            isAccessible={isAccessible}
-            handleShowWarningToast={handleShowWarningToast}
-          />
-
+          \
           {enlargedImage && (
             <div
               className="absolute top-1 w-screen  h-1/2 md:w-1/2 md:h-screen z-40"
@@ -1489,20 +1483,16 @@ const DashboardComponent = () => {
       <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-5">
         <div className="w-full flex xl:flex-row">
           <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10 px-4 sm:px-6 lg:px-8">
-            <h1
-              className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
-      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4"
-            >
+            <h1 className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4">
               RECOMMENDED LOCATIONS
             </h1>
             <div className="p-2 mx-auto">
               <div className="flex flex-wrap -mx-2">
                 {Object.values(posts)
-                  .slice(-4)
-                  .reverse()
+                  .slice(0, 3) // Slice the first 3 items
                   .map(({ location, key, path, title, intro }) => (
                     <div
-                      className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-8"
+                      className="w-full sm:w-1/2 md:w-1/3 lg:w-1/3 px-2 mb-8" // Adjusted to ensure full width on larger screens
                       key={key}
                     >
                       <div className="bg-white shadow-md overflow-hidden flex flex-col h-full">
@@ -1516,31 +1506,32 @@ const DashboardComponent = () => {
                             {location.toUpperCase()}
                           </div>
                         </div>
-
                         <div className="p-4 flex flex-col justify-between flex-grow">
                           <div>
-                            <h5 className="text-lg font-semibold">
-                              {`"${title}"`}
-                            </h5>
-
+                            <h5 className="text-lg font-semibold">{`"${title}"`}</h5>
                             <p className="text-base">
                               {expanded[key]
                                 ? intro
                                 : `${intro.substring(0, 100)}...`}
                             </p>
                           </div>
-                          <a
-                            href={`/pages/locations/${key}`}
-                            className="mt-4 text-customBlue hover:text-customBlue"
-                          >
-                            {expanded[key] ? "Read Less" : "Read More"} &rarr;
-                          </a>
+
+                          {/* Space above the button */}
+                          <div className="flex justify-end">
+                            <a
+                              href={`/pages/locations/${key}`}
+                              className="w-40 inline-block text-center bg-customBlue text-white py-2 px-4 rounded-lg hover:bg-customBlueDark focus:outline-none transition-colors duration-300"
+                            >
+                              Read More &rarr;
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
                   ))}
               </div>
             </div>
+
             <a
               href="/pages/location"
               className="mt-4 inline-block text-customBlue hover:text-customBlue text-lg font-medium"

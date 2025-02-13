@@ -58,7 +58,7 @@ const FeatureIcon = ({
   handleShowWarningToast,
 }) => {
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center z-50">
       <div className="bg-white border-2 rounded-3xl w-12 h-12 flex items-center justify-center border-customBlue transform hover:scale-105 hover:shadow-lg transition-all duration-300 ease-in-out">
         {isAccessible !== undefined ? (
           isAccessible ? (
@@ -76,7 +76,7 @@ const FeatureIcon = ({
             </div>
           )
         ) : (
-          <a href={link} passHref>
+          <a href={link}>
             <IconWithTooltip icon={icon} label={label} />
           </a>
         )}
@@ -84,7 +84,6 @@ const FeatureIcon = ({
     </div>
   );
 };
-
 const IconWithTooltip = ({ icon, label }) => {
   return (
     <div className="relative group">
@@ -99,7 +98,7 @@ const IconWithTooltip = ({ icon, label }) => {
       >
         {icon}
       </div>
-      <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-black bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-30">
         {label}
       </span>
     </div>

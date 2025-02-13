@@ -10,7 +10,8 @@ import Link from "next/link";
 import { CiMenuFries } from "react-icons/ci";
 import { IoCall } from "react-icons/io5";
 import MyBot from "../../components/Chatbot/page";
-
+import FloatingFeatures from "@/app/pages/floatingfeatures/page";
+import { showToast } from "../../components/alert/page";
 const properties = [
   { title: "Condominiums", slug: "condominiums" },
   { title: "Lots", slug: "residential" },
@@ -29,7 +30,7 @@ const Header = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-
+  const [isAccessible, setIsAccessible] = useState(true);
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
@@ -63,6 +64,9 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const handleShowWarningToast = (message) => {
+    showToast(message, "warning"); // Warning toast
+  };
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsExplorePage(window.location.pathname === "/pages/explore");
@@ -122,6 +126,11 @@ const Header = () => {
   return (
     <>
       <MyBot />
+      <FloatingFeatures
+        isAccessible={isAccessible}
+        handleShowWarningToast={handleShowWarningToast}
+      />
+
       <header
         className={`${
           scrolled ? "bg-gray-900 shadow-lg" : "bg-transparent"
@@ -214,7 +223,9 @@ const Header = () => {
               </a>
             </div>
             <div className="ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium">
-              {!isExplorePage && pathname !== "/contactus" ? (
+              {!isExplorePage &&
+              pathname !== "/contactus" &&
+              !pathname.startsWith("/pages/buildings/") ? (
                 <a
                   href="/pages/explore"
                   className="flex items-center text-white hover:opacity-80 transition-opacity duration-300"
@@ -228,7 +239,6 @@ const Header = () => {
                 <div className="w-[200px]"></div> // This keeps space even when hidden
               )}
             </div>
-
           </div>
         </div>
       </header>

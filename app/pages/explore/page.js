@@ -64,7 +64,6 @@ function ExplorePage() {
         throw new Error("Network response was not ok");
       }
       const buildingsData = await buildingsResponse.json();
-      console.log("Buildings Data:", buildingsData);
 
       // Fetch properties data
       const propertiesEndpoint = `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/allproperty`;
@@ -73,13 +72,12 @@ function ExplorePage() {
         throw new Error("Network response was not ok");
       }
       const propertiesData = await propertiesResponse.json();
-      console.log("Properties Data:", propertiesData);
 
       // Combine the building data with property status
       const combinedData = buildingsData.map((building) => {
         // Find the corresponding property by matching the ID
         const matchingProperty = propertiesData.find(
-          (property) => property.id === building.id
+          (property) => property.id === building.property_id
         );
 
         // Add the status from property if matched, else default to "Unknown"
@@ -88,7 +86,9 @@ function ExplorePage() {
           status: matchingProperty ? matchingProperty.status : "Unknown",
         };
       });
-
+      console.log(propertiesData);
+      console.log(buildingsData);
+      console.log(combinedData);
       // Set the combined data in state
       setAllBuildings(combinedData);
       setFilteredBuildings(combinedData); // Initially, display all buildings
@@ -189,8 +189,6 @@ function ExplorePage() {
               key={index}
               className="relative inline-block ml-5 sm:ml-8 justify-center lg:mt-5"
               onClick={() => handleImageClick(index, image.value)}
-              onMouseEnter={() => console.log(`Mouse entered: ${image.label}`)} // Mouse enter event
-              onTouchStart={() => console.log(`Touched: ${image.label}`)} // Touch event
             >
               <div className="flex justify-center items-center transition-transform duration-300 ease-in-out hover:scale-110 hover:opacity-80">
                 {image.icon}
@@ -225,7 +223,6 @@ function ExplorePage() {
               return (statusOrder[statusA] || 5) - (statusOrder[statusB] || 5);
             })
             .map((building) => {
-              // Define the background color based on the status
               let statusColor = "";
               switch (building.status?.toLowerCase()) {
                 case "ready for occupancy":

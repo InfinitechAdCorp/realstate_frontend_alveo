@@ -547,12 +547,26 @@ export const columns = [
         // Close the popup after submission
         closePopup("updateProperty");
       };
-
       const fetchBuildingData = async (buildingId) => {
+        const token = localStorage.getItem("auth_token");
+
+        if (!token) {
+          console.error("No authentication token found.");
+          return;
+        }
+
         try {
           const response = await fetch(
-            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/buildings/id/${buildingId}`
+            `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/buildings/id/${buildingId}`,
+            {
+              method: "GET", // Default is GET, but it's good to be explicit
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`, // Adding token to Authorization header
+              },
+            }
           );
+
           const data = await response.json();
 
           if (Array.isArray(data) && data.length > 0) {
@@ -589,7 +603,7 @@ export const columns = [
       };
       const handleUpdateBuilding = async (e) => {
         e.preventDefault();
-
+        const token = localStorage.getItem("auth_token");
         // Gather all updated values from the form fields
         const updatedBuilding = {
           propertyId: payment.id,
@@ -616,7 +630,7 @@ export const columns = [
             ), // Convert to number
           },
         };
-        const token = localStorage.getItem("auth_token");
+
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/update-buildings`,
