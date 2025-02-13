@@ -1,0 +1,1688 @@
+[33mcommit ff6f5f92277d8270f1796b96aad3e3008f452df8[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdeployment[m[33m, [m[1;31morigin/deployment[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Feb 13 15:09:48 2025 +0800
+
+    updated
+
+[33mcommit 9198cb413deda3ced710ea917cf01ba1be95abe1[m
+Merge: bb56b8c d14b7de
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 16:50:03 2025 +0800
+
+    Merge pull request #65 from Ron0710/lythea
+    
+    Updated
+
+[33mcommit d14b7de8f3887c72f9955b6fbf77d4b7172200fe[m[33m ([m[1;31morigin/lythea[m[33m, [m[1;31mlythea/lythea[m[33m, [m[1;32mlythea[m[33m)[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 16:49:36 2025 +0800
+
+    Updated
+
+[33mcommit bb56b8c0f49cd5df34ba9254606d55b6b42b3426[m
+Merge: f03324f b91b06a
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 15:30:53 2025 +0800
+
+    Merge pull request #64 from Ron0710/lythea
+    
+    Lythea
+
+[33mcommit b91b06a46744b5877d176091f6696ca2d8eea213[m
+Merge: a805ea3 f03324f
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 15:25:32 2025 +0800
+
+    Updated
+
+[33mcommit a805ea35bcbc5a28c9657194762ee4554e829ef5[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 15:24:33 2025 +0800
+
+    updated
+
+[33mcommit 0ec7469876dd67df9cbf45d3834223d15ed50bdb[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 14:39:26 2025 +0800
+
+    updated
+
+[33mcommit f03324fdd7c5cba1905cd6084650c111b29d535f[m
+Merge: 5ad594e f767fa7
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 13:42:32 2025 +0800
+
+    Merge pull request #63 from Ron0710/lythea
+    
+    Merge pull request #2 from InfinitechAdCorp/deployment
+
+[33mcommit f767fa782129c1ed95b530235ad918d9e02ad741[m
+Merge: 71f4e5b 5ad594e
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 13:36:19 2025 +0800
+
+    Merge pull request #2 from InfinitechAdCorp/deployment
+    
+    a
+
+[33mcommit 5ad594e4ff3d745ca53a38e466fc300093e6cd74[m
+Merge: 92eca68 5f4c616
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 13:32:36 2025 +0800
+
+    Merge pull request #62 from Ron0710/origin
+    
+    Updated
+
+[33mcommit 5f4c616b0e3fdddbba94ddbb0457ba8d33dac94e[m[33m ([m[1;31morigin/origin[m[33m, [m[1;32morigin[m[33m)[m
+Merge: 71f4e5b 92eca68
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 13:32:09 2025 +0800
+
+    Merge branch 'deployment' into origin
+
+[33mcommit 71f4e5b2519a7b251a0d04dbfaceab4bd6f26a3a[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Feb 11 13:30:23 2025 +0800
+
+    Updated
+
+[33mcommit 92eca682370fd4d70a7bf9b5ec0d247b31e7f5b1[m
+Merge: 09f9ac3 09f04a8
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Feb 10 16:21:14 2025 +0800
+
+    Merge pull request #61 from Ron0710/deployment
+    
+    Updated
+
+[33mcommit 09f04a82f6cd91080c2262e1d9d83feb46d544f4[m
+Merge: 232d3e0 09f9ac3
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Feb 10 16:21:05 2025 +0800
+
+    Merge branch 'deployment' into deployment
+
+[33mcommit 232d3e0f07c078526b2a27bc4e5a4fdf3e5500cf[m[33m ([m[1;31mlythea/frontend[m[33m)[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Feb 10 16:17:44 2025 +0800
+
+    Updated
+
+[33mcommit 09f9ac3d9a8c538e1bc9db75615fb613c550ad31[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 14:31:23 2025 +0800
+
+    Updated
+
+[33mcommit 929ea42c08ab84ebf6628c71f8894f0b67308e7b[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 11:38:18 2025 +0800
+
+    Updated
+
+[33mcommit 7287b0901034e5f5ad5199a7edc2ab499d4d1f78[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 11:36:57 2025 +0800
+
+    Updated
+
+[33mcommit 12b3cb608e408120aa012e1cb50343072fd2da8e[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 11:04:41 2025 +0800
+
+    Updated
+
+[33mcommit 6224b66f485bdc5af776a31fa3337eeadeaf43bc[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 10:46:10 2025 +0800
+
+    Updated
+
+[33mcommit 231aee8396df9cff7bb5e6037cf96bf0a642d146[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 09:45:58 2025 +0800
+
+    Updated
+
+[33mcommit c082481b2603bcea859363a7bd0f8710cb58380c[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 21 09:38:49 2025 +0800
+
+    Updated
+
+[33mcommit 2f8eb6d3282df7646b483a16c84692fc73296492[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 16:43:04 2025 +0800
+
+    Updated
+
+[33mcommit 7a4cc4b0f58505dee398b696dffd65a05f001c52[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 16:32:56 2025 +0800
+
+    Updated
+
+[33mcommit 03d886b4e0914bc4ca9eaff24e57c36b0c907ea7[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 16:24:22 2025 +0800
+
+    Updated
+
+[33mcommit 5e3013040ecdb89f7b5a477b303d1beac3e4f264[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 11:03:36 2025 +0800
+
+    Updated
+
+[33mcommit b6c742f2a163b1697973fe9624eb08d848b74b2a[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 10:06:44 2025 +0800
+
+    Updated
+
+[33mcommit c32e9d0a94e2f663d50f805b30d1d9526a6e699e[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 09:38:01 2025 +0800
+
+    Updated
+
+[33mcommit f831c18acc2060ef9fdc173b70009c23c264e848[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 20 08:35:37 2025 +0800
+
+    Updated
+
+[33mcommit 5da49ae1294b891a18ff459617ea5365f9b5008d[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:46:48 2025 +0800
+
+    Updated
+
+[33mcommit 9a6ae1cac30d4749908d5c3f62513f8f9d66f74b[m
+Merge: b31668d 6c5b1f2
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:38:16 2025 +0800
+
+    Merge pull request #60 from Ron0710/deployment
+    
+    a
+
+[33mcommit 6c5b1f2c1c83a5f3a624ebf934b15949ad449059[m
+Merge: 681e124 b31668d
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:37:38 2025 +0800
+
+    Merge pull request #1 from InfinitechAdCorp/deployment
+    
+    Updated
+
+[33mcommit b31668d9adf4beec23afe342565b2888fd43cbb6[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:36:52 2025 +0800
+
+    Updated
+
+[33mcommit 681e124c17f91c7ac16daae0ad541d288720236f[m
+Merge: 5c34890 a34d83b
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:28:42 2025 +0800
+
+    Merge branch 'InfinitechAdCorp:deployment' into deployment
+
+[33mcommit a34d83b08f46b98e33fcb9be0701fd739aef4f6d[m
+Author: ron <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:28:06 2025 +0800
+
+    Updated
+
+[33mcommit 5c34890f577802ac5b0503682f7608ef1cb94437[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 16:20:06 2025 +0800
+
+    Updated
+
+[33mcommit bf6d4c5075306da7eef162aee5d59ca8ac79094a[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 11:54:15 2025 +0800
+
+    Updated
+
+[33mcommit 2074269f77ad9661257c75f592c3da07a5acc03c[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 11:03:35 2025 +0800
+
+    Updated
+
+[33mcommit b5cebbaa59d12848875bf94cd5ef19bfb2315daa[m
+Merge: 1078545 6c021bc
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 10:21:20 2025 +0800
+
+    Merge pull request #59 from InfinitechAdCorp/explore-properties
+    
+    modify design
+
+[33mcommit 107854561103c3f63b3885d0b921c8b7b84ea03c[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 10:19:45 2025 +0800
+
+    Updated
+
+[33mcommit c21316da3c311fe6682e6c635d1dbeec0a6c4204[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 10:19:24 2025 +0800
+
+    pdated
+
+[33mcommit 6c021bc886e4c7d0d4c10aabb16f4a6a4927ff6d[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Fri Jan 17 10:04:38 2025 +0800
+
+    modify design
+
+[33mcommit a1d86ba52736f44cc5ff48cce1113d9ad8615363[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Fri Jan 17 09:15:44 2025 +0800
+
+    updated
+
+[33mcommit 466342b5eae9adf87cdcc4024cbaf9aaef90fe78[m
+Merge: 48cb718 63446e2
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 08:59:01 2025 +0800
+
+    Merge pull request #58 from InfinitechAdCorp/feature/chatbot
+    
+    chatbot function fix
+
+[33mcommit 63446e2971211ec4882111b1776634c668066f7b[m
+Merge: 2e21ab9 48cb718
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 08:58:54 2025 +0800
+
+    Merge branch 'deployment' into feature/chatbot
+
+[33mcommit 2e21ab9b99a7ac3f5c42243106ed958b39f6ae61[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Fri Jan 17 08:55:39 2025 +0800
+
+    chatbot function fix
+
+[33mcommit 48cb71893890e4a98276356fe4ab4b8a30125b11[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Fri Jan 17 08:42:39 2025 +0800
+
+    Updated
+
+[33mcommit 667466ce5a9b2a68cf31d245bf4bee4308f0fa70[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 17:43:40 2025 +0800
+
+    Updated
+
+[33mcommit bf87d4c60fea263ba0edf83d180c0319a300ee02[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 16:38:04 2025 +0800
+
+    Updated
+
+[33mcommit d822638441ed4a753a098c7216c91f4511fa677c[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 16:33:57 2025 +0800
+
+    Updated
+
+[33mcommit c6fe3cf62386ca8b0adaeb87343fba681b1a1d97[m
+Merge: 672cf32 db15375
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 16:32:56 2025 +0800
+
+    Merge pull request #57 from InfinitechAdCorp/properties
+    
+    modify design
+
+[33mcommit db15375fc1c10d06dcc7fdcbcb3739fa00851bb8[m
+Merge: 9409914 672cf32
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 16:32:43 2025 +0800
+
+    Merge branch 'deployment' into properties
+
+[33mcommit 672cf327c8b1e970765acc27ec841b26057d4bb4[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 16:23:48 2025 +0800
+
+    Updated
+
+[33mcommit 9409914426f71fdbc3cfa8f118d510a37236d1ff[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 16:02:19 2025 +0800
+
+    modify modals
+
+[33mcommit 4776833daf52f1190d086af64894fb5c2074c7e5[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 15:44:37 2025 +0800
+
+    add href
+
+[33mcommit 8d8287c6c9afe33b44d9e27e65f2698bb2b2ee20[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 15:29:33 2025 +0800
+
+    responsive layout
+
+[33mcommit 55b7af1626dced52e96f428ad267a7284e45e092[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 15:21:33 2025 +0800
+
+    modify design
+
+[33mcommit a45f71ba19be87fef2640882654b93a1810c907f[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 13:53:26 2025 +0800
+
+    add image loader
+
+[33mcommit cc9cd7e495a3aecfed1305b545472fc8c879ade3[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 13:50:23 2025 +0800
+
+    image loader
+
+[33mcommit 7378ca6e099381df940944e71a6f2cc240e26bf8[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 13:27:19 2025 +0800
+
+    add image loader
+
+[33mcommit 0db3b3c6285eb7071434c6a11d6d56c3c95047ab[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 11:49:41 2025 +0800
+
+    modify design
+
+[33mcommit 41906281392661b86e1d71956f19ec884604648d[m
+Merge: 2f13860 8e40c2c
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 11:04:24 2025 +0800
+
+    Merge pull request #56 from InfinitechAdCorp/feature/chatbot
+    
+    FIX DROPDOWN!
+
+[33mcommit 2f13860f4807df8da3edf718361df3c1bba8f284[m
+Merge: 2737aad 979cb13
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 11:03:27 2025 +0800
+
+    updated
+
+[33mcommit 2737aad056ca8bc01d141a08c277a952c73314dd[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 11:02:16 2025 +0800
+
+    Updated
+
+[33mcommit 8e40c2cf99142135a924451bd87ba6df79335dda[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 11:02:11 2025 +0800
+
+    FIX DROPDOWN!
+
+[33mcommit 979cb13384789c0471abdcffe8c179a2ca75661f[m
+Merge: 4420fb0 ceaee3b
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 10:58:03 2025 +0800
+
+    Merge pull request #55 from InfinitechAdCorp/feature/chatbot
+    
+    Feature/chatbot
+
+[33mcommit ceaee3b57258d20c48280e45f98dfd8f49bc47f3[m
+Merge: f813caa 4420fb0
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 10:57:54 2025 +0800
+
+    Merge branch 'deployment' into feature/chatbot
+
+[33mcommit 4420fb0b7accacbaf16bade15c78c2977b796628[m
+Merge: f6ff243 4c7c787
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 10:49:30 2025 +0800
+
+    Updated
+
+[33mcommit f6ff243f564bfff9fa25dd73973bef5d6bf4eedc[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 16 10:48:57 2025 +0800
+
+    Updated
+
+[33mcommit f813caab978e4921b2f6bb605561917f7072179b[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 10:26:33 2025 +0800
+
+    add loader, fetch answer from db
+
+[33mcommit e44da6cd2f0774b0be9f89361671e93e88f8c264[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 16 10:26:00 2025 +0800
+
+    mobile responsive
+
+[33mcommit 4c7c787af6ac85a567fdc7a146439d375e49246d[m
+Merge: 6a35e71 cab5fd0
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 17:04:11 2025 +0800
+
+    Merge pull request #54 from InfinitechAdCorp/Admin-side
+    
+    admin
+
+[33mcommit 6a35e71dd437d5db3159d707994483decf70bdd2[m
+Merge: 8f9c6a4 83240ca
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 17:03:58 2025 +0800
+
+    Merge pull request #53 from InfinitechAdCorp/design/dashboard
+    
+    Design/dashboard
+
+[33mcommit 8f9c6a4b39a5967c1bcf8ab89f094260dcd92ece[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 17:03:40 2025 +0800
+
+    updated
+
+[33mcommit d1ebd2d186114909825804826f40e995d66e4f51[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 17:03:27 2025 +0800
+
+    updated
+
+[33mcommit cab5fd047d5a71024911c1e04c0e5ba8f9f80951[m
+Author: Kimberly <infinitech.kimberly@gmail.com>
+Date:   Wed Jan 15 17:01:12 2025 +0800
+
+    admin
+    
+    * Side Bar
+    * off Canvas
+
+[33mcommit 83240cab933d5f46e6d5a1f44f65069d4a8c8411[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 16:55:51 2025 +0800
+
+    change input search
+
+[33mcommit 9522305f95abf9515cd39b10982fbce22a17d4f1[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 15:39:25 2025 +0800
+
+    Updated
+
+[33mcommit 0a9b12905c8be4815e3f0450d49a368dbc6a8c8f[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 15:36:08 2025 +0800
+
+    Updated
+
+[33mcommit 7e877800783f609df5db33b9a49b230f16d69260[m
+Merge: 5c68d96 3482523
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 15:27:37 2025 +0800
+
+    Merge branch 'design/dashboard' of https://github.com/InfinitechAdCorp/realstate_frontend_alveo into design/dashboard
+
+[33mcommit 5c68d9668a55192811530b491c2b98a25849dffe[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 15:27:32 2025 +0800
+
+    adjust banner content
+
+[33mcommit ccc37bf7ea6d51483d5722c329a2a47a592fc81e[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 14:21:10 2025 +0800
+
+    Updated
+
+[33mcommit 9a3d9e348efb27ec2e25b9a84ac7f86ebdc21069[m
+Merge: b58e436 e13d724
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 14:19:21 2025 +0800
+
+    Merge pull request #52 from InfinitechAdCorp/New
+    
+    Updated
+
+[33mcommit e13d7245d9d08270ca524fb6b5796e9df05fcd3f[m
+Merge: 403c545 b58e436
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 14:19:13 2025 +0800
+
+    Merge branch 'deployment' into New
+
+[33mcommit 403c545bf70050fbfe59ad9839ce895d605b135b[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 14:16:15 2025 +0800
+
+    Updated
+
+[33mcommit b58e43622a9b846b7022675b60452939bbd7650c[m
+Merge: 458bd46 db2bd79
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:57:17 2025 +0800
+
+    Merge pull request #50 from InfinitechAdCorp/Update
+    
+    Updates
+
+[33mcommit db2bd796a8621796d69d7143848986f57531448e[m
+Merge: 262fc75 458bd46
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:57:10 2025 +0800
+
+    Merge branch 'deployment' into Update
+
+[33mcommit 458bd46ea054a3f2eaed5524e6e98d1e610da5d0[m
+Merge: e75d2f6 3482523
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:53:58 2025 +0800
+
+    Merge pull request #49 from InfinitechAdCorp/design/dashboard
+    
+    Design/dashboard
+
+[33mcommit 34825230f36f50963a8a270b35bf08dfb0fa1995[m
+Merge: 4a649c3 e75d2f6
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:53:51 2025 +0800
+
+    Merge branch 'deployment' into design/dashboard
+
+[33mcommit e75d2f6271af33d0ab27f26890bc3fd27bd2392a[m
+Merge: 5be2584 10b56ed
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:53:09 2025 +0800
+
+    Merge pull request #51 from InfinitechAdCorp/Jan-15
+    
+    Updated
+
+[33mcommit 10b56ed304e4724a7f7f61219cfbbe9e163cd58a[m
+Merge: b30ed2f 5be2584
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:53:01 2025 +0800
+
+    Merge branch 'deployment' into Jan-15
+
+[33mcommit 262fc75ce43c6e7f0e211856babfa218c6d52f5e[m
+Author: Kimberly <infinitech.kimberly@gmail.com>
+Date:   Wed Jan 15 13:51:17 2025 +0800
+
+    Updates
+    
+    * Navigation Bar
+    * New Badge
+    * Property Sorting
+    * Chatbot
+
+[33mcommit b30ed2fcff6b09bf3dcb06874823149fa4f8a73c[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 13:49:02 2025 +0800
+
+    Updated
+
+[33mcommit 4a649c3c72efd6e02f405f3c576dd471ace02865[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 13:27:50 2025 +0800
+
+    redesign
+
+[33mcommit 6200ddf30e18da585947e3c95362fa34317d22c9[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 13:02:50 2025 +0800
+
+    updated
+
+[33mcommit 3d128b50b4b5ee8def1eff9dfeed2526a74053be[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 12:53:55 2025 +0800
+
+    redesign
+
+[33mcommit 5be25848f13a2e86617b288734bb7ee35ce131ba[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 11:41:23 2025 +0800
+
+    modify design
+
+[33mcommit 4c6bf28c6a5d12c5b4e6da0e8dbfc30eb46be440[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 11:18:47 2025 +0800
+
+    change button and navbar colors
+
+[33mcommit 6a4f4f2acf98897df01070db05fcd47349cc2df2[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 11:06:55 2025 +0800
+
+    modify loan calculator design
+
+[33mcommit 840065797d4d43af6727c5815114951d92d5cccd[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 10:45:06 2025 +0800
+
+    modify design
+
+[33mcommit 6fa09c4f0444e2b344c5dd09ed31a8a95de2920a[m
+Merge: ca3ee96 1243393
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 10:21:44 2025 +0800
+
+    Merge pull request #48 from InfinitechAdCorp/design/dashboard
+    
+    Design/dashboard
+
+[33mcommit 12433931ac45822cd43cbd35de3f245f4b3d58a7[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 10:20:08 2025 +0800
+
+    fix dropdown
+
+[33mcommit 4786b4cef56d639662221ee54f5ddbe314553262[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 10:08:52 2025 +0800
+
+    add video link to banner background
+
+[33mcommit a2929979a625f2215717e9919b1bac5f23b4dcb9[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 10:08:28 2025 +0800
+
+    mobile responsiveness
+
+[33mcommit ca3ee9646c2aa6bf3a4a53fc6ab3c56c90e41e13[m
+Merge: 67f2145 486e107
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 15 08:44:23 2025 +0800
+
+    Merge pull request #47 from InfinitechAdCorp/design/dashboard
+    
+    add video link
+
+[33mcommit 486e1073226c0142a1a24f1773e7ad4df7cb9e42[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Jan 15 08:41:43 2025 +0800
+
+    add video link
+
+[33mcommit 67f21454ce4a02decce1de1a5549479794ad339f[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 17:12:55 2025 +0800
+
+    Updated
+
+[33mcommit 385f8beb61dd6b2df2cf9cdaf661a6e9ed2cf287[m
+Merge: 65210ea ee8da2c
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 17:03:38 2025 +0800
+
+    updated
+
+[33mcommit 65210ea62c2108a2f2c60fc180c4afc2b3fb3f5b[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 17:02:56 2025 +0800
+
+    Remove Git LFS
+
+[33mcommit ee8da2cbc857d41c7da533b041e6f55df03025af[m
+Merge: 100b885 7016492
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 16:53:09 2025 +0800
+
+    Merge pull request #46 from InfinitechAdCorp/design/dashboard
+    
+    updated
+
+[33mcommit 100b885e27086cbf0ed2fd7b7c7610e76b635c8f[m
+Merge: 49b81ba c5795e5
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 16:52:36 2025 +0800
+
+    Merge branch 'deployment' of https://github.com/InfinitechAdCorp/realstate_frontend_alveo into deployment
+
+[33mcommit 49b81ba4b09a4282420b9e81b42fec69c8c97da4[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 16:52:24 2025 +0800
+
+    Updated
+
+[33mcommit 7016492361b6be57641f086b3151e94c54b556e7[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 16:33:44 2025 +0800
+
+    updated
+
+[33mcommit c5795e54daa174ff001c3ce496cb321dd5273f92[m
+Merge: 1e9e3a6 e50a85c
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 16:05:01 2025 +0800
+
+    Merge pull request #45 from InfinitechAdCorp/design/dashboard
+    
+    Design/dashboard
+
+[33mcommit e50a85cc3cb06af08bcd5c304a8b6a30913c68ac[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 16:04:06 2025 +0800
+
+    updated
+
+[33mcommit 38aec3207cdb67df3931a7b37bfc5f15ae79c7aa[m
+Merge: 993d631 951f0f0
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 16:02:07 2025 +0800
+
+    Merge branch 'design/dashboard' of https://github.com/InfinitechAdCorp/realstate_frontend_alveo into design/dashboard
+
+[33mcommit 993d631bd06d7db7888ea2f3e1819435cf105882[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 16:02:00 2025 +0800
+
+    updates
+
+[33mcommit 1e9e3a694b34c6b21fc063be8db717a8a3a65564[m
+Merge: 181066e 3bbaaa4
+Author: Infinitech-Kimberly <infinitech.kimberly@gmail.com>
+Date:   Tue Jan 14 15:57:22 2025 +0800
+
+    Merge pull request #44 from InfinitechAdCorp/revised-design
+    
+    Updates
+
+[33mcommit 3bbaaa4d870a7a5613efd2107455a15e9dae119a[m
+Author: Kimberly <infinitech.kimberly@gmail.com>
+Date:   Tue Jan 14 15:56:05 2025 +0800
+
+    Updates
+    
+    1. Modal Form
+      - Update modal of Request Viewing
+      - Update modal of Property Inquiry
+    
+    2. Contact Us
+      - Update Contact Form
+    
+    3. Loan Calculator
+      - Update Modal
+    
+    4. Set Appointment
+            - revise appointment form
+    
+    5. Submit Property
+      - Revise the submission form
+
+[33mcommit 181066e5587d1bf031b4a0033192ca63c9a9ea3e[m
+Merge: 5d13154 951f0f0
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 15:55:30 2025 +0800
+
+    Merge pull request #42 from InfinitechAdCorp/design/dashboard
+    
+    add design / updated
+
+[33mcommit 951f0f0089dc8d01cee57b1126798aa659792e6c[m
+Merge: 7cee880 5d13154
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 15:55:23 2025 +0800
+
+    Merge branch 'deployment' into design/dashboard
+
+[33mcommit 5d1315416a5228fa811d62923aa913022c335e4f[m
+Merge: ed7064a 5147b13
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 15:54:26 2025 +0800
+
+    Merge pull request #43 from InfinitechAdCorp/Jan14
+    
+    Updated
+
+[33mcommit 5147b13d2b66645d447793671b72d6d15897d3f8[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 15:53:49 2025 +0800
+
+    Updated
+
+[33mcommit 7cee880c3254e28a10dfba79e5dbbe379e0a878c[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 15:52:48 2025 +0800
+
+    updated
+
+[33mcommit 7924c994a86f43bc5aacc46e2ce896b6a08b4c69[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 15:24:04 2025 +0800
+
+    remove breadcrumbs background
+
+[33mcommit 379fa748f96e3e807f5e4c60f22221aaa2f4d77a[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 15:20:58 2025 +0800
+
+    add design / updated
+
+[33mcommit ed7064ace76b7d15a26dcb45505b1374c861deb6[m
+Merge: 6e4a9bf bfb7492
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 12:56:28 2025 +0800
+
+    Merge pull request #40 from InfinitechAdCorp/design/dashboard
+    
+    design updated
+
+[33mcommit bfb74928a167eeafea49bb574e21e2ac3253edfc[m
+Merge: ab0e23e 6e4a9bf
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 12:56:20 2025 +0800
+
+    Merge branch 'deployment' into design/dashboard
+
+[33mcommit 6e4a9bfe6c7319fdf6b72278afd2300fb89447ad[m
+Merge: 0d383b7 45cc3c2
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 12:53:36 2025 +0800
+
+    Merge pull request #41 from InfinitechAdCorp/14-Jan-2025
+    
+    Updated
+
+[33mcommit 45cc3c2c89b3fb782df04798f653525888f52cd5[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 12:52:01 2025 +0800
+
+    Updated
+
+[33mcommit ab0e23ec0783e3b9ae750a6a8607fa6528e82bf6[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Jan 14 12:49:41 2025 +0800
+
+    design updated
+
+[33mcommit 0d383b73add540e1a7e31ce03b531bd38ee62002[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 08:24:06 2025 +0800
+
+    Updated
+
+[33mcommit 6b6edff79165089246fbd491c89ed3e1d0b86843[m
+Merge: ce7932e 0184110
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 08:19:46 2025 +0800
+
+    Merge pull request #38 from InfinitechAdCorp/features/property-and-schedule
+    
+    Change Frontend
+
+[33mcommit ce7932eedf9975eeca52ea804ee85d15c622ce0b[m
+Merge: 8229bd8 5b4f634
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 08:19:32 2025 +0800
+
+    Merge pull request #36 from InfinitechAdCorp/design/dashboard
+    
+    Design/dashboard
+
+[33mcommit 5b4f63478e65e1d02c7afeeb66cd43ffe67cf4e1[m
+Merge: 2022ef7 8229bd8
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 14 08:19:22 2025 +0800
+
+    Merge branch 'deployment' into design/dashboard
+
+[33mcommit 0184110395da60a78b623a86d4b55cc08db73113[m
+Merge: 76f4b07 8229bd8
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 17:04:16 2025 +0800
+
+    Merge pull request #39 from InfinitechAdCorp/deployment
+    
+    a
+
+[33mcommit 76f4b0799c71634022b02d8f881e51e9f0e44b61[m
+Author: Kimberly <infinitech.kimberly@gmail.com>
+Date:   Mon Jan 13 16:58:27 2025 +0800
+
+    Change Frontend
+    
+    * Property
+    * Property Details
+    * Schedule
+
+[33mcommit 8229bd87bdf1dd81fccefb2ae711e102f37f4969[m
+Merge: d72cc4f 7f1ff40
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 16:57:56 2025 +0800
+
+    Merge pull request #37 from InfinitechAdCorp/adminSide
+    
+    Updated
+
+[33mcommit 7f1ff400dbd8f52c1d331a65c130a79a08e81a3b[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 16:56:26 2025 +0800
+
+    Updated
+
+[33mcommit 2022ef76141f19ba6618e2567bfc0a7b25e292ce[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Mon Jan 13 16:54:53 2025 +0800
+
+    add navbar links
+
+[33mcommit 871187a8fcac80cd464c5bb6756f35f4e9b8e14b[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Mon Jan 13 15:33:49 2025 +0800
+
+    revised banner
+
+[33mcommit d72cc4f7a00226085cb34d0129432253c777872d[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 13:15:31 2025 +0800
+
+    Updated
+
+[33mcommit d1726d02361bc6b5ac2d09880171e754f0b0510a[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 13:09:30 2025 +0800
+
+    Track large video files with Git LFS
+
+[33mcommit e3284e545e054ae49c110d3949ea8225dbc624d4[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 13:06:51 2025 +0800
+
+    Updated
+
+[33mcommit 5c9809a4d9a88f2d847a8d674641ed539074bd6b[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Mon Jan 13 08:17:55 2025 +0800
+
+    Updated
+
+[33mcommit 4a7725aaecd7838ed3489f7ba40ba17091e87103[m
+Merge: fbbff62 68de73a
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 17:58:27 2025 +0800
+
+    Merge pull request #35 from InfinitechAdCorp/09-Jan
+    
+    Merge pull request #32 from InfinitechAdCorp/deployment
+
+[33mcommit fbbff6281cbb3523210d4d93411df2c7404293fc[m
+Merge: f6ebe21 7739294
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 17:52:00 2025 +0800
+
+    Merge pull request #34 from InfinitechAdCorp/New-Update
+    
+    Updated
+
+[33mcommit 7739294fe2c406242d91841a3fb7d9dfcd44f12a[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 17:51:16 2025 +0800
+
+    Updated
+
+[33mcommit f6ebe21ccc9e428feeedebbd52a9791e67fca9ac[m
+Merge: 646714c 845c816
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 17:50:42 2025 +0800
+
+    Merge pull request #33 from InfinitechAdCorp/New-Update
+    
+    Update
+
+[33mcommit 845c8163e296ca9ff02501b9c5a05e712d257778[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 17:49:47 2025 +0800
+
+    Update
+
+[33mcommit 68de73a3ad03f2462838fe0e7bcefaa7c63f7bc3[m
+Merge: bbafd21 646714c
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 17:36:27 2025 +0800
+
+    Merge pull request #32 from InfinitechAdCorp/deployment
+    
+    Merge pull request #31 from InfinitechAdCorp/09-Jan
+
+[33mcommit 646714ce385658cfcc488b34ff334a6c6db346ea[m
+Merge: 7be5b6d bbafd21
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:57:11 2025 +0800
+
+    Merge pull request #31 from InfinitechAdCorp/09-Jan
+    
+    09 jan
+
+[33mcommit bbafd21a3c92c006c0e46f3e2ddce4cbdf6f7960[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:56:36 2025 +0800
+
+    Updated
+
+[33mcommit 79c27269f146e057821de89785c92103ed3bf775[m
+Merge: 6dff6ad 7be5b6d
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:53:33 2025 +0800
+
+    Merge pull request #30 from InfinitechAdCorp/deployment
+    
+    q
+
+[33mcommit 7be5b6d3cfca6b844011649ba61a93d62b2ebc8e[m
+Merge: 4c761b9 4598937
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:52:35 2025 +0800
+
+    Merge pull request #28 from InfinitechAdCorp/revisions
+    
+    Revisions
+
+[33mcommit 4598937a3fa50439640facf39a407e0446d43942[m
+Merge: 74c0af6 4c761b9
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:52:28 2025 +0800
+
+    Merge branch 'deployment' into revisions
+
+[33mcommit 4c761b91dbd14fa39f295a7ef794a04ffaf7a6be[m
+Merge: 7fb636b 6dff6ad
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:39:59 2025 +0800
+
+    Merge pull request #29 from InfinitechAdCorp/09-Jan
+    
+    09 jan
+
+[33mcommit 6dff6ad59d133f26950048bfd902cab0e4bc1e31[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 16:38:55 2025 +0800
+
+    updated
+
+[33mcommit 74c0af62d1b6480337c4c261108e37e5b809c3f6[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 9 16:38:10 2025 +0800
+
+    add properties
+
+[33mcommit 5c27b46cb869c1baef2fb76618e70dfea05bdf77[m
+Merge: 8162eab db6e732
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 9 14:41:57 2025 +0800
+
+    Merge branch 'revisions' of https://github.com/InfinitechAdCorp/realstate_frontend_alveo into revisions
+
+[33mcommit 8162eabff9205a10778af77e6f7282d4b10a5f67[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 9 14:38:42 2025 +0800
+
+    add revisions
+
+[33mcommit 367aa16e755072c71091483d2c1bcb894c7579d7[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 14:01:40 2025 +0800
+
+    Updated
+
+[33mcommit 7fb636b753a40d669c7c549def63f424e7e627e4[m
+Merge: 7bda995 db6e732
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 13:38:23 2025 +0800
+
+    Merge pull request #27 from InfinitechAdCorp/revisions
+    
+    revisions
+
+[33mcommit db6e7322dbb0c59b2bb323cb8fccfa40acfdfc6e[m
+Merge: 5b24316 7bda995
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 13:38:13 2025 +0800
+
+    Merge branch 'deployment' into revisions
+
+[33mcommit 5b2431673e31eb7041e6291f5926eb9c4c4cd948[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 9 13:27:37 2025 +0800
+
+    remove menu bar in test
+
+[33mcommit 7bda99555274b8a403c02c01d553229aae7a14cb[m
+Merge: 3df709c 372ef6f
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 13:16:14 2025 +0800
+
+    Merge pull request #26 from InfinitechAdCorp/Polish
+    
+    updated
+
+[33mcommit 372ef6fa8b5c3fd5b9bb54a092d3d81fee1b2435[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Jan 9 13:15:46 2025 +0800
+
+    updated
+
+[33mcommit f6843e6fe6ca779277c748752e2e767ccd27d01b[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Jan 9 13:14:52 2025 +0800
+
+    revisions
+
+[33mcommit 3df709c7053c77fc1e7b477826577531b0f274aa[m
+Merge: 8ea13bb d2f8cf8
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:14:27 2025 +0800
+
+    Merge pull request #25 from InfinitechAdCorp/Polish
+    
+    Updated
+
+[33mcommit d2f8cf8ab95a50db06bb72883da1ca1e250c7cc6[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:13:41 2025 +0800
+
+    Updated
+
+[33mcommit 8ea13bba61134e277821d6797837179bc5cb4214[m
+Merge: 6064e40 6b930dc
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:09:30 2025 +0800
+
+    Merge pull request #24 from InfinitechAdCorp/Polish
+    
+    Polish
+
+[33mcommit 6b930dca7f90418a47aadeb1771c1e35a479be65[m
+Merge: ce5839e b2782ae
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:08:52 2025 +0800
+
+    Updated
+
+[33mcommit 6064e40d1ad9e4687d83eecb0b467861d1d9fb77[m
+Merge: 8595122 b2782ae
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:05:20 2025 +0800
+
+    Merge pull request #23 from InfinitechAdCorp/Polish
+    
+    Merge pull request #22 from InfinitechAdCorp/deployment
+
+[33mcommit b2782ae97cc920d49e21be7ec42b9b7b85cc4809[m
+Merge: ae88f1d 8595122
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:04:35 2025 +0800
+
+    Merge pull request #22 from InfinitechAdCorp/deployment
+    
+    Merge pull request #21 from InfinitechAdCorp/Polish
+
+[33mcommit ce5839e32d0c00b74d8a9e7fc7d491bfc3765c96[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 17:04:03 2025 +0800
+
+    Updated
+
+[33mcommit 8595122991c290c536ee8e7baf599ff06907fb6c[m
+Merge: bd7de02 ae88f1d
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 16:58:20 2025 +0800
+
+    Merge pull request #21 from InfinitechAdCorp/Polish
+    
+    Merge pull request #20 from InfinitechAdCorp/deployment
+
+[33mcommit ae88f1d3301941723f9f0659b5e38eeddaf648dc[m
+Merge: 7b47146 bd7de02
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 16:57:47 2025 +0800
+
+    Merge pull request #20 from InfinitechAdCorp/deployment
+    
+    d
+
+[33mcommit bd7de02441f07734a87974a31db766545802eb31[m
+Merge: 9ba385d 7b47146
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 16:47:12 2025 +0800
+
+    Merge pull request #19 from InfinitechAdCorp/Polish
+    
+    Updated
+
+[33mcommit 7b47146745de1876849920f37f493424166ca5ad[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 16:45:12 2025 +0800
+
+    Updated
+
+[33mcommit 9ba385df2d8f89cc46ac52e6d439682080aa5a27[m
+Merge: 97176f7 7ccf297
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 10:11:54 2025 +0800
+
+    Merge pull request #18 from InfinitechAdCorp/Polish
+    
+    Updated
+
+[33mcommit 7ccf2976afb2223cbf13854bec9b1f628ec12887[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 10:11:09 2025 +0800
+
+    Updated
+
+[33mcommit 97176f757193f17801608f1b057b309b983f538b[m
+Merge: 63fe2b1 8d86342
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 10:04:15 2025 +0800
+
+    Merge pull request #17 from InfinitechAdCorp/Polish
+    
+    Updated
+
+[33mcommit 8d863423b7b0e464abb1b5b9c73824036db8096f[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Jan 8 10:03:42 2025 +0800
+
+    Updated
+
+[33mcommit 63fe2b1c3f8beb75e21000e588db1e701ebfb301[m
+Merge: 5432042 3890f8e
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 13:28:37 2025 +0800
+
+    Merge pull request #16 from InfinitechAdCorp/Polish
+    
+    Polish
+
+[33mcommit 3890f8ebb42f63bee7f26aff3a6e770b7ae27d8d[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 13:27:53 2025 +0800
+
+    Updated
+
+[33mcommit 445f40d3a910a79f2f1416fb4bd43dea83b95519[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 12:02:48 2025 +0800
+
+    updated
+
+[33mcommit 54320423d1d603be046c1674bdb1f4edebc90200[m
+Merge: 7745b4f 1b2b442
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:53:21 2025 +0800
+
+    Merge pull request #15 from InfinitechAdCorp/Polish
+    
+    Polish
+
+[33mcommit 1b2b442b303600b51b099f69097226f833013b5b[m
+Merge: a196728 c0fbe41
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:52:35 2025 +0800
+
+    Updated
+
+[33mcommit a196728241cb702c7718cce262e2cfc3c44df245[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:51:34 2025 +0800
+
+    Updated
+
+[33mcommit 7745b4f6a56afbaa62a8b559c740673c41f9ecb9[m
+Merge: a6ba79b c0fbe41
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:46:05 2025 +0800
+
+    Merge pull request #14 from InfinitechAdCorp/Polish
+    
+    Updated
+
+[33mcommit c0fbe4138cdf5a8cc4b986fa0018b5d889b35deb[m
+Merge: 2ef1f1a a6ba79b
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:45:43 2025 +0800
+
+    Merge branch 'deployment' into Polish
+
+[33mcommit 2ef1f1aa3443bffac25da5778434d94b3b95a2ec[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:42:35 2025 +0800
+
+    Updated
+
+[33mcommit a6ba79b913de865fe56623e4fec2ad8cfa407885[m
+Merge: 33ff7de 0816c6f
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:40:06 2025 +0800
+
+    Merge pull request #13 from InfinitechAdCorp/Polish
+    
+    Updated
+
+[33mcommit 0816c6f3c7762c638d74bd201746bb33e2d56502[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 11:33:17 2025 +0800
+
+    Updated
+
+[33mcommit 33ff7de7d21a0ecc0b2317233aecd5c2d9f05f50[m
+Merge: 3341f61 3292879
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 10:51:27 2025 +0800
+
+    Merge pull request #12 from InfinitechAdCorp/main
+    
+    first commit
+
+[33mcommit 3292879a552efea1f5b247141b99dccd4ee0138a[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 10:24:45 2025 +0800
+
+    first commit
+
+[33mcommit 3341f615d29d060864bcd35d19bc6f878d01c2c8[m
+Merge: 78520ca 0a57a08
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 10:20:09 2025 +0800
+
+    Merge pull request #11 from InfinitechAdCorp/Polish
+    
+    Polish
+
+[33mcommit 0a57a08c20ebadaa8cec5d02b3a883e6d6049fdd[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 10:19:29 2025 +0800
+
+    updated
+
+[33mcommit 5a910ecfc0a072f05685f74122d05195d024b011[m
+Merge: 5f8e9a2 ed3f363
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 10:14:32 2025 +0800
+
+    updated
+
+[33mcommit 5f8e9a2bf09244ac577ae32cd968193f9447c9a3[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 10:13:03 2025 +0800
+
+    Updated
+
+[33mcommit 78520caaf821b502b579e68de357460b277bd5df[m
+Merge: 88373d4 ed3f363
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 09:18:21 2025 +0800
+
+    Merge pull request #10 from InfinitechAdCorp/Polish
+    
+    Polish
+
+[33mcommit ed3f363cf3b63c0c37e4dd162f8fd89bd27f2e69[m
+Merge: 5212371 88373d4
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 09:18:11 2025 +0800
+
+    Merge branch 'deployment' into Polish
+
+[33mcommit 5212371a5b88356757dbeeefe41939f4e0ac6c4f[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Jan 7 09:12:59 2025 +0800
+
+    Updated
+
+[33mcommit 29f423941b1c4a7bb0d4cf1917ed0ade07c668ed[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Mon Jan 6 16:55:35 2025 +0800
+
+    new update
+
+[33mcommit 88373d47d476c02634e1c463cbb49ef35e7dc0ba[m
+Merge: b2336da 7276f0f
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Dec 20 08:27:59 2024 +0800
+
+    Merge pull request #9 from InfinitechAdCorp/feature/submit-property
+    
+    Feature/submit property
+
+[33mcommit 7276f0fa29de9df608a5a73ac84809247472093e[m
+Merge: f84d2aa b2336da
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Fri Dec 20 08:27:50 2024 +0800
+
+    Merge branch 'deployment' into feature/submit-property
+
+[33mcommit 528da6788a1624edb8c3271baca08f8b67da98b6[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Thu Dec 19 17:05:49 2024 +0800
+
+    Updated
+
+[33mcommit f84d2aa49874c2c17bb3c4b18864af7ca88ea4a6[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Dec 19 14:42:14 2024 +0800
+
+    add feature
+
+[33mcommit 0a31bf4bac18e7800012dd2c2e2a39bee3c7e11a[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Thu Dec 19 09:48:26 2024 +0800
+
+    use formik
+
+[33mcommit b2336da48a0503f3c5f6db79263dd7c593077f43[m
+Merge: 55b2078 5b5287b
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 16:47:28 2024 +0800
+
+    Merge pull request #7 from InfinitechAdCorp/Agent
+    
+    Agent
+
+[33mcommit 5b5287b5bfef73d968ece6e697f1b957fd1e6bab[m
+Merge: 9ea2e33 55b2078
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 16:47:19 2024 +0800
+
+    Merge branch 'deployment' into Agent
+
+[33mcommit 9ea2e33ae1306ad4d2b9d7d7a4481c24c7124a81[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 16:45:31 2024 +0800
+
+    Updated
+
+[33mcommit 716ba204e29648fc0033455bcb9fb39efa7b8fbb[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Dec 18 16:43:46 2024 +0800
+
+    fix error
+
+[33mcommit 55b2078f1ef412ff871285d9eb7437d310853ff1[m
+Merge: 1faba08 3d7ee0f
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 15:59:13 2024 +0800
+
+    Merge pull request #6 from InfinitechAdCorp/feature/set-appointment
+    
+    Feature/set appointment
+
+[33mcommit 3d7ee0ff4e330a3b3590b02c31417a99ab95081d[m
+Merge: 727f269 1faba08
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 15:59:05 2024 +0800
+
+    Merge branch 'deployment' into feature/set-appointment
+
+[33mcommit 727f269bce56803166313fe99b27e7e82d7058ba[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Dec 18 15:50:48 2024 +0800
+
+    admin side
+
+[33mcommit 600f72c0fc2cea20effb4ef280faca35f4c34277[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 14:25:57 2024 +0800
+
+    go
+
+[33mcommit 1faba0883ba149d249e18b72ab28b90cce9be20b[m
+Merge: 3113660 53f59ba
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 14:14:35 2024 +0800
+
+    Merge pull request #4 from InfinitechAdCorp/admin
+    
+    Updaewq
+
+[33mcommit 53f59ba761cec00fbe9f8c56e4137f93b76b3f36[m
+Merge: 0103b3c 3113660
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 14:14:26 2024 +0800
+
+    Merge branch 'deployment' into admin
+
+[33mcommit 3113660aecfecc5a9104dc16348641b054e59036[m
+Merge: ac3936d ac4a53e
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 14:10:29 2024 +0800
+
+    Merge pull request #1 from InfinitechAdCorp/feature/sidebar
+    
+    dynamic location
+
+[33mcommit ac4a53eff2eea4848c9e908f184d179c14b0a2da[m
+Merge: fb24a67 ac3936d
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 14:10:19 2024 +0800
+
+    Merge branch 'deployment' into feature/sidebar
+
+[33mcommit 0103b3ceba96ed3acf57f90de76479c52f5ac31c[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 13:46:27 2024 +0800
+
+    Updaewq
+
+[33mcommit ac3936d508b6edde6aa64fd0b641b8b1d0745dd8[m
+Merge: 6da1d94 15fcb28
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 13:45:54 2024 +0800
+
+    Merge pull request #3 from InfinitechAdCorp/feature/contactus
+    
+    Contact Us Form
+
+[33mcommit 15fcb28aabf5a046506f5d63bbe3fe43c44e872f[m
+Merge: 6cb6323 6da1d94
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 13:45:46 2024 +0800
+
+    Merge branch 'deployment' into feature/contactus
+
+[33mcommit 6da1d94a8598fca559fe0cb6ff3b65fe5a05340e[m
+Merge: 4ea8dc0 435bd21
+Author: Ron0710 <infinitech.roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 13:45:12 2024 +0800
+
+    Merge pull request #2 from InfinitechAdCorp/feature/chatbot
+    
+    ChatBot
+
+[33mcommit 6cb6323fb7ee1e2f9a91970b5d44d80c4dcd4126[m
+Author: Kimberly <infinitech.kimberly@gmail.com>
+Date:   Wed Dec 18 13:17:43 2024 +0800
+
+    Contact Us Form
+
+[33mcommit ac20d303e186932c59f394f7def0a7c628c66f4e[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Dec 18 13:07:40 2024 +0800
+
+    submit schedule
+
+[33mcommit 435bd21e09bee458c709511596634b9816ba2980[m
+Author: Kimberly <infinitech.kimberly@gmail.com>
+Date:   Wed Dec 18 11:09:28 2024 +0800
+
+    ChatBot
+    
+    * Added user interaction flow for selecting options and displaying corresponding messages.
+    * Included a typing indicator and improved chat interface styling.
+
+[33mcommit 82cf192bfb874be625d6bde8e52434ce0dd59c72[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Wed Dec 18 09:57:37 2024 +0800
+
+    location-data
+
+[33mcommit 4ea8dc075619e3c70de7a39628ff2151d8c3fb43[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 08:11:13 2024 +0800
+
+    Updated
+
+[33mcommit ca0236c859ce36486c5d0e2c7acd2c01c070f23b[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Wed Dec 18 08:07:04 2024 +0800
+
+    Updated
+
+[33mcommit fb24a671844d85f63666aed90cc6ef19dc7c8d88[m
+Author: Infinitech-Lyca <infinitech.lycanobleza@gmail.com>
+Date:   Tue Dec 17 16:54:57 2024 +0800
+
+    dynamic location
+
+[33mcommit 3f6d274490e1c5490222f24a49b90d0aebac354f[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Dec 17 16:48:57 2024 +0800
+
+    Updated
+
+[33mcommit e59c046288725c733476e9dc26af29bfeda98538[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Dec 17 16:47:49 2024 +0800
+
+    Updated
+
+[33mcommit f542ba2dc92b98e40f078e6e8ed7f0119e55a156[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Dec 17 16:18:27 2024 +0800
+
+    Updated
+
+[33mcommit 7f5b27d83dcc532d5901d51959b9331344c48a3f[m
+Merge: 63e056a deed8be
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Dec 17 13:05:40 2024 +0800
+
+    Resolved merge conflicts
+
+[33mcommit 63e056a49da81aedb8d32dd9fc0c45898e985c8c[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Dec 17 13:03:34 2024 +0800
+
+    Initial commit
+
+[33mcommit deed8be7543d743318f08d385ebd75ec8cf691d0[m
+Author: ron <roniversondelmundo@gmail.com>
+Date:   Tue Dec 17 12:00:22 2024 +0800
+
+    Initial commit
