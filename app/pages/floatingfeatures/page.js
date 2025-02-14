@@ -98,7 +98,7 @@ const IconWithTooltip = ({ icon, label }) => {
       >
         {icon}
       </div>
-      <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-black bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-30">
+      <span className="tooltip absolute top-full left-1/2 transform -translate-x-1/2 mt-2 text-xs text-white bg-black rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity z-30">
         {label}
       </span>
     </div>
