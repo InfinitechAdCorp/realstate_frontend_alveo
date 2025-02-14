@@ -999,7 +999,7 @@ const AlveoBanner = () => {
               </div>
             </div>
           </div>
-          \
+
           {enlargedImage && (
             <div
               className="absolute top-1 w-screen  h-1/2 md:w-1/2 md:h-screen z-40"
@@ -1400,7 +1400,11 @@ const AlveoBanner = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No properties found.</p>
+                  <div className="flex items-center justify-center h-screen">
+                    <p className="text-5xl text-white text-center -mt-20">
+                      No properties found.
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
