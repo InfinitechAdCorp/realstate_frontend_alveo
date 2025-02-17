@@ -15,7 +15,7 @@ const SocialMediaFloating = () => {
       {/* Toggle Button */}
       <button
         onClick={toggleSlider}
-        className="bg-white border-3 border-blue-600 text-white p-2 rounded-full flex items-center justify-center hover:bg-blue-500 transition-all"
+        className="bg-white border-2 border-black  text-white p-2 rounded-full flex items-center justify-center hover:bg-blue-500 transition-all"
       >
         <img
           src="/assets/socialmedia/contact-mail.png"

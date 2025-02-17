@@ -36,7 +36,7 @@ const Footer = () => {
         style={{ background: "#002B47" }}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 ">
-          <div className="col-span-1 h-auto flex justify-center lg:justify-end md:justify-center md:mx-auto md:ml-48 md:w-full">
+          <div className="col-span-1 h-auto flex justify-center lg:justify-end md:justify-center md:mx-auto md:ml-32 md:w-full">
             <div className="flex flex-col justify-center items-center py-4 lg:ml-40 md:mx-auto">
               <h2 className="text-5xl sm:text-7xl md:text-5xl xl:text-6xl font-bold text-center">
                 Λ L V E O
