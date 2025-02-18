@@ -19,8 +19,10 @@ import Slider from "react-slick";
 import Testimonial from "@/app/pages/testimonial/page";
 import { jsPDF } from "jspdf";
 import * as Yup from "yup";
+import * as XLSX from "xlsx";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import Cookies from "js-cookie";
+import ClientProperty from "@/app/pages/clientproperty/page";
 export default function Admin({}) {
   const [isChatbotModalOpen, setIsChatbotModalOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -127,7 +129,7 @@ export default function Admin({}) {
     locations: [],
   });
   const [themeModalOpen, setThemeModalOpen] = useState(false); // Modal state for Architectural Theme
-
+  const [user, setUser] = useState([]);
   const [chatbotData, setChatbotData] = useState([]);
   const [chatbotFormData, setChatbotFormData] = useState({
     question: "",
@@ -202,15 +204,18 @@ export default function Admin({}) {
 
   const [success, setSuccess] = useState("");
   const router = useRouter();
-
   useEffect(() => {
     const isLoggedIn = localStorage.getItem("auth_token");
+    const username = localStorage.getItem("userInfo"); // Get the username from localStorage
 
     // If no auth_token is found in localStorage, redirect to login
     if (!isLoggedIn) {
       router.push("/auth");
+    } else {
+      setUser(username); // Set the username to the state variable
     }
   }, [router]);
+
   // useEffect(() => {
   //   const checkLoginStatus = () => {
   //     const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -419,63 +424,6 @@ export default function Admin({}) {
     fetchData(); // Call fetchData after setting the token
   }, [isLoggedIn, authToken]); // Depend on isLoggedIn and authToken
 
-  const exportData = () => {
-    const doc = new jsPDF();
-    let y = 20; // Starting y value for the first line
-
-    // Title of the PDF
-    doc.setFontSize(18);
-    doc.text("CLIENT PROPERTIES", 14, y);
-    y += 15; // Increase y for spacing below the title
-
-    // Table headers
-    doc.setFontSize(12);
-    doc.text("First Name", 14, y);
-    doc.text("Last Name", 40, y);
-    doc.text("Email", 70, y);
-    doc.text("Phone", 120, y);
-    doc.text("Property Name", 150, y);
-    doc.text("Location", 190, y);
-    doc.text("Price", 230, y);
-    doc.text("Status", 260, y);
-    doc.text("Description", 290, y);
-    doc.text("Files", 340, y);
-    y += 10; // Space after the header row
-
-    // Table content
-    submittedProperties.forEach((property) => {
-      doc.setFontSize(10);
-
-      // Print each data point in the corresponding column
-      doc.text(property.first_name, 14, y);
-      doc.text(property.last_name, 40, y);
-      doc.text(property.email, 70, y);
-      doc.text(property.phone, 120, y);
-      doc.text(property.property_name, 150, y);
-      doc.text(property.location, 190, y);
-      doc.text(property.price, 230, y);
-      doc.text(property.status, 260, y);
-      doc.text(property.description, 290, y);
-      const filesArray = JSON.parse(property.files);
-      doc.text(
-        filesArray.length > 0 ? filesArray.join(", ") : "No files",
-        340,
-        y
-      );
-
-      y += 10; // Space between rows
-
-      // Add a new page if content exceeds page height
-      if (y > 270) {
-        doc.addPage();
-        y = 20; // Reset y for new page
-      }
-    });
-
-    // Save the PDF
-    doc.save("client_properties.pdf");
-  };
-
   useEffect(() => {
     const Token = localStorage.getItem("auth_token");
     const LoginStatus = localStorage.getItem("isLoggedIn");
@@ -521,24 +469,6 @@ export default function Admin({}) {
       };
 
       fetchChatbotData();
-    } else if (activeNav === "CLIENT PROPERTY") {
-      fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${Token}`, // Apply token here
-          },
-        }
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setSubmittedProperties(data); // Store the data in the state
-        })
-        .catch((error) => {
-          console.error("Error fetching submitted properties:", error);
-        });
     }
   }, [activeNav]);
   const fetchFormFiller_status = (token) => {
@@ -1193,13 +1123,7 @@ export default function Admin({}) {
                     authToken ? "bg-green-500" : "bg-red-500"
                   }`}
                 ></div>
-                <img
-                  src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183322/8.png"
-                  className="icn"
-                  alt="message-icon"
-                  width={20}
-                  height={20}
-                />
+
                 <div
                   className="message flex items-center space-x-4 relative"
                   onMouseEnter={() => setIsOpen(true)}
@@ -1209,6 +1133,10 @@ export default function Admin({}) {
                     }, 1500); // 5-second delay before closing
                   }}
                 >
+                  <span className="text-sm text-gray-800">
+                    {user ? `Hello, ${user}` : "Loading..."}
+                  </span>
+
                   <img
                     src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
                     className="dpicn rounded-full"
@@ -1217,9 +1145,8 @@ export default function Admin({}) {
                     height={40}
                   />
 
-                  {/* Dropdown Menu */}
                   {isOpen && (
-                    <div className="absolute  -right-2 mt-32 w-40 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
+                    <div className="absolute -right-2 mt-32 w-40 bg-white border border-gray-300 rounded-lg shadow-lg p-2">
                       {/* Arrow above the dropdown */}
                       <div className="absolute top-[-8px] right-4 w-0 h-0 border-l-8 border-l-transparent border-r-8 border-r-transparent border-b-8 border-b-white"></div>
 
@@ -1244,12 +1171,12 @@ export default function Admin({}) {
               )}
             </div>
           </header>
-          <div className="demo-container min-h-screen mt-14 w-11/12 mx-auto overflow-y-auto scrollbar-hidden  justify-center">
+          <div className="demo-container h-full mt-14 w-11/12 mx-auto overflow-y-auto scrollbar-hidden justify-center">
             {activeNav === "DASHBOARD" && (
               <>
                 {/* Grid Container */}
                 <div className="flex justify-center mt-10">
-                  <div className="box-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4 sm:px-8 max-w-screen-xl">
+                  <div className="box-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl overflow-x-auto">
                     {/* Box 1 */}
                     <div className="box bg-gray-50 p-4 sm:p-6 rounded-lg shadow-lg hover:bg-gray-100 transition duration-300 ease-in-out">
                       <div className="text text-center flex flex-col items-center">
@@ -1337,11 +1264,12 @@ export default function Admin({}) {
                 </div>
 
                 {/* Chart Section */}
-                <div className="mt-8 px-4">
+                <div className="mt-8 px-4 sm:px-6 lg:px-8 overflow-y-auto">
                   <Chart data={isLoggedIn} />
                 </div>
               </>
             )}
+
             {activeNav === "TESTIMONIAL" && (
               <div className="mt-20">
                 <Testimonial />
@@ -1358,106 +1286,7 @@ export default function Admin({}) {
               </div>
             )}
             {activeNav === "CLIENT PROPERTY" && (
-              <div className="mt-20">
-                <div className="justify-center text-center text-3xl my-2 mb-3">
-                  <h1 className="text-customBlue">CLIENT PROPERTIES</h1>
-                </div>
-                <div className="text-center mb-4">
-                  <button
-                    onClick={exportData}
-                    className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    Export Data
-                  </button>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="table-auto border-collapse border border-gray-200 w-full text-sm text-left text-gray-700">
-                    <thead>
-                      <tr>
-                        <th className="px-4 py-2 border border-gray-200">
-                          First Name
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Last Name
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Email
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Phone
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Property Name
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Location
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Price
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Status
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Description
-                        </th>
-                        <th className="px-4 py-2 border border-gray-200">
-                          Files
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {submittedProperties.map((property) => {
-                        // Parse the files field into an array
-                        const filesArray = JSON.parse(property.files);
-
-                        return (
-                          <tr key={property.id}>
-                            <td className="border px-4 py-2">
-                              {property.first_name}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.last_name}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.email}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.phone}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.property_name}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.location}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.price}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.status}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {property.description}
-                            </td>
-                            <td className="border px-4 py-2">
-                              {/* Button to show images in the modal */}
-                              {filesArray.length > 0 && (
-                                <button
-                                  onClick={() => openModal2(filesArray)}
-                                  className="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600"
-                                >
-                                  Show Images
-                                </button>
-                              )}
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              <ClientProperty data={submittedProperties} />
             )}
 
             {/* Modal for displaying images */}

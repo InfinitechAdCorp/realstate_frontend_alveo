@@ -44,6 +44,25 @@ const Header = () => {
   const [areas, setArea] = useState([]);
   const [viewportSize, setViewportSize] = useState("");
 
+  const iconDetails = [
+    {
+      link: "/pages/loancalculator",
+      label: "Loan Calculator",
+    },
+    {
+      link: "/pages/set-appointment",
+      label: "Set Appointment",
+    },
+    {
+      link: "/pages/add-property",
+      label: "Submit Property",
+    },
+    {
+      link: "/pages/agent",
+      label: "Agent",
+    },
+  ];
+
   const handleViewportClick = () => {
     const width = window.innerWidth;
     const height = window.innerHeight;
@@ -142,7 +161,7 @@ const Header = () => {
         >
           <div className="container mx-auto flex items-center px-4 sm:px-6 lg:px-8 justify-between">
             {/* Menu Icon for Mobile */}
-            <div className="block md:hidden me-3 mt-2">
+            <div className="block md:hidden mt-2">
               <button
                 className="text-white text-2xl hover:scale-110 transition-transform"
                 onClick={openSidebar}
@@ -154,7 +173,7 @@ const Header = () => {
             {/* Branding Section */}
             <a
               href="/"
-              className="branding-text text-white text-4xl font-light me-10 tracking-wider"
+              className="branding-text text-white text-3xl font-light me-10 tracking-wider ml-2"
               style={{ textDecoration: "none", color: "inherit" }}
             >
               Λ L V E O
@@ -222,6 +241,7 @@ const Header = () => {
                 Contact Us
               </a>
             </div>
+
             <div className="ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium">
               {!isExplorePage &&
               pathname !== "/contactus" &&
@@ -252,7 +272,7 @@ const Header = () => {
         onClick={closeSidebar}
         onKeyDown={(e) => e.key === "Escape" && closeSidebar()}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-700 ">
+        <div className="flex justify-between items-center p-4 border-b border-gray-700">
           <a
             href=""
             className="text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg"
@@ -297,6 +317,16 @@ const Header = () => {
           >
             CONTACT US
           </a>
+
+          {iconDetails.map((iconData, index) => (
+            <a
+              key={index}
+              href={iconData.link}
+              className="block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-xl xl:text-lg"
+            >
+              <span className="ml-2">{iconData.label}</span>
+            </a>
+          ))}
         </nav>
 
         {isPopupVisible && (

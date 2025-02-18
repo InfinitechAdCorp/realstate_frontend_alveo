@@ -1,5 +1,3 @@
-"use client";
-
 import { columns } from "./property";
 import { DataTable } from "./data-table";
 import { useState, useEffect } from "react";
@@ -28,30 +26,47 @@ const fetchProperties = async () => {
   }
 };
 
+const formatPriceRange = (priceRange) => {
+  const [minPrice, maxPrice] = priceRange.split(" - ");
+  return `₱${Number(minPrice).toLocaleString()} - ₱${Number(
+    maxPrice
+  ).toLocaleString()}`;
+};
+
 export default function DemoPage(datas) {
   const [data, setData] = useState([]); // State to hold fetched data
   const newData = datas.data; // Access the passed prop `datas.data`
 
   useEffect(() => {
-    // This useEffect will run when the component mounts or when `datas` changes.
     const fetchData = async () => {
-      const result = await fetchProperties(); // Fetch data from API
-      setData(result); // Set the fetched data in state
-    };
-
-    fetchData(); // Call the fetchData function to fetch data on component mount
-  }, []); // Empty dependency array ensures this only runs on mount
-
-  // This useEffect will run when `newData` (from `datas`) changes
-  useEffect(() => {
-    console.log("Datas prop has changed:", newData);
-    const fetchData = async () => {
-      const result = await fetchProperties(); // Fetch data from API
-      setData(result); // Set the fetched data in state
+      const result = await fetchProperties();
+      console.log("Fetched data:", result);
+      // Format the price range for each property
+      const formattedData = result.map((property) => ({
+        ...property,
+        price_range: formatPriceRange(property.price_range),
+      }));
+      setData(formattedData);
     };
 
     fetchData();
-  }, [newData]); // Dependency array watches `newData` for changes
+  }, []);
+
+  useEffect(() => {
+    console.log("Datas prop has changed:", newData);
+    const fetchData = async () => {
+      const result = await fetchProperties();
+      console.log("Fetched data for newData change:", result);
+      // Format the price range for each property
+      const formattedData = result.map((property) => ({
+        ...property,
+        price_range: formatPriceRange(property.price_range),
+      }));
+      setData(formattedData);
+    };
+
+    fetchData();
+  }, [newData]);
 
   return (
     <div>

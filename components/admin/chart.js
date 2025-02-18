@@ -170,10 +170,11 @@ export default function CardCharts(data) {
   };
 
   return (
-    <div className="">
-      {/* Pie Chart 1 */}
-      <div className="flex">
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
+    <div className="w-full px-4 sm:px-6 lg:px-8">
+      {/* Pie Chart Section */}
+      <div className="flex flex-wrap mt-6 mx-auto justify-center text-center">
+        {/* Pie Chart 1 */}
+        <div className="relative flex flex-col min-w-0 break-words w-full sm:w-1/2 lg:w-1/3 mb-4 shadow-lg rounded bg-blueGray-700">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full max-w-full flex-grow flex-1">
@@ -184,7 +185,6 @@ export default function CardCharts(data) {
             </div>
           </div>
           <div className="p-4 flex justify-center items-center">
-            {/* Pie Chart 1 */}
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
@@ -214,7 +214,7 @@ export default function CardCharts(data) {
         </div>
 
         {/* Pie Chart 2 */}
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
+        <div className="relative flex flex-col min-w-0 break-words w-full sm:w-1/2 lg:w-1/3 mb-4 shadow-lg rounded bg-blueGray-700">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full max-w-full flex-grow flex-1">
@@ -225,7 +225,6 @@ export default function CardCharts(data) {
             </div>
           </div>
           <div className="p-4 flex justify-center items-center">
-            {/* Pie Chart 2 */}
             <ResponsiveContainer width="100%" height={200}>
               <PieChart>
                 <Pie
@@ -255,7 +254,8 @@ export default function CardCharts(data) {
         </div>
       </div>
 
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0">
+      {/* Stacked Area Chart Section */}
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700">
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">

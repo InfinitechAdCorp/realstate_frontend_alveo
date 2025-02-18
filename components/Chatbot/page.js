@@ -369,7 +369,16 @@ Armed with sharper foresight, unparalleled excellence, and total commitment, the
         <div style={{ fontSize: "16px", color: "#333", marginBottom: "12px" }}>
           <strong style={{ fontWeight: "bold" }}>Price Range:</strong>{" "}
           <span style={{ color: "#28a745", fontWeight: "bold" }}>
-            {p.price_range}
+            {p.price_range
+              .split(" - ") // Split the range into two numbers
+              .map(
+                (price) =>
+                  `₱${new Intl.NumberFormat("en-PH").format(
+                    Number(price.trim())
+                  )}`
+              ) // Format each number
+              .join(" - ")}{" "}
+            {/* Join them back with the hyphen */}
           </span>
         </div>
 
@@ -681,7 +690,8 @@ Armed with sharper foresight, unparalleled excellence, and total commitment, the
             position: "fixed",
             bottom: "100px",
             right: "20px",
-            width: "500px",
+            width: "90%",
+            maxWidth: "500px", // Adjust width for mobile responsiveness
             height: "400px",
             backgroundColor: "white",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
@@ -858,6 +868,37 @@ Armed with sharper foresight, unparalleled excellence, and total commitment, the
           }
           100% {
             opacity: 0.3;
+          }
+        }
+
+        /* Media query for mobile responsiveness */
+        @media (max-width: 768px) {
+          .message {
+            font-size: 12px;
+          }
+
+          .message button {
+            font-size: 12px;
+          }
+
+          input {
+            padding: 8px;
+            font-size: 14px;
+          }
+
+          button {
+            padding: 6px 14px;
+            font-size: 14px;
+          }
+
+          div {
+            max-width: 90%;
+            width: 100%;
+          }
+
+          .chat-container {
+            max-height: 60%;
+            overflow-y: scroll;
           }
         }
       `}</style>

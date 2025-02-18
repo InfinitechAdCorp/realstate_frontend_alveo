@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
 import { showToast } from "@/components/alert/page";
 
 const Testimonial = () => {
@@ -10,9 +11,11 @@ const Testimonial = () => {
   const [testimonialOptions, setTestimonialOptions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [perPage, setPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
 
-  // Fetch testimonials on component mount
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
     const fetchTestimonials = async () => {
@@ -78,7 +81,7 @@ const Testimonial = () => {
         setNewTestimonial({ name: "", message: "" });
 
         handleShowSuccessToast("Testimonial added successfully!");
-        setIsModalOpen(false); // Close modal after submission
+        setIsModalOpen(false);
       } catch (err) {
         setError("Failed to add testimonial.");
       }
@@ -109,88 +112,101 @@ const Testimonial = () => {
     }
   };
 
-  return (
-    <div className="h-screen overflow-y-auto p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Testimonial</h2>
-
-        {/* Add Testimonial Button */}
+  const columns = [
+    {
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+      style: {
+        width: "200px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      },
+    },
+    {
+      name: "Message",
+      selector: (row) => row.message,
+      sortable: true,
+      style: {
+        width: "350px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      },
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
         <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+          onClick={() => handleDelete(row.id)}
+          className="text-red-500 hover:text-red-700"
         >
-          Add Testimonial
+          Delete
         </button>
+      ),
+      style: {
+        width: "120px",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      },
+    },
+  ];
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePerRowsChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    setCurrentPage(1);
+  };
+
+  const filteredTestimonials = testimonialOptions
+    .filter((testimonial) =>
+      testimonial.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .slice((currentPage - 1) * perPage, currentPage * perPage);
+  return (
+    <div className="h-screen p-4 w-full mx-auto">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 space-y-3 md:space-y-0">
+        <h2 className="text-xl font-semibold text-center md:text-left">
+          Testimonial
+        </h2>
+
+        <div className="flex flex-col md:flex-row w-full md:w-auto space-y-2 md:space-y-0 md:space-x-2">
+          <input
+            type="text"
+            placeholder="Search by name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="border rounded p-2 w-full md:w-auto"
+          />
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full md:w-auto"
+          >
+            Add Testimonial
+          </button>
+        </div>
       </div>
 
-      {/* Testimonial List */}
-      <ul className="border rounded-md shadow-md max-h-[70%] overflow-y-auto">
-        {testimonialOptions.length > 0 ? (
-          testimonialOptions.map((testimonial) => (
-            <li
-              key={testimonial.id}
-              className="p-4 border-b hover:bg-gray-100 flex justify-between items-center"
-            >
-              <div>
-                <strong>{testimonial.name}</strong>
-                <p>{testimonial.message}</p>
-              </div>
-              <button
-                onClick={() => handleDelete(testimonial.id)}
-                className="text-red-500 hover:text-red-700"
-              >
-                Delete
-              </button>
-            </li>
-          ))
-        ) : (
-          <li className="p-4">No Testimonials Found</li>
-        )}
-      </ul>
-
-      {/* Modal for Adding Testimonials */}
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-4">Add Testimonial</h3>
-
-            <input
-              type="text"
-              placeholder="Name"
-              value={newTestimonial.name}
-              onChange={(e) =>
-                setNewTestimonial({ ...newTestimonial, name: e.target.value })
-              }
-              className="border rounded p-2 w-full mb-3"
-            />
-            <textarea
-              placeholder="Message"
-              value={newTestimonial.message}
-              onChange={(e) =>
-                setNewTestimonial({
-                  ...newTestimonial,
-                  message: e.target.value,
-                })
-              }
-              className="border rounded p-2 w-full h-24 mb-3"
-            />
-            <div className="flex justify-end space-x-2">
-              <button
-                onClick={handleAdd}
-                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
-              >
-                Add
-              </button>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="overflow-x-auto">
+        <DataTable
+          columns={columns}
+          data={filteredTestimonials}
+          pagination
+          paginationPerPage={perPage}
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          onChangeRowsPerPage={handlePerRowsChange}
+          onChangePage={handlePageChange}
+          progressPending={loading}
+          className="w-full"
+          noDataComponent="No Testimonials Found"
+          style={{ tableLayout: "fixed" }}
+        />
+      </div>
     </div>
   );
 };

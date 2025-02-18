@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import "simple-datatables/dist/style.css";
+import DataTable from "react-data-table-component";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { showToast } from "@/components/alert/page";
+
 export const handleShowSuccessToast = (message) => {
   showToast(message, "success");
 };
@@ -17,6 +18,7 @@ export const handleShowWarningToast = (message) => {
 const Table = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // Search state
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -40,20 +42,18 @@ const Table = () => {
     fetchAppointments();
   }, []);
 
-  // Function to handle accepting the appointment
   const handleAccept = async (id) => {
     console.log("Accept button clicked for ID:", id);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/accept/${id}`,
         {
-          method: "POST", // Assuming the API requires POST for accepting
+          method: "POST",
         }
       );
       if (!response.ok) {
         throw new Error("Failed to accept appointment");
       }
-      // Update the appointment status locally after successful acceptance
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
           appointment.id === id
@@ -67,20 +67,18 @@ const Table = () => {
     }
   };
 
-  // Function to handle declining the appointment
   const handleDecline = async (id) => {
     console.log("Decline button clicked for ID:", id);
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/decline/${id}`,
         {
-          method: "POST", // Assuming the API requires POST for declining
+          method: "POST",
         }
       );
       if (!response.ok) {
         throw new Error("Failed to decline appointment");
       }
-      // Update the appointment status locally after successful decline
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
           appointment.id === id
@@ -94,76 +92,97 @@ const Table = () => {
     }
   };
 
+  const columns = [
+    {
+      name: "Full Name",
+      selector: (row) => row.fullname,
+      sortable: true,
+    },
+    {
+      name: "Email",
+      selector: (row) => row.email,
+      sortable: true,
+    },
+    {
+      name: "Phone Number",
+      selector: (row) => row.number,
+      sortable: true,
+    },
+    {
+      name: "Appointment For",
+      selector: (row) => row.reason,
+      sortable: true,
+    },
+    {
+      name: "Property/Unit",
+      selector: (row) => row.property,
+      sortable: true,
+    },
+    {
+      name: "Message",
+      selector: (row) => row.message,
+      sortable: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.status.toUpperCase(),
+      sortable: true,
+    },
+    {
+      name: "Action",
+      cell: (row) => (
+        <div>
+          <button
+            onClick={() => handleAccept(row.id)}
+            className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
+          >
+            <FaCheckCircle />
+          </button>
+          <button
+            onClick={() => handleDecline(row.id)}
+            className="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
+          >
+            <FaTimesCircle />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  // Filter appointments only by "fullname"
+  const filteredAppointments = appointments.filter((appointment) =>
+    appointment.fullname.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <div className="w-full px-4">
+      <div className="text-3xl text-center my-2 mb-3">
+        <h1 className="text-customBlue">SCHEDULED APPOINTMENTS</h1>
+      </div>
+
+      {/* Search Input */}
+      <div className="mb-3 flex justify-center">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full sm:w-96 px-3 py-2 border rounded"
+        />
+      </div>
+
+      {/* Table Container */}
       <div className="overflow-x-auto">
-        <div className="text-3xl justify-center text-center my-2 mb-3">
-          <h1 className="text-customBlue">SCHEDULED APPOINTMENTS</h1>
-        </div>
-        <table
-          id="search-table"
-          className="table-auto border-collapse border border-gray-200 w-full text-sm text-left text-gray-700"
-        >
-          <thead>
-            <tr>
-              <th className="border border-gray-300 px-4 py-2">Full Name</th>
-              <th className="border border-gray-300 px-4 py-2">Email</th>
-              <th className="border border-gray-300 px-4 py-2">Phone Number</th>
-              <th className="border border-gray-300 px-4 py-2">
-                Appointment For
-              </th>
-              <th className="border border-gray-300 px-4 py-2">
-                Property/Unit
-              </th>
-              <th className="border border-gray-300 px-4 py-2">Message</th>
-              <th className="border border-gray-300 px-4 py-2">Status</th>
-              <th className="border border-gray-300 px-4 py-2">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {appointments.map((appointment) => (
-              <tr key={appointment.id} className="hover:bg-gray-50">
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.fullname}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.email}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.number}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.reason}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.property}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.message}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  {appointment.status.toUpperCase()}
-                </td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <div>
-                    <button
-                      onClick={() => handleAccept(appointment.id)}
-                      className="px-3 py-1 text-white bg-blue-500 rounded hover:bg-blue-600"
-                    >
-                      <FaCheckCircle />
-                    </button>
-                    <button
-                      onClick={() => handleDecline(appointment.id)}
-                      className="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600"
-                    >
-                      <FaTimesCircle />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <DataTable
+          title="Appointments"
+          columns={columns}
+          data={filteredAppointments}
+          progressPending={loading}
+          pagination
+          paginationPerPage={5}
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          highlightOnHover
+          responsive
+        />
       </div>
     </div>
   );

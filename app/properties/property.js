@@ -82,12 +82,8 @@ export const columns = [
     header: "Architectural Theme",
   },
   {
-    accessorKey: "lat",
-    header: "Lattitude",
-  },
-  {
-    accessorKey: "lng",
-    header: "Longitude",
+    accessorKey: "specific_location",
+    header: "Specific Location",
   },
 
   {
@@ -107,6 +103,7 @@ export const columns = [
             }
           );
           const data = await response.json();
+          console.log(data);
           return data; // Return fetched properties
         } catch (error) {
           console.error("Failed to fetch properties:", error);

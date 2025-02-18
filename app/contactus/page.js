@@ -5,7 +5,12 @@ import { showToast } from "@/components/alert/page";
 import Header from "@/app/pages/header";
 import Icon from "@/app/pages/socialmedia-icons/page";
 import Footer from "@/app/pages/footer";
-import { FaPhoneAlt, FaEnvelope, FaCalendarAlt } from "react-icons/fa";
+import {
+  FaPhoneAlt,
+  FaEnvelope,
+  FaCalendarAlt,
+  FaBuilding,
+} from "react-icons/fa";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 const ContactForm = () => {
@@ -250,15 +255,23 @@ const ContactForm = () => {
             Contact Information
           </h3>
           <div className="space-y-8 text-white">
-            {/* Phone Section */}
+            <div>
+              <h4 className="text-2xl font-thin mb-4 flex items-center">
+                <FaBuilding className="text-3xl mr-3 text-white" /> Head Office
+              </h4>
+              <ul className="space-y-3">
+                <li className="text-lg">
+                  ALVEO Corporate Center 728 28th Street, Bonifacio Global City
+                  1634 Taguig City, Metro Manila, Philippines
+                </li>
+              </ul>
+            </div>
             <div>
               <h4 className="text-2xl font-thin mb-4 flex items-center">
                 <FaPhoneAlt className="text-3xl mr-3 text-white" /> Phone
               </h4>
               <ul className="space-y-3">
-                <li className="text-lg">Sales: +63 (2) 53248888</li>
-                <li className="text-lg">Leasing: +63 (2) 84037368</li>
-                <li className="text-lg">Customer Care: (+63) 918 9183456</li>
+                <li className="text-lg">Customer Hotline: (+632) 8848 5000</li>
               </ul>
             </div>
 
@@ -269,21 +282,12 @@ const ContactForm = () => {
               </h4>
               <ul className="space-y-3">
                 <li className="text-lg">
-                  Sales:{" "}
-                  <a
-                    href="mailto:sales@dmcihomes.com"
-                    className="text-blue-300 hover:text-blue-500 font-medium"
-                  >
-                    sales@dmcihomes.com
-                  </a>
-                </li>
-                <li className="text-lg">
                   Customer Care:{" "}
                   <a
-                    href="mailto:customercare@dmcihomes.com"
+                    href="mailto:info@alveoland.com.ph"
                     className="text-blue-300 hover:text-blue-500 font-medium"
                   >
-                    customercare@dmcihomes.com
+                    info@alveoland.com.ph
                   </a>
                 </li>
               </ul>

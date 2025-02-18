@@ -56,7 +56,7 @@ const Footer = () => {
           <div className="col-span-1 sm:col-span-2 lg:col-span-2 h-auto">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 p-4">
               <div className="flex flex-col text-start">
-                <h2 className="text-2xl xl:text-3xl font-thin">Contact Us:</h2>
+                <h2 className="text-2xl xl:text-3xl font-thin">Contact Us</h2>
                 <p className="text-xs xl:text-sm mt-2">
                   Our dedicated teams are ready to assist you with information
                   on Alveo Land properties.
@@ -64,7 +64,7 @@ const Footer = () => {
               </div>
 
               <div className="flex flex-col">
-                <h2 className="text-2xl xl:text-3xl font-thin">Email:</h2>
+                <h2 className="text-2xl xl:text-3xl font-thin">Email</h2>
                 <p className="text-xs xl:text-sm mt-2">
                   <a
                     href="mailto:info@alveoland.com.ph"
@@ -77,7 +77,7 @@ const Footer = () => {
 
               <div className="flex flex-col">
                 <h2 className="text-2xl xl:text-3xl font-thin">
-                  Customer Hotline:
+                  Customer Hotline
                 </h2>
                 <p className="text-xs xl:text-sm mt-2">
                   <a
@@ -90,7 +90,7 @@ const Footer = () => {
               </div>
 
               <div className="flex flex-col">
-                <h2 className="text-2xl xl:text-3xl font-thin">Location:</h2>
+                <h2 className="text-2xl xl:text-3xl font-thin">Location</h2>
                 <a
                   href="https://maps.app.goo.gl/dQRKwnAkHXiwc7hq8"
                   target="_blank"

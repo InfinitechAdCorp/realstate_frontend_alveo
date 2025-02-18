@@ -963,7 +963,6 @@ const AlveoBanner = () => {
                       </button>
                     </div>
 
-                    {/* Suggestions Dropdown */}
                     {isSuggestionsVisible && searchInput.trim() && (
                       <div className="absolute max-h-60 overflow-y-auto w-full sm:w-2/4 md:w-2/4 lg:w-1/3 xl:w-1/4 mx-auto top-full mt-2 z-20 md:left-1/3 bg-white shadow-lg rounded-md space-y-1 text-lg">
                         {suggestions.length > 0 &&
@@ -1019,12 +1018,16 @@ const AlveoBanner = () => {
               }`}
             >
               <div className="bg-customBlue p-6 w-full max-w-2xl h-full overflow-y-auto relative shadow-lg scrollbar-hidden">
-                <span
-                  className="sticky mr-10 top-1/2 transform -translate-y-1/2 text-2xl cursor-pointer text-white hover:text-red-600 transition-colors duration-300"
-                  onClick={handleClosePopup}
-                >
-                  &rarr; {/* Right Arrow Symbol */}
-                </span>
+                <div className="sticky top-2 flex justify-end">
+                  <span
+                    className="text-4xl cursor-pointer text-white hover:text-red-600 transition-colors duration-300"
+                    onClick={handleClosePopup}
+                    title="Close"
+                  >
+                    &times; {/* "X" Symbol */}
+                  </span>
+                </div>
+
                 {loading ? (
                   <div className="flex justify-center items-center py-16">
                     <ClipLoader color="#ffffff" loading={loading} size={100} />

@@ -36,7 +36,7 @@ const FloatingFeatures = ({ isAccessible, handleShowWarningToast }) => {
   ];
 
   return (
-    <div className="fixed top-20 right-1 z-10 lg:top-13 lg:right-2 flex space-x-2">
+    <div className="fixed top-20 right-1 z-10 lg:top-13 lg:right-2  space-x-2 hidden md:flex">
       {iconDetails.map((iconData, index) => (
         <FeatureIcon
           key={index}
@@ -84,6 +84,7 @@ const FeatureIcon = ({
     </div>
   );
 };
+
 const IconWithTooltip = ({ icon, label }) => {
   return (
     <div className="relative group">

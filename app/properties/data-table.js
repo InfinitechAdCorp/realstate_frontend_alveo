@@ -34,6 +34,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { showToast } from "@/components/alert/page";
+
 const handleShowSuccessToast = (message) => {
   showToast(message, "success");
 };
@@ -190,7 +191,6 @@ const fetchAllData = async () => {
   }
 };
 
-// DataTable Component
 export function DataTable({ columns, data, newData }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -522,6 +522,46 @@ export function DataTable({ columns, data, newData }) {
     fetchStatus();
     fetchArea();
   }, []);
+  const PAGE_SIZE = 10;
+  const PAGE_SIZES = [5, 10, 15];
+  const [currentPage, setCurrentPage] = useState(0); // Track the current page
+  const [selectedPageSize, setSelectedPageSize] = useState(PAGE_SIZE); // Track selected page size
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  // Get the paginated rows for the current page
+  const paginatedRows = table
+    .getRowModel()
+    .rows?.slice(
+      currentPage * selectedPageSize,
+      (currentPage + 1) * selectedPageSize
+    );
+
+  // Handle next/previous page
+  const handleNextPage = () => {
+    if (
+      currentPage <
+      Math.ceil(table.getRowModel().rows?.length / selectedPageSize) - 1
+    ) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
+  // Handle page size change
+  const handlePageSizeChange = (event) => {
+    setSelectedPageSize(Number(event.target.value));
+    setCurrentPage(0); // Reset to the first page when page size changes
+  };
+
   return (
     <div className="max-h-20 ">
       {isAddPropertyOpen && (
@@ -944,12 +984,16 @@ export function DataTable({ columns, data, newData }) {
           }
           className="max-w-sm"
         />
-        <button onClick={addproperty}>
-          <img src="/addbutton.png" className="w-8 h-8 " alt="Add Button" />
+        <button
+          onClick={addproperty}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-semibold p-2 rounded-lg shadow-md transform hover:scale-105 transition-all duration-200 absolute right-10 "
+        >
+          <h1 className="text-sm">Add Property</h1>
         </button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
+            <Button variant="outline" className="right-4">
               Columns
             </Button>
           </DropdownMenuTrigger>
@@ -1002,8 +1046,8 @@ export function DataTable({ columns, data, newData }) {
             </TableHeader>
 
             <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
+              {paginatedRows?.length ? (
+                paginatedRows.map((row) => (
                   <React.Fragment key={row.id}>
                     {/* Main Table Row */}
                     <TableRow
@@ -1022,8 +1066,6 @@ export function DataTable({ columns, data, newData }) {
                         </TableCell>
                       ))}
                     </TableRow>
-
-                    {/* Content Row (Accordion) */}
                     {expandedRow === row.id && (
                       <TableRow>
                         <TableCell
@@ -1236,23 +1278,48 @@ export function DataTable({ columns, data, newData }) {
           </Table>
         </div>
       </div>
-      <div className="text-right">
+      <div className="text-right mt-4">
+        {/* Previous Button */}
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
+          onClick={handlePreviousPage}
+          disabled={currentPage === 0}
         >
           Previous
         </Button>
+
+        {/* Page Number Display */}
+        <span className="mx-2">
+          Page {currentPage + 1} of{" "}
+          {Math.ceil(table.getRowModel().rows?.length / selectedPageSize)}
+        </span>
+
+        {/* Next Button */}
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
+          onClick={handleNextPage}
+          disabled={
+            currentPage >=
+            Math.ceil(table.getRowModel().rows?.length / selectedPageSize) - 1
+          }
         >
           Next
         </Button>
+
+        {/* Page Size Selector */}
+        <select
+          value={selectedPageSize}
+          onChange={handlePageSizeChange}
+          className="ml-4 p-1"
+        >
+          {PAGE_SIZES.map((size) => (
+            <option key={size} value={size}>
+              {size} rows
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

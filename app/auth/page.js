@@ -1,17 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+
 const AuthPopup = () => {
   const [formData, setFormData] = useState({ password: "" });
   const [error, setError] = useState(null);
   const [isVisible, setIsVisible] = useState(true); // Popup visibility state
   const [authToken, setAuthToken] = useState(null);
   const [isLoggedin, setIsLoggedin] = useState(false);
+  const [userName, setUserName] = useState(""); // State to store user name
 
   useEffect(() => {
     // Check login status from localStorage
     const loginStatus = localStorage.getItem("isLoggedIn") === "true";
     setIsLoggedin(loginStatus);
+
+    // If logged in, fetch the name from localStorage
+    if (loginStatus) {
+      const name = localStorage.getItem("userInfo");
+      setUserName(name); // Set the name if logged in
+    }
 
     // If not logged in and trying to access '/admin', redirect to '/auth'
     if (window.location.pathname === "/admin" && !loginStatus) {
@@ -53,11 +61,12 @@ const AuthPopup = () => {
         });
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userInfo", JSON.stringify(data.name));
+        localStorage.setItem("userInfo", data.name); // Don't add extra quotes around data.name
 
         // Update the necessary states
         setAuthToken(data.token);
         setIsLoggedin(true); // Set isLoggedin to true
+        setUserName(data.name); // Store the user's name in state
 
         // Set visibility or other UI-related states if needed
         setIsVisible(false);
