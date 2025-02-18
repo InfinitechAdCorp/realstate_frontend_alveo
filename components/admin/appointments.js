@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
@@ -160,7 +161,7 @@ const Table = () => {
       </div>
 
       {/* Search Input */}
-      <div className="mb-3 flex justify-center">
+      <div className="mb-3 flex justify-start">
         <input
           type="text"
           placeholder="Search by name..."

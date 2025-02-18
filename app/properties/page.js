@@ -1,3 +1,4 @@
+"use client";
 import { columns } from "./property";
 import { DataTable } from "./data-table";
 import { useState, useEffect } from "react";
