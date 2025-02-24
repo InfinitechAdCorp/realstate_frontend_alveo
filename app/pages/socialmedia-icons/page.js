@@ -11,7 +11,7 @@ const SocialMediaFloating = () => {
   };
 
   return (
-    <div className="fixed md:top-36 right-1 z-50 top-20">
+    <div className="fixed md:top-36 right-1 z-30   top-20">
       {/* Toggle Button */}
       <button
         onClick={toggleSlider}

@@ -340,7 +340,7 @@ const CanvasApp = () => {
     // Set the background color to white for a clean export
     canvas.backgroundColor = "white";
 
-    // Define the output image size (optional: you can specify the width and height)
+    // Define the output image size
     const canvasWidth = canvas.getWidth();
     const canvasHeight = canvas.getHeight();
 
@@ -357,63 +357,52 @@ const CanvasApp = () => {
     img.crossOrigin = "anonymous"; // Enable cross-origin access
     img.src = canvas.toDataURL("image/png"); // Export as PNG
     img.onload = () => {
-      // Draw the original canvas image onto the off-screen canvas
       ctx.drawImage(img, 0, 0);
 
       // Now apply the watermark to the off-screen canvas
       const watermarkImg = new window.Image();
-      watermarkImg.crossOrigin = "anonymous"; // Enable cross-origin access
+      watermarkImg.crossOrigin = "anonymous";
       watermarkImg.src = "/assets/RoomPlanner/infinitech.png"; // Watermark image path
       watermarkImg.onload = () => {
-        // Control watermark size (adjust this value to change the size)
-        const watermarkSize = 0.15; // 15% of the canvas width/height
-        const watermarkWidth = offScreenCanvas.width * watermarkSize;
-        const watermarkHeight = offScreenCanvas.height * watermarkSize;
+        // Define the desired width percentage
+        const watermarkBaseWidth = canvasWidth * 0.12; // 15% of the canvas width
+
+        // Maintain aspect ratio
+        const aspectRatio = watermarkImg.width / watermarkImg.height;
+        const watermarkWidth = watermarkBaseWidth;
+        const watermarkHeight = watermarkBaseWidth / aspectRatio;
 
         // Set transparency of the watermark
         ctx.globalAlpha = 0.25; // Set transparency to 25%
 
-        // Draw watermark at the four corners
-        ctx.drawImage(watermarkImg, 10, 10, watermarkWidth, watermarkHeight); // Upper Left
-        ctx.drawImage(
-          watermarkImg,
-          offScreenCanvas.width - watermarkWidth - 10,
-          10,
-          watermarkWidth,
-          watermarkHeight
-        ); // Upper Right
-        ctx.drawImage(
-          watermarkImg,
-          10,
-          offScreenCanvas.height - watermarkHeight - 10,
-          watermarkWidth,
-          watermarkHeight
-        ); // Lower Left
-        ctx.drawImage(
-          watermarkImg,
-          offScreenCanvas.width - watermarkWidth - 10,
-          offScreenCanvas.height - watermarkHeight - 10,
-          watermarkWidth,
-          watermarkHeight
-        ); // Lower Right
+        // Positions for watermark
+        const positions = [
+          { x: 10, y: 10 }, // Upper Left
+          { x: canvasWidth - watermarkWidth - 10, y: 10 }, // Upper Right
+          { x: 10, y: canvasHeight - watermarkHeight - 10 }, // Lower Left
+          {
+            x: canvasWidth - watermarkWidth - 10,
+            y: canvasHeight - watermarkHeight - 10,
+          }, // Lower Right
+          {
+            x: canvasWidth / 2 - watermarkWidth / 2,
+            y: canvasHeight / 2 - watermarkHeight / 2,
+          }, // Center
+        ];
 
-        // Draw watermark in the center
-        ctx.drawImage(
-          watermarkImg,
-          offScreenCanvas.width / 2 - watermarkWidth / 2,
-          offScreenCanvas.height / 2 - watermarkHeight / 2,
-          watermarkWidth,
-          watermarkHeight
-        ); // Center
+        // Draw watermark in different positions
+        positions.forEach(({ x, y }) => {
+          ctx.drawImage(watermarkImg, x, y, watermarkWidth, watermarkHeight);
+        });
 
         // Convert the off-screen canvas back to a data URL (with watermark)
         const finalImage = offScreenCanvas.toDataURL("image/png");
 
         // Create a downloadable link for the image with watermark
         const a = document.createElement("a");
-        a.href = finalImage; // Use the image data with watermark
-        a.download = "RoomPlanner-with-watermark.png"; // Set the download file name
-        a.click(); // Trigger the download
+        a.href = finalImage;
+        a.download = "RoomPlanner-with-watermark.png";
+        a.click();
       };
     };
   };

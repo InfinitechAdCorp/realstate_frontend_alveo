@@ -295,10 +295,10 @@ export default function LoanCalculator() {
                 onChange={(e) => setMonths(e.target.value)}
                 className="w-full p-3 border border-customBlue text-md focus:ring-2 focus:ring-blue-500"
               >
-                <option value="0">Select Months</option>
+                <option value="">Select Months</option>
                 {[...Array(12)].map((_, i) => (
-                  <option key={i} value={i}>
-                    {i} Month{i > 1 ? "s" : ""}
+                  <option key={i + 1} value={i + 1}>
+                    {i + 1} Month{i + 1 > 1 ? "s" : ""}
                   </option>
                 ))}
               </select>

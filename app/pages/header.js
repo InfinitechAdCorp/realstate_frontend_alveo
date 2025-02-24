@@ -240,6 +240,12 @@ const Header = () => {
               >
                 Contact Us
               </a>
+              <a
+                href="/pages/agent"
+                className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
+              >
+                Agent
+              </a>
             </div>
 
             <div className="ml-auto flex items-center text-sm sm:text-base lg:text-lg xl:text-xl font-medium">

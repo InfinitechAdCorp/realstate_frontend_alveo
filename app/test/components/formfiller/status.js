@@ -1,52 +1,42 @@
+"use client";
 import React, { useState, useEffect } from "react";
+import DataTable from "react-data-table-component";
 import {
   handleShowSuccessToast,
   handleShowErrorToast,
 } from "@/app/test/toastalert";
 
 const Status = () => {
-  const [data, setData] = useState({
-    statusOptions: [],
-    newStatus: "",
-  });
-  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
-  const [error, setError] = useState(""); // Error state
-  const [success, setSuccess] = useState(""); // Success state
+  const [statuses, setStatuses] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newStatus, setNewStatus] = useState("");
 
-  // Fetch status options
   useEffect(() => {
-    fetchStatusOptions();
+    fetchStatuses();
   }, []);
 
-  const fetchStatusOptions = () => {
+  const fetchStatuses = async () => {
     const token = localStorage.getItem("auth_token");
-    fetch(`${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status-options`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched Status Options:", data);
-        setData((prevData) => ({
-          ...prevData,
-          statusOptions: data,
-        }));
-      })
-      .catch((error) => console.error("Error fetching status options:", error));
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/status`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      const data = await response.json();
+      setStatuses(data);
+    } catch (error) {
+      handleShowErrorToast("Error fetching status options.");
+    }
   };
 
   const handleAddStatus = async () => {
-    setError("");
-    setSuccess("");
-
-    const { newStatus } = data;
     if (!newStatus) {
-      setError("Status name is required");
+      handleShowErrorToast("Status name is required.");
       return;
     }
 
-    // Create FormData object
     const formData = new FormData();
     formData.append("name", newStatus);
 
@@ -57,28 +47,21 @@ const Status = () => {
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-status`,
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData, // Send the FormData
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
         }
       );
 
-      const result = await response.json();
       if (response.ok) {
         handleShowSuccessToast("Status added successfully!");
-        fetchStatusOptions(); // Refresh the list of status options
-        setData((prevData) => ({
-          ...prevData,
-          newStatus: "",
-        })); // Reset the form field
-        setIsStatusModalOpen(false); // Close modal
+        fetchStatuses();
+        setNewStatus("");
+        setIsModalOpen(false);
       } else {
-        setError(result.message || "Something went wrong");
+        handleShowErrorToast("Something went wrong.");
       }
     } catch (err) {
-      console.error("An error occurred:", err);
-      setError("An error occurred during submission");
+      handleShowErrorToast("An error occurred during submission.");
     }
   };
 
@@ -95,83 +78,88 @@ const Status = () => {
           },
         }
       );
-      const data = await response.json();
-      if (data.success) {
+
+      if (response.ok) {
         handleShowSuccessToast("Status deleted successfully!");
-        setData((prevData) => ({
-          ...prevData,
-          statusOptions: prevData.statusOptions.filter(
-            (status) => status.id !== id
-          ),
-        }));
+        setStatuses((prevStatuses) =>
+          prevStatuses.filter((status) => status.id !== id)
+        );
       } else {
         handleShowErrorToast("Failed to delete status.");
       }
     } catch (error) {
-      console.error("Error deleting status:", error);
       handleShowErrorToast("Error occurred while deleting status.");
     }
   };
 
+  const columns = [
+    {
+      name: "Status Name",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <button
+          onClick={() => handleDeleteStatus(row.id)}
+          className="text-red-500 hover:text-red-700 text-sm"
+        >
+          Delete
+        </button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
+
   return (
-    <div className="overflow-y-auto mt-20">
-      <div>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Status</h2>
+    <div className="h-full overflow-y-auto mt-6 p-4 font-thin max-w-6xl mx-auto">
+      <div className="bg-white shadow-md p-6 rounded-lg">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
+          <h2 className="text-lg font-semibold">Status Options</h2>
           <button
-            onClick={() => setIsStatusModalOpen(true)} // Open modal when clicked
-            className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+            onClick={() => setIsModalOpen(true)}
+            className="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-600 w-full sm:w-auto"
           >
             Add Status
           </button>
         </div>
 
-        <ul className="h-[700px] overflow-y-auto">
-          {data.statusOptions?.length > 0 ? (
-            data.statusOptions.map((status) => (
-              <li
-                key={status.id}
-                className="flex justify-between p-2 border-b hover:bg-gray-100"
-              >
-                <span>{status.name}</span>
-                <button
-                  onClick={
-                    () => handleDeleteStatus(status.id) // Call delete function
-                  }
-                  className="text-red-500 hover:text-red-700"
-                >
-                  Delete
-                </button>
-              </li>
-            ))
-          ) : (
-            <li>No Status Options Found</li>
-          )}
-        </ul>
+        <div className="overflow-x-auto">
+          <DataTable
+            columns={columns}
+            data={statuses}
+            pagination
+            highlightOnHover
+            responsive
+            striped
+          />
+        </div>
       </div>
 
-      {/* Modal for Adding New Status */}
-      {isStatusModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
-            <h2 className="text-xl font-semibold mb-4">Add New Status</h2>
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-lg text-center mb-4">Add New Status</h2>
             <input
               type="text"
               placeholder="New Status"
-              value={data.newStatus || ""}
-              onChange={(e) => setData({ ...data, newStatus: e.target.value })}
-              className="border rounded p-2 w-full mb-4"
+              value={newStatus}
+              onChange={(e) => setNewStatus(e.target.value)}
+              className="border rounded p-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
               <button
-                onClick={() => setIsStatusModalOpen(false)} // Close modal
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full sm:w-auto"
               >
                 Cancel
               </button>
               <button
-                onClick={handleAddStatus} // Add status logic
-                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                onClick={handleAddStatus}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
               >
                 Add
               </button>

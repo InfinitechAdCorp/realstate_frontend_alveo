@@ -305,6 +305,7 @@ Armed with sharper foresight, unparalleled excellence, and total commitment, the
     } else if (selectedPrice) {
       setConversationStage("showProperty");
       showProperty(selectedPrice);
+      handleGreeting();
     } else if (value === "visionMission") {
       handleVisionMissionClick(); // Trigger Vision & Mission section
     } else if (value === "aboutUs") {

@@ -349,6 +349,10 @@ export default function BlogPost({ params }) {
                     {property.development_type}
                   </p>
                   <p>
+                    <strong>Architectural Theme</strong>{" "}
+                    {property.architectural_theme}
+                  </p>
+                  <p>
                     <strong>Units:</strong> {property.units}
                   </p>
                 </div>

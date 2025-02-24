@@ -1,150 +1,157 @@
 "use client";
 import React, { useState } from "react";
 import {
-  handleShowSuccessToast,
-  handleShowErrorToast,
-  handleShowWarningToast,
-} from "./toastalert";
+  FaTachometerAlt,
+  FaBuilding,
+  FaUsers,
+  FaCalendarAlt,
+  FaCommentDots,
+  FaWpforms,
+  FaChevronDown,
+  FaChevronUp,
+  FaCodeBranch,
+  FaMapMarkerAlt,
+  FaPalette,
+  FaLayerGroup,
+  FaRobot,
+  FaBars,
+  FaUserCircle,
+} from "react-icons/fa";
 
-const Sidebar = ({ setActiveNav }) => {
+const Sidebar = ({ setActiveNav, isSidebarOpen, setIsSidebarOpen }) => {
   const [showFormFiller, setShowFormFiller] = useState(false);
+  const [showProperties, setShowProperties] = useState(false);
 
   return (
-    <div className="w-63 h-screen bg-gray-800 text-white p-4 font-thin">
-      <h2 className="text-2xl  mb-6">Admin Panel</h2>
-
-      {/* Main Navigation */}
-      <ul>
+    <div
+      className={`fixed md:relative top-0 left-0 h-screen bg-gray-900 text-white p-5 font-thin shadow-lg transition-transform transform ${
+        isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+      } md:translate-x-0 md:w-64 z-50`}
+    >
+      <h2 className="text-2xl font-bold mb-6 text-gray-100">Admin Panel</h2>
+      <button
+        className="md:hidden absolute top-4 right-4 text-white"
+        onClick={() => setIsSidebarOpen(false)}
+      >
+        ✕
+      </button>
+      <ul className="space-y-3">
         <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
+          className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
           onClick={() => setActiveNav("DASHBOARD")}
         >
-          <img
-            src="/assets/dashboard.png"
-            alt="Dashboard"
-            className="w-5 h-5 mr-2"
-          />
-          DASHBOARD
-        </li>
-        <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-          onClick={() => setActiveNav("PROPERTIES")}
-        >
-          <img
-            src="/assets/house.png"
-            alt="Properties"
-            className="w-5 h-5 mr-2"
-          />
-          PROPERTIES
-        </li>
-        <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-          onClick={() => setActiveNav("CLIENT PROPERTY")}
-        >
-          <img
-            src="/assets/customers.png"
-            alt="Client Property"
-            className="w-5 h-5 mr-2"
-          />
-          CLIENT PROPERTY
-        </li>
-        <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-          onClick={() => setActiveNav("APPOINTMENTS")}
-        >
-          <img
-            src="/assets/appointment.png"
-            alt="Appointments"
-            className="w-5 h-5 mr-2"
-          />
-          APPOINTMENTS
-        </li>
-        <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-          onClick={() => setActiveNav("TESTIMONIAL")}
-        >
-          <img
-            src="/assets/review.png"
-            alt="Testimonials"
-            className="w-5 h-5 mr-2"
-          />
-          TESTIMONIALS
+          <FaTachometerAlt className="w-5 h-5 mr-3" /> DASHBOARD
         </li>
 
-        {/* Form Filler */}
+        {/* Properties Section */}
         <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-          onClick={() => setShowFormFiller(!showFormFiller)}
+          className="flex items-center justify-between cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+          onClick={() => {
+            setShowProperties(!showProperties);
+            setActiveNav("PROPERTIES"); // Set activeNav to "PROPERTIES"
+          }}
         >
-          <img
-            src="/assets/form.png"
-            alt="Form Filler"
-            className="w-5 h-5 mr-2"
-          />
-          FORM FILLER
+          <div className="flex items-center">
+            <FaBuilding className="w-5 h-5 mr-3" /> PROPERTIES
+          </div>
+          {showProperties ? (
+            <FaChevronUp className="text-xs ml-2" />
+          ) : (
+            <FaChevronDown className="text-xs ml-2" />
+          )}
         </li>
 
-        {/* Form Filler Submenu */}
-        {showFormFiller && (
-          <ul className="pl-6">
+        {showProperties && (
+          <ul className="pl-4 bg-gray-800 text-gray-300 rounded-lg p-2 space-y-2">
             <li
-              className="mb-2 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-              onClick={() => setActiveNav("DEVELOPMENT TYPE")}
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("OTHER BUILDING")}
             >
-              <img
-                src="/assets/turn-right.png"
-                alt="Development Type"
-                className="w-4 h-4 mr-2"
-              />
-              DEVELOPMENT TYPE
+              <FaBuilding className="w-4 h-4 mr-2" /> OTHER BUILDING
             </li>
             <li
-              className="mb-2 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-              onClick={() => setActiveNav("STATUS")}
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("FEATURES")}
             >
-              <img
-                src="/assets/turn-right.png"
-                alt="Status"
-                className="w-4 h-4 mr-2"
-              />
-              STATUS
+              <FaLayerGroup className="w-4 h-4 mr-2" /> FEATURES
             </li>
             <li
-              className="mb-2 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-              onClick={() => setActiveNav("ARCHITECTURAL THEME")}
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("FACILITIES")}
             >
-              <img
-                src="/assets/turn-right.png"
-                alt="Architectural Theme"
-                className="w-4 h-4 mr-2"
-              />
-              ARCHITECTURAL THEME
-            </li>
-            <li
-              className="mb-2 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
-              onClick={() => setActiveNav("LOCATION")}
-            >
-              <img
-                src="/assets/turn-right.png"
-                alt="Location"
-                className="w-4 h-4 mr-2"
-              />
-              LOCATION
+              <FaMapMarkerAlt className="w-4 h-4 mr-2" /> FACILITIES
             </li>
           </ul>
         )}
 
-        {/* Chatbot */}
         <li
-          className="mb-4 flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin"
+          className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+          onClick={() => setActiveNav("CLIENT PROPERTY")}
+        >
+          <FaUsers className="w-5 h-5 mr-3" /> CLIENT PROPERTY
+        </li>
+        <li
+          className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+          onClick={() => setActiveNav("APPOINTMENTS")}
+        >
+          <FaCalendarAlt className="w-5 h-5 mr-3" /> APPOINTMENTS
+        </li>
+        <li
+          className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+          onClick={() => setActiveNav("TESTIMONIAL")}
+        >
+          <FaCommentDots className="w-5 h-5 mr-3" /> TESTIMONIALS
+        </li>
+
+        {/* Form Filler Section */}
+        <li
+          className="flex items-center justify-between cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+          onClick={() => setShowFormFiller(!showFormFiller)}
+        >
+          <div className="flex items-center">
+            <FaWpforms className="w-5 h-5 mr-3" /> FORM FILLER
+          </div>
+          {showFormFiller ? (
+            <FaChevronUp className="text-xs ml-2" />
+          ) : (
+            <FaChevronDown className="text-xs ml-2" />
+          )}
+        </li>
+
+        {showFormFiller && (
+          <ul className="pl-4 bg-gray-800 text-gray-300 rounded-lg p-2 space-y-2">
+            <li
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("DEVELOPMENT TYPE")}
+            >
+              <FaLayerGroup className="w-4 h-4 mr-2" /> DEVELOPMENT TYPE
+            </li>
+            <li
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("STATUS")}
+            >
+              <FaCodeBranch className="w-4 h-4 mr-2" /> STATUS
+            </li>
+            <li
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("ARCHITECTURAL THEME")}
+            >
+              <FaPalette className="w-4 h-4 mr-2" /> ARCHITECTURAL THEME
+            </li>
+            <li
+              className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
+              onClick={() => setActiveNav("LOCATION")}
+            >
+              <FaMapMarkerAlt className="w-4 h-4 mr-2" /> LOCATION
+            </li>
+          </ul>
+        )}
+
+        <li
+          className="flex items-center cursor-pointer hover:text-blue-400 text-sm font-thin transition"
           onClick={() => setActiveNav("CHATBOT")}
         >
-          <img
-            src="/assets/robotic.png"
-            alt="Chatbot"
-            className="w-5 h-5 mr-2"
-          />
-          CHATBOT
+          <FaRobot className="w-5 h-5 mr-3" /> CHATBOT
         </li>
       </ul>
     </div>

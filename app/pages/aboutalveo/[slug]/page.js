@@ -163,21 +163,19 @@ export default function BlogPost({ params }) {
 
                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-customBlue"></div>
               </div>
-              <div className="absolute top-1/3 mt-3 left-5 w-4/5  text-white text-sm mx-1  sm:mx-10 sm:ml-20 md:top-96 lg:mt-64 lg:top-96 lg:ml-10">
-                <div className="flex space-x-4 h-36 lg:mt-10 lg:top-64 lg:ml-10 xl:-mt-16 xl:ml-40 max-sm:-mt-32 md:-mt-20 ">
-                  {headings.map((heading, idx) => (
-                    <h1
-                      key={idx}
-                      className={`${
-                        index === idx
-                          ? "opacity-100 transform translate-y-0 transition-transform duration-1000 ease-out"
-                          : "opacity-0 transform translate-y-5 font-thin"
-                      } w-full text-sm sm:text-2xl md:text-3xl lg:text-4xl font-thin`}
-                    >
-                      {heading}
-                    </h1>
-                  ))}
-                </div>
+              <div className="absolute top-0 -mt-20 left-5 w-3/5 text-white text-left text-sm mx-1 sm:mx-10 md:top-96 lg:mt-80 lg:top-72 h-36  overflow-hidden">
+                {headings.map((heading, idx) => (
+                  <h1
+                    key={idx}
+                    className={`absolute left-0 top-0 w-full h-full ${
+                      index === idx
+                        ? "opacity-100 transform translate-y-0 transition-transform duration-1000 ease-out"
+                        : "opacity-0 transform translate-y-5"
+                    } text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold`}
+                  >
+                    {heading}
+                  </h1>
+                ))}
               </div>
             </div>
             <div className="relative mt-8 h-auto p-4 text-black lg:mt-20 xl:mt-12">

@@ -20,6 +20,8 @@ import Testimonial from "@/app/pages/testimonial/page";
 import { jsPDF } from "jspdf";
 import * as Yup from "yup";
 import * as XLSX from "xlsx";
+import { FaChevronDown } from "react-icons/fa"; // Import arrow icon
+
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import Cookies from "js-cookie";
 import ClientProperty from "@/app/pages/clientproperty/page";
@@ -1034,18 +1036,32 @@ export default function Admin({}) {
                     }`}
                   >
                     <div
-                      className={`flex items-center text-sm p-1 ${
+                      className={`flex items-center justify-between text-sm p-1 ${
                         activeNav === item.name
                           ? "text-black"
                           : "text-white group-hover:text-black"
                       }`}
                     >
-                      <img
-                        src={item.icon}
-                        alt={item.name}
-                        className="w-3 h-3 mr-2"
-                      />
-                      {item.name}
+                      {/* Left Side: Icon & Text */}
+                      <div className="flex items-center">
+                        <img
+                          src={item.icon}
+                          alt={item.name}
+                          className="w-3 h-3 mr-2"
+                        />
+                        {item.name}
+                      </div>
+
+                      {/* Right Side: Downward Arrow (Only for "FORM FILLER") */}
+                      {item.name === "FORM FILLER" && (
+                        <FaChevronDown
+                          className={`transition-transform duration-300 ${
+                            activeNav === "FORM FILLER"
+                              ? "rotate-180 text-black"
+                              : "text-white"
+                          }`}
+                        />
+                      )}
                     </div>
 
                     {/* Submenu for "FORM FILLER" */}
@@ -1174,7 +1190,6 @@ export default function Admin({}) {
           <div className="demo-container h-full mt-14 w-11/12 mx-auto overflow-y-auto scrollbar-hidden justify-center">
             {activeNav === "DASHBOARD" && (
               <>
-                {/* Grid Container */}
                 <div className="flex justify-center mt-10">
                   <div className="box-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full px-4 sm:px-6 lg:px-8 max-w-screen-xl overflow-x-auto">
                     {/* Box 1 */}

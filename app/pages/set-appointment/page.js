@@ -118,7 +118,7 @@ const SetAppointment = () => {
       <div className="text-center mb-2 mt-20">
         <h1
           className="mt-12 mb-5 font-semibold text-2xl text-customBlue 
-    border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap 
+     w-fit mx-auto  whitespace-nowrap 
     sm:text-4xl md:text-5xl lg:text-3xl sm:mt-16 lg:mt-24"
         >
           SCHEDULE YOUR APPOINTMENT

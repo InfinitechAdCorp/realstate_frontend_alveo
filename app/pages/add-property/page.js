@@ -5,6 +5,8 @@ import Icon from "@/app/pages/socialmedia-icons/page";
 import Footer from "./../footer";
 import { showToast } from "@/components/alert/page";
 function App() {
+  const [showPreviews, setShowPreviews] = useState(true);
+
   const handleShowSuccessToast = (message) => {
     showToast(message, "success");
   };
@@ -196,7 +198,7 @@ function App() {
       <Header /> <Icon />
       <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mt-9 gap-5">
         {/* Data Privacy Reminder Section */}
-        <div className="w-full sm:w-3/4 md:w-2/3 lg:w-2/3 p-8 bg-white border border-customBlue  lg:mb-0 my-6 mx-auto">
+        <div className="w-full sm:w-2/4 md:w-1/3 lg:w-1/3 p-8 bg-white border border-customBlue  lg:mb-0 my-6 mx-auto">
           <h2 className="font-thin text-2xl text-customBlue mb-6 text-center">
             Data Privacy Reminder
           </h2>
@@ -397,20 +399,38 @@ function App() {
               <div className="mt-6">
                 {filePreviews.length > 0 && (
                   <div>
-                    <h2 className="text-sm font-medium text-customBlue">
-                      Image Previews
-                    </h2>
-                    <div className="grid grid-cols-3 gap-4">
-                      {filePreviews.map((imageUrl, index) => (
-                        <div key={index} className="w-full h-32 bg-gray-100">
-                          <img
-                            src={imageUrl}
-                            alt={`Preview ${index + 1}`}
-                            className="w-full h-32 object-cover"
-                          />
-                        </div>
-                      ))}
+                    {/* Toggle Button - Positioned to the Right */}
+                    <div className="flex justify-end">
+                      <button
+                        onClick={() => setShowPreviews(!showPreviews)}
+                        className="mb-2 px-4 py-2 bg-blue-500 text-white text-sm rounded-md focus:outline-none hover:bg-blue-600"
+                      >
+                        {showPreviews ? "Hide Previews" : "Show Previews"}
+                      </button>
                     </div>
+
+                    {/* Image Previews */}
+                    {showPreviews && (
+                      <div>
+                        <h2 className="text-sm font-medium text-customBlue">
+                          Image Previews
+                        </h2>
+                        <div className="grid grid-cols-3 gap-4">
+                          {filePreviews.map((imageUrl, index) => (
+                            <div
+                              key={index}
+                              className="w-full h-32 bg-gray-100"
+                            >
+                              <img
+                                src={imageUrl}
+                                alt={`Preview ${index + 1}`}
+                                className="w-full h-32 object-cover"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

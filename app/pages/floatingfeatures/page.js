@@ -28,11 +28,6 @@ const FloatingFeatures = ({ isAccessible, handleShowWarningToast }) => {
       icon: <FaHome className="w-8 h-8 text-customBlue" />,
       label: "Submit Property",
     },
-    {
-      link: "/pages/agent",
-      icon: <IoManSharp className="w-8 h-8 text-customBlue" />,
-      label: "Agent",
-    },
   ];
 
   return (

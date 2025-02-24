@@ -159,7 +159,7 @@ const Carousel = () => {
     <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10 px-4 sm:px-6 lg:px-8">
       <h1
         className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue 
-      border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4"
+      w-fit mx-auto  whitespace-nowrap mt-4 my-10"
       >
         FEATURED PROPERTIES
       </h1>
@@ -859,7 +859,7 @@ const AlveoBanner = () => {
                   {/* Left Column: Search Inputs */}
                   <div className="space-y-6 relative text-sm">
                     {/* Search Bar */}
-                    <div className="flex items-center border p-3 max-w-4xl bg-transparent">
+                    <div className="flex items-center border p-3 max-w-4xl bg-transparent gap-10">
                       {/* Dropdown Selection */}
                       <div className="relative">
                         <select
@@ -1490,7 +1490,7 @@ const DashboardComponent = () => {
       <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-5">
         <div className="w-full flex xl:flex-row">
           <div className="w-full mx-auto overflow-hidden mt-3 text-center h-full relative pb-10 px-4 sm:px-6 lg:px-8">
-            <h1 className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue border-t-2 w-fit mx-auto border-customBlue whitespace-nowrap mt-4">
+            <h1 className="font-thin items-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-customBlue w-fit mx-auto whitespace-nowrap py-2">
               RECOMMENDED LOCATIONS
             </h1>
             <div className="p-2 mx-auto">
@@ -1513,7 +1513,7 @@ const DashboardComponent = () => {
                             {location.toUpperCase()}
                           </div>
                         </div>
-                        <div className="p-4 flex flex-col justify-between flex-grow">
+                        <div className="p-4 flex flex-col justify-start text-start flex-grow">
                           <div>
                             <h5 className="text-lg font-semibold">{`"${title}"`}</h5>
                             <p className="text-base">
