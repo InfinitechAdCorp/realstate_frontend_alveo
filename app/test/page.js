@@ -91,9 +91,10 @@ const AdminLayout = () => {
           {activeNav === "FACILITIES" && (
             <Facility properties={properties} loading={loading} />
           )}
-          {activeNav === "FEATURES" && (
-            <Feature properties={properties} loading={loading} />
-          )}
+       {activeNav === "FEATURES" && (
+  <Feature properties={properties} loading={loading} fetchProperties={fetchProperties} />
+)}
+
           {activeNav === "CLIENT PROPERTY" && <ClientProperty />}
           {activeNav === "APPOINTMENTS" && <Appointment />}
           {activeNav === "TESTIMONIAL" && <Testimonial />}

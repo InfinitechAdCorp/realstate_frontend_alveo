@@ -11,100 +11,91 @@ import {
 import exportToPDF from "@/app/test/components/export/exportPDF";
 import exportToExcel from "@/app/test/components/export/exportExcel";
 import { showToast } from "@/components/alert/page";
-// import AddFeature from "@/app/test/components/modal/feature/addFeature";
-// import UpdateFeature from "@/app/test/components/modal/feature/updateFeature";
+import AddFeatureModal from "@/app/test/components/modal/feature/addFeature";
+import UpdateFeature from "@/app/test/components/modal/feature/updateFeature";
 
 const FeatureTable = ({ properties, loading }) => {
   const [groupedFeatures, setGroupedFeatures] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isAddFeatureOpen, setIsAddFeatureOpen] = useState(false);
-  const [isUpdateFeatureOpen, setIsUpdateFeatureOpen] = useState(false);
   const [selectedFeature, setSelectedFeature] = useState(null);
-  const [actionMenuOpen, setActionMenuOpen] = useState(null); // Manage Action Menu state
+  const [actionMenuOpen, setActionMenuOpen] = useState(null);
+  const [isEditFeatureOpen, setIsEditFeatureOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && properties.length > 0) {
-      const formattedData = properties.map((property) => {
-        try {
-          const features = JSON.parse(property.features);
-          return {
-            property_name: property.name,
-            property_id: property.id,
-            features: features.map((feature, index) => ({
-              id: `${property.id}-${index}`,
-              name: feature.name,
-              image: feature.image,
-            })),
-          };
-        } catch (error) {
-          console.error(`Error parsing features for ${property.name}:`, error);
-          return {
-            property_name: property.name,
-            property_id: property.id,
-            features: [],
-          };
-        }
-      });
-
-      setGroupedFeatures(formattedData);
+      setGroupedFeatures(
+        properties.map((property) => ({
+          property_name: property.name,
+          property_id: property.id,
+          features: Array.isArray(property.features)
+            ? property.features
+            : property.features
+            ? JSON.parse(property.features)
+            : [], // Ensure features is always an array
+        }))
+      );
     }
   }, [properties, loading]);
 
-  const handleDeleteClick = async (propertyId, featureName) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete "${featureName}"?`
+  const handleFeatureSubmit = (newFeatures, propertyId) => {
+    setGroupedFeatures((prev) =>
+      prev.map((group) =>
+        group.property_id === propertyId
+          ? { ...group, features: [...(group.features || []), ...newFeatures] }
+          : group
+      )
     );
-    if (!confirmDelete) return;
+  };
+
+  const handleUpdateClick = (property) => {
+    setSelectedFeature(property);
+    setIsEditFeatureOpen(true);
+  };
+
+  const handleFeatureUpdate = (updatedFeatures, propertyId) => {
+    setGroupedFeatures((prev) =>
+      prev.map((group) =>
+        group.property_id === propertyId
+          ? { ...group, features: Array.isArray(updatedFeatures) ? updatedFeatures : [] }
+          : group
+      )
+    );
+  };
+
+  const handleDeleteClick = async (propertyId) => {
+    if (!confirm("Are you sure you want to delete all features for this property?")) return;
 
     try {
       const token = localStorage.getItem("auth_token");
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/delete-feature`,
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/deletefeature`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({
-            property_id: propertyId,
-            feature_name: featureName,
-          }),
+          body: JSON.stringify({ id: [propertyId] }),
         }
       );
 
-      const data = await response.json();
+      if (!response.ok) throw new Error("Failed to delete features");
 
-      if (response.ok) {
-        showToast(`Feature "${featureName}" deleted successfully!`, "success");
-
-        setGroupedFeatures((prev) =>
-          prev.map((group) =>
-            group.property_id === propertyId
-              ? {
-                  ...group,
-                  features: group.features.filter(
-                    (f) => f.name !== featureName
-                  ),
-                }
-              : group
-          )
-        );
-      } else {
-        showToast(data.message || "Failed to delete feature.", "error");
-      }
+      showToast("All features deleted successfully!", "success");
+      setGroupedFeatures((prev) =>
+        prev.map((group) =>
+          group.property_id === propertyId ? { ...group, features: [] } : group
+        )
+      );
     } catch (error) {
-      showToast("Error deleting feature.", "error");
+      console.error("Error deleting features:", error);
+      showToast("Error deleting features.", "error");
     }
   };
 
-  const handleUpdateClick = (property, feature) => {
-    setSelectedFeature({ property, feature });
-    setIsUpdateFeatureOpen(true);
-  };
-
-  const filteredFeatures = groupedFeatures.filter((property) =>
-    property.property_name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredFeatures = groupedFeatures.filter(({ property_name }) =>
+    property_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const columns = [
@@ -116,19 +107,23 @@ const FeatureTable = ({ properties, loading }) => {
     },
     {
       name: "Features",
-      cell: (row) => (
-        <div className="flex flex-wrap gap-4">
-          {row.features.length > 0 ? (
-            row.features.map((feature, index) => (
-              <div key={index} className="flex flex-col items-center relative">
-                <img
-                  src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
-                  alt={feature.name}
-                  className="w-24 h-16 rounded-md object-cover border"
-                />
-                <span className="text-xs mt-1 text-center">{feature.name}</span>
-              </div>
-            ))
+      cell: ({ features }) => (
+        <div className="flex flex-wrap gap-4 overflow-auto max-h-32">
+          {Array.isArray(features) && features.length > 0 ? (
+            features.map((feature, index) =>
+              feature?.image ? (
+                <div key={index} className="flex flex-col items-center">
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
+                    alt={feature.name || "Unnamed Feature"}
+                    className="w-24 h-16 rounded-md object-cover border"
+                  />
+                  <span className="text-xs mt-1 text-center">
+                    {feature.name || "Unnamed Feature"}
+                  </span>
+                </div>
+              ) : null
+            )
           ) : (
             <span className="text-gray-500">No features available</span>
           )}
@@ -142,9 +137,7 @@ const FeatureTable = ({ properties, loading }) => {
         <div className="relative">
           <button
             onClick={() =>
-              setActionMenuOpen(
-                actionMenuOpen === row.property_id ? null : row.property_id
-              )
+              setActionMenuOpen(actionMenuOpen === row.property_id ? null : row.property_id)
             }
             className="text-gray-600 hover:text-gray-800"
           >
@@ -152,28 +145,18 @@ const FeatureTable = ({ properties, loading }) => {
           </button>
           {actionMenuOpen === row.property_id && (
             <div className="absolute right-0 bg-white border shadow-md rounded-md w-32 z-50">
-              {row.features.length > 0 ? (
-                row.features.map((feature, index) => (
-                  <div key={index} className="flex flex-col">
-                    <button
-                      className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
-                      onClick={() => handleUpdateClick(row, feature)}
-                    >
-                      <FaEdit /> Update
-                    </button>
-                    <button
-                      className="w-full px-4 py-2 text-left text-red-500 hover:bg-gray-100 flex items-center gap-2"
-                      onClick={() =>
-                        handleDeleteClick(row.property_id, feature.name)
-                      }
-                    >
-                      <FaTrash /> Delete
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <span className="text-gray-500 text-sm p-2">No actions</span>
-              )}
+              <button
+                className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
+                onClick={() => handleUpdateClick(row)}
+              >
+                <FaEdit /> Update
+              </button>
+              <button
+                className="w-full px-4 py-2 text-left text-red-500 hover:bg-gray-100 flex items-center gap-2"
+                onClick={() => handleDeleteClick(row.property_id)}
+              >
+                <FaTrash /> Delete
+              </button>
             </div>
           )}
         </div>
@@ -184,14 +167,13 @@ const FeatureTable = ({ properties, loading }) => {
     },
   ];
 
-  if (loading) return <div>Loading...</div>;
-
-  return (
+  return loading ? (
+    <div>Loading...</div>
+  ) : (
     <div className="p-4">
       <div className="bg-white shadow-md p-4 rounded-md">
-        {/* Header & Action Buttons */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-          <div className="w-full md:w-auto">
+          <div>
             <h2 className="text-lg font-semibold">Features by Property</h2>
             <input
               type="text"
@@ -201,7 +183,6 @@ const FeatureTable = ({ properties, loading }) => {
               className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
             />
           </div>
-
           <div className="flex gap-3 mt-2 md:mt-0">
             <button
               onClick={() => setIsAddFeatureOpen(true)}
@@ -223,15 +204,26 @@ const FeatureTable = ({ properties, loading }) => {
             </button>
           </div>
         </div>
-
-        <DataTable
-          columns={columns}
-          data={filteredFeatures}
-          pagination
-          highlightOnHover
-          striped
-        />
+        <DataTable columns={columns} data={filteredFeatures} pagination highlightOnHover striped />
       </div>
+
+      {isEditFeatureOpen && (
+        <UpdateFeature
+          isOpen={isEditFeatureOpen}
+          onClose={() => setIsEditFeatureOpen(false)}
+          property={selectedFeature}
+          onUpdate={handleFeatureUpdate}
+        />
+      )}
+
+      {isAddFeatureOpen && (
+        <AddFeatureModal
+          isOpen={isAddFeatureOpen}
+          onClose={() => setIsAddFeatureOpen(false)}
+          properties={properties}
+          onSubmit={handleFeatureSubmit}
+        />
+      )}
     </div>
   );
 };
