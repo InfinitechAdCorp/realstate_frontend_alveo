@@ -1613,11 +1613,9 @@ export const columns = [
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">
                   Add Building Facility for {payment.name}
                 </h2>{" "}
-                {/* Smaller text */}
+            
                 <form onSubmit={handleAddFacilities} className="space-y-3">
-                  {" "}
-                  {/* Reduced spacing */}
-                  {/* Number of Facility Names */}
+            
                   <div className="space-y-1">
                     <label className="text-lg font-medium text-gray-700">
                       How many Facility Names?

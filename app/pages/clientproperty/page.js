@@ -2,13 +2,12 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FaFilePdf, FaFileExcel } from "react-icons/fa";
-import * as XLSX from "xlsx";
-import { jsPDF } from "jspdf";
+import * as XLSX from "xlsx"; // Correct import for XLSX
+import { jsPDF } from "jspdf"; // Correct import for jsPDF
 
 const ClientProperties = () => {
   const [submittedProperties, setSubmittedProperties] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Search state
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(10); // Default to 5 per page
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
@@ -24,11 +23,27 @@ const ClientProperties = () => {
       }
     )
       .then((response) => response.json())
-      .then((data) => setSubmittedProperties(data))
-      .catch((error) =>
-        console.error("Error fetching submitted properties:", error)
-      );
+      .then((data) => {
+        console.log(data);
+        setSubmittedProperties(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching submitted properties:", error);
+      });
   }, []);
+
+  useEffect(() => {
+    console.log(submittedProperties);
+  }, [submittedProperties]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const handlePerPageChange = (newPerPage) => {
+    setPerPage(newPerPage);
+    setCurrentPage(1); // Reset to page 1 when changing rows per page
+  };
 
   const exportExcel = () => {
     const headers = [
@@ -65,6 +80,7 @@ const ClientProperties = () => {
 
   const exportPDF = () => {
     const doc = new jsPDF();
+
     doc.setFont("helvetica", "bold");
     doc.text("Client Properties Report", 10, 10);
     doc.line(10, 12, 200, 12);
@@ -79,6 +95,7 @@ const ClientProperties = () => {
       const fields = [
         { label: "First Name:", value: property.first_name },
         { label: "Last Name:", value: property.last_name },
+        { label: "Middle Name:", value: property.middle_name || "N/A" },
         { label: "Email:", value: property.email },
         { label: "Phone:", value: property.phone },
         { label: "Property Name:", value: property.property_name },
@@ -104,12 +121,9 @@ const ClientProperties = () => {
   };
 
   const openModal2 = (files) => {
+    // Placeholder function: You can implement modal logic here
     alert(`Show Images: ${JSON.stringify(files)}`);
   };
-
-  const filteredProperties = submittedProperties.filter((property) =>
-    property.property_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const columns = [
     { name: "First Name", selector: (row) => row.first_name, sortable: true },
@@ -124,14 +138,7 @@ const ClientProperties = () => {
     { name: "Location", selector: (row) => row.location, sortable: true },
     { name: "Price", selector: (row) => row.price, sortable: true },
     { name: "Status", selector: (row) => row.status, sortable: true },
-    {
-      name: "Description",
-      selector: (row) =>
-        row.description.length > 100
-          ? row.description.substring(0, 100) + "..."
-          : row.description,
-      wrap: true,
-    },
+    { name: "Description", selector: (row) => row.description, sortable: true },
     {
       name: "Files",
       cell: (row) => (
@@ -150,46 +157,41 @@ const ClientProperties = () => {
   ];
 
   return (
-    <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
-      <div className="bg-white shadow-md p-4 rounded-md">
-        {/* Title & Search Filter */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-          <div className="w-full md:w-auto">
-            <h2 className="text-lg font-semibold">Client Properties</h2>
-            <input
-              type="text"
-              placeholder="Search by property name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
-            />
-          </div>
+    <div className="mt-20">
+      <div className="justify-center text-center text-3xl my-2 mb-3">
+        <h1 className="text-customBlue">CLIENT PROPERTIES</h1>
+      </div>
 
-          {/* Export Buttons */}
-          <div className="flex gap-3">
-            <button
-              onClick={exportPDF}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
-            >
-              <FaFilePdf className="mr-2" /> Export PDF
-            </button>
-            <button
-              onClick={exportExcel}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
-            >
-              <FaFileExcel className="mr-2" /> Export Excel
-            </button>
-          </div>
-        </div>
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={exportPDF}
+          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-4"
+        >
+          <FaFilePdf className="inline-block mr-2" />
+          Export PDF
+        </button>
+        <button
+          onClick={exportExcel}
+          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          <FaFileExcel className="inline-block mr-2" />
+          Export Excel
+        </button>
+      </div>
 
-        {/* Data Table */}
+      <div className="overflow-x-auto">
         <DataTable
+          title="Client Properties"
           columns={columns}
-          data={filteredProperties}
+          data={submittedProperties}
           pagination
+          paginationServer
+          paginationPerPage={perPage}
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          onChangePage={handlePageChange}
+          onChangeRowsPerPage={handlePerPageChange}
           highlightOnHover
           responsive
-          striped
         />
       </div>
     </div>

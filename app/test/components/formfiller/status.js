@@ -132,6 +132,8 @@ const Status = () => {
             columns={columns}
             data={statuses}
             pagination
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[5, 10, 15]}
             highlightOnHover
             responsive
             striped

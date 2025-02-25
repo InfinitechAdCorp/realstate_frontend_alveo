@@ -133,6 +133,8 @@ const DevelopmentType = () => {
           columns={columns}
           data={developmentTypes}
           pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[5, 10, 15]}
           highlightOnHover
           responsive
           striped

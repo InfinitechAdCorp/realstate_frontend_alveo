@@ -1073,82 +1073,82 @@ export function DataTable({ columns, data, newData }) {
                           className="p-4 bg-white-100"
                         >
                           <Accordion type="single" collapsible>
-                            <AccordionItem value={row.id.toString()}>
-                              <AccordionTrigger>
-                                Other Buildings
-                              </AccordionTrigger>
-                              <AccordionContent>
-                                <div className="rounded-md border">
-                                  <Table>
-                                    <TableHeader>
-                                      <TableRow>
-                                        <TableHead>Building Name</TableHead>
-                                        <TableHead>Development Type</TableHead>
-                                        <TableHead>
-                                          Residential Levels
-                                        </TableHead>
-                                        <TableHead>
-                                          Basement Parking Levels
-                                        </TableHead>
-                                        <TableHead>
-                                          Podium Parking Levels
-                                        </TableHead>
-                                        <TableHead>Commercial Units</TableHead>
-                                        <TableHead>
-                                          Lower Ground Parking Levels
-                                        </TableHead>
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      {/* Filter the otherBuildingsdata to show only buildings that match the current row's ID */}
-                                      {otherBuildingsdata.length > 0 ? (
-                                        otherBuildingsdata
-                                          .filter(
-                                            (building) =>
-                                              building.property_id ===
-                                              row.original.id // Match the property_id with the row's id
-                                          )
-                                          .map((building) => (
-                                            <TableRow key={building.id}>
-                                              <TableCell>
-                                                {building.name}
-                                              </TableCell>
-                                              <TableCell>
-                                                {building.development_type}
-                                              </TableCell>
-                                              <TableCell>
-                                                {building.residential_levels}
-                                              </TableCell>
-                                              <TableCell>
-                                                {building.basement_parking_levels ||
-                                                  "N/A"}
-                                              </TableCell>
-                                              <TableCell>
-                                                {building.podium_parking_levels ||
-                                                  "N/A"}
-                                              </TableCell>
-                                              <TableCell>
-                                                {building.commercial_units ||
-                                                  "N/A"}
-                                              </TableCell>
-                                              <TableCell>
-                                                {building.lower_ground_floor_parking_levels ||
-                                                  "N/A"}
-                                              </TableCell>
-                                            </TableRow>
-                                          ))
-                                      ) : (
+                              <AccordionItem value={row.id.toString()}>
+                                <AccordionTrigger>
+                                  Other Buildings
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                  <div className="rounded-md border">
+                                    <Table>
+                                      <TableHeader>
                                         <TableRow>
-                                          <TableCell colSpan={7}>
-                                            No buildings found
-                                          </TableCell>
+                                          <TableHead>Building Name</TableHead>
+                                          <TableHead>Development Type</TableHead>
+                                          <TableHead>
+                                            Residential Levels
+                                          </TableHead>
+                                          <TableHead>
+                                            Basement Parking Levels
+                                          </TableHead>
+                                          <TableHead>
+                                            Podium Parking Levels
+                                          </TableHead>
+                                          <TableHead>Commercial Units</TableHead>
+                                          <TableHead>
+                                            Lower Ground Parking Levels
+                                          </TableHead>
                                         </TableRow>
-                                      )}
-                                    </TableBody>
-                                  </Table>
-                                </div>
-                              </AccordionContent>
-                            </AccordionItem>
+                                      </TableHeader>
+                                      <TableBody>
+                                        {/* Filter the otherBuildingsdata to show only buildings that match the current row's ID */}
+                                        {otherBuildingsdata.length > 0 ? (
+                                          otherBuildingsdata
+                                            .filter(
+                                              (building) =>
+                                                building.property_id ===
+                                                row.original.id // Match the property_id with the row's id
+                                            )
+                                            .map((building) => (
+                                              <TableRow key={building.id}>
+                                                <TableCell>
+                                                  {building.name}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {building.development_type}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {building.residential_levels}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {building.basement_parking_levels ||
+                                                    "N/A"}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {building.podium_parking_levels ||
+                                                    "N/A"}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {building.commercial_units ||
+                                                    "N/A"}
+                                                </TableCell>
+                                                <TableCell>
+                                                  {building.lower_ground_floor_parking_levels ||
+                                                    "N/A"}
+                                                </TableCell>
+                                              </TableRow>
+                                            ))
+                                        ) : (
+                                          <TableRow>
+                                            <TableCell colSpan={7}>
+                                              No buildings found
+                                            </TableCell>
+                                          </TableRow>
+                                        )}
+                                      </TableBody>
+                                    </Table>
+                                  </div>
+                                </AccordionContent>
+                              </AccordionItem>
                             <AccordionItem value={`building-details-${row.id}`}>
                               <AccordionTrigger>
                                 Building Details

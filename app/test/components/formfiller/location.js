@@ -173,6 +173,8 @@ const Location = () => {
             columns={columns}
             data={filteredLocations}
             pagination
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[5, 10, 15]}
             highlightOnHover
             responsive
             striped

@@ -51,8 +51,3 @@ body {
 .colored-toast .swal2-html-container {
   color: white;
 }
-/* Add this to your global styles or component-level styles */
-.property-container> :last-child {
-  margin-bottom: 200px;
-  /* Adjust the value to your desired space */
-}

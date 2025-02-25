@@ -13,6 +13,7 @@ import ClientProperty from "./components/clientproperty";
 import Property from "./components/property";
 import OtherBuilding from "./components/otherBuildings";
 import Facility from "./components/buildingFacility";
+import Feature from "./components/buildingFeatures";
 import { FaUserCircle, FaBars } from "react-icons/fa";
 
 const AdminLayout = () => {
@@ -89,6 +90,9 @@ const AdminLayout = () => {
           )}
           {activeNav === "FACILITIES" && (
             <Facility properties={properties} loading={loading} />
+          )}
+          {activeNav === "FEATURES" && (
+            <Feature properties={properties} loading={loading} />
           )}
           {activeNav === "CLIENT PROPERTY" && <ClientProperty />}
           {activeNav === "APPOINTMENTS" && <Appointment />}
