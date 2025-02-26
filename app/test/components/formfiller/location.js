@@ -62,6 +62,53 @@ const Location = () => {
       handleShowErrorToast("Error occurred while deleting location.");
     }
   };
+  const handleAddLocation = async () => {
+    if (!data.newAreaName || !data.newTitle || !data.newDescription) {
+      handleShowErrorToast("All fields except image are required.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("area_name", data.newAreaName);
+    formData.append("title", data.newTitle);
+    formData.append("description", data.newDescription);
+    if (data.newImage) {
+      formData.append("image", data.newImage);
+    }
+
+    const token = localStorage.getItem("auth_token");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-area`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`, // Attach token for authentication
+          },
+          body: formData, // Send formData (multipart/form-data)
+        }
+      );
+
+      const result = await response.json();
+
+      if (response.ok) {
+        handleShowSuccessToast("Location added successfully!");
+        fetchLocations(); // ✅ Fetch the updated locations list
+        setIsLocationModalOpen(false);
+        setData({
+          newAreaName: "",
+          newTitle: "",
+          newDescription: "",
+          newImage: null,
+        }); // Clear form fields
+      } else {
+        handleShowErrorToast(result.error || "Failed to add location.");
+      }
+    } catch (error) {
+      handleShowErrorToast("Error occurred while adding location.");
+    }
+  };
 
   const toggleExpansion = (id) => {
     setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -138,8 +185,10 @@ const Location = () => {
     },
   ];
 
-  const filteredLocations = locations.filter((location) =>
-    location.area_name.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredLocations = (locations || []).filter(
+    (location) =>
+      location.area_name &&
+      location.area_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (

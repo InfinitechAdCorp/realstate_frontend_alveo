@@ -120,14 +120,20 @@ const ClientProperties = () => {
   const columns = [
     { name: "First Name", selector: (row) => row.first_name, sortable: true },
     { name: "Last Name", selector: (row) => row.last_name, sortable: true },
-    { name: "Email", selector: (row) => row.email, sortable: true },
-    { name: "Phone", selector: (row) => row.phone, sortable: true },
+    { name: "Email", selector: (row) => row.email, sortable: true, wrap: true },
+    { name: "Phone", selector: (row) => row.phone, sortable: true, wrap: true },
     {
       name: "Property Name",
       selector: (row) => row.property_name,
       sortable: true,
+      wrap: true,
     },
-    { name: "Location", selector: (row) => row.location, sortable: true },
+    {
+      name: "Location",
+      selector: (row) => row.location,
+      sortable: true,
+      wrap: true,
+    },
     {
       name: "Price",
       selector: (row) => {

@@ -30,11 +30,8 @@ const UpdateFacility = ({ isOpen, closePopup, facility, setFacilities }) => {
   const handleDeleteFacility = (index) => {
     setUpdatedFacilities((prev) => prev.filter((_, i) => i !== index));
   };
-
   const handleBulkUpdate = async () => {
     const token = localStorage.getItem("auth_token");
-
-    // **Filter out empty names** before sending
     const filteredFacilities = updatedFacilities.filter((f) => f.name !== "");
 
     try {
@@ -46,7 +43,7 @@ const UpdateFacility = ({ isOpen, closePopup, facility, setFacilities }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(filteredFacilities), // ✅ Send with IDs
+          body: JSON.stringify(filteredFacilities),
         }
       );
 
@@ -54,17 +51,18 @@ const UpdateFacility = ({ isOpen, closePopup, facility, setFacilities }) => {
 
       if (response.ok) {
         showToast("Facilities updated successfully!", "success");
+        setFacilities((prev) => {
+          const updated = { ...prev };
+          updated[facility.property_id] = {
+            ...updated[facility.property_id],
+            facilities: updatedFacilities.map((f) => f.name), // ✅ Update facility names instantly
+          };
+          return updated; // ✅ React detects the state change
+        });
 
-        // ✅ Update UI after successful response
-        setFacilities((prev) => ({
-          ...prev,
-          [facility.property_id]: {
-            ...prev[facility.property_id],
-            facilities: filteredFacilities.map((f) => f.name),
-          },
-        }));
-
+        setSelectedFacility(null); // ✅ Reset modal state
         closePopup();
+        showToast("Facilities updated successfully!", "success");
       } else {
         showToast(data.message || "Failed to update facilities.", "error");
       }

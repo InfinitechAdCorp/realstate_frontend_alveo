@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
+import { motion } from "framer-motion";
 import {
   FaFilePdf,
   FaFileExcel,
@@ -32,7 +33,7 @@ const FeatureTable = ({ properties, loading }) => {
             ? property.features
             : property.features
             ? JSON.parse(property.features)
-            : [], // Ensure features is always an array
+            : [],
         }))
       );
     }
@@ -57,14 +58,22 @@ const FeatureTable = ({ properties, loading }) => {
     setGroupedFeatures((prev) =>
       prev.map((group) =>
         group.property_id === propertyId
-          ? { ...group, features: Array.isArray(updatedFeatures) ? updatedFeatures : [] }
+          ? {
+              ...group,
+              features: Array.isArray(updatedFeatures) ? updatedFeatures : [],
+            }
           : group
       )
     );
   };
 
   const handleDeleteClick = async (propertyId) => {
-    if (!confirm("Are you sure you want to delete all features for this property?")) return;
+    if (
+      !confirm(
+        "Are you sure you want to delete all features for this property?"
+      )
+    )
+      return;
 
     try {
       const token = localStorage.getItem("auth_token");
@@ -108,28 +117,39 @@ const FeatureTable = ({ properties, loading }) => {
     {
       name: "Features",
       cell: ({ features }) => (
-        <div className="flex flex-wrap gap-4 overflow-auto max-h-32">
-          {Array.isArray(features) && features.length > 0 ? (
-            features.map((feature, index) =>
-              feature?.image ? (
-                <div key={index} className="flex flex-col items-center">
-                  <img
-                    src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
-                    alt={feature.name || "Unnamed Feature"}
-                    className="w-24 h-16 rounded-md object-cover border"
-                  />
-                  <span className="text-xs mt-1 text-center">
-                    {feature.name || "Unnamed Feature"}
-                  </span>
-                </div>
-              ) : null
-            )
-          ) : (
-            <span className="text-gray-500">No features available</span>
-          )}
+        <div className="overflow-hidden relative w-full">
+          <motion.div
+            className="overflow-x-auto whitespace-nowrap max-w-full h-24 flex items-center scrollbar-hide"
+            whileTap={{ cursor: "grabbing" }}
+          >
+            {Array.isArray(features) && features.length > 0 ? (
+              <motion.div
+                className="flex gap-4"
+                drag="x"
+                dragConstraints={{ left: -200, right: 0 }}
+              >
+                {features.map((feature, index) =>
+                  feature?.image ? (
+                    <div key={index} className="flex flex-col items-center">
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${feature.image}`}
+                        alt={feature.name || "Unnamed Feature"}
+                        className="w-24 h-16 rounded-md object-cover border"
+                      />
+                      <span className="text-xs mt-1 text-center">
+                        {feature.name || "Unnamed Feature"}
+                      </span>
+                    </div>
+                  ) : null
+                )}
+              </motion.div>
+            ) : (
+              <span className="text-gray-500">No features available</span>
+            )}
+          </motion.div>
         </div>
       ),
-      minWidth: "600px",
+      minWidth: "400px",
     },
     {
       name: "Actions",
@@ -137,7 +157,9 @@ const FeatureTable = ({ properties, loading }) => {
         <div className="relative">
           <button
             onClick={() =>
-              setActionMenuOpen(actionMenuOpen === row.property_id ? null : row.property_id)
+              setActionMenuOpen(
+                actionMenuOpen === row.property_id ? null : row.property_id
+              )
             }
             className="text-gray-600 hover:text-gray-800"
           >
@@ -173,17 +195,17 @@ const FeatureTable = ({ properties, loading }) => {
     <div className="p-4">
       <div className="bg-white shadow-md p-4 rounded-md">
         <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-          <div>
+          <div className="w-full md:w-auto">
             <h2 className="text-lg font-semibold">Features by Property</h2>
             <input
               type="text"
               placeholder="Search by property name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
+              className="w-full px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
             />
           </div>
-          <div className="flex gap-3 mt-2 md:mt-0">
+          <div className="flex flex-wrap gap-3 mt-2 md:mt-0">
             <button
               onClick={() => setIsAddFeatureOpen(true)}
               className="px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 flex items-center"
@@ -204,26 +226,33 @@ const FeatureTable = ({ properties, loading }) => {
             </button>
           </div>
         </div>
-        <DataTable columns={columns} data={filteredFeatures} pagination highlightOnHover striped />
+        <div className="overflow-auto">
+          <DataTable
+            columns={columns}
+            data={filteredFeatures}
+            pagination
+            highlightOnHover
+            striped
+          />
+          {isEditFeatureOpen && (
+            <UpdateFeature
+              isOpen={isEditFeatureOpen}
+              onClose={() => setIsEditFeatureOpen(false)}
+              property={selectedFeature}
+              onUpdate={handleFeatureUpdate}
+            />
+          )}
+
+          {isAddFeatureOpen && (
+            <AddFeatureModal
+              isOpen={isAddFeatureOpen}
+              onClose={() => setIsAddFeatureOpen(false)}
+              properties={properties}
+              onSubmit={handleFeatureSubmit}
+            />
+          )}
+        </div>
       </div>
-
-      {isEditFeatureOpen && (
-        <UpdateFeature
-          isOpen={isEditFeatureOpen}
-          onClose={() => setIsEditFeatureOpen(false)}
-          property={selectedFeature}
-          onUpdate={handleFeatureUpdate}
-        />
-      )}
-
-      {isAddFeatureOpen && (
-        <AddFeatureModal
-          isOpen={isAddFeatureOpen}
-          onClose={() => setIsAddFeatureOpen(false)}
-          properties={properties}
-          onSubmit={handleFeatureSubmit}
-        />
-      )}
     </div>
   );
 };

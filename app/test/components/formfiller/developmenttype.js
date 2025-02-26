@@ -38,7 +38,6 @@ const DevelopmentType = () => {
       setLoading(false);
     }
   };
-
   const handleAddDevelopmentType = async (
     values,
     { setSubmitting, resetForm }
@@ -60,9 +59,9 @@ const DevelopmentType = () => {
 
       if (!response.ok) throw new Error("Failed to add development type");
 
-      const addedType = await response.json();
-      setDevelopmentTypes([...developmentTypes, addedType]);
+      await fetchDevelopmentTypes(); // ✅ Fetch updated data
       showToast("Development type added successfully!", "success");
+
       resetForm();
       setIsModalOpen(false);
     } catch (err) {

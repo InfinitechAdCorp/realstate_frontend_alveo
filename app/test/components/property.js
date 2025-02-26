@@ -83,21 +83,39 @@ const PropertyTable = ({ properties, loading }) => {
       name: "Specific Location",
       selector: (row) => row.specific_location,
       sortable: true,
+      wrap: true,
     },
-    { name: "Price Range", selector: (row) => row.price_range, sortable: true },
-    { name: "Units", selector: (row) => row.units, sortable: true },
+    {
+      name: "Price Range",
+      selector: (row) => {
+        if (!row.price_range) return "N/A"; // Handle empty values
+
+        const [min, max] = row.price_range.split(" - ").map(Number); // Split and convert to numbers
+
+        return `₱${min.toLocaleString()} - ₱${max.toLocaleString()}`; // Format with peso sign and commas
+      },
+      sortable: true,
+      wrap: true,
+    },
+    { name: "Units", selector: (row) => row.units, sortable: true, wrap: true },
     { name: "Land Area", selector: (row) => row.land_area, sortable: true },
     {
       name: "Development Type",
       selector: (row) => row.development_type,
       sortable: true,
+      wrap: true,
     },
     {
       name: "Architectural Theme",
       selector: (row) => row.architectural_theme,
       sortable: true,
     },
-    { name: "Status", selector: (row) => row.status, sortable: true },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      sortable: true,
+      wrap: true,
+    },
     {
       name: "Actions",
       cell: (row) => (
@@ -203,6 +221,11 @@ const PropertyTable = ({ properties, loading }) => {
         <UpdatePropertyModal
           property={selectedProperty}
           onClose={() => setIsUpdateModalOpen(false)}
+          onUpdateSuccess={() => {
+            showToast("Property updated successfully", "success");
+            setIsUpdateModalOpen(false);
+            // You may also want to refresh data after update
+          }}
         />
       )}
 

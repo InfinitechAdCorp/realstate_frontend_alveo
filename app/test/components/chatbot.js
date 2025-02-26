@@ -91,13 +91,48 @@ const Chatbot = () => {
       button: true,
     },
   ];
+  const handleAddChatbotEntry = async () => {
+    if (!chatbotFormData.question || !chatbotFormData.answer) {
+      handleShowErrorToast("Both question and answer are required!");
+      return;
+    }
+
+    const Token = localStorage.getItem("auth_token"); // Retrieve auth token
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/addChatbot`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Token}`,
+          },
+          body: JSON.stringify(chatbotFormData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        handleShowSuccessToast("Chatbot entry added successfully!");
+        setChatbotEntries([...chatbotEntries, data.data]); // Add new entry to the table
+        setChatbotFormData({ question: "", answer: "" });
+        setIsChatbotModalOpen(false);
+      } else {
+        handleShowErrorToast("Failed to add chatbot entry.");
+      }
+    } catch (error) {
+      handleShowErrorToast("Error occurred while adding chatbot entry.");
+    }
+  };
 
   const filteredChatbotEntries = chatbotEntries.filter((entry) =>
     entry.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <div className="h-full overflow-y-auto mt-6 p-4 font-thin max-w-6xl mx-auto">
+    <div className="h-full overflow-y-auto mt-6 p-4 font-thin max-w-full mx-auto">
       <div className="max-h-full overflow-y-auto bg-white shadow-md p-6 rounded-lg">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
           <div className="w-full sm:w-auto">
@@ -174,17 +209,7 @@ const Chatbot = () => {
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  if (!chatbotFormData.question || !chatbotFormData.answer)
-                    return;
-                  setChatbotEntries([
-                    ...chatbotEntries,
-                    { ...chatbotFormData, id: Date.now() },
-                  ]);
-                  setChatbotFormData({ question: "", answer: "" });
-                  setIsChatbotModalOpen(false);
-                  handleShowSuccessToast("Chatbot entry added successfully!");
-                }}
+                onClick={handleAddChatbotEntry}
                 className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
               >
                 Add
