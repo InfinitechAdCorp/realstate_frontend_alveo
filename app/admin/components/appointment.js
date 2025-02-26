@@ -197,10 +197,9 @@ const Table = () => {
     setConfirmAction(null); // Reset action after confirmation
     setSelectedAppointment(null); // Clear selected appointment
   };
-
   return (
     <div className="h-full overflow-y-auto mt-6 p-4 font-thin">
-      <div className="max-h-full overflow-y-auto bg-white shadow-md p-4 rounded-md">
+      <div className="max-h-full overflow-y-auto bg-white shadow-md p-4 rounded-md relative">
         {/* Header and Actions */}
         <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center mb-4 gap-3">
           <div className="w-full md:w-auto">
@@ -215,26 +214,26 @@ const Table = () => {
               className="w-full md:w-80 px-3 py-2 border rounded-md text-sm"
             />
           </div>
+        </div>
 
-          {/* Buttons - Stack on md screens, Row on lg+ */}
-          <div className="flex flex-col md:flex-col lg:flex-row gap-3 w-full md:w-1/2">
-            <button
-              onClick={handleExportPDF}
-              className="w-full md:w-full lg:w-auto px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center"
-            >
-              <FaFilePdf className="mr-2" /> Export PDF
-            </button>
-            <button
-              onClick={handleExportExcel}
-              className="w-full md:w-full lg:w-auto px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center"
-            >
-              <FaFileExcel className="mr-2" /> Export Excel
-            </button>
-          </div>
+        {/* Buttons - Stack on mobile and md screens, position in upper-right corner on lg+ screens */}
+        <div className="lg:absolute lg:top-4 lg:right-4 flex flex-col sm:flex-row gap-3 sm:w-auto w-full mt-4 lg:mt-0">
+          <button
+            onClick={handleExportPDF}
+            className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full sm:w-auto"
+          >
+            <FaFilePdf className="mr-2" /> Export PDF
+          </button>
+          <button
+            onClick={handleExportExcel}
+            className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full sm:w-auto"
+          >
+            <FaFileExcel className="mr-2" /> Export Excel
+          </button>
         </div>
 
         {/* Data Table */}
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto mt-6">
           <DataTable
             columns={columns}
             data={filteredAppointments}
