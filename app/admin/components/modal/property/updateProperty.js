@@ -69,14 +69,15 @@ const UpdatePropertyModal = ({ property, onClose, onUpdateSuccess }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-4xl">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+      <div className="bg-white p-6 rounded-lg w-full max-w-lg sm:max-w-4xl overflow-auto max-h-[90vh] sm:max-h-[80vh]">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4 text-center">
           Update Property: {formData.name}
         </h2>
         <form
           onSubmit={handleUpdateProperty}
-          className="grid grid-cols-2 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-6"
         >
+          {/* Dynamic Input Fields */}
           {Object.keys(formData)
             .filter(
               (key) =>
@@ -88,34 +89,42 @@ const UpdatePropertyModal = ({ property, onClose, onUpdateSuccess }) => {
                   "key",
                   "path",
                   "view",
-                ].includes(key)
-            ) // Exclude specific fields
+                ].includes(key) // Exclude specific fields
+            )
             .map((key) => (
-              <div key={key}>
-                <label className="block text-sm font-bold">
+              <div key={key} className="flex flex-col space-y-2">
+                <label
+                  htmlFor={key}
+                  className="text-sm font-bold text-gray-700"
+                >
                   {key.replace(/_/g, " ").toUpperCase()}
                 </label>
                 <input
                   type="text"
                   value={formData[key] || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, [key]: e.target.value })
+                    setFormData({
+                      ...formData,
+                      [key]: e.target.value,
+                    })
                   }
                   className="border rounded p-2 w-full"
                 />
               </div>
             ))}
-          <div className="flex justify-end space-x-2 col-span-2 mt-4">
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 mt-6">
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded"
+              className="bg-blue-500 text-white px-6 py-2 rounded-md w-full sm:w-auto hover:bg-blue-600 transition duration-200"
             >
               Update
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="bg-gray-500 text-white px-4 py-2 rounded"
+              className="bg-gray-500 text-white px-6 py-2 rounded-md w-full sm:w-auto hover:bg-gray-600 transition duration-200"
             >
               Cancel
             </button>

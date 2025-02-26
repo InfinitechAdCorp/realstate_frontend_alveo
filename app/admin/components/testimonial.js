@@ -6,6 +6,8 @@ import { showToast } from "@/components/alert/page";
 const Testimonial = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
+  const [entryToDelete, setEntryToDelete] = useState(null); // Store the testimonial to delete
   const [newTestimonial, setNewTestimonial] = useState({
     name: "",
     message: "",
@@ -56,6 +58,7 @@ const Testimonial = () => {
 
       setTestimonials(testimonials.filter((t) => t.id !== id));
       showToast("Testimonial deleted successfully.", "success");
+      setIsDeleteModalOpen(false); // Close the delete modal
     } catch (err) {
       showToast("Failed to delete testimonial.", "error");
     }
@@ -102,7 +105,10 @@ const Testimonial = () => {
       name: "Actions",
       cell: (row) => (
         <button
-          onClick={() => handleDeleteTestimonial(row.id)}
+          onClick={() => {
+            setEntryToDelete(row); // Set the testimonial to delete
+            setIsDeleteModalOpen(true); // Open the delete confirmation modal
+          }}
           className="text-red-500 hover:text-red-700"
         >
           Delete
@@ -118,20 +124,19 @@ const Testimonial = () => {
   const filteredTestimonials = testimonials.filter((testimonial) =>
     testimonial.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
   return (
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="max-h-full overflow-y-auto bg-white shadow-md p-3 rounded-md">
         {/* Header & Search Filter */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-3">
-          <div className="w-full md:w-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-3">
+          <div className="w-full sm:w-auto">
             <h2 className="text-lg mb-2">Testimonials</h2>
             <input
               type="text"
               placeholder="Search by name..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-80 px-3 py-2 border rounded-md text-sm"
+              className="w-full sm:w-80 px-3 py-2 border rounded-md text-sm"
             />
           </div>
 
@@ -141,7 +146,7 @@ const Testimonial = () => {
               setNewTestimonial({ name: "", message: "" });
               setIsModalOpen(true);
             }}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-500"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-500 w-full sm:w-auto mt-4 sm:mt-0"
           >
             Add Testimonial
           </button>
@@ -162,8 +167,8 @@ const Testimonial = () => {
 
       {/* Modal for Adding Testimonial */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg w-[350px]">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-[350px] sm:max-w-md">
             <h2 className="text-lg mb-3">Add Testimonial</h2>
             <div className="space-y-3">
               {/* Name Input */}
@@ -193,31 +198,57 @@ const Testimonial = () => {
               />
             </div>
             {/* Buttons */}
-            <div className="flex justify-end gap-2 mt-4">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4 text-sm">
+              {/* Add Button */}
+              <button
+                onClick={handleAddTestimonial}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
+              >
+                Add
+              </button>
+              {/* Cancel Button */}
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-gray-400 text-white px-3 py-1 rounded text-sm hover:bg-gray-500"
+                className="bg-gray-400 text-white px-3 py-1 rounded text-sm hover:bg-gray-500 w-full sm:w-auto"
               >
                 Cancel
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && entryToDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Delete Confirmation
+            </h3>
+            <p className="text-sm text-gray-600 mb-6 text-center">
+              Are you sure you want to delete the following testimonial?
+            </p>
+            <p className="text-sm text-gray-600 mb-2 text-center">
+              Name: {entryToDelete.name}
+            </p>
+            <p className="text-sm text-gray-600 mb-4 text-center">
+              Message: {entryToDelete.message}
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              {/* Delete Button */}
               <button
-                onClick={() => {
-                  if (
-                    !newTestimonial.name.trim() ||
-                    !newTestimonial.message.trim()
-                  )
-                    return;
-                  setTestimonials([
-                    ...testimonials,
-                    { ...newTestimonial, id: Date.now() },
-                  ]);
-                  setNewTestimonial({ name: "", message: "" });
-                  setIsModalOpen(false);
-                  showToast("Testimonial added successfully!", "success");
-                }}
-                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                onClick={() => handleDeleteTestimonial(entryToDelete.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md w-full sm:w-auto"
               >
-                Add
+                Delete
+              </button>
+              {/* Cancel Button */}
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md w-full sm:w-auto"
+              >
+                Cancel
               </button>
             </div>
           </div>

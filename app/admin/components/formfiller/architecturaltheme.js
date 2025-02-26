@@ -1,13 +1,16 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import {
   handleShowSuccessToast,
   handleShowErrorToast,
-} from "@/app/test/toastalert";
+} from "@/app/admin/toastalert";
 
 const ArchitecturalTheme = () => {
   const [themes, setThemes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
+  const [entryToDelete, setEntryToDelete] = useState(null); // Store the theme to delete
   const [newTheme, setNewTheme] = useState("");
 
   // Fetch architectural themes
@@ -84,6 +87,7 @@ const ArchitecturalTheme = () => {
         setThemes((prevThemes) =>
           prevThemes.filter((theme) => theme.id !== id)
         );
+        setIsDeleteModalOpen(false); // Close the delete confirmation modal
       } else {
         handleShowErrorToast("Failed to delete theme.");
       }
@@ -103,7 +107,10 @@ const ArchitecturalTheme = () => {
       name: "Actions",
       cell: (row) => (
         <button
-          onClick={() => handleDeleteTheme(row.id)}
+          onClick={() => {
+            setEntryToDelete(row); // Set the theme to delete
+            setIsDeleteModalOpen(true); // Open delete confirmation modal
+          }}
           className="text-red-500 hover:text-red-700"
         >
           Delete
@@ -119,36 +126,35 @@ const ArchitecturalTheme = () => {
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
         {/* Title & Add Button */}
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
           <h2 className="text-lg font-semibold">Architectural Themes</h2>
+          {/* On small screens, the button will stack below the title */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-600"
+            className="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-600 w-full sm:w-auto mt-4 sm:mt-0"
           >
             Add Theme
           </button>
         </div>
 
-        {/* Data Table with Proper Spacing */}
-        <div className="p-2">
-          <DataTable
-            columns={columns}
-            data={themes}
-            pagination
-            paginationPerPage={10}
-            paginationRowsPerPageOptions={[5, 10, 15]}
-            highlightOnHover
-            responsive
-            striped
-          />
-        </div>
+        {/* Data Table */}
+        <DataTable
+          columns={columns}
+          data={themes}
+          pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          highlightOnHover
+          responsive
+          striped
+        />
       </div>
 
       {/* Modal for Adding New Theme */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
-            <h2 className="text-sm sm:text-base mb-4">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:max-w-md max-w-[90%]">
+            <h2 className="text-sm sm:text-base mb-4 text-center">
               Add New Architectural Theme
             </h2>
             <input
@@ -158,20 +164,54 @@ const ArchitecturalTheme = () => {
               onChange={(e) => setNewTheme(e.target.value)}
               className="border rounded p-2 w-full text-sm"
             />
-            <div className="flex justify-end gap-2 mt-4 text-sm">
-              {/* Cancel Button */}
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 text-sm"
-              >
-                Cancel
-              </button>
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4 text-sm">
               {/* Add Button */}
               <button
                 onClick={handleAddTheme}
-                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 text-sm"
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
               >
                 Add
+              </button>
+              {/* Cancel Button */}
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full sm:w-auto"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && entryToDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Delete Confirmation
+            </h3>
+            <p className="text-sm text-gray-600 mb-6 text-center">
+              Are you sure you want to delete the following theme?
+            </p>
+            <p className="text-sm text-gray-600 mb-2 text-center">
+              Theme Name: {entryToDelete.name}
+            </p>
+
+            <div className="flex justify-center gap-4">
+              {/* Delete Button */}
+              <button
+                onClick={() => handleDeleteTheme(entryToDelete.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md w-full sm:w-auto"
+              >
+                Delete
+              </button>
+              {/* Cancel Button */}
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md w-full sm:w-auto"
+              >
+                Cancel
               </button>
             </div>
           </div>

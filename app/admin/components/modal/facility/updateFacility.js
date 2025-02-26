@@ -30,8 +30,11 @@ const UpdateFacility = ({ isOpen, closePopup, facility, setFacilities }) => {
   const handleDeleteFacility = (index) => {
     setUpdatedFacilities((prev) => prev.filter((_, i) => i !== index));
   };
+
   const handleBulkUpdate = async () => {
     const token = localStorage.getItem("auth_token");
+
+    // Ensure only non-empty facilities are sent for update
     const filteredFacilities = updatedFacilities.filter((f) => f.name !== "");
 
     try {
@@ -51,23 +54,23 @@ const UpdateFacility = ({ isOpen, closePopup, facility, setFacilities }) => {
 
       if (response.ok) {
         showToast("Facilities updated successfully!", "success");
+        closePopup();
+
+        // Update the state in the parent component
         setFacilities((prev) => {
           const updated = { ...prev };
           updated[facility.property_id] = {
             ...updated[facility.property_id],
-            facilities: updatedFacilities.map((f) => f.name), // ✅ Update facility names instantly
+            facilities: updatedFacilities.map((f) => f.name), // Instantly update facility names
           };
-          return updated; // ✅ React detects the state change
+          return updated;
         });
-
-        setSelectedFacility(null); // ✅ Reset modal state
-        closePopup();
-        showToast("Facilities updated successfully!", "success");
       } else {
         showToast(data.message || "Failed to update facilities.", "error");
       }
     } catch (error) {
-      showToast("Error updating facilities.", "error");
+      console.error("Error updating facilities:", error);
+      showToast("Error updating facilities. Please try again.", "error");
     }
   };
 
@@ -123,13 +126,13 @@ const UpdateFacility = ({ isOpen, closePopup, facility, setFacilities }) => {
         <div className="flex justify-end space-x-4 mt-6">
           <button
             onClick={handleBulkUpdate}
-            className="bg-blue-500 text-white px-6 py-2 rounded-full hover:bg-blue-600 transition duration-200"
+            className="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition duration-200"
           >
             Update Selected
           </button>
           <button
             onClick={closePopup}
-            className="bg-gray-500 text-white px-6 py-2 rounded-full hover:bg-gray-600 transition duration-200"
+            className="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600 transition duration-200"
           >
             Cancel
           </button>

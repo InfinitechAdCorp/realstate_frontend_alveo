@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FaFilePdf, FaFileExcel } from "react-icons/fa";
-import exportToPDF from "@/app/test/components/export/exportPDF"; // Import your reusable exportPDF function
-import exportToExcel from "@/app/test/components/export/exportExcel"; // Import your reusable exportExcel function
+import exportToPDF from "@/app/admin/components/export/exportPDF"; // Import your reusable exportPDF function
+import exportToExcel from "@/app/admin/components/export/exportExcel"; // Import your reusable exportExcel function
 
 const ClientProperties = () => {
   const [submittedProperties, setSubmittedProperties] = useState([]);
@@ -201,7 +201,7 @@ const ClientProperties = () => {
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
         {/* Title & Search Filter */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+        <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center mb-4">
           <div className="w-full md:w-auto">
             <h2 className="text-lg font-semibold">Client Properties</h2>
             <input
@@ -214,16 +214,16 @@ const ClientProperties = () => {
           </div>
 
           {/* Export Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row lg:flex-row gap-3 mt-4 md:mt-4 lg:mt-0 w-full md:w-auto">
             <button
               onClick={handleExportPDF}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full md:w-auto"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
               onClick={handleExportExcel}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full md:w-auto"
             >
               <FaFileExcel className="mr-2" /> Export Excel
             </button>
@@ -246,7 +246,7 @@ const ClientProperties = () => {
       {/* Image Modal */}
       {showImageModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[80vh] overflow-auto">
             <h2 className="text-xl font-semibold mb-4">Property Images</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {selectedImages.map((image, index) => (

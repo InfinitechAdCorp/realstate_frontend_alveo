@@ -94,18 +94,18 @@ const AddBuilding = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-4xl overflow-auto">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50 p-4">
+      <div className="bg-white p-6 rounded-lg w-full max-w-4xl max-h-[80vh] overflow-auto">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
           Add New Building
         </h2>
 
         <form
-          className="grid grid-cols-2 gap-4 w-full"
+          className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full"
           onSubmit={handleAddBuilding}
         >
           {/* Property Selection */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Property Name
             </label>
@@ -124,7 +124,7 @@ const AddBuilding = ({
           </div>
 
           {/* Building Name */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Building Name
             </label>
@@ -137,8 +137,8 @@ const AddBuilding = ({
             />
           </div>
 
-          {/* Development Type Dropdown */}
-          <div className="mb-4">
+          {/* Development Type */}
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Development Type
             </label>
@@ -158,7 +158,7 @@ const AddBuilding = ({
           </div>
 
           {/* Residential Levels */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Residential Levels
             </label>
@@ -172,7 +172,7 @@ const AddBuilding = ({
           </div>
 
           {/* Basement Parking */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Basement Parking Levels
             </label>
@@ -186,7 +186,7 @@ const AddBuilding = ({
           </div>
 
           {/* Podium Parking */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Podium Parking Levels
             </label>
@@ -200,7 +200,7 @@ const AddBuilding = ({
           </div>
 
           {/* Commercial Units */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Commercial Units
             </label>
@@ -214,7 +214,7 @@ const AddBuilding = ({
           </div>
 
           {/* Lower Ground Parking */}
-          <div className="mb-4">
+          <div>
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Lower Ground Parking Levels
             </label>
@@ -228,7 +228,7 @@ const AddBuilding = ({
           </div>
 
           {/* Building Image Upload */}
-          <div className="mb-4 col-span-2">
+          <div className="col-span-1 md:col-span-2">
             <label className="block text-gray-700 text-sm font-bold mb-2">
               Upload Building Image
             </label>
@@ -241,7 +241,7 @@ const AddBuilding = ({
           </div>
 
           {/* Submit & Cancel Buttons */}
-          <div className="flex justify-end space-x-2 mt-4 col-span-2">
+          <div className="flex justify-end space-x-2 mt-4 col-span-1 md:col-span-2">
             <button
               type="submit"
               className="bg-green-500 text-white px-4 py-2 rounded"

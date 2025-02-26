@@ -2,10 +2,10 @@
 import { useState } from "react";
 import { FaFilePdf, FaFileExcel, FaPlus, FaEllipsisV } from "react-icons/fa";
 import { showToast } from "@/components/alert/page";
-import exportToPDF from "@/app/test/components/export/exportPDF";
-import exportToExcel from "@/app/test/components/export/exportExcel";
-import AddPropertyModal from "@/app/test/components/modal/property/addproperty";
-import UpdatePropertyModal from "@/app/test/components/modal/property/updateProperty";
+import exportToPDF from "@/app/admin/components/export/exportPDF";
+import exportToExcel from "@/app/admin/components/export/exportExcel";
+import AddPropertyModal from "@/app/admin/components/modal/property/addproperty";
+import UpdatePropertyModal from "@/app/admin/components/modal/property/updateProperty";
 import DataTable from "react-data-table-component";
 
 const PropertyTable = ({ properties, loading }) => {
@@ -159,8 +159,8 @@ const PropertyTable = ({ properties, loading }) => {
   return (
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
-          <div className="w-full md:w-auto">
+        <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center mb-4">
+          <div className="w-full md:w-auto text-center md:text-left">
             <h2 className="text-lg font-semibold">Properties</h2>
             <input
               type="text"
@@ -171,28 +171,29 @@ const PropertyTable = ({ properties, loading }) => {
             />
           </div>
 
-          <div className="flex gap-3 mt-2 md:mt-0">
+          <div className="flex flex-col md:flex-row lg:flex-row gap-3 mt-2 md:mt-4 lg:mt-0 w-full md:w-auto justify-center">
             <button
               onClick={() => setIsAddPropertyOpen(true)}
-              className="px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 flex items-center"
+              className="px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 flex items-center justify-center w-full md:w-auto"
             >
               <FaPlus className="mr-2" /> Add Property
             </button>
             <button
               onClick={handleExportPDF}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full md:w-auto"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
               onClick={handleExportExcel}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full md:w-auto"
             >
               <FaFileExcel className="mr-2" /> Export Excel
             </button>
           </div>
         </div>
 
+        {/* Data Table or Loading */}
         {loading ? (
           <p className="text-center text-gray-500">Loading properties...</p>
         ) : (
@@ -209,6 +210,7 @@ const PropertyTable = ({ properties, loading }) => {
         )}
       </div>
 
+      {/* Add Property Modal */}
       {isAddPropertyOpen && (
         <AddPropertyModal
           isOpen={isAddPropertyOpen}
@@ -217,6 +219,7 @@ const PropertyTable = ({ properties, loading }) => {
         />
       )}
 
+      {/* Update Property Modal */}
       {isUpdateModalOpen && selectedProperty && (
         <UpdatePropertyModal
           property={selectedProperty}
@@ -224,28 +227,28 @@ const PropertyTable = ({ properties, loading }) => {
           onUpdateSuccess={() => {
             showToast("Property updated successfully", "success");
             setIsUpdateModalOpen(false);
-            // You may also want to refresh data after update
           }}
         />
       )}
 
+      {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
             <h2 className="text-lg mb-4">Confirm Deletion</h2>
             <p>Are you sure you want to delete this property?</p>
-            <div className="flex justify-center gap-4 mt-4">
-              <button
-                onClick={() => setIsDeleteModalOpen(false)}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-              >
-                Cancel
-              </button>
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
               <button
                 onClick={() => {}}
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                className="px-5 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 w-full sm:w-auto"
               >
                 Delete
+              </button>
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-5 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-all duration-200 w-full sm:w-auto"
+              >
+                Cancel
               </button>
             </div>
           </div>

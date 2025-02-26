@@ -12,6 +12,10 @@ const Chatbot = () => {
   });
   const [searchQuery, setSearchQuery] = useState("");
 
+  // New state for delete confirmation modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [entryToDelete, setEntryToDelete] = useState(null);
+
   useEffect(() => {
     fetchChatbotData();
   }, []);
@@ -36,11 +40,13 @@ const Chatbot = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
+    if (!entryToDelete) return;
+
     const Token = localStorage.getItem("auth_token");
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/deleteChatbot/${id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/deleteChatbot/${entryToDelete.id}`,
         {
           method: "DELETE",
           headers: {
@@ -53,51 +59,26 @@ const Chatbot = () => {
       if (data.success) {
         handleShowSuccessToast("Chatbot entry deleted successfully!");
         setChatbotEntries((prevEntries) =>
-          prevEntries.filter((item) => item.id !== id)
+          prevEntries.filter((item) => item.id !== entryToDelete.id)
         );
       } else {
         handleShowErrorToast("Failed to delete chatbot entry.");
       }
     } catch (error) {
       handleShowErrorToast("Error occurred while deleting chatbot entry.");
+    } finally {
+      setIsDeleteModalOpen(false); // Close the modal after deletion attempt
+      setEntryToDelete(null); // Reset the entry to be deleted
     }
   };
 
-  const columns = [
-    {
-      name: "Question",
-      selector: (row) => row.question,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: "Answer",
-      selector: (row) => row.answer,
-      sortable: true,
-      wrap: true,
-    },
-    {
-      name: "Actions",
-      cell: (row) => (
-        <button
-          onClick={() => handleDelete(row.id)}
-          className="text-red-500 hover:text-red-700 text-sm"
-        >
-          Delete
-        </button>
-      ),
-      ignoreRowClick: true,
-      allowOverflow: true,
-      button: true,
-    },
-  ];
   const handleAddChatbotEntry = async () => {
     if (!chatbotFormData.question || !chatbotFormData.answer) {
       handleShowErrorToast("Both question and answer are required!");
       return;
     }
 
-    const Token = localStorage.getItem("auth_token"); // Retrieve auth token
+    const Token = localStorage.getItem("auth_token");
 
     try {
       const response = await fetch(
@@ -116,7 +97,7 @@ const Chatbot = () => {
 
       if (data.success) {
         handleShowSuccessToast("Chatbot entry added successfully!");
-        setChatbotEntries([...chatbotEntries, data.data]); // Add new entry to the table
+        setChatbotEntries([...chatbotEntries, data.data]);
         setChatbotFormData({ question: "", answer: "" });
         setIsChatbotModalOpen(false);
       } else {
@@ -130,6 +111,38 @@ const Chatbot = () => {
   const filteredChatbotEntries = chatbotEntries.filter((entry) =>
     entry.question.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const columns = [
+    {
+      name: "Question",
+      selector: (row) => row.question,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: "Answer",
+      selector: (row) => row.answer,
+      sortable: true,
+      wrap: true,
+    },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <button
+          onClick={() => {
+            setEntryToDelete(row); // Set the entry to be deleted
+            setIsDeleteModalOpen(true); // Open the delete confirmation modal
+          }}
+          className="text-red-500 hover:text-red-700 text-sm"
+        >
+          Delete
+        </button>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
+  ];
 
   return (
     <div className="h-full overflow-y-auto mt-6 p-4 font-thin max-w-full mx-auto">
@@ -169,6 +182,7 @@ const Chatbot = () => {
         </div>
       </div>
 
+      {/* Add Chatbot Modal */}
       {isChatbotModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -203,16 +217,49 @@ const Chatbot = () => {
             </div>
             <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
               <button
+                onClick={handleAddChatbotEntry}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
+              >
+                Add
+              </button>
+              <button
                 onClick={() => setIsChatbotModalOpen(false)}
                 className="bg-gray-400 text-white px-4 py-2 rounded text-sm hover:bg-gray-500 w-full sm:w-auto"
               >
                 Cancel
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && entryToDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-sm w-full mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Delete Confirmation
+            </h3>
+            <p className="text-sm text-gray-600 mb-6 text-center">
+              Are you sure you want to delete the following Q&A?
+            </p>
+            <p className="text-md font-medium text-gray-700 mb-6 text-center">
+              <span className="block mb-2">Q: {entryToDelete.question}</span>
+              <span className="block">A: {entryToDelete.answer}</span>
+            </p>
+
+            <div className="flex justify-center gap-6">
               <button
-                onClick={handleAddChatbotEntry}
-                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
+                onClick={handleDelete}
+                className="px-5 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200"
               >
-                Add
+                Delete
+              </button>
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-5 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-all duration-200"
+              >
+                Cancel
               </button>
             </div>
           </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
@@ -8,6 +8,8 @@ import { showToast } from "@/components/alert/page";
 const DevelopmentType = () => {
   const [developmentTypes, setDevelopmentTypes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
+  const [entryToDelete, setEntryToDelete] = useState(null); // State to store the entry to delete
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ const DevelopmentType = () => {
       setLoading(false);
     }
   };
+
   const handleAddDevelopmentType = async (
     values,
     { setSubmitting, resetForm }
@@ -85,6 +88,7 @@ const DevelopmentType = () => {
 
       setDevelopmentTypes(developmentTypes.filter((type) => type.id !== id));
       showToast("Development type deleted successfully.", "success");
+      setIsDeleteModalOpen(false); // Close the delete modal
     } catch (err) {
       showToast("Failed to delete development type.", "error");
     }
@@ -101,8 +105,11 @@ const DevelopmentType = () => {
       name: "Actions",
       cell: (row) => (
         <button
-          onClick={() => handleDeleteDevelopmentType(row.id)}
-          className="text-red-500 hover:text-red-700"
+          onClick={() => {
+            setEntryToDelete(row); // Set the entry to delete
+            setIsDeleteModalOpen(true); // Open delete confirmation modal
+          }}
+          className="text-red-500 hover:text-red-700 text-sm"
         >
           Delete
         </button>
@@ -117,33 +124,35 @@ const DevelopmentType = () => {
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="max-h-full overflow-y-auto bg-white shadow-md p-3 rounded-md">
         {/* Header & Add Button */}
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-lg">Development Types</h2>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+          <h2 className="text-lg font-semibold">Development Types</h2>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-indigo-600 text-white px-3 py-1 rounded-md text-sm hover:bg-indigo-500"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-500 w-full sm:w-auto"
           >
             Add Development Type
           </button>
         </div>
 
         {/* Data Table */}
-        <DataTable
-          columns={columns}
-          data={developmentTypes}
-          pagination
-          paginationPerPage={10}
-          paginationRowsPerPageOptions={[5, 10, 15]}
-          highlightOnHover
-          responsive
-          striped
-        />
+        <div className="p-2">
+          <DataTable
+            columns={columns}
+            data={developmentTypes}
+            pagination
+            paginationPerPage={10}
+            paginationRowsPerPageOptions={[5, 10, 15]}
+            highlightOnHover
+            responsive
+            striped
+          />
+        </div>
       </div>
 
       {/* Modal for Adding Development Type */}
       {isModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-[400px]">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:max-w-md max-w-[400px]">
             <h2 className="text-lg mb-4">Add Development Type</h2>
             <Formik
               initialValues={{ newType: "" }}
@@ -166,25 +175,57 @@ const DevelopmentType = () => {
                     className="text-red-500 text-sm"
                   />
 
-                  <div className="flex justify-end gap-2 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => setIsModalOpen(false)}
-                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
+                  <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600"
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
                     >
                       {isSubmitting ? "Adding..." : "Add"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full sm:w-auto"
+                    >
+                      Cancel
                     </button>
                   </div>
                 </Form>
               )}
             </Formik>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && entryToDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Delete Confirmation
+            </h3>
+            <p className="text-sm text-gray-600 mb-6 text-center">
+              Are you sure you want to delete the following development type?
+            </p>
+            <p className="text-sm text-gray-600 mb-2 text-center">
+              Name: {entryToDelete.name}
+            </p>
+
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => handleDeleteDevelopmentType(entryToDelete.id)}
+                className="px-4 py-2 bg-red-500 text-white rounded-md w-full sm:w-auto"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md w-full sm:w-auto"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -9,10 +9,10 @@ import {
   FaTimes,
   FaCheck,
 } from "react-icons/fa";
-import exportToPDF from "@/app/test/components/export/exportPDF";
-import exportToExcel from "@/app/test/components/export/exportExcel";
-import AddFacility from "@/app/test/components/modal/facility/addFacility";
-import UpdateFacility from "@/app/test/components/modal/facility/updateFacility";
+import exportToPDF from "@/app/admin/components/export/exportPDF";
+import exportToExcel from "@/app/admin/components/export/exportExcel";
+import AddFacility from "@/app/admin/components/modal/facility/addFacility";
+import UpdateFacility from "@/app/admin/components/modal/facility/updateFacility";
 import { showToast } from "@/components/alert/page";
 
 const FacilitiesTable = ({ properties, loading }) => {
@@ -135,6 +135,34 @@ const FacilitiesTable = ({ properties, loading }) => {
       setConfirmDelete(null);
     }
   };
+  const onSubmit = ({ propertyId, facilities }) => {
+    // Update the facilities list in the state, ensuring no duplicates
+    setGroupedFacilities((prevGroupedFacilities) => {
+      const updatedGroupedFacilities = { ...prevGroupedFacilities };
+
+      // Check if the property already exists
+      if (updatedGroupedFacilities[propertyId]) {
+        // Filter out the facilities that already exist
+        updatedGroupedFacilities[propertyId].facilities = [
+          ...new Set([
+            ...updatedGroupedFacilities[propertyId].facilities, // Existing facilities
+            ...facilities, // New facilities
+          ]),
+        ];
+      } else {
+        // Add the new property and its facilities if it's not in the list
+        updatedGroupedFacilities[propertyId] = {
+          property_id: propertyId,
+          property_name: facilities[0], // Assuming the first facility name is the property name
+          facilities: facilities,
+        };
+      }
+
+      return updatedGroupedFacilities;
+    });
+
+    showToast("Facility added successfully!", "success");
+  };
 
   const handleUpdateClick = (property) => {
     setSelectedFacility(property);
@@ -225,36 +253,47 @@ const FacilitiesTable = ({ properties, loading }) => {
       button: true,
     },
   ];
-
   return (
     <div className="p-4">
       <div className="bg-white shadow-md p-4 rounded-md">
+        {/* Delete Confirmation Modal */}
         {confirmDelete && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white p-6 rounded-md shadow-md">
-              <p className="text-lg font-semibold">
-                Delete all facilities under {confirmDelete.propertyName}?
+            <div className="bg-white p-6 rounded-md shadow-md max-w-sm w-full">
+              <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+                Delete Confirmation
+              </h3>
+              <p className="text-sm text-gray-600 mb-6 text-center">
+                Are you sure you want to delete the following facilities?
               </p>
-              <div className="flex justify-end gap-3 mt-4">
+              <p className="text-md font-medium text-gray-700 mb-6 text-center">
+                <span className="block mb-2">
+                  Property: {confirmDelete.propertyName}
+                </span>
+              </p>
+
+              <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
                 <button
                   onClick={confirmDeletion}
-                  className="bg-red-500 text-white px-4 py-2 rounded-md flex items-center gap-2"
+                  className="px-5 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 w-full sm:w-auto"
                 >
-                  <FaCheck /> Yes, Delete
+                  Delete
                 </button>
                 <button
                   onClick={() => setConfirmDelete(null)}
-                  className="bg-gray-400 px-4 py-2 rounded-md flex items-center gap-2"
+                  className="px-5 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-all duration-200 w-full sm:w-auto"
                 >
-                  <FaTimes /> Cancel
+                  Cancel
                 </button>
               </div>
             </div>
           </div>
         )}
+
+        {/* Header & Search Filter */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-4">
           <div className="w-full md:w-auto">
-            <h2 className="text-lg font-semibold">Facilities by Property</h2>
+            <h2 className="text-lg font-semibold">Facilities</h2>
             <input
               type="text"
               placeholder="Search by property name..."
@@ -264,10 +303,11 @@ const FacilitiesTable = ({ properties, loading }) => {
             />
           </div>
 
-          <div className="flex gap-3 mt-2 md:mt-0">
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 mt-2 md:mt-0">
             <button
               onClick={() => setIsAddFacilityOpen(true)}
-              className="px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 flex items-center"
+              className="px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 flex items-center w-full sm:w-auto"
             >
               <FaPlus className="mr-2" /> Add Facility
             </button>
@@ -275,7 +315,7 @@ const FacilitiesTable = ({ properties, loading }) => {
               onClick={() =>
                 exportToPDF("Facilities Report", filteredFacilities)
               }
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
@@ -283,7 +323,7 @@ const FacilitiesTable = ({ properties, loading }) => {
               onClick={() =>
                 exportToExcel("Facilities Report", filteredFacilities)
               }
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFileExcel className="mr-2" /> Export Excel
             </button>
@@ -297,18 +337,22 @@ const FacilitiesTable = ({ properties, loading }) => {
           pagination
           highlightOnHover
           striped
+          responsive
         />
       </div>
 
-      {/* Modals */}
+      {/* Add Facility Modal */}
       {isAddFacilityOpen && (
         <AddFacility
           isOpen={isAddFacilityOpen}
           closePopup={() => setIsAddFacilityOpen(false)}
-          setFacilities={setGroupedFacilities}
+          facilitiesData={groupedFacilities}
+          onSubmit={onSubmit}
           properties={properties}
         />
       )}
+
+      {/* Update Facility Modal */}
       {isUpdateFacilityOpen && selectedFacility && (
         <UpdateFacility
           isOpen={isUpdateFacilityOpen}

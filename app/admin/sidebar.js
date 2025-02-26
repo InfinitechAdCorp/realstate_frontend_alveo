@@ -28,7 +28,9 @@ const Sidebar = ({ setActiveNav, isSidebarOpen, setIsSidebarOpen }) => {
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       } md:translate-x-0 md:w-64 z-50`}
     >
-      <h2 className="text-2xl font-bold mb-6 text-gray-100">Admin Panel</h2>
+      <h2 className="text-2xl font-bold mb-6 text-gray-100 mx-auto text-center">
+        Admin Panel
+      </h2>
       <button
         className="md:hidden absolute top-4 right-4 text-white"
         onClick={() => setIsSidebarOpen(false)}

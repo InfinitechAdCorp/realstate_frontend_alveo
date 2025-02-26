@@ -189,7 +189,7 @@ const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
   };
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg w-full max-w-4xl overflow-auto shadow-xl relative">
+      <div className="bg-white p-6 rounded-lg w-full max-w-4xl sm:max-w-lg md:max-w-4xl overflow-auto shadow-xl relative h-full max-h-[90vh] sm:max-h-[70vh]">
         {/* Close Button */}
         <button
           onClick={() => handleClose()}
@@ -206,7 +206,7 @@ const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 overflow-auto max-h-[70vh] sm:max-h-[60vh]"
         >
           {/* Dynamic Input Fields */}
           {fillableFields.map((field) => (
@@ -228,7 +228,7 @@ const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
                     [field.value]: e.target.value,
                   })
                 }
-                className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
               />
             </div>
           ))}
@@ -281,7 +281,7 @@ const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
                 name={field.value}
                 onChange={handleFileChange}
                 accept={field.value === "path" ? "image/*" : "*"}
-                className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
               />
             </div>
           ))}
@@ -315,9 +315,13 @@ const renderDropdownWithCustomInput = (
   setPropertyData
 ) => {
   return (
-    <div className="flex flex-col space-y-2">
+    <div className="flex flex-col space-y-2 max-h-48 overflow-auto">
+      {" "}
+      {/* Limit the container's height */}
       <label className="text-sm font-medium text-gray-700">{label}</label>
-      <div>
+      <div className="overflow-hidden">
+        {" "}
+        {/* Hide overflow in the container */}
         <select
           id={key}
           name={key}
@@ -325,18 +329,17 @@ const renderDropdownWithCustomInput = (
           onChange={(e) =>
             setPropertyData({ ...propertyData, [key]: e.target.value })
           }
-          className="rounded-md border border-gray-300 p-2 focus:outline-blue-500 focus:ring-1 focus:ring-blue-500 w-full"
+          className="rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-1 focus:ring-blue-500 w-full max-h-32 overflow-y-auto" // Limit height of the dropdown
         >
           <option value="" disabled>
             Select
           </option>
           {options.map((type) => (
             <option
-              value={key === "location" ? type.area_name : type.name} // ✅ Fix for location dropdown
+              value={key === "location" ? type.area_name : type.name}
               key={type.id}
             >
-              {key === "location" ? type.area_name : type.name}{" "}
-              {/* ✅ Display correct values */}
+              {key === "location" ? type.area_name : type.name}
             </option>
           ))}
           <option value="other">
