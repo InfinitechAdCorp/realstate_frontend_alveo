@@ -142,7 +142,7 @@ const FacilitiesTable = ({ properties, loading }) => {
 
       // Check if the property already exists
       if (updatedGroupedFacilities[propertyId]) {
-        // Filter out the facilities that already exist
+        // Add the new facilities to the existing ones, ensuring no duplicates
         updatedGroupedFacilities[propertyId].facilities = [
           ...new Set([
             ...updatedGroupedFacilities[propertyId].facilities, // Existing facilities
@@ -150,10 +150,10 @@ const FacilitiesTable = ({ properties, loading }) => {
           ]),
         ];
       } else {
-        // Add the new property and its facilities if it's not in the list
+        // If the property doesn't exist, add the new property and facilities
         updatedGroupedFacilities[propertyId] = {
           property_id: propertyId,
-          property_name: facilities[0], // Assuming the first facility name is the property name
+          property_name: facilities[0], // Assuming the first facility is the property name
           facilities: facilities,
         };
       }
