@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import Header from "./../header";
-import Footer from "./../footer";
+import Header from "../header";
+import Footer from "../footer";
 import { FaQuoteLeft } from "react-icons/fa6";
 import Icon from "@/app/pages/socialmedia-icons/page";
 import { PhotoProvider, PhotoView } from 'react-photo-view';
@@ -12,13 +12,6 @@ export default function agent() {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [testimonialName, setTestimonialName] = useState(""); // State for testimonial name
   const [testimonialMessage, setTestimonialMessage] = useState(""); // State for testimonial message
-
-  const itemsPerPage = 4;
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const totalPages = Math.ceil(testimonialOptions.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentTestimonials = testimonialOptions.slice(startIndex, startIndex + itemsPerPage);
 
   const galleryImage = [
     "photo_2024-10-05_18-30-19.jpg",
@@ -252,54 +245,86 @@ export default function agent() {
           </PhotoProvider>
           )}
           {activeSection === "testimonial" && (
-              <div className="text-center">
+            <div className="text-center ">
               <div
                 onClick={() => setIsModalOpen(true)}
                 className="cursor-pointer bg-indigo-700 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition w-40 mx-auto my-5"
               >
                 Add Testimonial
               </div>
-        
+
               {testimonialOptions.length > 0 && (
-                <div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    {currentTestimonials.map((testimonial) => (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {testimonialOptions
+                    .slice(0, testimonialOptions.length - 1)
+                    .map((testimonial) => (
                       <div
                         key={testimonial.id}
-                        className="max-h-[400px] max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6 overflow-auto"
-                        style={{ backgroundColor: "#f9f9f9", borderRadius: "15px" }}
+                        className="max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6"
+                        style={{
+                          backgroundColor: "#f9f9f9",
+                          borderRadius: "15px",
+                        }}
                       >
                         <div className="text-center mb-4">
                           <FaQuoteLeft className="w-16 h-16 text-customBlue mx-auto" />
                         </div>
-                        <div className="text-lg text-gray-700 italic mb-2">
+                        <div
+                          className="text-lg text-gray-700"
+                          style={{
+                            fontStyle: "italic",
+                            marginBottom: "10px",
+                            fontSize: "16px",
+                          }}
+                        >
                           <p>{testimonial.message}</p>
                         </div>
-                        <div className="text-xl font-semibold text-gray-900 mt-2">
+                        <div
+                          className="text-xl font-semibold text-gray-900"
+                          style={{ marginTop: "10px", fontSize: "18px" }}
+                        >
                           - {testimonial.name}
                         </div>
                       </div>
                     ))}
-                  </div>
-        
-                  {/* Pagination Controls */}
-                  <div className="flex justify-center mt-4 space-x-2">
-                    <button
-                      className={`px-4 py-2 border rounded-lg ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
-                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                      disabled={currentPage === 1}
+
+                  {/* Last testimonial - render this if there's an odd number of testimonials */}
+                  {testimonialOptions.length % 2 !== 0 && (
+                    <div
+                      key={testimonialOptions[testimonialOptions.length - 1].id}
+                      className="max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6 sm:col-span-2"
+                      style={{
+                        backgroundColor: "#f9f9f9",
+                        borderRadius: "15px",
+                      }}
                     >
-                      Previous
-                    </button>
-                    <span className="px-4 py-2 border rounded-lg">Page {currentPage} of {totalPages}</span>
-                    <button
-                      className={`px-4 py-2 border rounded-lg ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
-                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                      disabled={currentPage === totalPages}
-                    >
-                      Next
-                    </button>
-                  </div>
+                      <div className="text-center mb-4">
+                        <FaQuoteLeft className="w-16 h-16 text-customBlue mx-auto" />
+                      </div>
+                      <div
+                        className="text-lg text-gray-700"
+                        style={{
+                          fontStyle: "italic",
+                          marginBottom: "10px",
+                          fontSize: "16px",
+                        }}
+                      >
+                        <p>
+                          {
+                            testimonialOptions[testimonialOptions.length - 1]
+                              .message
+                          }
+                        </p>
+                      </div>
+                      <div
+                        className="text-xl font-semibold text-gray-900"
+                        style={{ marginTop: "10px", fontSize: "18px" }}
+                      >
+                        -{" "}
+                        {testimonialOptions[testimonialOptions.length - 1].name}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

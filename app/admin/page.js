@@ -101,16 +101,16 @@ const AdminLayout = () => {
       />
       <div className="flex-1 flex flex-col bg-gray-100 text-black min-w-[320px]">
         {/* Header Section */}
-        <header className="bg-white shadow-md p-4 flex items-center justify-between w-full md:px-4 lg:px-6 relative">
+        <header className="bg-white shadow-md p-4 flex items-center justify-end w-full md:px-4 lg:px-6 relative">
           <button
             className="md:hidden text-gray-600 text-2xl"
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           >
             <FaBars />
           </button>
-          <h1 className="text-lg font-semibold text-gray-800 truncate text-center md:text-left">
+          {/* <h1 className="text-lg font-semibold text-gray-800 truncate text-center md:text-left">
             Λ L V E O
-          </h1>
+          </h1> */}
           <div className="flex items-center space-x-3 relative">
             {/* Status Indicator */}
             <div
@@ -129,7 +129,7 @@ const AdminLayout = () => {
               <FaUserCircle className="text-2xl text-gray-600 cursor-pointer hover:text-gray-800" />
               {showLogout && (
                 <div
-                  className="absolute top-full mt-2 right-0 bg-white shadow-lg border border-gray-300 rounded-md px-3 py-1 text-sm text-gray-700 cursor-pointer hover:bg-gray-100"
+                  className="z-10 absolute top-full mt-2 w-20 text-center right-0 bg-white shadow-lg border border-gray-300 rounded-md px-3 py-1 text-lg text-gray-700 cursor-pointer hover:bg-gray-100"
                   onClick={handleLogout}
                 >
                   Logout
