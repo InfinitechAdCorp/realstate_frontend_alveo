@@ -57,7 +57,7 @@ const ContactForm = () => {
       [name]: value,
     });
   };
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleSubmit = async (values) => {
     // Log the values that are passed from Formik (the actual form data)
     console.log(values); // This will show the correct form data
 
@@ -75,7 +75,14 @@ const ContactForm = () => {
     if (res.ok) {
       handleShowSuccessToast("Message sent successfully!");
       // Reset the form values after success
-      resetForm();
+      setFormData({
+        inquiryType: "",
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        message: "",
+      });
     } else {
       handleShowErrorToast("Something went wrong, please try again!");
     }
