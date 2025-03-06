@@ -14,7 +14,6 @@ import FloatingFeatures from "@/app/pages/floatingfeatures/page";
 import { showToast } from "../../components/alert/page";
 const properties = [
   { title: "Condominiums", slug: "condominiums" },
-  { title: "Lots", slug: "residential" },
   { title: "Commercials", slug: "commercial" },
   { title: "Offices", slug: "office" },
 ];
@@ -173,8 +172,13 @@ const Header = () => {
             {/* Branding Section */}
             <a
               href="/"
-              className="branding-text text-white text-3xl font-light me-10 tracking-wider ml-2"
-              style={{ textDecoration: "none", color: "inherit" }}
+              className={`branding-text text-white font-light tracking-wider flex items-center ml-5 lg:mr-5
+      text-2xl sm:text-3xl md:text-3xl lg:text-3xl xl:text-3xl`}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                whiteSpace: "nowrap",
+              }}
             >
               Λ L V E O
             </a>
@@ -183,7 +187,7 @@ const Header = () => {
             <div className="hidden md:flex justify-center items-center space-x-6">
               {/* About Link */}
               <a
-                href="/pages/aboutalveo/aboutalveo"
+                href="/pages/aboutalveo"
                 className="text-white font-light hover:text-blue-300 lg:text-lg xl:text-xl no-underline transition duration-300"
               >
                 About
@@ -293,7 +297,7 @@ const Header = () => {
 
         <nav className="p-4">
           <a
-            href="/pages/aboutalveo/aboutalveo"
+            href="/pages/aboutalveo"
             className="block text-lg mt-6 mb-4 hover:text-gray-300 no-underline text-white lg:text-3xl xl:text-lg z-50"
           >
             ABOUT ALVEO

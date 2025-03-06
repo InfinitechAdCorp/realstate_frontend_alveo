@@ -1,17 +1,21 @@
 "use client";
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-import { FaFilePdf, FaFileExcel } from "react-icons/fa";
-import exportToPDF from "@/app/admin/components/export/exportPDF"; // Import your reusable exportPDF function
-import exportToExcel from "@/app/admin/components/export/exportExcel"; // Import your reusable exportExcel function
+import { FaFilePdf, FaFileExcel, FaEllipsisV } from "react-icons/fa";
+import exportToPDF from "@/app/admin/components/export/exportPDF";
+import exportToExcel from "@/app/admin/components/export/exportExcel";
+import { showToast } from "@/components/alert/page";
+import EditModal from "@/app/admin/components/modal/clientproperty/editModal"; // Import EditModal at the top
 
 const ClientProperties = () => {
   const [submittedProperties, setSubmittedProperties] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(""); // Search state
-  const [showImageModal, setShowImageModal] = useState(false); // State to handle modal visibility
-  const [selectedImages, setSelectedImages] = useState([]); // State to hold the images for the modal
-
-  useEffect(() => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [openDropdown, setOpenDropdown] = useState(null); // Tracks dropdown visibility
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingProperty, setEditingProperty] = useState(null);
+  const fetchProperties = () => {
     const token = localStorage.getItem("auth_token");
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`,
@@ -25,98 +29,90 @@ const ClientProperties = () => {
     )
       .then((response) => response.json())
       .then((data) => {
-        console.log("Raw Fetched Data:", data); // Log raw fetched data
-
         const formattedData = data.map((property) => {
-          console.log("Before Fix:", property.files); // Log before fix
-
           let fixedFiles = [];
-
           if (property.files && typeof property.files === "string") {
             try {
-              // Since `property.files` is already a valid JSON array, parse it directly
-              fixedFiles = JSON.parse(property.files).map(
-                (file) => file.replace(/\\/g, "/") // Replace `\` with `/` properly
+              fixedFiles = JSON.parse(property.files).map((file) =>
+                file.replace(/\\/g, "/")
               );
             } catch (error) {
               console.error("Error parsing files:", property.files, error);
             }
           }
-
-          console.log("After Fix:", fixedFiles); // Log after fix
-
-          return {
-            ...property,
-            files: fixedFiles, // Store as array with correct paths
-          };
+          return { ...property, files: fixedFiles };
         });
 
-        console.log("Formatted Data:", formattedData);
         setSubmittedProperties(formattedData);
       })
-
       .catch((error) =>
         console.error("Error fetching submitted properties:", error)
       );
+  };
+
+  // Call fetchProperties immediately after component mounts
+  useEffect(() => {
+    fetchProperties();
   }, []);
 
   const openImageModal = (files) => {
-    setSelectedImages(files); // Set selected images
-    setShowImageModal(true); // Show the modal
+    setSelectedImages(files);
+    setShowImageModal(true);
   };
 
   const closeImageModal = () => {
-    setShowImageModal(false); // Hide the modal
-    setSelectedImages([]); // Clear images when modal is closed
+    setShowImageModal(false);
+    setSelectedImages([]);
+  };
+
+  const handleEdit = (property) => {
+    setEditingProperty(property);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDelete = async (propertyId) => {
+    if (!window.confirm("Are you sure you want to delete this property?")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("auth_token");
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties/${propertyId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        showToast("Property deleted successfully!", "success");
+        // Remove deleted property from the state
+        setSubmittedProperties((prevProperties) =>
+          prevProperties.filter((property) => property.id !== propertyId)
+        );
+      } else {
+        alert(result.message || "Failed to delete property.");
+      }
+    } catch (error) {
+      console.error("Error deleting property:", error);
+      showToast("An error occurred while deleting the property.", "error");
+    }
+  };
+
+  const toggleDropdown = (propertyId) => {
+    setOpenDropdown(openDropdown === propertyId ? null : propertyId);
   };
 
   const filteredProperties = submittedProperties.filter((property) =>
     property.property_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // 📌 Handle Export to PDF using your reusable function
-  const handleExportPDF = () => {
-    if (filteredProperties.length === 0) {
-      console.error("No data available for export.");
-      return;
-    }
-
-    const exportData = filteredProperties.map((property) => ({
-      "First Name": property.first_name,
-      "Last Name": property.last_name,
-      Email: property.email,
-      Phone: property.phone,
-      "Property Name": property.property_name,
-      Location: property.location,
-      Price: property.price,
-      Status: property.status,
-      Description: property.description || "No description provided",
-    }));
-
-    exportToPDF("Client Properties", exportData); // ✅ Uses your reusable exportPDF function
-  };
-
-  // 📌 Handle Export to Excel using your reusable function
-  const handleExportExcel = () => {
-    if (filteredProperties.length === 0) {
-      console.error("No data available for export.");
-      return;
-    }
-
-    const exportData = filteredProperties.map((property) => ({
-      first_name: property.first_name,
-      last_name: property.last_name,
-      email: property.email,
-      phone: property.phone,
-      property_name: property.property_name,
-      location: property.location,
-      price: property.price,
-      status: property.status,
-      description: property.description || "No description provided",
-    }));
-
-    exportToExcel("Client Properties", exportData); // ✅ Uses your reusable exportExcel function
-  };
   const columns = [
     { name: "First Name", selector: (row) => row.first_name, sortable: true },
     { name: "Last Name", selector: (row) => row.last_name, sortable: true },
@@ -134,45 +130,26 @@ const ClientProperties = () => {
       sortable: true,
       wrap: true,
     },
+    { name: "Status", selector: (row) => row.status, sortable: true },
     {
       name: "Price",
       selector: (row) => {
         const priceRange = row.price;
         if (priceRange) {
-          const [minPrice, maxPrice] = priceRange.split("-").map((price) => {
-            return `₱${Number(price.trim()).toLocaleString()}`;
-          });
+          const [minPrice, maxPrice] = priceRange
+            .split("-")
+            .map((price) => `₱${Number(price.trim()).toLocaleString()}`);
           return `${minPrice} - ${maxPrice}`;
         }
-        return "N/A"; // Return N/A if there's no price range
+        return "N/A";
       },
       sortable: true,
-      wrap: true, // Ensures that the content doesn't get truncated in the DataTable
-    },
-
-    { name: "Status", selector: (row) => row.status, sortable: true },
-    {
-      name: "Description",
-      selector: (row) =>
-        row.description.length > 100
-          ? row.description.substring(0, 100) + "..."
-          : row.description,
       wrap: true,
     },
     {
       name: "Files",
       cell: (row) => {
-        let files = [];
-        if (Array.isArray(row.files)) {
-          files = row.files; // If already an array, use as is
-        } else if (typeof row.files === "string") {
-          try {
-            files = JSON.parse(row.files); // Attempt to parse string JSON
-          } catch (error) {
-            console.error("Error parsing files:", row.files, error);
-          }
-        }
-
+        let files = Array.isArray(row.files) ? row.files : [];
         return (
           <div>
             {files.length > 0 && (
@@ -180,11 +157,9 @@ const ClientProperties = () => {
                 onClick={() => {
                   const imageUrls = files.map((file) => {
                     const cleanPath = file.replace(/\\/g, "/");
-                    const url = `${process.env.NEXT_PUBLIC_SERVER_PORT}/${cleanPath}`;
-                    console.log(url); // Log each generated URL to verify
-                    return url;
+                    return `${process.env.NEXT_PUBLIC_SERVER_PORT}/${cleanPath}`;
                   });
-                  openImageModal(imageUrls); // Pass the image URLs to the modal
+                  openImageModal(imageUrls);
                 }}
                 className="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600"
               >
@@ -195,41 +170,71 @@ const ClientProperties = () => {
         );
       },
     },
+    {
+      name: "Actions",
+      cell: (row) => (
+        <div className="relative">
+          {/* Ellipsis button */}
+          <button
+            onClick={() => toggleDropdown(row.id)}
+            className="p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+          >
+            <FaEllipsisV />
+          </button>
+
+          {/* Dropdown menu */}
+          {openDropdown === row.id && (
+            <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md z-10">
+              <button
+                onClick={() => handleEdit(row)}
+                className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(row.id)}
+                className="block w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
+      ),
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+    },
   ];
 
   return (
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
         {/* Title & Search Filter */}
-        <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center mb-4">
-          <div className="w-full md:w-auto">
-            <h2 className="text-lg font-semibold">Client Properties</h2>
-            <input
-              type="text"
-              placeholder="Search by property name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
-            />
-          </div>
-
-          {/* Export Buttons */}
-          <div className="flex flex-col md:flex-row lg:flex-row gap-3 mt-4 md:mt-4 lg:mt-0 w-full md:w-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+          <h2 className="text-lg font-semibold">Client Properties</h2>
+          <input
+            type="text"
+            placeholder="Search by property name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
+          />
+          <div className="flex gap-3">
             <button
-              onClick={handleExportPDF}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full md:w-auto"
+              onClick={exportToPDF}
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
-              onClick={handleExportExcel}
-              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full md:w-auto"
+              onClick={exportToExcel}
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
             >
               <FaFileExcel className="mr-2" /> Export Excel
             </button>
           </div>
         </div>
-
         {/* Data Table */}
         <DataTable
           columns={columns}
@@ -241,34 +246,13 @@ const ClientProperties = () => {
           responsive
           striped
         />
+        <EditModal
+          modalOpen={isEditModalOpen}
+          closeModal={() => setIsEditModalOpen(false)}
+          property={editingProperty}
+          fetchData={fetchProperties} // ✅ Pass fetchProperties to update table after edit
+        />
       </div>
-
-      {/* Image Modal */}
-      {showImageModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[80vh] overflow-auto">
-            <h2 className="text-xl font-semibold mb-4">Property Images</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {selectedImages.map((image, index) => (
-                <img
-                  key={index}
-                  src={`${image}`}
-                  alt={`Property Image ${index + 1}`}
-                  className="w-full h-64 object-cover rounded"
-                />
-              ))}
-            </div>
-            <div className="flex justify-center gap-4 mt-4">
-              <button
-                onClick={closeImageModal}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

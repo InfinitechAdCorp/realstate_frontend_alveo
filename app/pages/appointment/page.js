@@ -119,7 +119,7 @@ export default function Admin({}) {
           >
             <div className="flex justify-between items-center p-4 border-b border-gray-700 ">
               <a
-                href="/pages/aboutalveo/aboutalveo"
+                href="/pages/aboutalveo"
                 className="text-lg font-bold no-underline text-white hover:text-gray-300 lg:text-3xl xl:text-lg"
               >
                 ALVEO

@@ -51,3 +51,80 @@ body {
 .colored-toast .swal2-html-container {
   color: white;
 }
+/* Footer Global Styles */
+footer {
+  background-color: #002B47;
+  /* Ensure consistent background */
+  color: white;
+  width: 100%;
+  padding: 2rem 1rem;
+}
+
+/* Footer Heading */
+footer h2 {
+  font-weight: 600;
+}
+
+/* Footer Paragraphs */
+footer p {
+  font-size: 0.875rem;
+  /* Default size */
+  opacity: 0.8;
+}
+
+/* Footer Links */
+footer a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+footer a:hover {
+  color: #4fa3ff;
+}
+
+/* Footer Button */
+footer button {
+  background-color: #f8f9fa;
+  color: #002B47;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  transition: background 0.3s ease-in-out;
+}
+
+footer button:hover {
+  background-color: #e0e0e0;
+}
+
+/* Separator Line */
+footer hr {
+  border-color: rgba(255, 255, 255, 0.2);
+  margin: 1rem auto;
+  width: 80%;
+}
+
+/* Responsive Typography */
+@media (min-width: 640px) {
+
+  /* sm */
+  footer h2 {
+    font-size: 2rem;
+  }
+
+  footer p {
+    font-size: 0.875rem;
+  }
+}
+
+@media (min-width: 1024px) {
+
+  /* lg */
+  footer h2 {
+    font-size: 2.5rem;
+  }
+
+  footer p {
+    font-size: 1rem;
+  }
+}

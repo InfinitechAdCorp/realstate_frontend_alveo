@@ -101,9 +101,6 @@ const LocationPage = () => {
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale, property location, location"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/location"
       />
-      <div className="mb-10">
-        <Header /> <Icon />
-      </div>
 
       {/* <div className="xl:ml-64 mt-20">
         <Directory currentLocation="LOCATION" specificLocation={``} />
@@ -163,9 +160,6 @@ const LocationPage = () => {
               )
             )}
           </div>
-        </div>
-        <div className="text-left xl:mt-10">
-          <Footer />
         </div>
       </div>
     </>

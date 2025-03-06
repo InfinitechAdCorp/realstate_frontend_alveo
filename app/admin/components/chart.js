@@ -167,8 +167,8 @@ export default function CardCharts(data) {
   return (
     <div className="mt-4 h-fit">
       {/* Pie Chart 1 */}
-      <div className="flex">
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
+      <div className="flex ">
+        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6 bg-white">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full max-w-full flex-grow flex-1">
@@ -209,7 +209,7 @@ export default function CardCharts(data) {
         </div>
 
         {/* Pie Chart 2 */}
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6">
+        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6 bg-white">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full max-w-full flex-grow flex-1">
@@ -250,7 +250,7 @@ export default function CardCharts(data) {
         </div>
       </div>
 
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0">
+      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 bg-white">
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">

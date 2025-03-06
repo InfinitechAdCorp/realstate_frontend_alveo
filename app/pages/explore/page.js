@@ -17,43 +17,25 @@ import {
 } from "react-icons/bs";
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import Icon from "@/app/pages/socialmedia-icons/page";
+
 function ExplorePage() {
   const [value, setValue] = useState("all");
   const [allBuildings, setAllBuildings] = useState([]); // Store all buildings data here
   const [filteredBuildings, setFilteredBuildings] = useState([]); // Store the filtered buildings based on selected category
   const [loading, setLoading] = useState(true);
 
-  const handleImageLoad = () => {
-    setLoading(false); // Set loading to false when the image has loaded
-  };
+  // Get the query parameter specificLocation from URL
+  const searchParams = useSearchParams();
+  const specificLocation = searchParams.get("specificLocation");
 
-  const images = [
-    {
-      icon: <BsCopy className="text-4xl" />, // Using the 'copy' icon from React Icons
-      value: "all",
-      label: "All Property",
-    },
-    {
-      icon: <BsBuildings className="text-4xl" />, // Using the 'building' icon for Condominiums
-      value: "condominiums",
-      label: "Condominiums",
-    },
-    {
-      icon: <BsHouseDoor className="text-4xl" />, // Using the 'home' icon for Residentials
-      value: "residential",
-      label: "Residentials",
-    },
-    {
-      icon: <BsBag className="text-4xl" />, // Using the 'suitcase' icon for Commercials
-      value: "commercial",
-      label: "Commercials",
-    },
-    {
-      icon: <HiOutlineBuildingOffice2 className="text-4xl" />, // Using the 'location' icon for Offices
-      value: "office",
-      label: "Offices",
-    },
-  ];
+  useEffect(() => {
+    console.log(specificLocation); // Log the value of specificLocation
+    fetchBuildings(); // Fetch buildings data only once when the component mounts
+  }, []);
+
+  useEffect(() => {
+    filterBuildings(specificLocation); // Filter the buildings whenever specificLocation changes
+  }, [specificLocation, allBuildings]); // Dependency on both specificLocation and allBuildings
 
   const fetchBuildings = async () => {
     try {
@@ -86,6 +68,7 @@ function ExplorePage() {
           status: matchingProperty ? matchingProperty.status : "Unknown",
         };
       });
+
       console.log(propertiesData);
       console.log(buildingsData);
       console.log(combinedData);
@@ -97,8 +80,11 @@ function ExplorePage() {
     }
   };
 
-  const filterBuildings = (category) => {
-    let filteredData;
+  // Filter buildings based on the selected category
+  const filterBuildings = (specificLocation) => {
+    let category = specificLocation || "all"; // Default to "all" if no location is provided
+    let filteredData = allBuildings;
+    console.log(category, filteredData, allBuildings);
 
     // Filter buildings based on the selected category (all, condominiums, residential)
     if (category === "all") {
@@ -119,8 +105,6 @@ function ExplorePage() {
       filteredData = allBuildings.filter((building) =>
         building.development_type.toLowerCase().includes("office")
       );
-    } else {
-      filteredData = [];
     }
 
     // Sort buildings from newest to oldest based on created_at
@@ -167,9 +151,30 @@ function ExplorePage() {
     return daysDiff <= 3;
   };
 
-  useEffect(() => {
-    fetchBuildings(); // Fetch buildings data only once when the component mounts
-  }, []);
+  // Define the categories (images) array with icons and labels
+  const images = [
+    {
+      icon: <BsCopy className="text-4xl" />, // Using the 'copy' icon from React Icons
+      value: "all",
+      label: "All Property",
+    },
+    {
+      icon: <BsBuildings className="text-4xl" />, // Using the 'building' icon for Condominiums
+      value: "condominiums",
+      label: "Condominiums",
+    },
+
+    {
+      icon: <BsBag className="text-4xl" />, // Using the 'suitcase' icon for Commercials
+      value: "commercial",
+      label: "Commercials",
+    },
+    {
+      icon: <HiOutlineBuildingOffice2 className="text-4xl" />, // Using the 'location' icon for Offices
+      value: "office",
+      label: "Offices",
+    },
+  ];
 
   return (
     <>
@@ -179,9 +184,7 @@ function ExplorePage() {
         keywords="alveo, real estate, properties, parkings, building features, property features, property, buildings, building type"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/explore"
       />
-      <div className="mb-10">
-        <Header /> <Icon />
-      </div>
+
       <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10">
         <div className="text-center mt-10 sm:-ml-10 cursor-pointer border-b-2 border-black">
           {images.map((image, index) => (
@@ -269,7 +272,6 @@ function ExplorePage() {
                     <img
                       src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${building.path}`}
                       alt={building.name}
-                      onLoad={handleImageLoad}
                       className="w-full h-64 object-cover transform hover:scale-105 transition-transform duration-300 ease-in-out"
                     />
 
@@ -318,9 +320,6 @@ function ExplorePage() {
             })}
         </div>
       </div>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Footer />
-      </Suspense>
     </>
   );
 }

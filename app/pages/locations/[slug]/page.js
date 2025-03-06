@@ -159,7 +159,6 @@ export default function BlogPost({ params }) {
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <Header /> <Icon />
         <div className="flex-grow">
           <div className="w-full h-full">
             {Object.values(posts).map((post) => (
@@ -224,7 +223,6 @@ export default function BlogPost({ params }) {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </>
   );

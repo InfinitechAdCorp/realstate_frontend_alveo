@@ -74,10 +74,9 @@ export default function agent() {
     }
   };
   return (
-    <>
-      <Header /> <Icon />
+    <div>
       <div
-        className="relative bg-cover bg-center h-screen flex justify-center items-center"
+        className="relative bg-cover bg-center min-h-screen flex flex-col justify-center items-center"
         style={{ backgroundImage: "url(/assets/Alveo.png)" }}
       >
         {isModalOpen && (
@@ -118,7 +117,6 @@ export default function agent() {
             </div>
           </div>
         )}
-
         <div className="absolute inset-0 bg-customBlue opacity-80 z-0"></div>
         {/* Content Container */}
         <div className="relative w-full max-w-4xl bg-opacity-80 p-8 z-0">
@@ -306,9 +304,6 @@ export default function agent() {
           )}
         </div>
       </div>
-      <div className="mt-14">
-        <Footer />
-      </div>
-    </>
+    </div>
   );
 }

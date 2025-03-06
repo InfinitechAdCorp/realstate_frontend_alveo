@@ -108,10 +108,10 @@ const ArchitecturalTheme = () => {
       cell: (row) => (
         <button
           onClick={() => {
-            setEntryToDelete(row); // Set the theme to delete
+            setEntryToDelete(row); // Set the property to delete
             setIsDeleteModalOpen(true); // Open delete confirmation modal
           }}
-          className="text-red-500 hover:text-red-700"
+          className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
         >
           Delete
         </button>

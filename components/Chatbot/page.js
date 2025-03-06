@@ -131,11 +131,6 @@ const MyBot = () => {
         break;
 
       case "waitingForResponse":
-        // If the conversation is in a waiting state, you can do something special here
-        // For example, you could log something, or check for further user input
-        break;
-
-      default:
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/chatbot/get-answer`,
@@ -184,7 +179,6 @@ const MyBot = () => {
     }
   };
   const handleOtherServicesClick = () => {
-    // Inform the user that other services are currently unavailable
     setMessages((prevMessages) => [
       ...prevMessages,
       {
