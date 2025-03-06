@@ -4,8 +4,8 @@ import Header from "./../header";
 import Footer from "./../footer";
 import { FaQuoteLeft } from "react-icons/fa6";
 import Icon from "@/app/pages/socialmedia-icons/page";
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
 export default function agent() {
   const [activeSection, setActiveSection] = useState("certificates");
   const [testimonialOptions, setTestimonialOptions] = useState([]);
@@ -18,7 +18,10 @@ export default function agent() {
 
   const totalPages = Math.ceil(testimonialOptions.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentTestimonials = testimonialOptions.slice(startIndex, startIndex + itemsPerPage);
+  const currentTestimonials = testimonialOptions.slice(
+    startIndex,
+    startIndex + itemsPerPage
+  );
 
   const galleryImage = [
     "photo_2024-10-05_18-30-19.jpg",
@@ -200,7 +203,7 @@ export default function agent() {
                 alt="Ella Carmela Sarmiento"
                 className="w-4/4 h-4/4 object-cover rounded-lg"
               /> */}
-               <PhotoProvider>
+              <PhotoProvider>
                 <PhotoView src="/assets/agent/credentials1.jpg">
                   <img
                     src="/assets/agent/credentials1.jpg"
@@ -220,9 +223,9 @@ export default function agent() {
                     src="/assets/agent/credentials1.jpg"
                     alt="Ella Carmela Sarmiento"
                     className="w-4/4 h-4/4 object-cover rounded-lg cursor-pointer"
-                   />
+                  />
                 </PhotoView>
-                <PhotoView   src="/assets/agent/credentials2.jpg">
+                <PhotoView src="/assets/agent/credentials2.jpg">
                   <img
                     src="/assets/agent/credentials2.jpg"
                     alt="Ella Carmela Sarmiento"
@@ -236,28 +239,28 @@ export default function agent() {
           {/* Gallery Section */}
           {activeSection === "gallery" && (
             <PhotoProvider>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-6">
-              {galleryImage.map((image, index) => (
-                <PhotoView key={index} src={`/assets/agent/${image}`}>
-                  <img
-                    src={`/assets/agent/${image}`}
-                    alt="Ella Carmela Sarmiento"
-                    className="w-80 h-96 object-cover rounded-lg cursor-pointer"
-                  />
-                </PhotoView>
-              ))}
-            </div>
-          </PhotoProvider>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mt-6">
+                {galleryImage.map((image, index) => (
+                  <PhotoView key={index} src={`/assets/agent/${image}`}>
+                    <img
+                      src={`/assets/agent/${image}`}
+                      alt="Ella Carmela Sarmiento"
+                      className="w-80 h-96 object-cover rounded-lg cursor-pointer"
+                    />
+                  </PhotoView>
+                ))}
+              </div>
+            </PhotoProvider>
           )}
           {activeSection === "testimonial" && (
-              <div className="text-center">
+            <div className="text-center">
               <div
                 onClick={() => setIsModalOpen(true)}
                 className="cursor-pointer bg-indigo-700 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition w-40 mx-auto my-5"
               >
                 Add Testimonial
               </div>
-        
+
               {testimonialOptions.length > 0 && (
                 <div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -265,7 +268,10 @@ export default function agent() {
                       <div
                         key={testimonial.id}
                         className="max-h-[400px] max-w-xl mx-auto p-6 border-2 border-gray-300 mb-6 overflow-auto"
-                        style={{ backgroundColor: "#f9f9f9", borderRadius: "15px" }}
+                        style={{
+                          backgroundColor: "#f9f9f9",
+                          borderRadius: "15px",
+                        }}
                       >
                         <div className="text-center mb-4">
                           <FaQuoteLeft className="w-16 h-16 text-customBlue mx-auto" />
@@ -279,20 +285,34 @@ export default function agent() {
                       </div>
                     ))}
                   </div>
-        
+
                   {/* Pagination Controls */}
                   <div className="flex justify-center mt-4 space-x-2">
                     <button
-                      className={`px-4 py-2 border rounded-lg ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
-                      onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                      className={`px-4 py-2 border rounded-lg ${
+                        currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-200"
+                      }`}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.max(prev - 1, 1))
+                      }
                       disabled={currentPage === 1}
                     >
                       Previous
                     </button>
-                    <span className="px-4 py-2 border rounded-lg">Page {currentPage} of {totalPages}</span>
+                    <span className="px-4 py-2 border rounded-lg">
+                      Page {currentPage} of {totalPages}
+                    </span>
                     <button
-                      className={`px-4 py-2 border rounded-lg ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-200"}`}
-                      onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                      className={`px-4 py-2 border rounded-lg ${
+                        currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-200"
+                      }`}
+                      onClick={() =>
+                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                      }
                       disabled={currentPage === totalPages}
                     >
                       Next

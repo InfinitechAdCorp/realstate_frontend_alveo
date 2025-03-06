@@ -1,5 +1,6 @@
-import RootLayout from "./RootLayout"; // Import the RootLayout
-import { metadata } from "./metadata"; // Import metadata
+import Head from "next/head"; // ✅ Import Head from next/head
+import RootLayout from "./RootLayout";
+import { metadata } from "./metadata";
 
 function App({ Component, pageProps }) {
   return (
@@ -7,7 +8,6 @@ function App({ Component, pageProps }) {
       <Head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
-        {/* Add other meta tags here */}
       </Head>
       <RootLayout>
         <Component {...pageProps} />

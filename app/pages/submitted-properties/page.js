@@ -10,7 +10,7 @@ import ArchitecturalThemeModal from "@/components/admin/architecturalThemeModal"
 import StatusModal from "@/components/admin/statusModal";
 
 import { Input } from "@/components/ui/input";
-import Demo from "../../properties/page";
+
 import Header from "../header";
 
 import AreaModal from "@/components/admin/areaModal";

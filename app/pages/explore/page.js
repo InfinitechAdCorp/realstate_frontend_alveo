@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Header from "../header";
-import { Suspense } from "react";
+
 import Footer from "./../footer";
 import SEO from "./../../seo/page";
 import {
@@ -18,7 +18,7 @@ import {
 import { HiOutlineBuildingOffice2 } from "react-icons/hi2";
 import Icon from "@/app/pages/socialmedia-icons/page";
 
-function ExplorePage() {
+function ExplorePageContent() {
   const [value, setValue] = useState("all");
   const [allBuildings, setAllBuildings] = useState([]); // Store all buildings data here
   const [filteredBuildings, setFilteredBuildings] = useState([]); // Store the filtered buildings based on selected category
@@ -185,7 +185,7 @@ function ExplorePage() {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/explore"
       />
 
-      <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10">
+      <div className="min-h-screen flex flex-col items-center justify-center 2xl:mx-10 mt-14">
         <div className="text-center mt-10 sm:-ml-10 cursor-pointer border-b-2 border-black">
           {images.map((image, index) => (
             <div
@@ -323,5 +323,10 @@ function ExplorePage() {
     </>
   );
 }
-
-export default ExplorePage;
+export default function ExplorePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ExplorePageContent />
+    </Suspense>
+  );
+}
