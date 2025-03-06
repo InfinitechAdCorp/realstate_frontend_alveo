@@ -82,8 +82,7 @@ const ContactForm = () => {
   };
 
   return (
-    <div>
-      <Header /> <Icon />
+    <>
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 rounded-lg mt-24 text-customBlue bg-white">
         <div>
           <h2 className="text-3xl font-thin mb-6 text-customBlue">
@@ -306,7 +305,7 @@ const ContactForm = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

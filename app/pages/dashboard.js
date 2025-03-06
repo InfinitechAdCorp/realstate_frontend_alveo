@@ -396,7 +396,7 @@ const AboutAlveo = () => {
             </p>
             <p className="text-end">
               <a
-                href="/pages/aboutalveo/aboutalveo"
+                href="/pages/aboutalveo"
                 className="text-white flex items-center space-x-2 justify-end"
               >
                 <span>READ MORE ABOUT ALVEO</span>
@@ -1476,10 +1476,7 @@ const DashboardComponent = () => {
         keywords="alveo, real estate, luxury living, property, condominiums, luxury homes, investment, residential properties,sale"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
-      <div className="mb-10">
-        <Header />
-        <Icon />
-      </div>
+
       <AlveoBanner />
       <Carousel />
       <div className="flex flex-col xl:flex-row w-screen">
@@ -1552,7 +1549,6 @@ const DashboardComponent = () => {
       <div className="max-sm:mt-32 sm:mt-32 xl:mt-0 xl:z-50">
         <SocialMediaFloating />
         <MyBot />
-        <Footer />
       </div>
     </>
   );

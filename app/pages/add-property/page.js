@@ -195,10 +195,9 @@ function App() {
 
   return (
     <>
-      <Header /> <Icon />
-      <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mt-9 gap-5">
+      <div className="App flex flex-col lg:flex-row w-full p-6 bg-gray-50 min-h-screen mt-9 gap-5 items-stretch">
         {/* Data Privacy Reminder Section */}
-        <div className="w-full sm:w-2/4 md:w-1/3 lg:w-1/3 p-8 bg-white border border-customBlue  lg:mb-0 my-6 mx-auto">
+        <div className="w-full sm:w-2/4 md:w-1/3 lg:w-1/3 p-8 bg-white border border-customBlue lg:mb-0 my-6 mx-auto lg:h-[calc(967px-10px)] overflow-hidden">
           <h2 className="font-thin text-2xl text-customBlue mb-6 text-center">
             Data Privacy Reminder
           </h2>
@@ -223,10 +222,8 @@ function App() {
           </p>
         </div>
 
-        {/* Property Submission Form */}
         <div className="w-full my-6 bg-gray-50 ">
-          {/* Personal Information (First Row) */}
-          <div className="w-full p-6 bg-white border border-customBlue mb-6">
+          <div className="w-full p-6 bg-white border border-customBlue mb-6 ">
             <h1 className="text-2xl font-semibold text-left mb-6 text-customBlue">
               Personal Information
             </h1>
@@ -297,8 +294,8 @@ function App() {
           </div>
 
           {/* Property Information (Second Row) */}
-          <div className="w-full p-6 bg-white border border-customBlue">
-            <h1 className="text-2xl font-semibold text-left mb-6 text-customBlue">
+          <div className="w-full p-6 bg-white border border-customBlue ">
+            <h1 className="text-2xl font-semibold text-left mb-6 text-customBlue ">
               Property Information
             </h1>
             <form onSubmit={handleSubmit}>
@@ -448,9 +445,6 @@ function App() {
             </form>
           </div>
         </div>
-      </div>
-      <div className="mt-14">
-        <Footer />
       </div>
     </>
   );

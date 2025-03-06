@@ -111,10 +111,6 @@ const SetAppointment = () => {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/locations"
       />
 
-      <div className="mb-16">
-        <Header /> <Icon />
-      </div>
-
       <div className="text-center mb-2 mt-20">
         <h1
           className="mt-12 mb-5 font-semibold text-2xl text-customBlue 
@@ -398,9 +394,6 @@ const SetAppointment = () => {
           </div>
           {/* Calendar */}
         </div>
-      </div>
-      <div className="mt-14">
-        <Footer />
       </div>
     </div>
   );

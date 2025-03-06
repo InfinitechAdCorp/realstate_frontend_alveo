@@ -247,7 +247,7 @@ export default function LoanCalculator() {
         keywords="alveo, real estate, property sale, property investment, property price, property loan, building price, condiminium loan"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/loancalculator"
       />
-      <Header /> <Icon />
+
       <main
         className="h-screen flex items-center justify-center bg-cover bg-center"
         style={{ backgroundImage: "url('/assets/Alveo.png')" }}

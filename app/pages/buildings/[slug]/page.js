@@ -273,9 +273,7 @@ export default function BlogPost({ params }) {
         keywords="alveo, real estate, luxury property, property features, building information, property information, building features, condominium features"
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}"
       />
-      <div className="mb-10">
-        <Header /> <Icon />
-      </div>
+
       <div className=" p-2 md:p-8 mt-20 w-full mb-20 ">
         <h1 className="text-2xl font-semibold text-customBlue mb-4 text-center">
           {property.name}
@@ -619,32 +617,35 @@ export default function BlogPost({ params }) {
           )}
         </div>
 
-        {/*  Facilities */}
         <div className="max-w-7xl mx-auto px-4 py-6 relative bg-cover bg-center">
-          {/* Content */}
           <div className="relative z-10">
-            <h2 className="text-2xl font-semibold text-start mb-6 text-customBlue">
+            {/* Center the heading */}
+            <h2 className="text-xl font-semibold text-center mb-4 text-customBlue">
               Facilities
             </h2>
 
-            {/* Facilities List */}
             {facilities.length === 0 ? (
-              <div className="flex items-center justify-center">
-                <p className="text-sm sm:text-xl text-white">
+              <div className="flex items-center justify-center w-full">
+                {/* Center the "No facilities available" message */}
+                <p className="text-sm sm:text-lg text-white text-center">
                   No facilities available for this property.
                 </p>
               </div>
             ) : (
-              <div className="text-start">
-                <p className="text-xl text-gray-700 font-medium">
-                  {facilities.map((facility, index) => (
-                    <span key={facility.id}>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 justify-center ">
+                {facilities.map((facility) => (
+                  <div
+                    key={facility.id}
+                    className="bg-white p-3 rounded-lg  hover:shadow-lg transition-shadow duration-300 flex flex-col items-center justify-center text-center  shadow-lg"
+                  >
+                    <h3 className="text-sm font-semibold text-gray-800 mb-1">
                       {facility.name}
-                      {index < facilities.length - 1 ? ", " : ""}{" "}
-                      {/* Add a comma except for the last item */}
-                    </span>
-                  ))}
-                </p>
+                    </h3>
+                    <p className="text-xs text-gray-600">
+                      {facility.description}
+                    </p>
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -737,8 +738,6 @@ export default function BlogPost({ params }) {
           </div>
         </div>
       </div>
-
-      <Footer />
     </>
   );
 }
