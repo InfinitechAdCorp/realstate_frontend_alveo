@@ -23,16 +23,15 @@ const RootLayout = ({ children }) => {
   const pathname = usePathname(); // Get current path
 
   // Check if the current page is one where we don't want the footer
-  const excludeFooter = pathname?.includes("/admin"); // Example condition to exclude footer on certain routes
+  const excludeFooter =
+    pathname?.includes("/admin") || pathname?.includes("/pages/roomplanner");
 
   return (
     <html lang="en">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} flex flex-col min-h-screen`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} `}>
         {children}
         {!excludeFooter && <Header />}
         {!excludeFooter && <Footer />}

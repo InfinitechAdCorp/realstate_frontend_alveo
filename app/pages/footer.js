@@ -24,15 +24,15 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-customBlue text-white px-4 xl:px-1 w-full justify-center ">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8">
+    <footer className="bg-customBlue text-white px-4 xl:px-1 w-full">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 text-center sm:text-center lg:text-left">
         {/* Left Column */}
-        <div className="col-span-1 flex justify-center lg:justify-end md:justify-center md:mx-auto md:w-full">
-          <div className="flex flex-col justify-center items-center py-4 lg:mr-20 ">
-            <h2 className="text-5xl sm:text-7xl md:text-5xl xl:text-5xl font-semibold text-center">
+        <div className="col-span-1 flex justify-center lg:justify-center md:justify-center md:mx-auto md:w-full">
+          <div className="flex flex-col justify-center items-center sm:items-center  py-4 lg:ml-10">
+            <h2 className="text-5xl sm:text-7xl md:text-5xl xl:text-5xl font-semibold">
               Λ L V E O
             </h2>
-            <p className="text-lg sm:text-sm mt-2 text-center opacity-80">
+            <p className="text-lg sm:text-sm mt-2 opacity-80">
               An AyalaLand Company
             </p>
             <button
@@ -45,9 +45,9 @@ const Footer = () => {
         </div>
 
         {/* Right Column (Contact Info) */}
-        <div className="col-span-1 sm:col-span-2 lg:col-span-2 h-auto text-center lg:text-start">
+        <div className="col-span-1 sm:col-span-2 lg:col-span-2 h-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 p-4">
-            <div className="flex flex-col ">
+            <div className="flex flex-col items-center sm:items-center lg:items-start">
               <h2 className="text-2xl xl:text-3xl font-thin">Contact Us</h2>
               <p className="text-xs xl:text-sm mt-2">
                 Our dedicated teams are ready to assist you with information on
@@ -55,7 +55,7 @@ const Footer = () => {
               </p>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center sm:items-center lg:items-start">
               <h2 className="text-2xl xl:text-3xl font-thin">Email</h2>
               <p className="text-xs xl:text-sm mt-2">
                 <a
@@ -67,7 +67,7 @@ const Footer = () => {
               </p>
             </div>
 
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center sm:items-center lg:items-start">
               <h2 className="text-2xl xl:text-3xl font-thin">
                 Customer Hotline
               </h2>
@@ -80,15 +80,14 @@ const Footer = () => {
                 </a>
               </p>
             </div>
-
-            <div className="flex flex-col">
+            <div className="flex flex-col items-center sm:items-center lg:items-start text-center lg:text-left">
               <h2 className="text-2xl xl:text-3xl font-thin">Location</h2>
               <a
                 href="https://maps.app.goo.gl/dQRKwnAkHXiwc7hq8"
                 target="_blank"
                 className="no-underline text-white hover:text-blue-500"
               >
-                <p className="text-xs xl:text-sm mt-2">
+                <p className="text-xs xl:text-sm mt-2 lg:text-left">
                   Alveo Corporate Center 728 28th Street, Bonifacio Global City
                   1634 Taguig City, Metro Manila Philippines
                 </p>
