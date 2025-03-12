@@ -88,15 +88,21 @@ const PropertyTable = ({ properties, loading }) => {
     {
       name: "Price Range",
       selector: (row) => {
-        if (!row.price_range) return "N/A"; // Handle empty values
+        if (!row.price_range || typeof row.price_range !== "string")
+          return "N/A"; // ✅ Ensure price_range exists and is a string
 
-        const [min, max] = row.price_range.split(" - ").map(Number); // Split and convert to numbers
+        const parts = row.price_range.split(" - ").map(Number); // ✅ Convert to numbers safely
+        if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1]))
+          return "N/A"; // ✅ Handle incorrect format
 
-        return `₱${min.toLocaleString()} - ₱${max.toLocaleString()}`; // Format with peso sign and commas
+        const [min, max] = parts;
+
+        return `₱${min.toLocaleString()} - ₱${max.toLocaleString()}`; // ✅ Format with peso sign and commas
       },
       sortable: true,
       wrap: true,
     },
+
     { name: "Units", selector: (row) => row.units, sortable: true, wrap: true },
     { name: "Land Area", selector: (row) => row.land_area, sortable: true },
     {
