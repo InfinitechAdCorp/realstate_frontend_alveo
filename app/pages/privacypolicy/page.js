@@ -6,7 +6,7 @@ const PrivacyPolicy = () => {
   return (
     <>
       <div className="w-[90%] mx-auto p-6 pt-20">
-        <Header />
+
         <div className="mt-10 relative mb-32">
           <h1 className="text-3xl font-bold text-center mb-6">
             Privacy Policy
@@ -97,7 +97,7 @@ const PrivacyPolicy = () => {
           </section>
         </div>
       </div>
-      <Footer />
+
     </>
   );
 };

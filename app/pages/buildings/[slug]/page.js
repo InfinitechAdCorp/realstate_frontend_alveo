@@ -636,7 +636,7 @@ export default function BlogPost({ params }) {
                 {facilities.map((facility) => (
                   <div
                     key={facility.id}
-                    className="bg-white p-3 rounded-lg  hover:shadow-lg transition-shadow duration-300 flex flex-col items-center justify-center text-center  shadow-lg"
+                    className="bg-white p-3 rounded-lg  hover:shadow-lg transition-shadow duration-300  items-center justify-center text-center  shadow-lg"
                   >
                     <h3 className="text-sm font-semibold text-gray-800 mb-1">
                       {facility.name}

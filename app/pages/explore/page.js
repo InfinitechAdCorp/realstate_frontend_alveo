@@ -86,7 +86,7 @@ function ExplorePageContent() {
     let filteredData = allBuildings;
     console.log(category, filteredData, allBuildings);
 
-    // Filter buildings based on the selected category (all, condominiums, residential)
+    // Filter buildings based on the selected category (all, condominiums, residential, commercial, office)
     if (category === "all") {
       filteredData = allBuildings; // Show all buildings
     } else if (category === "condominiums") {
@@ -99,7 +99,9 @@ function ExplorePageContent() {
       );
     } else if (category === "commercial") {
       filteredData = allBuildings.filter(
-        (building) => building.commercial_units > 0
+        (building) =>
+          building.commercial_units > 0 &&
+          !building.development_type.toLowerCase().includes("office") // Exclude offices
       );
     } else if (category === "office") {
       filteredData = allBuildings.filter((building) =>

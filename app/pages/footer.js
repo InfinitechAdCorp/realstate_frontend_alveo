@@ -35,12 +35,6 @@ const Footer = () => {
             <p className="text-lg sm:text-sm mt-2 opacity-80">
               An AyalaLand Company
             </p>
-            <button
-              onClick={() => alert("Downloading App...")}
-              className="bg-slate-100 text-customBlue text-sm xl:text-base p-3 rounded-lg mt-4"
-            >
-              Download App
-            </button>
           </div>
         </div>
 

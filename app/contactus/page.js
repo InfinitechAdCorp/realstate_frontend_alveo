@@ -36,8 +36,8 @@ const ContactForm = () => {
       .required("Email is required."),
     phone: Yup.string()
       .matches(/^[0-9]+$/, "Phone number must contain only numbers.")
-      .min(11, "Phone number must be at least 11 digits.")
-      .max(13, "Phone number can be at most 13 digits.")
+
+      .max(11, "Phone number can be at most 11 digits.")
       .required("Phone number is required."),
     message: Yup.string().required("Message is required."),
   });

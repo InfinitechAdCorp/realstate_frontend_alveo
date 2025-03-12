@@ -134,10 +134,7 @@ const SetAppointment = () => {
         canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/locations"
       />
 
-      {/* Header outside the main content */}
-      <div className="mb-10">
-        <Header /> <Icon />
-      </div>
+
 
       <div className="text-center mb-2 mt-10">
         <h1 className="text-3xl font-bold text-blue-600">Submit Property</h1>
@@ -345,8 +342,6 @@ const SetAppointment = () => {
         </Formik>
       </div>
 
-      {/* Footer outside the main content */}
-      <Footer />
     </div>
   );
 };
