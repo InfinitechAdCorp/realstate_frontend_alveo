@@ -158,7 +158,7 @@ const FeatureTable = () => {
             <FaEllipsisV />
           </button>
           {actionMenuOpen === row.id && (
-            <div className="absolute right-0 bg-white border shadow-md rounded-md w-32 z-50">
+            <div className="fixed -ml-20  bg-white shadow-md rounded-md w-24 mr-16  z-50">
               <button
                 className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
                 onClick={() => handleUpdateClick(row)}

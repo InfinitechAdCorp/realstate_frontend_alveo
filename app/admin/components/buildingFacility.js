@@ -226,7 +226,7 @@ const FacilitiesTable = ({ properties, loading }) => {
             <FaEllipsisV />
           </button>
           {isActionMenuOpen === row.property_name && (
-            <div className="absolute right-0 bg-white border shadow-md rounded-md w-32 z-50">
+            <div className="fixed right-4 bg-white shadow-md rounded-md w-24 mr-16 -mt-10 z-50">
               <button
                 className="w-full px-4 py-2 text-left hover:bg-gray-100"
                 onClick={() => {

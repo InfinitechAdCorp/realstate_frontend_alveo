@@ -172,7 +172,7 @@ const ClientProperties = () => {
             <FaEllipsisV />
           </button>
           {openDropdown === row.id && (
-            <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md z-10">
+            <div className="fixed right-10 bg-white shadow-md rounded-md w-24 mr-16 z-50">
               <button
                 onClick={() => handleEdit(row)}
                 className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
