@@ -3,9 +3,13 @@ import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig = {
   reactStrictMode: true,
-  eslint: {
-    ignoreDuringBuilds: true, // ✅ Ignore ESLint errors during production builds
+  typescript: {
+    ignoreBuildErrors: true, // ✅ Ignore TypeScript errors in production
   },
+  eslint: {
+    ignoreDuringBuilds: true, // ✅ Ignore ESLint errors during production
+  },
+
   images: {
     domains: [
       "media.geeksforgeeks.org",
@@ -13,9 +17,7 @@ const nextConfig = {
       "infinitech-testing1.online",
     ],
   },
-  typescript: {
-    ignoreBuildErrors: true, // ✅ Ignore TypeScript errors in builds
-  },
+
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.watchOptions = {
