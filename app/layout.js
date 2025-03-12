@@ -1,7 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "./pages/header";
-import Footer from "./pages/footer";
+import ClientLayout from "./ClientLayout"; // ✅ Import Client Layout
 
 const APP_NAME = "Alveo Land";
 const APP_DEFAULT_TITLE = "Alveo Land - Premium Real Estate";
@@ -21,7 +20,7 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-// ✅ Next.js Metadata API
+// ✅ Metadata with PWA
 export const metadata = {
   title: {
     default: APP_DEFAULT_TITLE,
@@ -54,7 +53,8 @@ const RootLayout = ({ children }) => {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children} {/* ✅ Header/Footer logic is now inside `page.js` */}
+        <ClientLayout>{children}</ClientLayout>{" "}
+        {/* ✅ ClientLayout handles Header/Footer */}
       </body>
     </html>
   );
