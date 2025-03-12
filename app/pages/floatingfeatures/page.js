@@ -3,10 +3,7 @@
 import { IoManSharp, IoBed } from "react-icons/io5";
 import { FaCalculator, FaCalendarAlt, FaHome } from "react-icons/fa";
 
-const FloatingFeatures = ({
-  isAccessible = false,
-  handleShowWarningToast = () => {},
-}) => {
+const FloatingFeatures = ({ isAccessible, handleShowWarningToast }) => {
   const iconDetails = [
     {
       link: "/pages/roomplanner",
@@ -34,7 +31,7 @@ const FloatingFeatures = ({
   ];
 
   return (
-    <div className="fixed top-20 right-1 z-10 lg:top-13 lg:right-2 space-x-2 hidden md:flex">
+    <div className="fixed top-20 right-1 z-10 lg:top-13 lg:right-2  space-x-2 hidden md:flex">
       {iconDetails.map((iconData, index) => (
         <FeatureIcon
           key={index}
@@ -50,10 +47,10 @@ const FeatureIcon = ({
   link,
   icon,
   label,
-  isAccessible = true,
+  isAccessible,
   accessibleLink,
   inaccessibleMessage,
-  handleShowWarningToast = () => {},
+  handleShowWarningToast,
 }) => {
   return (
     <div className="flex justify-center items-center z-50">

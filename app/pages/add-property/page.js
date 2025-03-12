@@ -417,8 +417,21 @@ function App() {
                           {filePreviews.map((imageUrl, index) => (
                             <div
                               key={index}
-                              className="w-full h-32 bg-gray-100"
+                              className="relative w-full h-32 bg-gray-100"
                             >
+                              {/* Close Button */}
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setFilePreviews((prev) =>
+                                    prev.filter((_, i) => i !== index)
+                                  )
+                                }
+                                className="absolute top-1 right-1 bg-red-500 text-white text-xs px-2 py-1 rounded-full hover:bg-red-600"
+                              >
+                                ✕
+                              </button>
+
                               <img
                                 src={imageUrl}
                                 alt={`Preview ${index + 1}`}

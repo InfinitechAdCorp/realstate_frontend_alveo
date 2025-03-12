@@ -119,6 +119,37 @@ const Testimonial = () => {
       button: true,
     },
   ];
+  const handleAddTestimonial = async () => {
+    const token = localStorage.getItem("auth_token");
+
+    if (!newTestimonial.name.trim() || !newTestimonial.message.trim()) {
+      showToast("Please fill in all fields.", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/testimonials`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newTestimonial),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to add testimonial");
+
+      const data = await response.json();
+      setTestimonials((prev) => [data, ...prev]); // Add new testimonial to the list
+      showToast("Testimonial added successfully!", "success");
+      setIsModalOpen(false); // Close modal
+    } catch (error) {
+      showToast("Failed to add testimonial.", "error");
+    }
+  };
 
   // Filter testimonials based on search query
   const filteredTestimonials = testimonials.filter((testimonial) =>

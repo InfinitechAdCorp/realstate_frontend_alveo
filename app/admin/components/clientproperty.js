@@ -2,67 +2,51 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { FaFilePdf, FaFileExcel, FaEllipsisV } from "react-icons/fa";
-import exportToPDF from "@/app/admin/components/export/exportPDF";
-import exportToExcel from "@/app/admin/components/export/exportExcel";
+import exportToPDF from "@/app/admin/components/export/exportPDF"; // ✅ Reusable PDF export
+import exportToExcel from "@/app/admin/components/export/exportExcel"; // ✅ Reusable Excel export
 import { showToast } from "@/components/alert/page";
-import EditModal from "@/app/admin/components/modal/clientproperty/editModal"; // Import EditModal at the top
+import EditModal from "@/app/admin/components/modal/clientproperty/editModal";
 
 const ClientProperties = () => {
   const [submittedProperties, setSubmittedProperties] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [showImageModal, setShowImageModal] = useState(false);
-  const [selectedImages, setSelectedImages] = useState([]);
-  const [openDropdown, setOpenDropdown] = useState(null); // Tracks dropdown visibility
+  const [openDropdown, setOpenDropdown] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
-  const fetchProperties = () => {
-    const token = localStorage.getItem("auth_token");
-    fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        const formattedData = data.map((property) => {
-          let fixedFiles = [];
-          if (property.files && typeof property.files === "string") {
-            try {
-              fixedFiles = JSON.parse(property.files).map((file) =>
-                file.replace(/\\/g, "/")
-              );
-            } catch (error) {
-              console.error("Error parsing files:", property.files, error);
-            }
-          }
-          return { ...property, files: fixedFiles };
-        });
 
-        setSubmittedProperties(formattedData);
-      })
-      .catch((error) =>
-        console.error("Error fetching submitted properties:", error)
-      );
-  };
-
-  // Call fetchProperties immediately after component mounts
   useEffect(() => {
     fetchProperties();
   }, []);
 
-  const openImageModal = (files) => {
-    setSelectedImages(files);
-    setShowImageModal(true);
-  };
+  const fetchProperties = async () => {
+    try {
+      const token = localStorage.getItem("auth_token");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  const closeImageModal = () => {
-    setShowImageModal(false);
-    setSelectedImages([]);
+      if (!response.ok) throw new Error("Failed to fetch properties");
+
+      const data = await response.json();
+      const formattedData = data.map((property) => ({
+        ...property,
+        files:
+          typeof property.files === "string"
+            ? JSON.parse(property.files).map((file) => file.replace(/\\/g, "/"))
+            : [],
+      }));
+
+      setSubmittedProperties(formattedData);
+    } catch (error) {
+      console.error("Error fetching properties:", error);
+    }
   };
 
   const handleEdit = (property) => {
@@ -71,13 +55,11 @@ const ClientProperties = () => {
   };
 
   const handleDelete = async (propertyId) => {
-    if (!window.confirm("Are you sure you want to delete this property?")) {
+    if (!window.confirm("Are you sure you want to delete this property?"))
       return;
-    }
 
     try {
       const token = localStorage.getItem("auth_token");
-
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/submitted-properties/${propertyId}`,
         {
@@ -89,14 +71,13 @@ const ClientProperties = () => {
         }
       );
 
-      const result = await response.json();
       if (response.ok) {
         showToast("Property deleted successfully!", "success");
-        // Remove deleted property from the state
-        setSubmittedProperties((prevProperties) =>
-          prevProperties.filter((property) => property.id !== propertyId)
+        setSubmittedProperties((prev) =>
+          prev.filter((p) => p.id !== propertyId)
         );
       } else {
+        const result = await response.json();
         alert(result.message || "Failed to delete property.");
       }
     } catch (error) {
@@ -107,6 +88,42 @@ const ClientProperties = () => {
 
   const toggleDropdown = (propertyId) => {
     setOpenDropdown(openDropdown === propertyId ? null : propertyId);
+  };
+
+  const handleExportPDF = () => {
+    const exportData = submittedProperties.map((property) => ({
+      "First Name": property.first_name,
+      "Last Name": property.last_name,
+      Email: property.email,
+      Phone: property.phone,
+      "Property Name": property.property_name,
+      Location: property.location,
+      Status: property.status,
+      Price: property.price
+        ? `₱${Number(
+            property.price.split("-")[0].trim()
+          ).toLocaleString()} - ₱${Number(
+            property.price.split("-")[1].trim()
+          ).toLocaleString()}`
+        : "N/A",
+    }));
+
+    exportToPDF("Client Properties", exportData);
+  };
+
+  const handleExportExcel = () => {
+    const exportData = submittedProperties.map((property) => ({
+      first_name: property.first_name,
+      last_name: property.last_name,
+      email: property.email,
+      phone: property.phone,
+      property_name: property.property_name,
+      location: property.location,
+      status: property.status,
+      price: property.price,
+    }));
+
+    exportToExcel("Client Properties", exportData);
   };
 
   const filteredProperties = submittedProperties.filter((property) =>
@@ -133,67 +150,38 @@ const ClientProperties = () => {
     { name: "Status", selector: (row) => row.status, sortable: true },
     {
       name: "Price",
-      selector: (row) => {
-        const priceRange = row.price;
-        if (priceRange) {
-          const [minPrice, maxPrice] = priceRange
-            .split("-")
-            .map((price) => `₱${Number(price.trim()).toLocaleString()}`);
-          return `${minPrice} - ${maxPrice}`;
-        }
-        return "N/A";
-      },
+      selector: (row) =>
+        row.price
+          ? `₱${Number(
+              row.price.split("-")[0].trim()
+            ).toLocaleString()} - ₱${Number(
+              row.price.split("-")[1].trim()
+            ).toLocaleString()}`
+          : "N/A",
       sortable: true,
       wrap: true,
-    },
-    {
-      name: "Files",
-      cell: (row) => {
-        let files = Array.isArray(row.files) ? row.files : [];
-        return (
-          <div>
-            {files.length > 0 && (
-              <button
-                onClick={() => {
-                  const imageUrls = files.map((file) => {
-                    const cleanPath = file.replace(/\\/g, "/");
-                    return `${process.env.NEXT_PUBLIC_SERVER_PORT}/${cleanPath}`;
-                  });
-                  openImageModal(imageUrls);
-                }}
-                className="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600"
-              >
-                Show Images
-              </button>
-            )}
-          </div>
-        );
-      },
     },
     {
       name: "Actions",
       cell: (row) => (
         <div className="relative">
-          {/* Ellipsis button */}
           <button
             onClick={() => toggleDropdown(row.id)}
-            className="p-2 text-gray-600 hover:text-gray-800 focus:outline-none"
+            className="p-2 text-gray-600 hover:text-gray-800"
           >
             <FaEllipsisV />
           </button>
-
-          {/* Dropdown menu */}
           {openDropdown === row.id && (
             <div className="absolute right-0 mt-2 w-32 bg-white shadow-md rounded-md z-10">
               <button
                 onClick={() => handleEdit(row)}
-                className="block w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                className="block w-full px-4 py-2 text-gray-700 hover:bg-gray-100"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(row.id)}
-                className="block w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100"
+                className="block w-full px-4 py-2 text-red-600 hover:bg-gray-100"
               >
                 Delete
               </button>
@@ -210,47 +198,51 @@ const ClientProperties = () => {
   return (
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
-        {/* Title & Search Filter */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4">
+        {/* Title & Export Buttons in One Row */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <h2 className="text-lg font-semibold">Client Properties</h2>
-          <input
-            type="text"
-            placeholder="Search by property name..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
-          />
-          <div className="flex gap-3">
+          <div className="flex gap-3 mt-2 md:mt-0">
             <button
-              onClick={exportToPDF}
+              onClick={handleExportPDF}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
-              onClick={exportToExcel}
+              onClick={handleExportExcel}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
             >
               <FaFileExcel className="mr-2" /> Export Excel
             </button>
           </div>
         </div>
+
+        {/* Search Filter (Moved Below Title) */}
+        <div className="mt-2">
+          <input
+            type="text"
+            placeholder="Search by property name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full md:w-80 px-3 py-2 border rounded-md text-sm"
+          />
+        </div>
+
         {/* Data Table */}
         <DataTable
           columns={columns}
           data={filteredProperties}
           pagination
-          paginationPerPage={10}
-          paginationRowsPerPageOptions={[5, 10, 15]}
           highlightOnHover
           responsive
           striped
         />
+
         <EditModal
           modalOpen={isEditModalOpen}
           closeModal={() => setIsEditModalOpen(false)}
           property={editingProperty}
-          fetchData={fetchProperties} // ✅ Pass fetchProperties to update table after edit
+          fetchData={fetchProperties}
         />
       </div>
     </div>

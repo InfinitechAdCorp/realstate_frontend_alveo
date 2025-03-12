@@ -42,7 +42,10 @@ const SetAppointment = () => {
     return "";
   };
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
+  const handleSubmit = async (
+    values,
+    { setSubmitting, setErrors, resetForm }
+  ) => {
     const appointmentData = new FormData();
     appointmentData.append("fullname", values.fullname);
     appointmentData.append("email", values.email);
@@ -60,11 +63,18 @@ const SetAppointment = () => {
           body: appointmentData,
         }
       );
+
       if (response.ok) {
         const data = await response.json();
         handleShowSuccessToast("Appointment scheduled successfully!");
         setMessageType("success");
         console.log(data);
+
+        // ✅ Clear form fields on success
+        resetForm();
+        setDate(new Date());
+        setTime("");
+        setFormattedDate("");
       } else {
         setErrors({ submit: "Failed to schedule the appointment." });
         handleShowErrorToast(
@@ -82,6 +92,7 @@ const SetAppointment = () => {
       );
       setMessageType("error");
     }
+
     setSubmitting(false);
   };
 
@@ -380,14 +391,15 @@ const SetAppointment = () => {
                       </div>
                     )}
                   </div>
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-1/2 py-2 bg-customBlue text-white  mt-4 "
-                  >
-                    {isSubmitting ? "Submitting..." : "Submit Schedule"}
-                  </button>
+                  <div className="mx-auto w-full flex justify-center">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-1/2 py-2 bg-customBlue text-white mt-4 text-center"
+                    >
+                      {isSubmitting ? "Submitting..." : "Submit Schedule"}
+                    </button>
+                  </div>
                 </Form>
               )}
             </Formik>

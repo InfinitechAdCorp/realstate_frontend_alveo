@@ -1,11 +1,13 @@
 {
+  "id": "/",
   "name": "Alveo Land",
   "short_name": "Alveo",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "theme_color": "#030303",
-  "background_color": "#0c0d0d",
+  "display_override": ["standalone", "window-controls-overlay"],
+  "theme_color": "#8936FF",
+  "background_color": "#2EC6FE",
   "icons": [
     {
       "src": "/icon512_maskable.png",

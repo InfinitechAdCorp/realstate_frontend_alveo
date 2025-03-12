@@ -95,6 +95,7 @@ const AdminLayout = () => {
   return (
     <div className="flex h-screen overflow-hidden w-full min-w-[320px]">
       <Sidebar
+        activeNav={activeNav}
         setActiveNav={setActiveNav}
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
@@ -160,7 +161,7 @@ const AdminLayout = () => {
           )}
           {activeNav === "CLIENT PROPERTY" && <ClientProperty />}
           {activeNav === "APPOINTMENTS" && <Appointment />}
-          {activeNav === "TESTIMONIAL" && <Testimonial />}
+          {activeNav === "TESTIMONIALS" && <Testimonial />}
           {activeNav === "CHATBOT" && <Chatbot />}
           {activeNav === "DEVELOPMENT TYPE" && <DevelopmentType />}
           {activeNav === "STATUS" && <Status />}

@@ -2,29 +2,26 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import {
-  FaCheckCircle,
-  FaTimesCircle,
+  FaTrash,
   FaFilePdf,
   FaFileExcel,
+  FaCheck,
+  FaTimes,
 } from "react-icons/fa";
 import { showToast } from "@/components/alert/page";
-import exportToPDF from "@/app/admin/components/export/exportPDF"; // Import the reusable export function
-import exportToExcel from "@/app/admin/components/export/exportExcel"; // Import reusable Excel function
+import exportToPDF from "@/app/admin/components/export/exportPDF";
+import exportToExcel from "@/app/admin/components/export/exportExcel";
 
-export const handleShowSuccessToast = (message) => {
+export const handleShowSuccessToast = (message) =>
   showToast(message, "success");
-};
-
-export const handleShowErrorToast = (message) => {
-  showToast(message, "error");
-};
+export const handleShowErrorToast = (message) => showToast(message, "error");
 
 const Table = () => {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [confirmAction, setConfirmAction] = useState(null); // For tracking which action to confirm
-  const [selectedAppointment, setSelectedAppointment] = useState(null); // For storing the selected appointment for confirmation
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
 
   useEffect(() => {
     fetchAppointments();
@@ -47,50 +44,27 @@ const Table = () => {
     }
   };
 
-  const handleAccept = async (id) => {
+  const updateAppointmentStatus = async (id, status) => {
     try {
       await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/accept/${id}`,
+        `${
+          process.env.NEXT_PUBLIC_SERVER_PORT
+        }/api/admin/appointment/${status.toLowerCase()}/${id}`,
         { method: "POST" }
       );
 
-      setAppointments((prev) => {
-        const updatedAppointments = prev.map((appointment) =>
-          appointment.id === id
-            ? { ...appointment, status: "ACCEPTED" }
-            : appointment
-        );
-        return [...updatedAppointments]; // Ensure a new reference is created
-      });
-
-      handleShowSuccessToast("Appointment accepted!");
-    } catch (error) {
-      handleShowErrorToast("Error accepting appointment.");
-    }
-  };
-
-  const handleDecline = async (id) => {
-    try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/decline/${id}`,
-        { method: "POST" }
+      setAppointments((prev) =>
+        prev.map((appointment) =>
+          appointment.id === id ? { ...appointment, status } : appointment
+        )
       );
 
-      setAppointments((prev) => {
-        const updatedAppointments = prev.map((appointment) =>
-          appointment.id === id
-            ? { ...appointment, status: "DECLINED" }
-            : appointment
-        );
-        return [...updatedAppointments];
-      });
-
-      handleShowSuccessToast("Appointment declined!");
+      handleShowSuccessToast(`Appointment ${status.toLowerCase()}ed!`);
+      setModalOpen(false);
     } catch (error) {
-      handleShowErrorToast("Error declining appointment.");
+      handleShowErrorToast("Error updating appointment status.");
     }
   };
-
   // Export to PDF
   const handleExportPDF = () => {
     const exportData = appointments.map((appointment) => ({
@@ -120,34 +94,49 @@ const Table = () => {
 
     exportToExcel("Scheduled Appointments", exportData);
   };
+  const handleDelete = async (id) => {
+    try {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/appointment/delete/${id}`,
+        { method: "DELETE" }
+      );
 
+      setAppointments((prev) =>
+        prev.filter((appointment) => appointment.id !== id)
+      );
+      handleShowSuccessToast("Appointment deleted successfully!");
+    } catch (error) {
+      handleShowErrorToast("Error deleting appointment.");
+    }
+  };
+
+  const openModal = (appointment) => {
+    setSelectedAppointment(appointment);
+    setModalOpen(true);
+  };
+  const filteredAppointments = appointments.filter((appointment) =>
+    appointment.fullname.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
     { name: "Full Name", selector: (row) => row.fullname, sortable: true },
     { name: "Email", selector: (row) => row.email, sortable: true },
     { name: "Phone", selector: (row) => row.number, sortable: true },
     { name: "Appointment For", selector: (row) => row.reason, sortable: true },
     { name: "Property/Unit", selector: (row) => row.property, sortable: true },
-    {
-      name: "Message",
-      selector: (row) => row.message,
-      wrap: true,
-      sortable: true,
-    },
+    { name: "Message", selector: (row) => row.message || "N/A", wrap: true },
     {
       name: "Status",
       selector: (row) => row.status.toUpperCase(),
-      sortable: true,
       cell: (row) => (
         <span
-          className={`px-2 py-1 rounded-md text-white ${
+          className={`px-2 py-1 rounded-md text-white cursor-pointer ${
             row.status === "ACCEPTED"
               ? "bg-green-500"
               : row.status === "DECLINED"
               ? "bg-red-500"
-              : row.status === "PENDING"
-              ? "bg-yellow-500"
-              : "bg-gray-400"
+              : "bg-yellow-500"
           }`}
+          onClick={() => openModal(row)}
         >
           {row.status.toUpperCase()}
         </span>
@@ -156,26 +145,12 @@ const Table = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <div className="flex space-x-2">
-          <button
-            onClick={() => {
-              setSelectedAppointment(row);
-              setConfirmAction("accept");
-            }}
-            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            <FaCheckCircle />
-          </button>
-          <button
-            onClick={() => {
-              setSelectedAppointment(row);
-              setConfirmAction("decline");
-            }}
-            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            <FaTimesCircle />
-          </button>
-        </div>
+        <button
+          onClick={() => handleDelete(row.id)}
+          className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-gray-600"
+        >
+          <FaTrash />
+        </button>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
@@ -183,102 +158,137 @@ const Table = () => {
     },
   ];
 
-  const filteredAppointments = appointments.filter((appointment) =>
-    appointment.fullname.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const confirmActionHandler = () => {
-    if (confirmAction === "accept") {
-      handleAccept(selectedAppointment.id);
-    } else if (confirmAction === "decline") {
-      handleDecline(selectedAppointment.id);
-    }
-
-    setConfirmAction(null); // Reset action after confirmation
-    setSelectedAppointment(null); // Clear selected appointment
-  };
   return (
     <div className="h-full overflow-y-auto mt-6 p-4 font-thin">
-      <div className="max-h-full overflow-y-auto bg-white shadow-md p-4 rounded-md relative">
-        {/* Header and Actions */}
-        <div className="flex flex-col md:flex-col lg:flex-row justify-between items-center mb-4 gap-3">
-          <div className="w-full md:w-auto">
-            <h2 className="text-lg mb-2 text-center md:text-left">
-              Scheduled Appointments
-            </h2>
-            <input
-              type="text"
-              placeholder="Search by name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full md:w-80 px-3 py-2 border rounded-md text-sm"
-            />
+      <div className="bg-white shadow-md p-4 rounded-md">
+        {/* Title & Export Buttons (Same Line) */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-2">
+          <h2 className="text-lg font-semibold">Scheduled Appointments</h2>
+
+          <div className="flex gap-3 mt-2 md:mt-0">
+            <button
+              onClick={() =>
+                exportToPDF("Scheduled Appointments", appointments)
+              }
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+            >
+              <FaFilePdf className="mr-2" /> Export PDF
+            </button>
+            <button
+              onClick={() =>
+                exportToExcel("Scheduled Appointments", appointments)
+              }
+              className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center"
+            >
+              <FaFileExcel className="mr-2" /> Export Excel
+            </button>
           </div>
         </div>
 
-        {/* Buttons - Stack on mobile and md screens, position in upper-right corner on lg+ screens */}
-        <div className="lg:absolute lg:top-4 lg:right-4 flex flex-col sm:flex-row gap-3 sm:w-auto w-full mt-4 lg:mt-0">
-          <button
-            onClick={handleExportPDF}
-            className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full sm:w-auto"
-          >
-            <FaFilePdf className="mr-2" /> Export PDF
-          </button>
-          <button
-            onClick={handleExportExcel}
-            className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center justify-center w-full sm:w-auto"
-          >
-            <FaFileExcel className="mr-2" /> Export Excel
-          </button>
-        </div>
-
-        {/* Data Table */}
-        <div className="overflow-x-auto mt-6">
-          <DataTable
-            columns={columns}
-            data={filteredAppointments}
-            pagination
-            paginationPerPage={10}
-            paginationRowsPerPageOptions={[5, 10, 15]}
-            highlightOnHover
-            responsive
-            striped
-            progressPending={loading}
-            noDataComponent="No Appointments Found"
+        {/* Search Filter (New Line) */}
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full md:w-1/3 px-3 py-2 border rounded-md text-sm"
           />
         </div>
-      </div>
 
-      {/* Confirmation Modal */}
-      {confirmAction && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg">
-            <h2 className="text-lg mb-4 text-center">
-              Are you sure you want to{" "}
-              {confirmAction === "accept" ? "accept" : "decline"} this
-              appointment?
-            </h2>
-            <p className="text-sm text-gray-600 mb-4 text-center">
-              <strong>Name:</strong> {selectedAppointment?.fullname} <br />
-              <strong>Email:</strong> {selectedAppointment?.email}
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+        <DataTable
+          columns={columns}
+          data={filteredAppointments}
+          pagination
+          highlightOnHover
+          responsive
+          striped
+        />
+
+        {modalOpen && selectedAppointment && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+              <h2 className="text-lg mb-4 text-center">
+                Change Status for {selectedAppointment.fullname}?
+              </h2>
+              <p className="text-center text-sm text-gray-600 mb-4">
+                Current Status:{" "}
+                <span
+                  className={`font-bold ${
+                    selectedAppointment.status === "ACCEPTED"
+                      ? "text-green-500"
+                      : selectedAppointment.status === "DECLINED"
+                      ? "text-red-500"
+                      : "text-yellow-500"
+                  }`}
+                >
+                  {selectedAppointment.status}
+                </span>
+              </p>
+              <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+                {selectedAppointment.status === "PENDING" && (
+                  <>
+                    <button
+                      onClick={() =>
+                        updateAppointmentStatus(
+                          selectedAppointment.id,
+                          "ACCEPTED"
+                        )
+                      }
+                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center justify-center"
+                    >
+                      <FaCheck className="mr-2" /> Accept
+                    </button>
+                    <button
+                      onClick={() =>
+                        updateAppointmentStatus(
+                          selectedAppointment.id,
+                          "DECLINED"
+                        )
+                      }
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex items-center justify-center"
+                    >
+                      <FaTimes className="mr-2" /> Decline
+                    </button>
+                  </>
+                )}
+                {selectedAppointment.status === "ACCEPTED" && (
+                  <button
+                    onClick={() =>
+                      updateAppointmentStatus(
+                        selectedAppointment.id,
+                        "DECLINED"
+                      )
+                    }
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex items-center justify-center"
+                  >
+                    <FaTimes className="mr-2" /> Decline
+                  </button>
+                )}
+                {selectedAppointment.status === "DECLINED" && (
+                  <button
+                    onClick={() =>
+                      updateAppointmentStatus(
+                        selectedAppointment.id,
+                        "ACCEPTED"
+                      )
+                    }
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 flex items-center justify-center"
+                  >
+                    <FaCheck className="mr-2" /> Accept
+                  </button>
+                )}
+              </div>
               <button
-                onClick={confirmActionHandler}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
-              >
-                {confirmAction === "accept" ? "Accept" : "Decline"}
-              </button>
-              <button
-                onClick={() => setConfirmAction(null)}
-                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full sm:w-auto"
+                onClick={() => setModalOpen(false)}
+                className="mt-4 bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full"
               >
                 Cancel
               </button>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

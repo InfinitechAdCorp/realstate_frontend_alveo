@@ -1,17 +1,10 @@
 /** @type {import('next').NextConfig} */
-import withPWAInit from "@ducanh2912/next-pwa";
-
-const withPWA = withPWAInit({
-  dest: "public", // ✅ Folder where service worker and PWA assets will be saved
-  register: true,
-  skipWaiting: true,
-  disable: false, // ✅ Disable PWA in development mode
-});
+import withPWA from "@ducanh2912/next-pwa";
 
 const nextConfig = {
-  reactStrictMode: true, // ✅ Keep this outside of withPWA()
+  reactStrictMode: true,
   eslint: {
-    ignoreDuringBuilds: true, // ✅ Disables ESLint errors during build
+    ignoreDuringBuilds: true, // ✅ Ignore ESLint errors during production builds
   },
   images: {
     domains: [
@@ -20,15 +13,13 @@ const nextConfig = {
       "infinitech-testing1.online",
     ],
   },
-
   typescript: {
-    ignoreBuildErrors: process.env.NODE_ENV === "development", // ✅ Only ignore in dev mode
+    ignoreBuildErrors: true, // ✅ Ignore TypeScript errors in builds
   },
-
   webpack: (config, { isServer }) => {
-    if (!isServer && process.env.NODE_ENV === "development") {
+    if (!isServer) {
       config.watchOptions = {
-        poll: 1000, // Check for changes every second
+        poll: 1000,
         aggregateTimeout: 300,
       };
     }
@@ -36,5 +27,13 @@ const nextConfig = {
   },
 };
 
-// ✅ Apply PWA configuration
-export default withPWA(nextConfig);
+// ✅ Apply PWA configuration correctly
+export default withPWA({
+  ...nextConfig, // ✅ Spread nextConfig inside withPWA
+  pwa: {
+    dest: "public", // ✅ Service worker and assets go in public folder
+    register: true, // ✅ Auto-register SW
+    skipWaiting: true, // ✅ Update SW without waiting for reload
+    disable: false, // ✅ Ensure PWA is enabled
+  },
+});

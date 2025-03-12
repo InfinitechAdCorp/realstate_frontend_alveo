@@ -133,7 +133,7 @@ const Chatbot = () => {
             setEntryToDelete(row); // Set the entry to be deleted
             setIsDeleteModalOpen(true); // Open the delete confirmation modal
           }}
-          className="text-red-500 hover:text-red-700 text-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
         >
           Delete
         </button>

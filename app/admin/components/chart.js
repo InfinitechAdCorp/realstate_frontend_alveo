@@ -165,29 +165,29 @@ export default function CardCharts(data) {
   };
 
   return (
-    <div className="mt-4 h-fit">
-      {/* Pie Chart 1 */}
-      <div className="flex ">
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6 bg-white">
+    <div className="mt-4 h-fit w-full gap-10">
+      {/* Pie Charts Container */}
+      <div className="flex justify-between w-full gap-6">
+        {/* Pie Chart 1 - Aligned to the Left */}
+        <div className="relative flex flex-col min-w-0 break-words w-[50%] shadow-lg rounded bg-white">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full max-w-full flex-grow flex-1">
-                <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
+                <h6 className="uppercase text-gray-700 mb-1 text-xs font-semibold">
                   Most Property Inquired
                 </h6>
               </div>
             </div>
           </div>
           <div className="p-4 flex justify-center items-center">
-            {/* Pie Chart 1 */}
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={180}>
               <PieChart>
                 <Pie
                   data={getPieChartData(propertyInquiryData)}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={50}
+                  outerRadius={70}
                   fill="#8884d8"
                 >
                   {propertyInquiryData.map((entry, index) => (
@@ -208,27 +208,26 @@ export default function CardCharts(data) {
           </div>
         </div>
 
-        {/* Pie Chart 2 */}
-        <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 mt-6 bg-white">
+        {/* Pie Chart 2 - Aligned to the Right */}
+        <div className="relative flex flex-col min-w-0 break-words w-[50%] shadow-lg rounded bg-white">
           <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full max-w-full flex-grow flex-1">
-                <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
+                <h6 className="uppercase text-gray-700 mb-1 text-xs font-semibold">
                   Most Viewed Property
                 </h6>
               </div>
             </div>
           </div>
           <div className="p-4 flex justify-center items-center">
-            {/* Pie Chart 2 */}
-            <ResponsiveContainer width="100%" height={200}>
+            <ResponsiveContainer width="100%" height={180}>
               <PieChart>
                 <Pie
                   data={getPieChartData(requestViewingData)}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={60}
-                  outerRadius={80}
+                  innerRadius={50}
+                  outerRadius={70}
                   fill="#8884d8"
                 >
                   {requestViewingData.map((entry, index) => (
@@ -250,19 +249,19 @@ export default function CardCharts(data) {
         </div>
       </div>
 
-      <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded bg-blueGray-700 left-0 bg-white">
+      {/* Stacked Area Chart - Full Width */}
+      <div className="relative flex flex-col min-w-0 break-words w-full shadow-lg rounded bg-white mt-10">
         <div className="rounded-t mb-0 px-4 py-3 bg-transparent">
           <div className="flex flex-wrap items-center">
             <div className="relative w-full max-w-full flex-grow flex-1">
-              <h6 className="uppercase text-blueGray-100 mb-1 text-xs font-semibold">
-                INSERTED CLIENT PROPERTY
+              <h6 className="uppercase text-gray-700 mb-1 text-xs font-semibold">
+                Inserted Client Property
               </h6>
             </div>
           </div>
         </div>
         <div className="p-4 flex-auto">
-          {/* Stacked Area Chart */}
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={getStackedAreaChartData()}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
