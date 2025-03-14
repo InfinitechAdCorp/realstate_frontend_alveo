@@ -101,7 +101,7 @@ const exportToPDF = (title, data) => {
       yOffset += 6;
 
       entryData.forEach(({ label, wrappedText, height }) => {
-        doc.setFontSize(10);
+        doc.setFontSize(8);
         doc.setFont("helvetica", "bold");
         doc.text(label, currentColumnX, yOffset);
 

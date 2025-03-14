@@ -18,7 +18,10 @@ import { FaUserCircle, FaBars } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 const AdminLayout = () => {
-  const [activeNav, setActiveNav] = useState("DASHBOARD");
+  const [activeNav, setActiveNav] = useState(
+    () => localStorage.getItem("activeNav") || "DASHBOARD"
+  );
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -47,6 +50,10 @@ const AdminLayout = () => {
       fetchProperties();
     }
   }, [activeNav]);
+  const handleNavChange = (navItem) => {
+    setActiveNav(navItem);
+    localStorage.setItem("activeNav", navItem);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("auth_token");
@@ -96,10 +103,11 @@ const AdminLayout = () => {
     <div className="flex h-screen overflow-hidden w-full min-w-[320px]">
       <Sidebar
         activeNav={activeNav}
-        setActiveNav={setActiveNav}
+        setActiveNav={handleNavChange} // ✅ Use the new function
         isSidebarOpen={isSidebarOpen}
         setIsSidebarOpen={setIsSidebarOpen}
       />
+
       <div className="flex-1 flex flex-col bg-gray-100 text-black min-w-[320px]">
         {/* Header Section */}
         <header className="bg-white shadow-md p-4 flex items-center justify-end w-full md:px-4 lg:px-6 relative">

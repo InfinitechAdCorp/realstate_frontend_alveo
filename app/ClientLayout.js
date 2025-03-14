@@ -7,7 +7,11 @@ import Footer from "./pages/footer";
 
 const ClientLayout = ({ children }) => {
   const pathname = usePathname();
-  const isAdminPage = pathname.startsWith("/admin"); // ✅ Exclude `/admin` pages from header/footer
+  const isAdminPage =
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/pages/roomplanner");
+  // ✅ Exclude `/admin` pages from header/footer
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
   // ✅ Register Service Worker & Listen for Install Prompt
@@ -55,7 +59,6 @@ const ClientLayout = ({ children }) => {
       <main>{children}</main>
       {!isAdminPage && <Footer />}
 
-      {/* ✅ Install PWA Button (Visible on All Pages, Including Admin) */}
       {deferredPrompt && (
         <button
           onClick={handleInstallClick}

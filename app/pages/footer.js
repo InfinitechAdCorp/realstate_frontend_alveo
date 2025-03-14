@@ -24,15 +24,15 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-customBlue text-white px-4 xl:px-1 w-full">
+    <footer className="w-full bg-customBlue text-white px-6 py-8 font-normal">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-8 text-center sm:text-center lg:text-left">
         {/* Left Column */}
         <div className="col-span-1 flex justify-center lg:justify-center md:justify-center md:mx-auto md:w-full">
-          <div className="flex flex-col justify-center items-center sm:items-center  py-4 lg:ml-10">
-            <h2 className="text-5xl sm:text-7xl md:text-5xl xl:text-5xl font-semibold">
+          <div className="flex flex-col justify-center items-center sm:items-center py-4 lg:ml-10">
+            <h2 className="text-5xl sm:text-7xl md:text-5xl xl:text-5xl ">
               Λ L V E O
             </h2>
-            <p className="text-lg sm:text-sm mt-2 opacity-80">
+            <p className="text-lg sm:text-sm mt-2 opacity-80 ">
               An AyalaLand Company
             </p>
           </div>
@@ -42,15 +42,15 @@ const Footer = () => {
         <div className="col-span-1 sm:col-span-2 lg:col-span-2 h-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 p-4">
             <div className="flex flex-col items-center sm:items-center lg:items-start">
-              <h2 className="text-2xl xl:text-3xl font-thin">Contact Us</h2>
-              <p className="text-xs xl:text-sm mt-2">
+              <h2 className="text-2xl xl:text-3xl ">Contact Us</h2>
+              <p className="text-xs xl:text-sm mt-2 ">
                 Our dedicated teams are ready to assist you with information on
                 Alveo Land properties.
               </p>
             </div>
 
             <div className="flex flex-col items-center sm:items-center lg:items-start">
-              <h2 className="text-2xl xl:text-3xl font-thin">Email</h2>
+              <h2 className="text-2xl xl:text-3xl ">Email</h2>
               <p className="text-xs xl:text-sm mt-2">
                 <a
                   href="mailto:info@alveoland.com.ph"
@@ -62,30 +62,29 @@ const Footer = () => {
             </div>
 
             <div className="flex flex-col items-center sm:items-center lg:items-start">
-              <h2 className="text-2xl xl:text-3xl font-thin">
-                Customer Hotline
-              </h2>
-              <p className="text-xs xl:text-sm mt-2">
+              <h2 className="text-2xl xl:text-3xl ">Customer Hotline</h2>
+              <p className="text-xs xl:text-sm mt-2 ">
                 <a
                   href="tel:+63288485000"
-                  className="text-white hover:text-blue-600 hover:underline"
+                  className="text-white hover:text-blue-600 hover:underline "
                 >
                   (+632) 8848 5000
                 </a>
               </p>
             </div>
+
             <div className="flex flex-col items-center sm:items-center lg:items-start text-center lg:text-left">
-              <h2 className="text-2xl xl:text-3xl font-thin">Location</h2>
-              <a
-                href="https://maps.app.goo.gl/dQRKwnAkHXiwc7hq8"
-                target="_blank"
-                className="no-underline text-white hover:text-blue-500"
-              >
-                <p className="text-xs xl:text-sm mt-2 lg:text-left">
-                  Alveo Corporate Center 728 28th Street, Bonifacio Global City
-                  1634 Taguig City, Metro Manila Philippines
-                </p>
-              </a>
+              <h2 className="text-2xl xl:text-3xl ">Location</h2>
+              <p className="text-xs xl:text-sm mt-2  lg:text-left">
+                <a
+                  href="https://maps.app.goo.gl/dQRKwnAkHXiwc7hq8"
+                  target="_blank"
+                  className="no-underline text-white hover:text-blue-500 "
+                >
+                  Alveo Corporate Center, 728 28th Street, Bonifacio Global
+                  City, 1634 Taguig City, Metro Manila, Philippines
+                </a>
+              </p>
             </div>
           </div>
         </div>
@@ -96,7 +95,7 @@ const Footer = () => {
 
       {/* Footer Section */}
       <div className="text-center text-white py-2">
-        <p className="text-xs xl:text-sm">
+        <p className="text-xs xl:text-sm ">
           Copyright © 2024 All Rights Reserved by
           <a
             href="https://www.infinitechphil.com/about-us"
@@ -108,7 +107,7 @@ const Footer = () => {
           |{" "}
           <a
             href="/pages/privacypolicy"
-            className="text-white hover:text-blue-600 hover:underline"
+            className="text-white hover:text-blue-600 hover:underline "
           >
             {" "}
             Privacy Policy

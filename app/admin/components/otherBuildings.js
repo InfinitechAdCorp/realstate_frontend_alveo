@@ -128,14 +128,71 @@ const OtherBuildingsTable = ({ properties, loading }) => {
   const filteredBuildings = buildings.filter((building) =>
     building.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const handleexportToPDF = () => {
+    if (filteredBuildings.length === 0) {
+      showToast("No data available for export.", "error");
+      return;
+    }
+
+    const exportData = filteredBuildings.map((building) => ({
+      "Building Name": building.name,
+      "Property Name": building.property_name || "N/A",
+      "Development Type": building.development_type || "N/A",
+      "Residential Levels": building.residential_levels || "N/A",
+      "Basement Parking": building.basement_parking_levels || "N/A",
+      "Podium Parking": building.podium_parking_levels || "N/A",
+      "Commercial Units": building.commercial_units || "N/A",
+      "Lower Ground Parking":
+        building.lower_ground_floor_parking_levels || "N/A",
+    }));
+
+    exportToPDF("Other Buildings Report", exportData);
+  };
+
+  const handleexportToExcel = () => {
+    if (filteredBuildings.length === 0) {
+      showToast("No data available for export.", "error");
+      return;
+    }
+
+    const exportData = filteredBuildings.map((building) => ({
+      name: building.name,
+      property_name: building.property_name || "N/A",
+      development_type: building.development_type || "N/A",
+      residential_levels: building.residential_levels || "N/A",
+      basement_parking_levels: building.basement_parking_levels || "N/A",
+      podium_parking_levels: building.podium_parking_levels || "N/A",
+      commercial_units: building.commercial_units || "N/A",
+      lower_ground_floor_parking_levels:
+        building.lower_ground_floor_parking_levels || "N/A",
+    }));
+
+    exportToExcel("Other Buildings Report", exportData);
+  };
 
   const columns = [
     {
       name: "Property Name",
       selector: (row) => row.property_name,
+
       sortable: true,
     },
     { name: "Building Name", selector: (row) => row.name, sortable: true },
+    {
+      name: "Building Image",
+      selector: (row) => row.path,
+      sortable: false,
+      cell: (row) =>
+        row.path ? (
+          <img
+            src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${row.path}`}
+            alt="View"
+            className="w-16 h-16 rounded-md object-cover"
+          />
+        ) : (
+          "N/A"
+        ),
+    },
     {
       name: "Development Type",
       selector: (row) => row.development_type,
@@ -230,15 +287,13 @@ const OtherBuildingsTable = ({ properties, loading }) => {
               <FaPlus className="mr-2" /> Add Building
             </button>
             <button
-              onClick={() => exportToPDF("Buildings Report", filteredBuildings)}
+              onClick={() => handleexportToPDF()}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
-              onClick={() =>
-                exportToExcel("Buildings Report", filteredBuildings)
-              }
+              onClick={() => handleexportToExcel()}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFileExcel className="mr-2" /> Export Excel

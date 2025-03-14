@@ -9,16 +9,18 @@ import {
 const Location = () => {
   const [locations, setLocations] = useState([]);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // Search state
-  const [expandedRows, setExpandedRows] = useState({}); // Expanded state for see more/less
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [expandedRows, setExpandedRows] = useState({});
   const [data, setData] = useState({
     newAreaName: "",
     newTitle: "",
     newDescription: "",
     newImage: null,
   });
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete confirmation modal
-  const [entryToDelete, setEntryToDelete] = useState(null); // State for the entry to be deleted
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [entryToDelete, setEntryToDelete] = useState(null);
 
   useEffect(() => {
     fetchLocations();
@@ -30,9 +32,7 @@ const Location = () => {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/area`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       const result = await response.json();
@@ -60,7 +60,7 @@ const Location = () => {
         prevLocations.filter((location) => location.id !== id)
       );
       handleShowSuccessToast("Location deleted successfully!");
-      setIsDeleteModalOpen(false); // Close delete modal
+      setIsDeleteModalOpen(false);
     } catch (error) {
       handleShowErrorToast("Error occurred while deleting location.");
     }
@@ -87,10 +87,8 @@ const Location = () => {
         `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/add-area`,
         {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`, // Attach token for authentication
-          },
-          body: formData, // Send formData (multipart/form-data)
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
         }
       );
 
@@ -98,14 +96,14 @@ const Location = () => {
 
       if (response.ok) {
         handleShowSuccessToast("Location added successfully!");
-        fetchLocations(); // ✅ Fetch the updated locations list
+        fetchLocations();
         setIsLocationModalOpen(false);
         setData({
           newAreaName: "",
           newTitle: "",
           newDescription: "",
           newImage: null,
-        }); // Clear form fields
+        });
       } else {
         handleShowErrorToast(result.error || "Failed to add location.");
       }
@@ -114,10 +112,45 @@ const Location = () => {
     }
   };
 
-  const toggleExpansion = (id) => {
-    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }));
+  const handleEditClick = (location) => {
+    setSelectedLocation(location);
+    setIsEditModalOpen(true);
   };
 
+  const handleUpdateLocation = async () => {
+    if (!selectedLocation) return;
+
+    const formData = new FormData();
+    formData.append("area_name", selectedLocation.area_name);
+    formData.append("title", selectedLocation.title);
+    formData.append("description", selectedLocation.description);
+    if (selectedLocation.image) {
+      formData.append("image", selectedLocation.image);
+    }
+
+    const token = localStorage.getItem("auth_token");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/updateArea/${selectedLocation.id}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${token}` },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        handleShowSuccessToast("Location updated successfully!");
+        fetchLocations();
+        setIsEditModalOpen(false);
+      } else {
+        handleShowErrorToast("Failed to update location.");
+      }
+    } catch (err) {
+      handleShowErrorToast("An error occurred while updating.");
+    }
+  };
   const columns = [
     {
       name: "Area Name",
@@ -176,45 +209,34 @@ const Location = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <button
-          onClick={() => {
-            setEntryToDelete(row); // Set the entry to delete
-            setIsDeleteModalOpen(true); // Open delete confirmation modal
-          }}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
-        >
-          Delete
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEditClick(row)}
+            className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => {
+              setEntryToDelete(row);
+              setIsDeleteModalOpen(true);
+            }}
+            className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Delete
+          </button>
+        </div>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
-      button: true,
     },
   ];
-
-  const filteredLocations = (locations || []).filter(
-    (location) =>
-      location.area_name &&
-      location.area_name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   return (
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
-        {/* Title & Search Filter */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
-          <div className="w-full sm:w-auto">
-            <h2 className="text-lg font-semibold">Locations</h2>
-            <input
-              type="text"
-              placeholder="Search by area name..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full sm:w-80 px-3 py-2 border rounded-md text-sm mt-2 sm:mt-0"
-            />
-          </div>
-
-          {/* Add Location Button */}
+          <h2 className="text-lg font-semibold">Locations</h2>
           <button
             onClick={() => setIsLocationModalOpen(true)}
             className="bg-indigo-600 text-white px-4 py-2 text-sm hover:bg-indigo-500 rounded-md sm:w-auto w-full"
@@ -223,22 +245,17 @@ const Location = () => {
           </button>
         </div>
 
-        {/* Data Table with Proper Spacing */}
         <div className="p-2">
           <DataTable
             columns={columns}
-            data={filteredLocations}
+            data={locations}
             pagination
-            paginationPerPage={10}
-            paginationRowsPerPageOptions={[5, 10, 15]}
             highlightOnHover
             responsive
             striped
           />
         </div>
       </div>
-
-      {/* Modal for Adding Location */}
       {isLocationModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:max-w-md max-w-[400px]">
@@ -325,6 +342,85 @@ const Location = () => {
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md w-full sm:w-auto"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Edit Location Modal */}
+      {isEditModalOpen && selectedLocation && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-lg mb-4">Edit Location</h2>
+
+            {/* Area Name */}
+            <label className="text-sm font-medium">Area Name</label>
+            <input
+              type="text"
+              value={selectedLocation.area_name}
+              onChange={(e) =>
+                setSelectedLocation({
+                  ...selectedLocation,
+                  area_name: e.target.value,
+                })
+              }
+              className="border rounded p-2 w-full mb-2"
+            />
+
+            {/* Title */}
+            <label className="text-sm font-medium">Title</label>
+            <input
+              type="text"
+              value={selectedLocation.title}
+              onChange={(e) =>
+                setSelectedLocation({
+                  ...selectedLocation,
+                  title: e.target.value,
+                })
+              }
+              className="border rounded p-2 w-full mb-2"
+            />
+
+            {/* Description */}
+            <label className="text-sm font-medium">Description</label>
+            <textarea
+              value={selectedLocation.description}
+              onChange={(e) =>
+                setSelectedLocation({
+                  ...selectedLocation,
+                  description: e.target.value,
+                })
+              }
+              className="border rounded p-2 w-full mb-2 h-24 resize-none"
+            />
+
+            {/* Image Upload */}
+            <label className="text-sm font-medium">Upload Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) =>
+                setSelectedLocation({
+                  ...selectedLocation,
+                  image: e.target.files[0], // Save the new image file
+                })
+              }
+              className="border rounded p-2 w-full mb-2"
+            />
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
+              <button
+                onClick={handleUpdateLocation}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-indigo-600 w-full sm:w-auto"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 w-full sm:w-auto"
               >
                 Cancel
               </button>

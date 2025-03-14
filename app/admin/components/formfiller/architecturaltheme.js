@@ -9,11 +9,12 @@ import {
 const ArchitecturalTheme = () => {
   const [themes, setThemes] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State for delete modal
-  const [entryToDelete, setEntryToDelete] = useState(null); // Store the theme to delete
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // New state for edit modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [entryToDelete, setEntryToDelete] = useState(null);
   const [newTheme, setNewTheme] = useState("");
+  const [editingTheme, setEditingTheme] = useState(null); // Store the theme being edited
 
-  // Fetch architectural themes
   useEffect(() => {
     fetchThemes();
   }, []);
@@ -57,9 +58,9 @@ const ArchitecturalTheme = () => {
 
       if (response.ok) {
         handleShowSuccessToast("Theme added successfully!");
-        fetchThemes(); // Refresh list
-        setNewTheme(""); // Reset input field
-        setIsModalOpen(false); // Close modal
+        fetchThemes();
+        setNewTheme("");
+        setIsModalOpen(false);
       } else {
         handleShowErrorToast("Something went wrong.");
       }
@@ -87,7 +88,7 @@ const ArchitecturalTheme = () => {
         setThemes((prevThemes) =>
           prevThemes.filter((theme) => theme.id !== id)
         );
-        setIsDeleteModalOpen(false); // Close the delete confirmation modal
+        setIsDeleteModalOpen(false);
       } else {
         handleShowErrorToast("Failed to delete theme.");
       }
@@ -96,7 +97,43 @@ const ArchitecturalTheme = () => {
     }
   };
 
-  // Define columns for React Data Table
+  const handleEditClick = (theme) => {
+    setEditingTheme(theme);
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateTheme = async () => {
+    if (!editingTheme.name) {
+      handleShowErrorToast("Theme name is required.");
+      return;
+    }
+
+    const token = localStorage.getItem("auth_token");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/updateArchitecturalTheme/${editingTheme.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name: editingTheme.name }),
+        }
+      );
+
+      if (response.ok) {
+        handleShowSuccessToast("Theme updated successfully!");
+        fetchThemes();
+        setIsEditModalOpen(false);
+      } else {
+        handleShowErrorToast("Failed to update theme.");
+      }
+    } catch (error) {
+      handleShowErrorToast("An error occurred while updating the theme.");
+    }
+  };
+
   const columns = [
     {
       name: "Theme Name",
@@ -106,38 +143,44 @@ const ArchitecturalTheme = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <button
-          onClick={() => {
-            setEntryToDelete(row); // Set the property to delete
-            setIsDeleteModalOpen(true); // Open delete confirmation modal
-          }}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
-        >
-          Delete
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => handleEditClick(row)}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => {
+              setEntryToDelete(row);
+              setIsDeleteModalOpen(true);
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
+          >
+            Delete
+          </button>
+        </div>
       ),
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      width: "15%",
     },
   ];
 
   return (
     <div className="h-full overflow-y-auto mt-10 p-4 font-thin">
       <div className="bg-white shadow-md p-4 rounded-md">
-        {/* Title & Add Button */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
           <h2 className="text-lg font-semibold">Architectural Themes</h2>
-          {/* On small screens, the button will stack below the title */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-600 w-full sm:w-auto mt-4 sm:mt-0"
+            className="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-600 w-full sm:w-auto"
           >
             Add Theme
           </button>
         </div>
 
-        {/* Data Table */}
         <DataTable
           columns={columns}
           data={themes}
@@ -150,7 +193,38 @@ const ArchitecturalTheme = () => {
         />
       </div>
 
-      {/* Modal for Adding New Theme */}
+      {/* Edit Theme Modal */}
+      {isEditModalOpen && editingTheme && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md max-w-sm w-full mx-auto">
+            <h3 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
+              Edit Theme
+            </h3>
+            <input
+              type="text"
+              value={editingTheme.name}
+              onChange={(e) =>
+                setEditingTheme({ ...editingTheme, name: e.target.value })
+              }
+              className="border rounded p-2 w-full text-sm"
+            />
+            <div className="flex justify-center gap-4 mt-4">
+              <button
+                onClick={handleUpdateTheme}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md w-full sm:w-auto"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setIsEditModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md w-full sm:w-auto"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full sm:max-w-md max-w-[90%]">

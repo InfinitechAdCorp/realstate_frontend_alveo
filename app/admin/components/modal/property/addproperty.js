@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { showToast } from "@/components/alert/page";
 
-const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
+const AddPropertyModal = ({ isOpen, closePopup }) => {
   if (!isOpen) return null;
 
   const handleClose = () => {
@@ -11,6 +11,15 @@ const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
   };
   const handleShowSuccessToast = (message) => {
     showToast(message, "success");
+  };
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (files.length > 0) {
+      setPropertyData((prevData) => ({
+        ...prevData,
+        [name]: files[0], // Store the File object
+      }));
+    }
   };
 
   const handleShowErrorToast = (message) => {
@@ -104,9 +113,9 @@ const AddPropertyModal = ({ isOpen, closePopup, handleFileChange }) => {
     const formData = new FormData();
 
     if (propertyData.location === "other") {
-      propertyData.key = propertyData.custom_location.toLowerCase();
+      propertyData.key = propertyData.custom_location;
     } else {
-      propertyData.key = propertyData.location.toLowerCase();
+      propertyData.key = propertyData.location;
     }
 
     if (propertyData.development_type === "other") {
@@ -342,9 +351,6 @@ const renderDropdownWithCustomInput = (
               {key === "location" ? type.area_name : type.name}
             </option>
           ))}
-          <option value="other">
-            Other (type your custom {label.toLowerCase()})
-          </option>
         </select>
       </div>
     </div>

@@ -113,12 +113,45 @@ const FeatureTable = () => {
   const filteredFeatures = features.filter(
     ({ name }) => name && name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const handleExportFeaturesPDF = () => {
+    if (filteredFeatures.length === 0) {
+      showToast("No data available for export.", "error");
+      return;
+    }
 
+    const exportData = filteredFeatures.map((row) => ({
+      "Feature Name": row.name, // ✅ Main feature group name
+      Features:
+        row.features && Array.isArray(row.features)
+          ? row.features.map((feature) => feature.name).join(", ") // ✅ Extracts feature names
+          : "No features available",
+    }));
+
+    exportToPDF("Features Report", exportData);
+  };
+
+  const handleExportFeaturesExcel = () => {
+    if (filteredFeatures.length === 0) {
+      showToast("No data available for export.", "error");
+      return;
+    }
+
+    const exportData = filteredFeatures.map((row) => ({
+      name: row.name, // ✅ Main feature group name
+      features:
+        row.features && Array.isArray(row.features)
+          ? row.features.map((feature) => feature.name).join(", ") // ✅ Extracts feature names
+          : "No features available",
+    }));
+
+    exportToExcel("Features Report", exportData);
+  };
   const columns = [
     {
       name: "Feature Name",
       selector: (row) => row.name,
       sortable: true,
+      width: "20%", // ✅ Sets a fixed width for Feature Name
     },
     {
       name: "Features",
@@ -144,11 +177,12 @@ const FeatureTable = () => {
           )}
         </div>
       ),
+      width: "60%", // ✅ Increased width for better layout
     },
     {
       name: "Actions",
       cell: (row) => (
-        <div className="relative min-w-[100px]">
+        <div className="relative min-w-[100px] flex justify-center">
           <button
             onClick={() =>
               setActionMenuOpen(actionMenuOpen === row.id ? null : row.id)
@@ -158,7 +192,7 @@ const FeatureTable = () => {
             <FaEllipsisV />
           </button>
           {actionMenuOpen === row.id && (
-            <div className="fixed -ml-20  bg-white shadow-md rounded-md w-24 mr-16  z-50">
+            <div className="absolute right-0 top-10 bg-white shadow-md rounded-md w-28 z-50">
               <button
                 className="w-full px-4 py-2 text-left hover:bg-gray-100 flex items-center gap-2"
                 onClick={() => handleUpdateClick(row)}
@@ -175,6 +209,11 @@ const FeatureTable = () => {
           )}
         </div>
       ),
+      width: "10%", // ✅ Ensures actions are aligned properly
+      right: true, // ✅ Moves Actions to the right
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
     },
   ];
 
@@ -203,13 +242,13 @@ const FeatureTable = () => {
               <FaPlus className="mr-2" /> Add Feature
             </button>
             <button
-              onClick={() => exportToPDF("Features Report", filteredFeatures)}
+              onClick={() => handleExportFeaturesPDF()}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
-              onClick={() => exportToExcel("Features Report", filteredFeatures)}
+              onClick={() => handleExportFeaturesExcel()}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFileExcel className="mr-2" /> Export Excel

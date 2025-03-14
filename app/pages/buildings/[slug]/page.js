@@ -632,18 +632,16 @@ export default function BlogPost({ params }) {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 justify-center ">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 justify-center">
                 {facilities.map((facility) => (
                   <div
                     key={facility.id}
-                    className="bg-white p-3 rounded-lg  hover:shadow-lg transition-shadow duration-300  items-center justify-center text-center  shadow-lg"
+                    className="bg-white p-2 rounded-lg hover:shadow-lg transition-shadow duration-300 shadow-lg 
+                 flex items-center justify-center h-auto" // ✅ Added flex, items-center, justify-center, and height
                   >
-                    <h3 className="text-sm font-semibold text-gray-800 mb-1">
+                    <h3 className="text-sm font-semibold text-gray-800 text-center mt-1">
                       {facility.name}
                     </h3>
-                    <p className="text-xs text-gray-600">
-                      {facility.description}
-                    </p>
                   </div>
                 ))}
               </div>

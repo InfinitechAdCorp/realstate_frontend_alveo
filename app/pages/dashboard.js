@@ -20,8 +20,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SEO from "./../seo/page";
-import Header from "./header";
-import Footer from "./footer";
 import MyBot from "../../components/Chatbot/page";
 import SocialMediaFloating from "./socialmedia-icons/page";
 import { usePathname } from "next/navigation";

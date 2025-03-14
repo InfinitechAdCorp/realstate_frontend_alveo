@@ -178,6 +178,33 @@ const FacilitiesTable = ({ properties, loading }) => {
       return newSet;
     });
   };
+  const handleExportFacilitiesPDF = () => {
+    if (Object.keys(groupedFacilities).length === 0) {
+      showToast("No data available for export.", "error");
+      return;
+    }
+
+    const exportData = Object.values(groupedFacilities).map((property) => ({
+      "Property Name": property.property_name, // ✅ Property name
+      Facilities: property.facilities.join(", "), // ✅ Facilities as a comma-separated list
+    }));
+
+    exportToPDF("Facilities Report", exportData);
+  };
+
+  const handleExportFacilitiesExcel = () => {
+    if (Object.keys(groupedFacilities).length === 0) {
+      showToast("No data available for export.", "error");
+      return;
+    }
+
+    const exportData = Object.values(groupedFacilities).map((property) => ({
+      property_name: property.property_name, // ✅ Property name
+      facilities: property.facilities.join(", "), // ✅ Facilities as a comma-separated list
+    }));
+
+    exportToExcel("Facilities Report", exportData);
+  };
 
   const columns = [
     {
@@ -312,17 +339,13 @@ const FacilitiesTable = ({ properties, loading }) => {
               <FaPlus className="mr-2" /> Add Facility
             </button>
             <button
-              onClick={() =>
-                exportToPDF("Facilities Report", filteredFacilities)
-              }
+              onClick={() => handleExportFacilitiesPDF()}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFilePdf className="mr-2" /> Export PDF
             </button>
             <button
-              onClick={() =>
-                exportToExcel("Facilities Report", filteredFacilities)
-              }
+              onClick={() => handleExportFacilitiesExcel()}
               className="px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 flex items-center w-full sm:w-auto"
             >
               <FaFileExcel className="mr-2" /> Export Excel

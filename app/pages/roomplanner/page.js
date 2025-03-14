@@ -863,145 +863,147 @@ const CanvasApp = () => {
   const handlePointerDown = (e) => {};
 
   return (
-    <div className="header-container">
-      <SEO
-        title="REAL ESTATE"
-        description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
-        keywords="alveo, real estate, property customize, building format, property layout, roomplanner, roomlayout, realstate customization,room layout"
-        canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/roomplanner"
-      />
-      <div className="header-container bg-customBlue">
-        <div className="button-container flex flex-wrap gap-1 justify-center p-3 bg-customBlue">
-          <a
-            href="/"
-            className="branding-text text-white text-4xl font-thin mt-1 me-10 tracking-wider"
-            style={{ textDecoration: "none", color: "inherit" }}
-          >
-            Λ L V E O
-          </a>
-          <button
-            className="new-btn h-12 bg-hoverBlue text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={resetCanvas}
-          >
-            New
-          </button>
-          <button
-            className="generate-room-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={() => createRoom(10, 10)}
-          >
-            Generate Room
-          </button>
-          <button
-            className="label-btn h-12  bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={handleAddTextbox}
-          >
-            Label
-          </button>
-          <button
-            className="delete-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-          <button
-            className="zoom-btn plus h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={() => handleZoom(true)}
-          >
-            Zoom In
-          </button>
-          <button
-            className="zoom-btn minus h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={() => handleZoom(false)}
-          >
-            Zoom Out
-          </button>
-          <button
-            className="label-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={toggleLabels}
-          >
-            Show/Hide Label
-          </button>
-          <button
-            className="export-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={handleExport}
-          >
-            Export Planner
-          </button>
-          <button
-            className="label-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
-            onClick={logActiveObjectIds}
-          >
-            Export Data
-          </button>
+    <>
+      <div className="header-container">
+        <SEO
+          title="REAL ESTATE"
+          description="Discover contemporary homes in vibrant neighborhoods designed to match your lifestyle. From chic urban apartments to serene suburban retreats, we offer the perfect setting for your next chapter.."
+          keywords="alveo, real estate, property customize, building format, property layout, roomplanner, roomlayout, realstate customization,room layout"
+          canonical="${process.env.NEXT_PUBLIC_LOCAL_PORT}/pages/roomplanner"
+        />
+        <div className="header-container bg-customBlue">
+          <div className="button-container flex flex-wrap gap-1 justify-center p-3 bg-customBlue">
+            <a
+              href="/"
+              className="branding-text text-white text-4xl font-thin mt-1 me-10 tracking-wider"
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              Λ L V E O
+            </a>
+            <button
+              className="new-btn h-12 bg-hoverBlue text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={resetCanvas}
+            >
+              New
+            </button>
+            <button
+              className="generate-room-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={() => createRoom(10, 10)}
+            >
+              Generate Room
+            </button>
+            <button
+              className="label-btn h-12  bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={handleAddTextbox}
+            >
+              Label
+            </button>
+            <button
+              className="delete-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+            <button
+              className="zoom-btn plus h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={() => handleZoom(true)}
+            >
+              Zoom In
+            </button>
+            <button
+              className="zoom-btn minus h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={() => handleZoom(false)}
+            >
+              Zoom Out
+            </button>
+            <button
+              className="label-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={toggleLabels}
+            >
+              Show/Hide Label
+            </button>
+            <button
+              className="export-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={handleExport}
+            >
+              Export Planner
+            </button>
+            <button
+              className="label-btn h-12 bg-hoverBlue bg-opacity-45 text-white text-lg font-thin rounded px-4 py-2 hover:opacity-90"
+              onClick={logActiveObjectIds}
+            >
+              Export Data
+            </button>
+          </div>
         </div>
-      </div>
-      {/* Main content */}
-      <div className="flex flex-col lg:flex-row fixed w-full">
-        {/* Accordion section */}
-        <div className="w-full lg:w-1/3 xl:w-1/4  bg-white z-50 p-2">
-          <Accordion type="single" collapsible>
-            {Object.keys(groupedData).map((category, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-lg xl:text-xl w-full p-4 flex justify-between items-center text-black">
-                  {category}
-                </AccordionTrigger>
-                <AccordionContent>
-                  <div className="grid grid-cols-2 w-full justify-items-center max-h-64 xl:max-h-96 overflow-y-auto gap-4">
-                    {groupedData[category].map((item, itemIndex) => (
-                      <div
-                        key={itemIndex}
-                        className={`text-center w-4/5 text-black ${
-                          itemIndex % 2 === 0 &&
-                          itemIndex === groupedData[category].length - 1
-                            ? "col-span-2"
-                            : ""
-                        }`}
-                      >
-                        <h4 className="text-sm xl:text-base">{item.name}</h4>
-                        <p className="text-xs xl:text-sm">
-                          {item.height} x {item.width}
-                        </p>
-                        <img
-                          src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}/assets/RoomPlanner/${category}/${item.picture}`}
-                          alt={item.name}
-                          className="w-16 h-16 xl:w-24 xl:h-24 cursor-pointer"
-                          data-category={category}
-                          data-picture={item.picture}
-                          data-width={item.width}
-                          data-height={item.height}
-                          onClick={(e) => handleItemClick(e.target)}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        {/* Main content */}
+        <div className="flex flex-col lg:flex-row fixed w-full">
+          {/* Accordion section */}
+          <div className="w-full lg:w-1/3 xl:w-1/4  bg-white z-50 p-2">
+            <Accordion type="single" collapsible>
+              {Object.keys(groupedData).map((category, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-lg xl:text-xl w-full p-4 flex justify-between items-center text-black">
+                    {category}
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <div className="grid grid-cols-2 w-full justify-items-center max-h-64 xl:max-h-96 overflow-y-auto gap-4">
+                      {groupedData[category].map((item, itemIndex) => (
+                        <div
+                          key={itemIndex}
+                          className={`text-center w-4/5 text-black ${
+                            itemIndex % 2 === 0 &&
+                            itemIndex === groupedData[category].length - 1
+                              ? "col-span-2"
+                              : ""
+                          }`}
+                        >
+                          <h4 className="text-sm xl:text-base">{item.name}</h4>
+                          <p className="text-xs xl:text-sm">
+                            {item.height} x {item.width}
+                          </p>
+                          <img
+                            src={`${process.env.NEXT_PUBLIC_LOCAL_PORT}/assets/RoomPlanner/${category}/${item.picture}`}
+                            alt={item.name}
+                            className="w-16 h-16 xl:w-24 xl:h-24 cursor-pointer"
+                            data-category={category}
+                            data-picture={item.picture}
+                            data-width={item.width}
+                            data-height={item.height}
+                            onClick={(e) => handleItemClick(e.target)}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
 
-        {/* Canvas container */}
-        <div
-          className="relative flex-grow xl:w-3/4 2xl:w-3/4 "
-          onClick={handlePointerDown}
-        >
-          <canvas
-            id="canvas"
-            className="border-black w-screen h-32 xl:h-screen lg:h-auto"
-          ></canvas>
-
+          {/* Canvas container */}
           <div
-            id="dimensionDisplay"
-            className="text-lg w-auto fixed top-10 left-5 bg-white text-black p-2 border-2 border-black rounded z-50 xl:left-1/4 xl:top-20 mt-2"
-            dangerouslySetInnerHTML={{
-              __html: `Height: ${dimensions.height.toFixed(
-                2
-              )} m<br/>Width: ${dimensions.width.toFixed(2)} m`,
-            }}
-          />
+            className="relative flex-grow xl:w-3/4 2xl:w-3/4 "
+            onClick={handlePointerDown}
+          >
+            <canvas
+              id="canvas"
+              className="border-black w-screen h-32 xl:h-screen lg:h-auto"
+            ></canvas>
+
+            <div
+              id="dimensionDisplay"
+              className="text-lg w-auto fixed top-10 left-5 bg-white text-black p-2 border-2 border-black rounded z-50 xl:left-1/4 xl:top-20 mt-2"
+              dangerouslySetInnerHTML={{
+                __html: `Height: ${dimensions.height.toFixed(
+                  2
+                )} m<br/>Width: ${dimensions.width.toFixed(2)} m`,
+              }}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

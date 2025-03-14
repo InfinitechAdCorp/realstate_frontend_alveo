@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { showToast } from "@/components/alert/page";
-import Header from "@/app/pages/header";
+
 import Icon from "@/app/pages/socialmedia-icons/page";
 import Footer from "@/app/pages/footer";
 import {
@@ -83,228 +83,232 @@ const ContactForm = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 rounded-lg mt-24 text-customBlue bg-white">
-        <div>
-          <h2 className="text-3xl font-thin mb-6 text-customBlue">
-            Get in Touch
-          </h2>
-          <Formik
-            initialValues={formData}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit} // Formik will handle the form submission
-          >
-            {({ handleChange, values, errors, touched }) => (
-              <Form className="space-y-6 text-customBlue">
-                <div>
-                  <label
-                    className="block font-medium mb-2"
-                    htmlFor="inquiryType"
-                  >
-                    What can we help you with?
-                  </label>
-                  <Field
-                    as="select"
-                    id="inquiryType"
-                    name="inquiryType"
-                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
-                  >
-                    <option value="">Select an option</option>
-                    <option value="Sales Inquiry">Sales Inquiry</option>
-                    <option value="Customer Care">Customer Care</option>
-                    <option value="Leasing Inquiry">Leasing Inquiry</option>
-                    <option value="Other Concern">Other Concern</option>
-                  </Field>
-                  {errors.inquiryType && touched.inquiryType && (
-                    <div className="text-red-500 text-xs">
-                      {errors.inquiryType}
+      <div className="w-full flex justify-center h-auto">
+        <div className=" mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 p-8 rounded-lg mt-24  bg-white">
+          <div>
+            <h2 className="text-3xl font-thin mb-6 ">Get in Touch</h2>
+            <Formik
+              initialValues={formData}
+              validationSchema={validationSchema}
+              onSubmit={handleSubmit} // Formik will handle the form submission
+            >
+              {({ handleChange, values, errors, touched }) => (
+                <Form className="space-y-6 text-customBlue">
+                  <div>
+                    <label
+                      className="block font-medium mb-2"
+                      htmlFor="inquiryType"
+                    >
+                      What can we help you with?
+                    </label>
+                    <Field
+                      as="select"
+                      id="inquiryType"
+                      name="inquiryType"
+                      className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                    >
+                      <option value="">Select an option</option>
+                      <option value="Sales Inquiry">Sales Inquiry</option>
+                      <option value="Customer Care">Customer Care</option>
+                      <option value="Leasing Inquiry">Leasing Inquiry</option>
+                      <option value="Other Concern">Other Concern</option>
+                    </Field>
+                    {errors.inquiryType && touched.inquiryType && (
+                      <div className="text-red-500 text-xs">
+                        {errors.inquiryType}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label
+                        className="block font-medium mb-2"
+                        htmlFor="firstName"
+                      >
+                        First Name
+                      </label>
+                      <Field
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={values.firstName}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                      />
+                      <ErrorMessage
+                        name="firstName"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
                     </div>
-                  )}
-                </div>
+                    <div>
+                      <label
+                        className="block font-medium mb-2"
+                        htmlFor="lastName"
+                      >
+                        Last Name
+                      </label>
+                      <Field
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={values.lastName}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                      />
+                      <ErrorMessage
+                        name="lastName"
+                        component="div"
+                        className="text-red-500 text-xs"
+                      />
+                    </div>
+                  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label
-                      className="block font-medium mb-2"
-                      htmlFor="firstName"
-                    >
-                      First Name
+                    <label className="block font-medium mb-2" htmlFor="email">
+                      Email
                     </label>
                     <Field
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={values.firstName}
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={values.email}
                       onChange={handleChange}
                       required
                       className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
                     />
                     <ErrorMessage
-                      name="firstName"
+                      name="email"
                       component="div"
                       className="text-red-500 text-xs"
                     />
                   </div>
+
                   <div>
-                    <label
-                      className="block font-medium mb-2"
-                      htmlFor="lastName"
-                    >
-                      Last Name
+                    <label className="block font-medium mb-2" htmlFor="phone">
+                      Phone Number
                     </label>
                     <Field
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={values.lastName}
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={values.phone}
                       onChange={handleChange}
                       required
                       className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
                     />
                     <ErrorMessage
-                      name="lastName"
+                      name="phone"
                       component="div"
                       className="text-red-500 text-xs"
                     />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block font-medium mb-2" htmlFor="email">
-                    Email
-                  </label>
-                  <Field
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="text-red-500 text-xs"
-                  />
-                </div>
+                  <div>
+                    <label className="block font-medium mb-2" htmlFor="message">
+                      Message
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="message"
+                      name="message"
+                      rows="4"
+                      value={values.message}
+                      onChange={handleChange}
+                      required
+                      className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                    />
+                    <ErrorMessage
+                      name="message"
+                      component="div"
+                      className="text-red-500 text-xs"
+                    />
+                  </div>
 
-                <div>
-                  <label className="block font-medium mb-2" htmlFor="phone">
-                    Phone Number
-                  </label>
-                  <Field
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={values.phone}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
-                  />
-                  <ErrorMessage
-                    name="phone"
-                    component="div"
-                    className="text-red-500 text-xs"
-                  />
-                </div>
+                  <div className="flex justify-center">
+                    <button
+                      type="submit"
+                      className="w-1/2 py-3 bg-customBlue text-white font-thin hover:bg-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
+                    >
+                      Submit Inquiry
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
 
-                <div>
-                  <label className="block font-medium mb-2" htmlFor="message">
-                    Message
-                  </label>
-                  <Field
-                    as="textarea"
-                    id="message"
-                    name="message"
-                    rows="4"
-                    value={values.message}
-                    onChange={handleChange}
-                    required
-                    className="w-full p-3 border border-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
-                  />
-                  <ErrorMessage
-                    name="message"
-                    component="div"
-                    className="text-red-500 text-xs"
-                  />
-                </div>
+          <div className="bg-customBlue border border-white p-10 max-w-lg mx-auto rounded-lg shadow-lg">
+            <h3 className="text-4xl font-thin mb-8 text-white tracking-wide text-center">
+              Contact Information
+            </h3>
+            <div className="space-y-8 text-white">
+              <div>
+                <h4 className="text-2xl font-thin mb-4 flex items-center">
+                  <FaBuilding className="text-3xl mr-3 text-white" /> Head
+                  Office
+                </h4>
+                <ul className="space-y-3">
+                  <li className="text-lg">
+                    ALVEO Corporate Center 728 28th Street, Bonifacio Global
+                    City 1634 Taguig City, Metro Manila, Philippines
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-2xl font-thin mb-4 flex items-center">
+                  <FaPhoneAlt className="text-3xl mr-3 text-white" /> Phone
+                </h4>
+                <ul className="space-y-3">
+                  <li className="text-lg">
+                    Customer Hotline: (+632) 8848 5000
+                  </li>
+                </ul>
+              </div>
 
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    className="w-1/2 py-3 bg-customBlue text-white font-thin hover:bg-customBlue focus:outline-none focus:ring-2 focus:ring-customBlue"
-                  >
-                    Submit Inquiry
-                  </button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
+              {/* Email Section */}
+              <div>
+                <h4 className="text-2xl font-thin mb-4 flex items-center">
+                  <FaEnvelope className="text-3xl mr-3 text-white" /> Email
+                </h4>
+                <ul className="space-y-3">
+                  <li className="text-lg">
+                    Customer Care:{" "}
+                    <a
+                      href="mailto:info@alveoland.com.ph"
+                      className="text-blue-300 hover:text-blue-500 font-medium"
+                    >
+                      info@alveoland.com.ph
+                    </a>
+                  </li>
+                </ul>
+              </div>
 
-        <div className="bg-customBlue border border-white p-10 max-w-lg mx-auto rounded-lg shadow-lg">
-          <h3 className="text-4xl font-thin mb-8 text-white tracking-wide text-center">
-            Contact Information
-          </h3>
-          <div className="space-y-8 text-white">
-            <div>
-              <h4 className="text-2xl font-thin mb-4 flex items-center">
-                <FaBuilding className="text-3xl mr-3 text-white" /> Head Office
-              </h4>
-              <ul className="space-y-3">
-                <li className="text-lg">
-                  ALVEO Corporate Center 728 28th Street, Bonifacio Global City
-                  1634 Taguig City, Metro Manila, Philippines
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="text-2xl font-thin mb-4 flex items-center">
-                <FaPhoneAlt className="text-3xl mr-3 text-white" /> Phone
-              </h4>
-              <ul className="space-y-3">
-                <li className="text-lg">Customer Hotline: (+632) 8848 5000</li>
-              </ul>
-            </div>
-
-            {/* Email Section */}
-            <div>
-              <h4 className="text-2xl font-thin mb-4 flex items-center">
-                <FaEnvelope className="text-3xl mr-3 text-white" /> Email
-              </h4>
-              <ul className="space-y-3">
-                <li className="text-lg">
-                  Customer Care:{" "}
+              {/* Appointment Section */}
+              <div>
+                <h4 className="text-2xl font-thin mb-4 flex items-center">
+                  <FaCalendarAlt className="text-3xl mr-3 text-white" /> Set an
+                  Appointment
+                </h4>
+                <p className="text-lg">
+                  Avoid the queues, book a visit at our{" "}
                   <a
-                    href="mailto:info@alveoland.com.ph"
-                    className="text-blue-300 hover:text-blue-500 font-medium"
+                    href="/pages/set-appointment"
+                    className="text-blue-300 underline hover:text-blue-500 font-medium"
                   >
-                    info@alveoland.com.ph
+                    Alveo Property
                   </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Appointment Section */}
-            <div>
-              <h4 className="text-2xl font-thin mb-4 flex items-center">
-                <FaCalendarAlt className="text-3xl mr-3 text-white" /> Set an
-                Appointment
-              </h4>
-              <p className="text-lg">
-                Avoid the queues, book a visit at our{" "}
-                <a
-                  href="/pages/set-appointment"
-                  className="text-blue-300 underline hover:text-blue-500 font-medium"
-                >
-                  Alveo Property
-                </a>
-                .
-              </p>
+                  .
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

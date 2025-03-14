@@ -10,9 +10,11 @@ const Status = () => {
   const [statuses, setStatuses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newStatus, setNewStatus] = useState("");
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // Add delete modal state
-  const [entryToDelete, setEntryToDelete] = useState(null); // Entry to delete
-  const [searchQuery, setSearchQuery] = useState(""); // Search state
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false); // Update modal state
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [entryToDelete, setEntryToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchStatuses();
@@ -51,7 +53,7 @@ const Status = () => {
         prevStatuses.filter((status) => status.id !== id)
       );
       handleShowSuccessToast("Status deleted successfully!");
-      setIsDeleteModalOpen(false); // Close the modal after deletion
+      setIsDeleteModalOpen(false);
     } catch (error) {
       handleShowErrorToast("Error occurred while deleting status.");
     }
@@ -91,6 +93,40 @@ const Status = () => {
     }
   };
 
+  const handleUpdateStatus = async () => {
+    if (!selectedStatus || !selectedStatus.name) {
+      handleShowErrorToast("Status name is required.");
+      return;
+    }
+
+    const token = localStorage.getItem("auth_token");
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/updateStatus/${selectedStatus.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name: selectedStatus.name }),
+        }
+      );
+
+      if (response.ok) {
+        handleShowSuccessToast("Status updated successfully!");
+        fetchStatuses();
+        setIsUpdateModalOpen(false);
+        setSelectedStatus(null);
+      } else {
+        handleShowErrorToast("Something went wrong while updating.");
+      }
+    } catch (err) {
+      handleShowErrorToast("An error occurred during update.");
+    }
+  };
+
   const columns = [
     {
       name: "Status Name",
@@ -100,16 +136,28 @@ const Status = () => {
     {
       name: "Actions",
       cell: (row) => (
-        <button
-          onClick={() => {
-            setEntryToDelete(row); // Set the entry to delete
-            setIsDeleteModalOpen(true); // Open delete confirmation modal
-          }}
-          className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition duration-300 ease-in-out"
-        >
-          Delete
-        </button>
+        <div className="flex gap-2 ">
+          <button
+            onClick={() => {
+              setSelectedStatus(row);
+              setIsUpdateModalOpen(true);
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition"
+          >
+            Edit
+          </button>
+          <button
+            onClick={() => {
+              setEntryToDelete(row);
+              setIsDeleteModalOpen(true);
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition"
+          >
+            Delete
+          </button>
+        </div>
       ),
+      width: "15%",
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
@@ -126,7 +174,7 @@ const Status = () => {
     <div className="h-full overflow-y-auto mt-6 p-4 font-thin max-w-full mx-auto">
       <div className="bg-white shadow-md p-6 rounded-lg">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-4">
-          <h2 className="text-lg font-semibold">Status </h2>
+          <h2 className="text-lg font-semibold">Status</h2>
           <button
             onClick={() => setIsModalOpen(true)}
             className="bg-indigo-700 text-white px-4 py-2 rounded-md hover:bg-indigo-600 w-full sm:w-auto"
@@ -135,21 +183,17 @@ const Status = () => {
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <DataTable
-            columns={columns}
-            data={filteredStatuses}
-            pagination
-            paginationPerPage={10}
-            paginationRowsPerPageOptions={[5, 10, 15]}
-            highlightOnHover
-            responsive
-            striped
-          />
-        </div>
+        <DataTable
+          columns={columns}
+          data={filteredStatuses}
+          pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[5, 10, 15]}
+          highlightOnHover
+          responsive
+          striped
+        />
       </div>
-
-      {/* Add Status Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 p-4">
           <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -203,6 +247,35 @@ const Status = () => {
               <button
                 onClick={() => setIsDeleteModalOpen(false)}
                 className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md w-full sm:w-auto"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {isUpdateModalOpen && selectedStatus && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+            <h2 className="text-lg text-center mb-4">Update Status</h2>
+            <input
+              type="text"
+              value={selectedStatus.name}
+              onChange={(e) =>
+                setSelectedStatus({ ...selectedStatus, name: e.target.value })
+              }
+              className="border rounded p-2 w-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <div className="flex justify-end gap-2 mt-4">
+              <button
+                onClick={handleUpdateStatus}
+                className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Update
+              </button>
+              <button
+                onClick={() => setIsUpdateModalOpen(false)}
+                className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500"
               >
                 Cancel
               </button>

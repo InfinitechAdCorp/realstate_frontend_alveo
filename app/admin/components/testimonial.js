@@ -109,7 +109,7 @@ const Testimonial = () => {
             setEntryToDelete(row); // Set the testimonial to delete
             setIsDeleteModalOpen(true); // Open the delete confirmation modal
           }}
-          className="text-red-500 hover:text-red-700"
+          className="px-4 py-2 bg-red-500 text-white rounded-md w-full sm:w-auto"
         >
           Delete
         </button>
@@ -258,12 +258,6 @@ const Testimonial = () => {
             </h3>
             <p className="text-sm text-gray-600 mb-6 text-center">
               Are you sure you want to delete the following testimonial?
-            </p>
-            <p className="text-sm text-gray-600 mb-2 text-center">
-              Name: {entryToDelete.name}
-            </p>
-            <p className="text-sm text-gray-600 mb-4 text-center">
-              Message: {entryToDelete.message}
             </p>
 
             <div className="flex flex-col sm:flex-row justify-center gap-4">
