@@ -18,10 +18,9 @@ import { FaUserCircle, FaBars } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
 const AdminLayout = () => {
-  const [activeNav, setActiveNav] = useState(
-    () => localStorage.getItem("activeNav") || "DASHBOARD"
-  );
-
+  const router = useRouter();
+  const [activeNav, setActiveNav] = useState("DASHBOARD"); // Default state
+  const [isMounted, setIsMounted] = useState(false); // Track mounting status
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -30,7 +29,6 @@ const AdminLayout = () => {
   const [showLogout, setShowLogout] = useState(false);
 
   let logoutTimeout; // Store timeout reference
-  const router = useRouter();
 
   useEffect(() => {
     const authToken = localStorage.getItem("auth_token");
@@ -50,6 +48,23 @@ const AdminLayout = () => {
       fetchProperties();
     }
   }, [activeNav]);
+  useEffect(() => {
+    setIsMounted(true); // Now we are in the client
+    const authToken = localStorage.getItem("auth_token");
+    const username = localStorage.getItem("userInfo");
+    const savedNav = localStorage.getItem("activeNav");
+
+    if (!authToken) {
+      setIsLoggedIn(false);
+      router.push("/auth");
+    } else {
+      setIsLoggedIn(true);
+      setUser(username || "Admin");
+      if (savedNav) {
+        setActiveNav(savedNav);
+      }
+    }
+  }, [router]);
   const handleNavChange = (navItem) => {
     setActiveNav(navItem);
     localStorage.setItem("activeNav", navItem);
