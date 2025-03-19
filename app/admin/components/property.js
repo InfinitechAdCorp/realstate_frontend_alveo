@@ -15,6 +15,18 @@ const PropertyTable = ({ properties, loading }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedImage(null);
+    setIsModalOpen(false);
+  };
   console.log("Properties Data:", properties);
   const handleExportPDF = () => {
     if (properties.length === 0) {
@@ -67,14 +79,39 @@ const PropertyTable = ({ properties, loading }) => {
   };
 
   const handleDeleteClick = (property) => {
+    console.log(property);
     setSelectedProperty(property);
     setIsDeleteModalOpen(true);
   };
-
-  const handleUpdateClick = (property) => {
+  const handleConfirmationDelete = async (property) => {
+    console.log(property.id);
     setSelectedProperty(property);
-    setIsUpdateModalOpen(true);
+    const authToken = localStorage.getItem("auth_token");
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_PORT}/api/admin/deleteproperty`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({ id: [property.id] }), // Send as an array
+        }
+      );
+
+      if (response.ok) {
+        console.log("Property deleted successfully");
+        setIsDeleteModalOpen(false);
+        showToast("Property deleted successfully", "success");
+      } else {
+        console.error("Failed to delete property");
+      }
+    } catch (error) {
+      console.error("Error deleting property:", error);
+    }
   };
+
   const columns = [
     { name: "Name", selector: (row) => row.name, sortable: true },
     { name: "Location", selector: (row) => row.location, sortable: true },
@@ -119,25 +156,8 @@ const PropertyTable = ({ properties, loading }) => {
       sortable: true,
       wrap: true,
     },
-    // ✅ View (Building Image)
     {
       name: "View",
-      selector: (row) => row.view,
-      sortable: false,
-      cell: (row) =>
-        row.view ? (
-          <img
-            src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${row.view}`}
-            alt="View"
-            className="w-16 h-16 rounded-md object-cover"
-          />
-        ) : (
-          "N/A"
-        ),
-    },
-    // ✅ Master Plan (Plan Image)
-    {
-      name: "Master Plan",
       selector: (row) => row.path,
       sortable: false,
       cell: (row) =>
@@ -145,12 +165,34 @@ const PropertyTable = ({ properties, loading }) => {
           <img
             src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${row.path}`}
             alt="Master Plan"
-            className="w-16 h-16 rounded-md object-cover"
+            className="w-16 h-16 rounded-md object-cover cursor-pointer"
+            onClick={() =>
+              openModal(`${process.env.NEXT_PUBLIC_SERVER_PORT}/${row.path}`)
+            }
           />
         ) : (
           "N/A"
         ),
     },
+    {
+      name: "Master Plan",
+      selector: (row) => row.view,
+      sortable: false,
+      cell: (row) =>
+        row.view ? (
+          <img
+            src={`${process.env.NEXT_PUBLIC_SERVER_PORT}/${row.view}`}
+            alt="View"
+            className="w-16 h-16 rounded-md object-cover cursor-pointer"
+            onClick={() =>
+              openModal(`${process.env.NEXT_PUBLIC_SERVER_PORT}/${row.view}`)
+            }
+          />
+        ) : (
+          "N/A"
+        ),
+    },
+
     {
       name: "Actions",
       cell: (row) => (
@@ -162,7 +204,7 @@ const PropertyTable = ({ properties, loading }) => {
             <FaEllipsisV />
           </button>
           {isActionMenuOpen === row.id && (
-            <div className="fixed right-6 bg-white shadow-md rounded-md w-24 mr-16 py-1 z-50">
+            <div className="fixed right-6 bg-white shadow-md rounded-md w-24 -mt-20 mr-16 py-1 z-50">
               <button
                 className="w-full px-4 py-2 text-left hover:bg-gray-100"
                 onClick={() => {
@@ -205,6 +247,23 @@ const PropertyTable = ({ properties, loading }) => {
               className="w-full md:w-80 px-3 py-2 border rounded-md text-sm mt-2 md:mt-0"
             />
           </div>
+          {isModalOpen && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="relative bg-white p-4 rounded-lg shadow-lg max-w-2xl">
+                <button
+                  className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl"
+                  onClick={closeModal}
+                >
+                  &times;
+                </button>
+                <img
+                  src={selectedImage}
+                  alt="Enlarged View"
+                  className="max-w-full max-h-[80vh] rounded-md"
+                />
+              </div>
+            </div>
+          )}
 
           <div className="flex flex-col md:flex-row lg:flex-row gap-3 mt-2 md:mt-4 lg:mt-0 w-full md:w-auto justify-center">
             <button
@@ -273,7 +332,9 @@ const PropertyTable = ({ properties, loading }) => {
             <p>Are you sure you want to delete this property?</p>
             <div className="flex flex-col sm:flex-row justify-end gap-2 mt-4">
               <button
-                onClick={() => {}}
+                onClick={() => {
+                  handleConfirmationDelete(selectedProperty);
+                }}
                 className="px-5 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-200 w-full sm:w-auto"
               >
                 Delete

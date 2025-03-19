@@ -16,7 +16,18 @@ const OtherBuildingsTable = ({ properties, loading }) => {
   const [selectedBuilding, setSelectedBuilding] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openImageModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeImageModal = () => {
+    setSelectedImage(null);
+    setIsModalOpen(false);
+  };
   useEffect(() => {
     fetchBuildings();
     fetchDevelopmentTypes(); // ✅ Fetch development types
@@ -187,12 +198,18 @@ const OtherBuildingsTable = ({ properties, loading }) => {
           <img
             src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${row.path}`}
             alt="View"
-            className="w-16 h-16 rounded-md object-cover"
+            className="w-16 h-16 rounded-md object-cover cursor-pointer"
+            onClick={() =>
+              openImageModal(
+                `${process.env.NEXT_PUBLIC_SERVER_PORT}${row.path}`
+              )
+            }
           />
         ) : (
           "N/A"
         ),
     },
+
     {
       name: "Development Type",
       selector: (row) => row.development_type,
@@ -300,6 +317,23 @@ const OtherBuildingsTable = ({ properties, loading }) => {
             </button>
           </div>
         </div>
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="relative bg-white p-4 rounded-lg shadow-lg max-w-3xl">
+              <button
+                className="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl"
+                onClick={closeImageModal}
+              >
+                &times;
+              </button>
+              <img
+                src={selectedImage}
+                alt="Enlarged View"
+                className="max-w-full max-h-[80vh] rounded-md"
+              />
+            </div>
+          </div>
+        )}
 
         {/* Data Table */}
         <DataTable

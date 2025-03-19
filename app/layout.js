@@ -54,7 +54,7 @@ const RootLayout = ({ children }) => {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ClientLayout>{children}</ClientLayout>{" "}
-        {/* ✅ ClientLayout handles Header/Footer */}
+ 
       </body>
     </html>
   );

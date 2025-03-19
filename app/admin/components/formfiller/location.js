@@ -22,6 +22,12 @@ const Location = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [entryToDelete, setEntryToDelete] = useState(null);
 
+  const toggleExpansion = (rowId) => {
+    setExpandedRows((prev) => ({
+      ...prev,
+      [rowId]: !prev[rowId], // Toggle the expansion state
+    }));
+  };
   useEffect(() => {
     fetchLocations();
   }, []);
@@ -127,7 +133,9 @@ const Location = () => {
     if (selectedLocation.image) {
       formData.append("image", selectedLocation.image);
     }
-
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
     const token = localStorage.getItem("auth_token");
 
     try {
@@ -148,13 +156,16 @@ const Location = () => {
         handleShowErrorToast("Failed to update location.");
       }
     } catch (err) {
-      handleShowErrorToast("An error occurred while updating.");
+      handleShowErrorToast("Image is required.");
     }
   };
   const columns = [
     {
       name: "Area Name",
-      selector: (row) => row.area_name,
+      selector: (row) => {
+        console.log("Row Data:", row); // Log row data
+        return row.area_name;
+      },
       sortable: true,
     },
     {
@@ -205,6 +216,21 @@ const Location = () => {
           )}
         </div>
       ),
+    },
+    {
+      name: "Image",
+      selector: (row) => row.image,
+      sortable: false,
+      cell: (row) =>
+        row.image ? (
+          <img
+            src={`${process.env.NEXT_PUBLIC_SERVER_PORT}${row.image}`}
+            alt={row.area_name}
+            className="w-16 h-16 rounded-md object-cover"
+          />
+        ) : (
+          "N/A"
+        ),
     },
     {
       name: "Actions",

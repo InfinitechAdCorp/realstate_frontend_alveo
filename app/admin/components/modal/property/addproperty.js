@@ -183,6 +183,7 @@ const AddPropertyModal = ({ isOpen, closePopup }) => {
         if (response.ok) {
           handleShowSuccessToast("Property created successfully");
           closePopup("addProperty");
+          window.location.reload();
         } else {
           console.error("Error creating property:", data);
           handleShowErrorToast(`Error: ${data.message}`);

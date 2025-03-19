@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import Header from "./../header";
+
 import Icon from "@/app/pages/socialmedia-icons/page";
-import Footer from "./../footer";
+
 import { showToast } from "@/components/alert/page";
 function App() {
   const [showPreviews, setShowPreviews] = useState(true);
